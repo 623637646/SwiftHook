@@ -1,5 +1,5 @@
 //
-//  AspectsTests.m
+//  InstanceBeforeTests.m
 //  AspectsTests
 //
 //  Created by Yanni Wang on 4/10/19.
@@ -45,6 +45,46 @@
     
     [obj methodWithExecuted:&executed];
     XCTAssert(executed == YES);
+}
+
+- (void)testMultipleTimes
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+}
+
+- (void)testOneTime
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
 }
 
 @end

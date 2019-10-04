@@ -33,6 +33,46 @@
     XCTAssert(triggered == YES);
 }
 
+- (void)testMultipleTimes
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+}
+
+- (void)testOneTime
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
+}
+
 - (void)testSkipOriginal
 {
     NSError *error = nil;

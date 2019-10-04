@@ -1,5 +1,5 @@
 //
-//  AspectsInstanceAfterTests.m
+//  AspectsTests.m
 //  AspectsTests
 //
 //  Created by Yanni Wang on 4/10/19.
@@ -10,11 +10,11 @@
 #import "Aspects.h"
 #import "TestObjects/TestObject.h"
 
-@interface AspectsInstanceAfterTests : XCTestCase
+@interface InstanceBeforeTests : XCTestCase
 
 @end
 
-@implementation AspectsInstanceAfterTests
+@implementation InstanceBeforeTests
 
 - (void)testTriggered
 {
@@ -22,7 +22,7 @@
     TestObject *obj = [[TestObject alloc] init];
     __block BOOL triggered = NO;
     
-    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -38,8 +38,8 @@
     TestObject *obj = [[TestObject alloc] init];
     __block BOOL executed = NO;
     
-    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
-        XCTAssert(executed == YES);
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        XCTAssert(executed == NO);
     } error:&error];
     XCTAssert(error == nil);
     

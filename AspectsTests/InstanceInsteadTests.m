@@ -1,5 +1,5 @@
 //
-//  AspectsInstanceInsteadTests.m
+//  InstanceInsteadTests.m
 //  AspectsTests
 //
 //  Created by Yanni Wang on 4/10/19.
@@ -11,11 +11,11 @@
 #import "TestObjects/TestObject.h"
 #import <objc/runtime.h>
 
-@interface AspectsInstanceInsteadTests : XCTestCase
+@interface InstanceInsteadTests : XCTestCase
 
 @end
 
-@implementation AspectsInstanceInsteadTests
+@implementation InstanceInsteadTests
 
 - (void)testTriggered
 {

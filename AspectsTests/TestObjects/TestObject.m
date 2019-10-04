@@ -17,4 +17,9 @@
     }
 }
 
+- (id)methodWithOriginalReturnValue:(id)value;
+{
+    return value;
+}
+
 @end

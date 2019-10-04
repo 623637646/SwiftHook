@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)methodWithExecuted:(nullable BOOL *)executed;
 
+- (id)methodWithOriginalReturnValue:(id)value;
+
 @end
 
 NS_ASSUME_NONNULL_END

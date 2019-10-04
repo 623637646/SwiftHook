@@ -10,6 +10,8 @@
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC5234308AE006D42F2 /* iOSHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A467BC4234308AE006D42F2 /* iOSHookTests.swift */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD0745B2344908A00BA1FE1 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */; };
+		2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD0745A2344908A00BA1FE1 /* Token.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,8 @@
 		2A467BBF234308AE006D42F2 /* iOSHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BC4234308AE006D42F2 /* iOSHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSHookTests.swift; sourceTree = "<group>"; };
 		2A467BC6234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
+		2AD0745A2344908A00BA1FE1 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				2A467BB9234308AE006D42F2 /* iOSHook.h */,
+				2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */,
+				2AD0745A2344908A00BA1FE1 /* Token.swift */,
 				2A467BBA234308AE006D42F2 /* Info.plist */,
 			);
 			path = iOSHook;
@@ -148,6 +154,7 @@
 				TargetAttributes = {
 					2A467BB5234308AE006D42F2 = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
 					};
 					2A467BBE234308AE006D42F2 = {
 						CreatedOnToolsVersion = 10.3;
@@ -194,6 +201,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AD0745B2344908A00BA1FE1 /* NSObjectExtension.swift in Sources */,
+				2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +350,7 @@
 		2A467BCB234308AE006D42F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -357,6 +367,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.iOSHook;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -365,6 +376,7 @@
 		2A467BCC234308AE006D42F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -389,6 +401,7 @@
 		2A467BCE234308AE006D42F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = iOSHookTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -406,6 +419,7 @@
 		2A467BCF234308AE006D42F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = iOSHookTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -9,6 +9,13 @@
 import XCTest
 @testable import iOSHook
 
+class MyObject: NSObject {
+    @objc func test() -> String {
+        print("MyObject->test")
+        return ""
+    }
+}
+
 class iOSHookTests: XCTestCase {
 
     override func setUp() {
@@ -20,8 +27,11 @@ class iOSHookTests: XCTestCase {
     }
 
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // #selector(MyObject.test)
+        MyObject.init().hookAfter(selector: #selector(MyObject.test)) { (result, args) in
+            
+        }
+        
     }
 
     func testPerformanceExample() {

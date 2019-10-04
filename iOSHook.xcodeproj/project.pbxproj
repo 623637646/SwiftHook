@@ -13,6 +13,7 @@
 		2A4149732347441D0027F6DF /* InstanceAfterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4149722347441D0027F6DF /* InstanceAfterTests.m */; };
 		2A414975234744330027F6DF /* InstanceInsteadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A414974234744330027F6DF /* InstanceInsteadTests.m */; };
 		2A41497C23474FE10027F6DF /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A41497B23474FE10027F6DF /* TestObject.m */; };
+		2A4149832347607C0027F6DF /* Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4149822347607C0027F6DF /* Constant.m */; };
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC5234308AE006D42F2 /* iOSHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A467BC4234308AE006D42F2 /* iOSHookTests.swift */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,6 +42,8 @@
 		2A414974234744330027F6DF /* InstanceInsteadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstanceInsteadTests.m; sourceTree = "<group>"; };
 		2A41497A23474FE10027F6DF /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
 		2A41497B23474FE10027F6DF /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
+		2A4149812347607C0027F6DF /* Constant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
+		2A4149822347607C0027F6DF /* Constant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Constant.m; sourceTree = "<group>"; };
 		2A467BB6234308AE006D42F2 /* iOSHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BB9234308AE006D42F2 /* iOSHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSHook.h; sourceTree = "<group>"; };
 		2A467BBA234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,12 +83,14 @@
 		2A41496523473D540027F6DF /* AspectsTests */ = {
 			isa = PBXGroup;
 			children = (
-				2A41497923474FAC0027F6DF /* TestObjects */,
-				2A414971234743E60027F6DF /* Aspects */,
 				2A41496623473D540027F6DF /* InstanceBeforeTests.m */,
 				2A4149722347441D0027F6DF /* InstanceAfterTests.m */,
 				2A414974234744330027F6DF /* InstanceInsteadTests.m */,
 				2A41496F234743D30027F6DF /* AllInstanceBeforeTests.m */,
+				2A41497923474FAC0027F6DF /* TestObjects */,
+				2A414971234743E60027F6DF /* Aspects */,
+				2A4149812347607C0027F6DF /* Constant.h */,
+				2A4149822347607C0027F6DF /* Constant.m */,
 				2A41496823473D540027F6DF /* Info.plist */,
 			);
 			path = AspectsTests;
@@ -296,6 +301,7 @@
 			files = (
 				2A41496723473D540027F6DF /* InstanceBeforeTests.m in Sources */,
 				2A414975234744330027F6DF /* InstanceInsteadTests.m in Sources */,
+				2A4149832347607C0027F6DF /* Constant.m in Sources */,
 				2A414970234743D30027F6DF /* AllInstanceBeforeTests.m in Sources */,
 				2A41496E23473D620027F6DF /* Aspects.m in Sources */,
 				2A41497C23474FE10027F6DF /* TestObject.m in Sources */,

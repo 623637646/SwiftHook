@@ -8,29 +8,13 @@
 
 #import <XCTest/XCTest.h>
 #import "Aspects.h"
+#import "TestObjects/TestObject.h"
 
-@interface TestObject : NSObject
-
-- (void)someMethod:(BOOL *)executed;
-
-@end
-
-@implementation TestObject
-
-- (void)someMethod:(BOOL *)executed;
-{
-    if (executed) {
-        *executed = YES;
-    }
-}
+@interface AspectsInstanceBeforeTests : XCTestCase
 
 @end
 
-@interface AspectsTests : XCTestCase
-
-@end
-
-@implementation AspectsTests
+@implementation AspectsInstanceBeforeTests
 
 - (void)testNoHook
 {

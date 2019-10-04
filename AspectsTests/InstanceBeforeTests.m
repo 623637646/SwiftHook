@@ -87,4 +87,31 @@
     XCTAssert(triggered == NO);
 }
 
+- (void)testCancel
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    id<AspectToken> token = [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    BOOL removed = [token remove];
+    XCTAssert(removed == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
+}
+
 @end

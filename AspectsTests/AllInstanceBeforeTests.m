@@ -12,6 +12,8 @@
 
 @interface AllInstanceBeforeTests : XCTestCase
 
+@property (nonatomic, assign) BOOL triggered;
+
 @end
 
 @implementation AllInstanceBeforeTests

@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Aspects.h"
+#import "TestObjects/TestObject.h"
 
 @interface AspectsInstanceAfterTests : XCTestCase
 
@@ -14,25 +16,43 @@
 
 @implementation AspectsInstanceAfterTests
 
-//- (void)testInstanceMethodAfter {
-//    
-//    NSError *error = nil;
-//    TestObject *obj = [[TestObject alloc] init];
-//    __block BOOL triggered = NO;
-//    
-//    [obj aspect_hookSelector:@selector(executeInstanceMethod) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
-//        triggered = YES;
-//        TestObject *obj = info.instance;
-//        XCTAssert(obj.alreadyExecutedMethod == YES);
-//    } error:&error];
-//    XCTAssert(error == nil);
-//    
-//    XCTAssert(obj.alreadyExecutedMethod == NO);
-//    [obj executeInstanceMethod];
-//    XCTAssert(obj.alreadyExecutedMethod == YES);
-//    XCTAssert(triggered == YES);
-//    
-//    [self testInstanceMethodNoHook];
-//}
+- (void)testNoHook
+{
+    TestObject *obj = [[TestObject alloc] init];
+    BOOL executed = NO;
+    [obj someMethod:&executed];
+    XCTAssert(executed == YES);
+}
+
+- (void)testTriggered
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj someMethod:NULL];
+    XCTAssert(triggered == YES);
+}
+
+- (void)testOrder
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL executed = NO;
+    
+    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
+        XCTAssert(executed == YES);
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    [obj someMethod:&executed];
+    XCTAssert(executed == YES);
+}
 
 @end

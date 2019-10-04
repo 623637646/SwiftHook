@@ -22,13 +22,13 @@
     TestObject *obj = [[TestObject alloc] init];
     __block BOOL triggered = NO;
     
-    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
     
     XCTAssert(triggered == NO);
-    [obj someMethod:NULL];
+    [obj methodWithExecuted:NULL];
     XCTAssert(triggered == YES);
 }
 
@@ -38,12 +38,12 @@
     TestObject *obj = [[TestObject alloc] init];
     __block BOOL executed = NO;
     
-    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         
     } error:&error];
     XCTAssert(error == nil);
     
-    [obj someMethod:&executed];
+    [obj methodWithExecuted:&executed];
     XCTAssert(executed == NO);
 }
 
@@ -53,12 +53,12 @@
     TestObject *obj = [[TestObject alloc] init];
     __block BOOL executed = NO;
     
-    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         [info.originalInvocation invoke];
     } error:&error];
     XCTAssert(error == nil);
     
-    [obj someMethod:&executed];
+    [obj methodWithExecuted:&executed];
     XCTAssert(executed == YES);
 }
 

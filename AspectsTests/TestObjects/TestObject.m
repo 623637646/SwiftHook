@@ -10,7 +10,7 @@
 
 @implementation TestObject
 
-- (void)someMethod:(BOOL *)executed;
+- (void)methodWithExecuted:(BOOL *)executed;
 {
     if (executed) {
         *executed = YES;

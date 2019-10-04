@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TestObject : NSObject
 
-- (void)someMethod:(nullable BOOL *)executed;
+- (void)methodWithExecuted:(nullable BOOL *)executed;
 
 @end
 

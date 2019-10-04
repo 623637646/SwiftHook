@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A41496723473D540027F6DF /* AspectsInstanceBeforeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A41496623473D540027F6DF /* AspectsInstanceBeforeTests.m */; };
+		2A41496E23473D620027F6DF /* Aspects.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A41496C23473D620027F6DF /* Aspects.m */; };
+		2A414970234743D30027F6DF /* AspectsClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A41496F234743D30027F6DF /* AspectsClassTests.m */; };
+		2A4149732347441D0027F6DF /* AspectsInstanceAfterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A4149722347441D0027F6DF /* AspectsInstanceAfterTests.m */; };
+		2A414975234744330027F6DF /* AspectsInstanceInsteadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A414974234744330027F6DF /* AspectsInstanceInsteadTests.m */; };
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC5234308AE006D42F2 /* iOSHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A467BC4234308AE006D42F2 /* iOSHookTests.swift */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -25,6 +30,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A41496423473D540027F6DF /* AspectsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AspectsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A41496623473D540027F6DF /* AspectsInstanceBeforeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsInstanceBeforeTests.m; sourceTree = "<group>"; };
+		2A41496823473D540027F6DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A41496C23473D620027F6DF /* Aspects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aspects.m; sourceTree = "<group>"; };
+		2A41496D23473D620027F6DF /* Aspects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Aspects.h; sourceTree = "<group>"; };
+		2A41496F234743D30027F6DF /* AspectsClassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsClassTests.m; sourceTree = "<group>"; };
+		2A4149722347441D0027F6DF /* AspectsInstanceAfterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsInstanceAfterTests.m; sourceTree = "<group>"; };
+		2A414974234744330027F6DF /* AspectsInstanceInsteadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsInstanceInsteadTests.m; sourceTree = "<group>"; };
 		2A467BB6234308AE006D42F2 /* iOSHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iOSHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BB9234308AE006D42F2 /* iOSHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSHook.h; sourceTree = "<group>"; };
 		2A467BBA234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -36,6 +49,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2A41496123473D540027F6DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A467BB3234308AE006D42F2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -54,11 +74,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A41496523473D540027F6DF /* AspectsTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A414971234743E60027F6DF /* Aspects */,
+				2A41496623473D540027F6DF /* AspectsInstanceBeforeTests.m */,
+				2A4149722347441D0027F6DF /* AspectsInstanceAfterTests.m */,
+				2A414974234744330027F6DF /* AspectsInstanceInsteadTests.m */,
+				2A41496F234743D30027F6DF /* AspectsClassTests.m */,
+				2A41496823473D540027F6DF /* Info.plist */,
+			);
+			path = AspectsTests;
+			sourceTree = "<group>";
+		};
+		2A414971234743E60027F6DF /* Aspects */ = {
+			isa = PBXGroup;
+			children = (
+				2A41496D23473D620027F6DF /* Aspects.h */,
+				2A41496C23473D620027F6DF /* Aspects.m */,
+			);
+			path = Aspects;
+			sourceTree = "<group>";
+		};
 		2A467BAC234308AE006D42F2 = {
 			isa = PBXGroup;
 			children = (
 				2A467BB8234308AE006D42F2 /* iOSHook */,
 				2A467BC3234308AE006D42F2 /* iOSHookTests */,
+				2A41496523473D540027F6DF /* AspectsTests */,
 				2A467BB7234308AE006D42F2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +111,7 @@
 			children = (
 				2A467BB6234308AE006D42F2 /* iOSHook.framework */,
 				2A467BBF234308AE006D42F2 /* iOSHookTests.xctest */,
+				2A41496423473D540027F6DF /* AspectsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,6 +158,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		2A41496323473D540027F6DF /* AspectsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A41496B23473D540027F6DF /* Build configuration list for PBXNativeTarget "AspectsTests" */;
+			buildPhases = (
+				2A41496023473D540027F6DF /* Sources */,
+				2A41496123473D540027F6DF /* Frameworks */,
+				2A41496223473D540027F6DF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AspectsTests;
+			productName = AspectsTests;
+			productReference = 2A41496423473D540027F6DF /* AspectsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2A467BB5234308AE006D42F2 /* iOSHook */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2A467BCA234308AE006D42F2 /* Build configuration list for PBXNativeTarget "iOSHook" */;
@@ -160,6 +221,9 @@
 				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = Yanni;
 				TargetAttributes = {
+					2A41496323473D540027F6DF = {
+						CreatedOnToolsVersion = 10.3;
+					};
 					2A467BB5234308AE006D42F2 = {
 						CreatedOnToolsVersion = 10.3;
 						LastSwiftMigration = 1030;
@@ -183,11 +247,19 @@
 			targets = (
 				2A467BB5234308AE006D42F2 /* iOSHook */,
 				2A467BBE234308AE006D42F2 /* iOSHookTests */,
+				2A41496323473D540027F6DF /* AspectsTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2A41496223473D540027F6DF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A467BB4234308AE006D42F2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -205,6 +277,18 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2A41496023473D540027F6DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A41496723473D540027F6DF /* AspectsInstanceBeforeTests.m in Sources */,
+				2A414975234744330027F6DF /* AspectsInstanceInsteadTests.m in Sources */,
+				2A414970234743D30027F6DF /* AspectsClassTests.m in Sources */,
+				2A41496E23473D620027F6DF /* Aspects.m in Sources */,
+				2A4149732347441D0027F6DF /* AspectsInstanceAfterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A467BB2234308AE006D42F2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -233,6 +317,38 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2A41496923473D540027F6DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AspectsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.AspectsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2A41496A23473D540027F6DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AspectsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.AspectsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		2A467BC8234308AE006D42F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -445,6 +561,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2A41496B23473D540027F6DF /* Build configuration list for PBXNativeTarget "AspectsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A41496923473D540027F6DF /* Debug */,
+				2A41496A23473D540027F6DF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2A467BB0234308AE006D42F2 /* Build configuration list for PBXProject "iOSHook" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -16,14 +16,6 @@
 
 @implementation AspectsInstanceBeforeTests
 
-- (void)testNoHook
-{
-    TestObject *obj = [[TestObject alloc] init];
-    BOOL executed = NO;
-    [obj someMethod:&executed];
-    XCTAssert(executed == YES);
-}
-
 - (void)testTriggered
 {
     NSError *error = nil;

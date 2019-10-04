@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Aspects.h"
+#import "TestObjects/TestObject.h"
 
 @interface AspectsInstanceInsteadTests : XCTestCase
 
@@ -14,25 +16,50 @@
 
 @implementation AspectsInstanceInsteadTests
 
-//- (void)testInstanceMethodInstead {
-//
-//    NSError *error = nil;
-//    TestObject *obj = [[TestObject alloc] init];
-//    __block BOOL triggered = NO;
-//    
-//    [obj aspect_hookSelector:@selector(executeInstanceMethod) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
-//        triggered = YES;
-//        TestObject *obj = info.instance;
-//        XCTAssert(obj.alreadyExecutedMethod == NO);
-//    } error:&error];
-//    XCTAssert(error == nil);
-//    
-//    XCTAssert(obj.alreadyExecutedMethod == NO);
-//    [obj executeInstanceMethod];
-//    XCTAssert(obj.alreadyExecutedMethod == NO);
-//    XCTAssert(triggered == YES);
-//    
-//    [self testInstanceMethodNoHook];
-//}
+- (void)testTriggered
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj someMethod:NULL];
+    XCTAssert(triggered == YES);
+}
+
+- (void)testSkipOriginal
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL executed = NO;
+    
+    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    [obj someMethod:&executed];
+    XCTAssert(executed == NO);
+}
+
+- (void)testCalledOriginal
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL executed = NO;
+    
+    [obj aspect_hookSelector:@selector(someMethod:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        [info.originalInvocation invoke];
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    [obj someMethod:&executed];
+    XCTAssert(executed == YES);
+}
 
 @end

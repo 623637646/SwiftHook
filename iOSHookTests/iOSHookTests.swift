@@ -28,7 +28,11 @@ class iOSHookTests: XCTestCase {
 
     func testExample() {
         // #selector(MyObject.test)
-        MyObject.init().hookAfter(selector: #selector(MyObject.test)) { (result, args) in
+        MyObject.init().hookAfter(selector: #selector(MyObject.test)) { (obj, result, args) in
+            
+        }
+        
+        MyObject.hookAfter(selector: #selector(MyObject.test)) { (obj, result, args) in
             
         }
         

@@ -75,9 +75,8 @@
 		2A467BB8234308AE006D42F2 /* iOSHook */ = {
 			isa = PBXGroup;
 			children = (
+				2A60A3802347298700043143 /* Classes */,
 				2A467BB9234308AE006D42F2 /* iOSHook.h */,
-				2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */,
-				2AD0745A2344908A00BA1FE1 /* Token.swift */,
 				2A467BBA234308AE006D42F2 /* Info.plist */,
 			);
 			path = iOSHook;
@@ -90,6 +89,15 @@
 				2A467BC6234308AE006D42F2 /* Info.plist */,
 			);
 			path = iOSHookTests;
+			sourceTree = "<group>";
+		};
+		2A60A3802347298700043143 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */,
+				2AD0745A2344908A00BA1FE1 /* Token.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

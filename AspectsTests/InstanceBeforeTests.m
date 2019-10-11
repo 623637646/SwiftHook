@@ -114,4 +114,25 @@
     XCTAssert(triggered == NO);
 }
 
+- (void)testNoAffectToOtherInstance
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    TestObject *obj2 = [[TestObject alloc] init];
+    triggered = NO;
+    [obj2 methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
+}
+
 @end

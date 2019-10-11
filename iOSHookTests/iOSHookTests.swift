@@ -6,6 +6,44 @@
 //  Copyright © 2019 Yanni. All rights reserved.
 //
 
+
+/* Test Cases.
+ 
+ -One instance
+    -Before
+        -testTriggered
+        -testOrder
+        -testMultipleTimes
+        -testOneTime
+        -testCancel
+        -testNoAffectToOtherInstance
+    -After
+        -testTriggered
+        -testOrder
+        -testMultipleTimes
+        -testOneTime
+        -testCancel
+        -testNoAffectToOtherInstance
+    -Instead
+        -testTriggered
+        -testMultipleTimes
+        -testOneTime
+        -testCancel
+        -testNoAffectToOtherInstance
+        -testSkipOriginal
+        -testCalledOriginal
+        -testChangedReturnValue
+ -All instance
+    -Before
+    -After
+    -Instead
+ -Class
+    -Before
+    -After
+    -Instead
+ 
+ */
+
 import XCTest
 @testable import iOSHook
 

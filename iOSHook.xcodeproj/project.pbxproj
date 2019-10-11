@@ -19,6 +19,7 @@
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD0745B2344908A00BA1FE1 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */; };
 		2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD0745A2344908A00BA1FE1 /* Token.swift */; };
+		2AE18BB523509BB200C5612D /* ClassBeforeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AE18BB423509BB200C5612D /* ClassBeforeTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		2A467BC6234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AD074592344908A00BA1FE1 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
 		2AD0745A2344908A00BA1FE1 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		2AE18BB423509BB200C5612D /* ClassBeforeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClassBeforeTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				2A4149722347441D0027F6DF /* InstanceAfterTests.m */,
 				2A414974234744330027F6DF /* InstanceInsteadTests.m */,
 				2A41496F234743D30027F6DF /* AllInstanceBeforeTests.m */,
+				2AE18BB423509BB200C5612D /* ClassBeforeTests.m */,
 				2A41497923474FAC0027F6DF /* TestObjects */,
 				2A414971234743E60027F6DF /* Aspects */,
 				2A4149812347607C0027F6DF /* Constant.h */,
@@ -301,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A41496723473D540027F6DF /* InstanceBeforeTests.m in Sources */,
+				2AE18BB523509BB200C5612D /* ClassBeforeTests.m in Sources */,
 				2A414975234744330027F6DF /* InstanceInsteadTests.m in Sources */,
 				2A4149832347607C0027F6DF /* Constant.m in Sources */,
 				2A414970234743D30027F6DF /* AllInstanceBeforeTests.m in Sources */,

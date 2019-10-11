@@ -73,6 +73,54 @@
     XCTAssert(triggered == NO);
 }
 
+- (void)testCancel
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    id<AspectToken> token = [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    BOOL removed = [token remove];
+    XCTAssert(removed == YES);
+    
+    triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
+}
+
+- (void)testNoAffectToOtherInstance
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered == YES);
+    
+    TestObject *obj2 = [[TestObject alloc] init];
+    triggered = NO;
+    [obj2 methodWithExecuted:NULL];
+    XCTAssert(triggered == NO);
+}
+
 - (void)testSkipOriginal
 {
     NSError *error = nil;
@@ -119,33 +167,6 @@
     
     id result = [obj methodWithOriginalReturnValue:obj1];
     XCTAssert(result == obj2);
-}
-
-- (void)testCancel
-{
-    NSError *error = nil;
-    TestObject *obj = [[TestObject alloc] init];
-    __block BOOL triggered = NO;
-    
-    id<AspectToken> token = [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
-        triggered = YES;
-    } error:&error];
-    XCTAssert(error == nil);
-    
-    XCTAssert(triggered == NO);
-    [obj methodWithExecuted:NULL];
-    XCTAssert(triggered == YES);
-    
-    triggered = NO;
-    [obj methodWithExecuted:NULL];
-    XCTAssert(triggered == YES);
-    
-    BOOL removed = [token remove];
-    XCTAssert(removed == YES);
-    
-    triggered = NO;
-    [obj methodWithExecuted:NULL];
-    XCTAssert(triggered == NO);
 }
 
 @end

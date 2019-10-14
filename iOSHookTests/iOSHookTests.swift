@@ -44,6 +44,7 @@
         -testOneTime
         -testCancel
         -testNoAffectToSuperClassInstance
+        -testAffectToChildClassInstance
     -After
     -Instead
  -Class

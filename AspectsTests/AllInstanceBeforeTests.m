@@ -20,14 +20,14 @@
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
     
     TestObject *obj = [[TestObject alloc] init];
     XCTAssert(triggered == NO);
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
     
     XCTAssert([token remove] == YES);
@@ -38,7 +38,7 @@
     __block BOOL triggered = NO;
     __block BOOL executed = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(executedBlock:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         XCTAssert(triggered == NO);
         XCTAssert(executed == NO);
         triggered = YES;
@@ -46,7 +46,7 @@
     XCTAssert(error == nil);
     
     TestObject *obj = [[TestObject alloc] init];
-    [obj methodWithExecutedBlock:^{
+    [obj executedBlock:^{
         XCTAssert(triggered == YES);
         XCTAssert(executed == NO);
         executed = YES;
@@ -60,7 +60,7 @@
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -68,11 +68,11 @@
     TestObject *obj = [[TestObject alloc] init];
     
     XCTAssert(triggered == NO);
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
     
     triggered = NO;
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
     
     XCTAssert([token remove] == YES);
@@ -82,7 +82,7 @@
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -90,11 +90,11 @@
     TestObject *obj = [[TestObject alloc] init];
 
     XCTAssert(triggered == NO);
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
 
     triggered = NO;
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == NO);
     
     XCTAssert([token remove] == NO);
@@ -104,7 +104,7 @@
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -112,17 +112,17 @@
     TestObject *obj = [[TestObject alloc] init];
 
     XCTAssert(triggered == NO);
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
 
     triggered = NO;
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == YES);
 
     XCTAssert([token remove] == YES);
 
     triggered = NO;
-    [obj methodWithExecutedBlock:nil];
+    [obj simpleMethod];
     XCTAssert(triggered == NO);
 }
 
@@ -130,7 +130,7 @@
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
-    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(methodGetNameOfSelf) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -138,8 +138,27 @@
     SuperTestObject *obj = [[SuperTestObject alloc] init];
 
     XCTAssert(triggered == NO);
-    [obj methodGetNameOfSelf];
+    [obj simpleMethod];
     XCTAssert(triggered == NO);
+    
+    XCTAssert([token remove] == YES);
+}
+
+// Aspects don't support this
+- (void)testAffectToChildClassInstance
+{
+    __block BOOL triggered = NO;
+    NSError *error = nil;
+    id<AspectToken> token = [SuperTestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    TestObject *obj = [[TestObject alloc] init];
+
+    XCTAssert(triggered == NO);
+    [obj simpleMethod];
+    XCTAssert(triggered == YES);
     
     XCTAssert([token remove] == YES);
 }

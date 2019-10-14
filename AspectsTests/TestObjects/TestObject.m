@@ -10,21 +10,21 @@
 
 @implementation TestObject
 
-- (void)methodWithExecutedBlock:(nullable void(^)(void))block
+- (void)simpleMethod
+{
+    
+}
+
+- (void)executedBlock:(nullable void(^)(void))block
 {
     if (block) {
         block();
     }
 }
 
-- (id)methodWithOriginalReturnValue:(id)value;
+- (id)returnParameter:(id)value;
 {
     return value;
-}
-
-- (NSString *)methodGetNameOfSelf
-{
-    return [self.class description];
 }
 
 @end

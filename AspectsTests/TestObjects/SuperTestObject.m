@@ -10,9 +10,9 @@
 
 @implementation SuperTestObject
 
-- (NSString *)methodGetNameOfSelf
+- (void)simpleMethod
 {
-    return [self.class description];
+    
 }
 
 @end

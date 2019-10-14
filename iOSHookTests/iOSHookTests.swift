@@ -50,7 +50,24 @@
         -testNoAffectToSuperClassInstance
         -testAffectToChildClassInstance
         -testHookTwice
+        +testHookClassThenInstance
+        +testHookInstanceThenClass
+        +testHookOnceClassThenInstance
+        +testHookOnceInstanceThenClass
     -After
+        -testTriggered
+        -testOrder
+        -testMultipleTimes
+        -testOneTime
+        -testOneTimeAndNormalAtSameTime
+        -testCancel
+        -testNoAffectToSuperClassInstance
+        -testAffectToChildClassInstance
+        -testHookTwice
+        +testHookClassThenInstance
+        +testHookInstanceThenClass
+        +testHookOnceClassThenInstance
+        +testHookOnceInstanceThenClass
     -Instead
  -Class
     -Before

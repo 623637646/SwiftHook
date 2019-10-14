@@ -63,4 +63,64 @@
     XCTAssert(self.executed == YES);
 }
 
+- (void)testMultipleTimes
+{
+    TestObject *obj = [[TestObject alloc] init];
+    
+    XCTAssert(self.triggered == NO);
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(self.triggered == YES);
+    
+    self.triggered = NO;
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(self.triggered == YES);
+}
+
+- (void)testOneTime
+{
+    [self tearDown];
+    
+    __block BOOL triggered = NO;
+    NSError *error = nil;
+    [TestObject aspect_hookSelector:@selector(methodWithExecutedBlock:) withOptions:AspectPositionBefore | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+        XCTAssert(triggered == NO);
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    TestObject *obj = [[TestObject alloc] init];
+
+    XCTAssert(triggered == NO);
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(triggered == YES);
+
+    triggered = NO;
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(triggered == NO);
+    
+    [self setUp];
+}
+
+- (void)testCancel
+{
+    TestObject *obj = [[TestObject alloc] init];
+
+    XCTAssert(self.triggered == NO);
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(self.triggered == YES);
+
+    self.triggered = NO;
+    [obj methodWithExecutedBlock:nil];
+    XCTAssert(self.triggered == YES);
+
+    BOOL removed = [self.token remove];
+    XCTAssert(removed == YES);
+
+    self.triggered = NO;
+    [obj methodWithExecuted:NULL];
+    XCTAssert(self.triggered == NO);
+    
+    [self setUp];
+}
+
 @end

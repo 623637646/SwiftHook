@@ -17,6 +17,7 @@
         -testOneTime
         -testCancel
         -testNoAffectToOtherInstance
+        -testHookTwice
     -After
         -testTriggered
         -testOrder
@@ -24,6 +25,7 @@
         -testOneTime
         -testCancel
         -testNoAffectToOtherInstance
+        -testHookTwice
     -Instead
         -testTriggered
         -testMultipleTimes
@@ -33,8 +35,15 @@
         -testSkipOriginal
         -testCalledOriginal
         -testChangedReturnValue
+        -testHookTwice
  -All instance
     -Before
+        -testTriggered
+        -testOrder
+        -testMultipleTimes
+        -testOneTime
+        -testCancel
+        
     -After
     -Instead
  -Class

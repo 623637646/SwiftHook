@@ -135,4 +135,28 @@
     XCTAssert(triggered == NO);
 }
 
+- (void)testHookTwice
+{
+    NSError *error = nil;
+    TestObject *obj = [[TestObject alloc] init];
+    __block BOOL triggered1 = NO;
+    __block BOOL triggered2 = NO;
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered1 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    [obj aspect_hookSelector:@selector(methodWithExecuted:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered2 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    XCTAssert(triggered1 == NO);
+    XCTAssert(triggered2 == NO);
+    [obj methodWithExecuted:NULL];
+    XCTAssert(triggered1 == YES);
+    XCTAssert(triggered2 == YES);
+}
+
 @end

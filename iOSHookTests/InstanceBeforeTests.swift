@@ -22,6 +22,10 @@ class InstanceBeforeTests: XCTestCase {
         XCTAssert(triggered == false)
         obj.simpleMethod()
         XCTAssert(triggered == true)
+//        
+//        TestObject.hookBefore(selector: #selector(TestObject.simpleMethod), error: &error) { (obj, args) in
+//            
+//        }
     }
 
 }

@@ -27,7 +27,7 @@ private func performLocked(block: () -> Void) -> Void {
 private let blacklist = [NSSelectorFromString("retain"),NSSelectorFromString("release"), NSSelectorFromString("autorelease"), NSSelectorFromString("forwardInvocation:")]
 
 private func isSelectorAllowed(
-    class: AnyClass,
+    theClass: AnyClass,
     selector: Selector,
     error: inout Error?) -> Bool {
     guard !blacklist.contains(selector) else {
@@ -49,8 +49,8 @@ public extension NSObject {
                     block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
         var token: Token? = nil
         performLocked {
-            guard let `class` = object_getClass(self),
-                isSelectorAllowed(class: `class`, selector: selector, error: &error) else {
+            guard let theClass = object_getClass(self),
+                isSelectorAllowed(theClass: theClass, selector: selector, error: &error) else {
                     return
             }
             token = Token()
@@ -115,12 +115,12 @@ public extension NSObject {
 //    class func hookBefore(selector: Selector,
 //                          isClassFunc: Bool = false,
 //                          onlyOnce: Bool = false,
-//                          error: AutoreleasingUnsafeMutablePointer<Error>? = nil,
+//                          error: inout Error?,
 //                          block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
 //        var token: Token? = nil
 //        performLocked {
-//            guard let `class` = object_getClass(self),
-//                isSelectorAllowed(class: `class`, selector: selector, error: error) else {
+//            guard let theClass = object_getClass(self),
+//                isSelectorAllowed(theClass: theClass, selector: selector, error: &error) else {
 //                    return
 //            }
 //            token = Token()

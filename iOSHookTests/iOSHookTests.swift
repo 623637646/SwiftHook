@@ -69,6 +69,21 @@
         +testHookOnceClassThenInstance
         +testHookOnceInstanceThenClass
     -Instead
+        -testTriggered
+        -testMultipleTimes
+        -testOneTime
+        -testOneTimeAndNormalAtSameTime
+        -testCancel
+        -testNoAffectToSuperClassInstance
+        -testAffectToChildClassInstance
+        -testSkipOriginal
+        -testCalledOriginal
+        -testChangedReturnValue
+        -testHookTwice
+        +testHookClassThenInstance
+        +testHookInstanceThenClass
+        +testHookOnceClassThenInstance
+        +testHookOnceInstanceThenClass
  -Class
     -Before
     -After

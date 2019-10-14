@@ -107,12 +107,12 @@
     __block BOOL triggered1 = NO;
     __block BOOL triggered2 = NO;
     
-    id<AspectToken> token1 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token1 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
         triggered1 = YES;
     } error:&error];
     XCTAssert(error == nil);
     
-    id<AspectToken> token2 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionInstead | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token2 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
         triggered2 = YES;
     } error:&error];
     XCTAssert(error == nil);

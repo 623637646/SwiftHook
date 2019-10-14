@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Token {
+public class Token {
     func remove() -> Bool {
         return true
     }

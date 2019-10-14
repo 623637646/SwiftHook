@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TestObject : SuperTestObject
 
-- (void)methodWithExecuted:(nullable BOOL *)executed;
-
 - (void)methodWithExecutedBlock:(nullable void(^)(void))block;
 
 - (id)methodWithOriginalReturnValue:(id)value;

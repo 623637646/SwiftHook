@@ -10,13 +10,6 @@
 
 @implementation TestObject
 
-- (void)methodWithExecuted:(nullable BOOL *)executed
-{
-    if (executed) {
-        *executed = YES;
-    }
-}
-
 - (void)methodWithExecutedBlock:(nullable void(^)(void))block
 {
     if (block) {

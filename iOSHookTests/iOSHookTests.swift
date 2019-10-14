@@ -15,6 +15,7 @@
         -testOrder
         -testMultipleTimes
         -testOneTime
+        -testOneTimeAndNormalAtSameTime
         -testCancel
         -testNoAffectToOtherInstance
         -testHookTwice
@@ -23,6 +24,7 @@
         -testOrder
         -testMultipleTimes
         -testOneTime
+        -testOneTimeAndNormalAtSameTime
         -testCancel
         -testNoAffectToOtherInstance
         -testHookTwice
@@ -30,6 +32,7 @@
         -testTriggered
         -testMultipleTimes
         -testOneTime
+        -testOneTimeAndNormalAtSameTime
         -testCancel
         -testNoAffectToOtherInstance
         -testSkipOriginal
@@ -42,6 +45,7 @@
         -testOrder
         -testMultipleTimes
         -testOneTime
+        -testOneTimeAndNormalAtSameTime
         -testCancel
         -testNoAffectToSuperClassInstance
         -testAffectToChildClassInstance

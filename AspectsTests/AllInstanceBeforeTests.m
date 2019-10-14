@@ -100,6 +100,42 @@
     XCTAssert([token remove] == NO);
 }
 
+// Aspects bug.
+- (void)testOneTimeAndNormalAtSameTime
+{
+    NSError *error = nil;
+    __block BOOL triggered1 = NO;
+    __block BOOL triggered2 = NO;
+    
+    id<AspectToken> token1 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        triggered1 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    id<AspectToken> token2 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionInstead | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+        triggered2 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    TestObject *obj = [[TestObject alloc] init];
+    
+    XCTAssert(triggered1 == NO);
+    XCTAssert(triggered2 == NO);
+    [obj simpleMethod];
+    XCTAssert(triggered1 == YES);
+    XCTAssert(triggered2 == YES);
+    
+    triggered1 = NO;
+    triggered2 = NO;
+    [obj simpleMethod];
+    XCTAssert(triggered1 == YES);
+    XCTAssert(triggered2 == NO);
+    
+    XCTAssert([token1 remove] == YES);
+    XCTAssert([token2 remove] == NO);
+}
+
+
 - (void)testCancel
 {
     __block BOOL triggered = NO;
@@ -169,12 +205,12 @@
     __block BOOL triggered1 = NO;
     __block BOOL triggered2 = NO;
     
-    [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token1 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered1 = YES;
     } error:&error];
     XCTAssert(error == nil);
     
-    [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token2 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
         triggered2 = YES;
     } error:&error];
     XCTAssert(error == nil);
@@ -186,6 +222,9 @@
     [obj simpleMethod];
     XCTAssert(triggered1 == YES);
     XCTAssert(triggered2 == YES);
+    
+    XCTAssert([token1 remove] == YES);
+    XCTAssert([token2 remove] == YES);
 }
 
 @end

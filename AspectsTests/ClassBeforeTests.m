@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Aspects.h"
+#import "TestObjects/TestObject.h"
 
 @interface ClassBeforeTests : XCTestCase
 
@@ -14,12 +16,21 @@
 
 @implementation ClassBeforeTests
 
-- (void)setUp {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
+// Aspects don't support this
+- (void)testTriggered
+{
+    __block BOOL triggered = NO;
+    NSError *error = nil;
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(classSimpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        triggered = YES;
+    } error:&error];
+    XCTAssert(error == nil);
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    XCTAssert(triggered == NO);
+    [TestObject classSimpleMethod];
+    XCTAssert(triggered == YES);
+
+    XCTAssert([token remove] == YES);
 }
 
 @end

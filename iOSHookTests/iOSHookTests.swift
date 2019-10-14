@@ -86,8 +86,12 @@
         +testHookOnceInstanceThenClass
  -Class
     -Before
+        -testTriggered
+        +
     -After
+        +
     -Instead
+        +
  
  */
 

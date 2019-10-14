@@ -27,4 +27,9 @@
     return value;
 }
 
++ (void)classSimpleMethod
+{
+    
+}
+
 @end

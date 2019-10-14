@@ -7,16 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SuperTestObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TestObject : NSObject
+@interface TestObject : SuperTestObject
 
 - (void)methodWithExecuted:(nullable BOOL *)executed;
 
 - (void)methodWithExecutedBlock:(nullable void(^)(void))block;
 
 - (id)methodWithOriginalReturnValue:(id)value;
+
+- (NSString *)methodGetNameOfSelf;
 
 @end
 

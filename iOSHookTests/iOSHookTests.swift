@@ -43,7 +43,7 @@
         -testMultipleTimes
         -testOneTime
         -testCancel
-        
+        -testNoAffectToSuperClassInstance
     -After
     -Instead
  -Class

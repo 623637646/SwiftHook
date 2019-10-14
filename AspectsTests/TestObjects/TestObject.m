@@ -29,4 +29,9 @@
     return value;
 }
 
+- (NSString *)methodGetNameOfSelf
+{
+    return [self.class description];
+}
+
 @end

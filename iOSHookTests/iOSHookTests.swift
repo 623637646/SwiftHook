@@ -45,6 +45,7 @@
         -testCancel
         -testNoAffectToSuperClassInstance
         -testAffectToChildClassInstance
+        -testHookTwice
     -After
     -Instead
  -Class

@@ -181,7 +181,7 @@
     NSError *error = nil;
     __block BOOL executed = NO;
     
-    [TestObject aspect_hookSelector:@selector(executedBlock:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(executedBlock:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         
     } error:&error];
     XCTAssert(error == nil);
@@ -192,6 +192,8 @@
         executed = YES;
     }];
     XCTAssert(executed == NO);
+    
+    XCTAssert([token remove] == YES);
 }
 
 - (void)testCalledOriginal
@@ -199,7 +201,7 @@
     NSError *error = nil;
     __block BOOL executed = NO;
     
-    [TestObject aspect_hookSelector:@selector(executedBlock:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(executedBlock:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         [info.originalInvocation invoke];
     } error:&error];
     XCTAssert(error == nil);
@@ -210,6 +212,8 @@
         executed = YES;
     }];
     XCTAssert(executed == YES);
+    
+    XCTAssert([token remove] == YES);
 }
 
 - (void)testChangedReturnValue
@@ -218,7 +222,7 @@
     __block NSObject *obj1 = [[NSObject alloc] init];
     __block NSObject *obj2 = [[NSObject alloc] init];
     
-    [TestObject aspect_hookSelector:@selector(returnParameter:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(returnParameter:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         NSInvocation *invocation = info.originalInvocation;
         objc_setAssociatedObject(invocation, _cmd, obj2, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [invocation setReturnValue:&obj2];
@@ -229,6 +233,8 @@
     
     id result = [obj returnParameter:obj1];
     XCTAssert(result == obj2);
+    
+    XCTAssert([token remove] == YES);
 }
 
 - (void)testHookTwice

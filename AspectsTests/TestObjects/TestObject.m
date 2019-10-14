@@ -10,10 +10,17 @@
 
 @implementation TestObject
 
-- (void)methodWithExecuted:(BOOL *)executed;
+- (void)methodWithExecuted:(nullable BOOL *)executed
 {
     if (executed) {
         *executed = YES;
+    }
+}
+
+- (void)methodWithExecutedBlock:(nullable void(^)(void))block
+{
+    if (block) {
+        block();
     }
 }
 

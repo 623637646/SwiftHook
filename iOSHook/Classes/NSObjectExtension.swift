@@ -8,39 +8,8 @@
 
 import Foundation
 
-// domain
-public let domain = "com.iOSHook"
-public enum ErrorCode: Int {
-    case selectorNotAllowed = 0
-}
-
-
-// lock
-private var lock = os_unfair_lock()
-private func performLocked(block: () -> Void) -> Void {
-    os_unfair_lock_lock(&lock)
-    block()
-    os_unfair_lock_unlock(&lock)
-}
-
-// check selector
-private let blacklist = [NSSelectorFromString("retain"),NSSelectorFromString("release"), NSSelectorFromString("autorelease"), NSSelectorFromString("forwardInvocation:")]
-
-private func isSelectorAllowed(
-    theClass: AnyClass,
-    selector: Selector,
-    error: inout Error?) -> Bool {
-    guard !blacklist.contains(selector) else {
-        error? = NSError.init(domain: domain, code: ErrorCode.selectorNotAllowed.rawValue, userInfo: nil)
-        return false
-    }
-    return true
-}
-
 public extension NSObject {
-    
-    // instance
-    
+        
     // before
     @discardableResult
     func hookBefore(selector: Selector,
@@ -49,9 +18,38 @@ public extension NSObject {
                     block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
         var token: Token? = nil
         performLocked {
-            guard let theClass = object_getClass(self),
-                isSelectorAllowed(theClass: theClass, selector: selector, error: &error) else {
-                    return
+            guard isSelectorAllowedForOneInstance(obj: self, selector: selector, error: &error) else {
+                return
+            }
+            token = Token()
+        }
+        return token
+    }
+    
+    @discardableResult
+    class func hookBeforeForAllInstances(selector: Selector,
+                                         onlyOnce: Bool = false,
+                                         error: inout Error?,
+                                         block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
+        var token: Token? = nil
+        performLocked {
+            guard isSelectorAllowedForAllInstances(theClass: self, selector: selector, error: &error) else {
+                return
+            }
+            token = Token()
+        }
+        return token
+    }
+    
+    @discardableResult
+    class func hookBeforeForClass(selector: Selector,
+                                  onlyOnce: Bool = false,
+                                  error: inout Error?,
+                                  block: (_ class: AnyClass, _ args: [Any]) -> Void) -> Token? {
+        var token: Token? = nil
+        performLocked {
+            guard isSelectorAllowedForClass(theClass: self, selector: selector, error: &error) else {
+                return
             }
             token = Token()
         }
@@ -111,22 +109,7 @@ public extension NSObject {
     // class
     
     // before
-//    @discardableResult
-//    class func hookBefore(selector: Selector,
-//                          isClassFunc: Bool = false,
-//                          onlyOnce: Bool = false,
-//                          error: inout Error?,
-//                          block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
-//        var token: Token? = nil
-//        performLocked {
-//            guard let theClass = object_getClass(self),
-//                isSelectorAllowed(theClass: theClass, selector: selector, error: &error) else {
-//                    return
-//            }
-//            token = Token()
-//        }
-//        return token
-//    }
+    
     
     // after
 //    @discardableResult

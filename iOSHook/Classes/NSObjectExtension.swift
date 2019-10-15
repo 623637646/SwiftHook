@@ -18,7 +18,7 @@ public extension NSObject {
                     block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
         var token: Token? = nil
         performLocked {
-            guard isSelectorAllowedForOneInstance(obj: self, selector: selector, error: &error) else {
+            guard isSelectorAllowedForSingleInstance(obj: self, selector: selector, error: &error) else {
                 return
             }
             token = Token()

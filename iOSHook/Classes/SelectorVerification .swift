@@ -14,7 +14,7 @@ private let blacklist = [NSSelectorFromString("retain"),
                          NSSelectorFromString("forwardInvocation:"),
                          NSSelectorFromString("dealloc")]
 
-func isSelectorAllowedForOneInstance(obj: NSObject, selector: Selector, error: inout Error?) -> Bool {
+func isSelectorAllowedForSingleInstance(obj: NSObject, selector: Selector, error: inout Error?) -> Bool {
     guard !blacklist.contains(selector) else {
         error? = getError(code: .selectorBlacklisted, description: "Selector \(selector) is blacklisted.")
         return false

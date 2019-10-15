@@ -11,7 +11,7 @@ import iOSHook
 
 class InstanceBeforeTests: XCTestCase {
     
-    func testOneInstance() {
+    func testSingleInstance() {
         var error: Error? = nil
         let obj = TestObject()
         var triggered = false

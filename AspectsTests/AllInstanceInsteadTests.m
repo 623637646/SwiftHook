@@ -157,7 +157,6 @@
     XCTAssert([token remove] == YES);
 }
 
-// Aspects don't support this
 - (void)testAffectToChildClassInstance
 {
     __block BOOL triggered = NO;

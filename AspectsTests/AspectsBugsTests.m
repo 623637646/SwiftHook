@@ -10,12 +10,13 @@
 #import "Aspects.h"
 #import "TestObjects/TestObject.h"
 
-@interface ClassBeforeTests : XCTestCase
+@interface AspectsBugsTests : XCTestCase
 
 @end
 
-@implementation ClassBeforeTests
+@implementation AspectsBugsTests
 
+// Aspects don't support this
 - (void)testSupportClassMethod
 {
     __block BOOL triggered = NO;
@@ -32,7 +33,8 @@
     XCTAssert([token remove] == YES);
 }
 
-- (void)testOneBug
+// Aspects bug.
+- (void)testHookSuperAndChild
 {
     NSError *error = nil;
     id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
@@ -40,15 +42,50 @@
     XCTAssert(error == nil);
     XCTAssert([token remove] == YES);
 
-    
+
     token = [SuperTestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
     } error:&error];
     XCTAssert(error == nil);
-    
+
     TestObject *obj2 = [[TestObject alloc] init];
     [obj2 simpleMethod];
-    
+
     XCTAssert([token remove] == YES);
+}
+
+// Aspects bug.
+- (void)testOneTimeAndNormalAtSameTime
+{
+    NSError *error = nil;
+    __block BOOL triggered1 = NO;
+    __block BOOL triggered2 = NO;
+    
+    id<AspectToken> token1 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
+        triggered1 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    id<AspectToken> token2 = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter | AspectOptionAutomaticRemoval usingBlock:^(id<AspectInfo> info){
+        triggered2 = YES;
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    TestObject *obj = [[TestObject alloc] init];
+    
+    XCTAssert(triggered1 == NO);
+    XCTAssert(triggered2 == NO);
+    [obj simpleMethod];
+    XCTAssert(triggered1 == YES);
+    XCTAssert(triggered2 == YES);
+    
+    triggered1 = NO;
+    triggered2 = NO;
+    [obj simpleMethod];
+    XCTAssert(triggered1 == YES);
+    XCTAssert(triggered2 == NO);
+    
+    XCTAssert([token1 remove] == YES);
+    XCTAssert([token2 remove] == NO);
 }
 
 @end

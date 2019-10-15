@@ -11,7 +11,8 @@ import Foundation
 // domain
 public let domain = "com.iOSHook"
 public enum ErrorCode: Int {
-    case selectorBlacklisted = 0
+    case internalError = 0
+    case selectorBlacklisted
     case doesNotRespondToSelector
 }
 

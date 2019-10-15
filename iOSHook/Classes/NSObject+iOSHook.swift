@@ -21,7 +21,7 @@ public extension NSObject {
             guard isSelectorAllowedForSingleInstance(obj: self, selector: selector, error: &error) else {
                 return
             }
-            token = Token()
+            token = _hook(obj: self, error: &error)
         }
         return token
     }

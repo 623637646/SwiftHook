@@ -11,7 +11,7 @@ import UIKit
 class TestObject: SuperTestObject {
     
     @objc override func simpleMethod() {
-        
+        super.simpleMethod()
     }
     
     @objc func executedBlock(_ block: ()->()) {

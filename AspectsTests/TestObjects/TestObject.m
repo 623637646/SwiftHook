@@ -12,7 +12,7 @@
 
 - (void)simpleMethod
 {
-    
+    [super simpleMethod];
 }
 
 - (void)executedBlock:(nullable void(^)(void))block

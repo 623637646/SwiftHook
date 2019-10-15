@@ -10,8 +10,8 @@ import XCTest
 import iOSHook
 
 class InstanceBeforeTests: XCTestCase {
-
-    func testInstance() {
+    
+    func testOneInstance() {
         var error: Error? = nil
         let obj = TestObject()
         var triggered = false
@@ -21,19 +21,31 @@ class InstanceBeforeTests: XCTestCase {
         XCTAssert(error == nil)
         XCTAssert(triggered == false)
         obj.simpleMethod()
-//        XCTAssert(triggered == true)
+        //        XCTAssert(triggered == true)
+    }
+    
+    func testAllInstance() {
+        var error: Error? = nil
+        var triggered = false
+        TestObject.hookBeforeForAllInstances(selector: #selector(TestObject.simpleMethod), onlyOnce: false, error:&error, block: {(obj, args) in
+            triggered = true
+        })
+        XCTAssert(error == nil)
+        XCTAssert(triggered == false)
+        TestObject().simpleMethod()
+        //            XCTAssert(triggered == true)
     }
     
     func testClass() {
-            var error: Error? = nil
-            var triggered = false
-            TestObject.hookBeforeForAllInstances(selector: #selector(TestObject.simpleMethod), onlyOnce: false, error:&error, block: {(obj, args) in
-                triggered = true
-            })
-            XCTAssert(error == nil)
-            XCTAssert(triggered == false)
-            TestObject().simpleMethod()
-//            XCTAssert(triggered == true)
-        }
-
+        var error: Error? = nil
+        var triggered = false
+        TestObject.hookBeforeForClass(selector: #selector(TestObject.simpleMethod), onlyOnce: false, error:&error, block: {(obj, args) in
+            triggered = true
+        })
+        XCTAssert(error == nil)
+        XCTAssert(triggered == false)
+        TestObject().simpleMethod()
+        //            XCTAssert(triggered == true)
+    }
+    
 }

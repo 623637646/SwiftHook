@@ -10,7 +10,7 @@ import Foundation
 
 public extension NSObject {
         
-    // before
+    // MARK: Before
     @discardableResult
     func hookBefore(selector: Selector,
                     onlyOnce: Bool = false,
@@ -53,7 +53,7 @@ public extension NSObject {
         return token
     }
     
-    // after
+    // MARK: After
 //    @discardableResult
 //    func hookAfter(selector: Selector,
 //                   onlyOnce: Bool = false,

@@ -11,7 +11,7 @@ import Foundation
 let iOSHookSubclassSuffix = "_iOSHook_";
 
 // TODO: Probably a KVO'ed class. Swizzle in place. Also swizzle meta classes in place???
-func _hook(obj: NSObject, error: inout Error?) -> Token? {
+func _hook(obj: NSObject) throws -> Token? {
     let theClass = type(of: obj)
     if class_isMetaClass(theClass) {
         // TODO
@@ -19,30 +19,27 @@ func _hook(obj: NSObject, error: inout Error?) -> Token? {
         // already subclass
     } else {
         // normal instance
-        guard let subclass = createSubclass(baseClass: theClass, error: &error) else {
+        guard let subclass = try createSubclass(baseClass: theClass) else {
             return nil
         }
-        let a = object_setClass(obj, subclass)
-        let b = object_getClassName(obj)
-        let c = object_getClass(obj)
+        let _ = object_setClass(obj, subclass)
+        let _ = object_getClassName(obj)
+        let _ = object_getClass(obj)
         print("")
     }
     return Token()
 }
 
-func createSubclass(baseClass: NSObject.Type, error: inout Error?) -> NSObject.Type? {
+func createSubclass(baseClass: NSObject.Type) throws -> NSObject.Type? {
     let className = NSStringFromClass(baseClass)
     let subclassName = "\(className)\(iOSHookSubclassSuffix)"
     var subclass = objc_getClass(subclassName) as? NSObject.Type
     guard subclass == nil else {
-        assert(false)
-        error? = getError(code: .internalError, description: "Existing iOS hook subclass of \(baseClass)")
-        return nil
+        throw iOSHookError(code: .internalError, description: "Existing iOS hook subclass of \(baseClass)")
     }
     subclass = objc_allocateClassPair(baseClass, subclassName, 0) as? NSObject.Type;
     guard let subclassNoNil = subclass else {
-        error? = getError(code: .internalError, description: "objc_allocateClassPair failed (baseClass: \(baseClass)")
-        return nil
+        throw iOSHookError(code: .internalError, description: "objc_allocateClassPair failed (baseClass: \(baseClass)")
     }
     objc_registerClassPair(subclassNoNil);
     return subclassNoNil

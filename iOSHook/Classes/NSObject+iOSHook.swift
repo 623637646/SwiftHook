@@ -14,14 +14,13 @@ public extension NSObject {
     @discardableResult
     func hookBefore(selector: Selector,
                     onlyOnce: Bool = false,
-                    error: inout Error?,
-                    block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
+                    block: (_ obj: NSObject, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
-        performLocked {
-            guard isSelectorAllowedForSingleInstance(obj: self, selector: selector, error: &error) else {
+        try performLocked {
+            guard try isSelectorAllowedForSingleInstance(obj: self, selector: selector) else {
                 return
             }
-            token = _hook(obj: self, error: &error)
+            token = try _hook(obj: self)
         }
         return token
     }
@@ -29,11 +28,10 @@ public extension NSObject {
     @discardableResult
     class func hookBeforeForAllInstances(selector: Selector,
                                          onlyOnce: Bool = false,
-                                         error: inout Error?,
-                                         block: (_ obj: NSObject, _ args: [Any]) -> Void) -> Token? {
+                                         block: (_ obj: NSObject, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
-        performLocked {
-            guard isSelectorAllowedForAllInstances(theClass: self, selector: selector, error: &error) else {
+        try performLocked {
+            guard try isSelectorAllowedForAllInstances(theClass: self, selector: selector) else {
                 return
             }
             token = Token()
@@ -44,11 +42,10 @@ public extension NSObject {
     @discardableResult
     class func hookBeforeForClass(selector: Selector,
                                   onlyOnce: Bool = false,
-                                  error: inout Error?,
-                                  block: (_ class: AnyClass, _ args: [Any]) -> Void) -> Token? {
+                                  block: (_ class: AnyClass, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
-        performLocked {
-            guard isSelectorAllowedForClass(theClass: self, selector: selector, error: &error) else {
+        try performLocked {
+            guard try isSelectorAllowedForClass(theClass: self, selector: selector) else {
                 return
             }
             token = Token()

@@ -16,6 +16,6 @@ public enum ErrorCode: Int {
     case doesNotRespondToSelector
 }
 
-func getError(code: ErrorCode, description: String) -> NSError {
+func iOSHookError(code: ErrorCode, description: String) -> NSError {
     return NSError.init(domain: domain, code: code.rawValue, userInfo: [NSLocalizedDescriptionKey: description])
 }

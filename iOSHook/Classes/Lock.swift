@@ -10,8 +10,8 @@ import Foundation
 
 // lock
 var lock = os_unfair_lock()
-func performLocked(block: () -> Void) -> Void {
+func performLocked(block: () throws -> Void) rethrows {
     os_unfair_lock_lock(&lock)
-    block()
+    try block()
     os_unfair_lock_unlock(&lock)
 }

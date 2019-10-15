@@ -16,8 +16,7 @@
 
 @implementation ClassBeforeTests
 
-// Aspects don't support this
-- (void)testTriggered
+- (void)testSupportClassMethod
 {
     __block BOOL triggered = NO;
     NSError *error = nil;
@@ -30,6 +29,25 @@
     [TestObject classSimpleMethod];
     XCTAssert(triggered == YES);
 
+    XCTAssert([token remove] == YES);
+}
+
+- (void)testOneBug
+{
+    NSError *error = nil;
+    id<AspectToken> token = [TestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> info){
+    } error:&error];
+    XCTAssert(error == nil);
+    XCTAssert([token remove] == YES);
+
+    
+    token = [SuperTestObject aspect_hookSelector:@selector(simpleMethod) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+    } error:&error];
+    XCTAssert(error == nil);
+    
+    TestObject *obj2 = [[TestObject alloc] init];
+    [obj2 simpleMethod];
+    
     XCTAssert([token remove] == YES);
 }
 

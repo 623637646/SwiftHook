@@ -37,7 +37,7 @@ func createSubclass(baseClass: NSObject.Type) throws -> NSObject.Type? {
     guard subclass == nil else {
         throw iOSHookError(code: .internalError, description: "Existing iOS hook subclass of \(baseClass)")
     }
-    subclass = objc_allocateClassPair(baseClass, subclassName, 0) as? NSObject.Type;
+    subclass = objc_allocateClassPair(baseClass, subclassName, 0) as? NSObject.Type
     guard let subclassNoNil = subclass else {
         throw iOSHookError(code: .internalError, description: "objc_allocateClassPair failed (baseClass: \(baseClass)")
     }

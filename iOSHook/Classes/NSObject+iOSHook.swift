@@ -18,9 +18,9 @@ public extension iOSHookProtocol where Self: NSObject {
         
     // MARK: Before
     @discardableResult
-    func hookBefore(selector: Selector,
+    func hookBefore<T>(selector: Selector,
                     onlyOnce: Bool = false,
-                    block: (_ obj: Self, _ args: [Any]) -> Void) throws -> Token? {
+                    block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForSingleInstance(obj: self, selector: selector) else {
@@ -32,9 +32,9 @@ public extension iOSHookProtocol where Self: NSObject {
     }
     
     @discardableResult
-    static func hookBeforeForAllInstances(selector: Selector,
+    static func hookBeforeForAllInstances<T>(selector: Selector,
                                           onlyOnce: Bool = false,
-                                          block: (_ obj: Self, _ args: [Any]) -> Void) throws -> Token? {
+                                          block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForAllInstances(theClass: self, selector: selector) else {
@@ -46,9 +46,9 @@ public extension iOSHookProtocol where Self: NSObject {
     }
     
     @discardableResult
-    static func hookBeforeForClass(selector: Selector,
+    static func hookBeforeForClass<T>(selector: Selector,
                                    onlyOnce: Bool = false,
-                                   block: (_ class: AnyClass, _ args: [Any]) -> Void) throws -> Token? {
+                                   block: (_ class: AnyClass, _ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForClass(theClass: self, selector: selector) else {

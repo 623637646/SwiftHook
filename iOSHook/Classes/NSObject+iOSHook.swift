@@ -15,15 +15,15 @@ extension NSObject: iOSHookProtocol {
 }
 
 public extension iOSHookProtocol where Self: NSObject {
-        
+    
     // MARK: Before
     @discardableResult
-    func hookBefore<T>(selector: Selector,
-                    onlyOnce: Bool = false,
-                    block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
+    func hookSelfAtBefore<T>(selector: Selector,
+                             onlyOnce: Bool = false,
+                             block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
-            guard try isSelectorAllowedForSingleInstance(obj: self, selector: selector) else {
+            guard try isSelectorAllowedForInstances(theClass: type(of: self), selector: selector) else {
                 return
             }
             token = try _hook(obj: self)
@@ -32,12 +32,12 @@ public extension iOSHookProtocol where Self: NSObject {
     }
     
     @discardableResult
-    static func hookBeforeForAllInstances<T>(selector: Selector,
-                                          onlyOnce: Bool = false,
-                                          block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
+    static func hookAllInstancesAtBefore<T>(selector: Selector,
+                                            onlyOnce: Bool = false,
+                                            block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
-            guard try isSelectorAllowedForAllInstances(theClass: self, selector: selector) else {
+            guard try isSelectorAllowedForInstances(theClass: self, selector: selector) else {
                 return
             }
             token = Token()
@@ -46,9 +46,9 @@ public extension iOSHookProtocol where Self: NSObject {
     }
     
     @discardableResult
-    static func hookBeforeForClass<T>(selector: Selector,
-                                   onlyOnce: Bool = false,
-                                   block: (_ class: AnyClass, _ args: T) -> Void) throws -> Token? {
+    static func hookClassMethodAtBefore<T>(selector: Selector,
+                                           onlyOnce: Bool = false,
+                                           block: (_ args: T) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForClass(theClass: self, selector: selector) else {

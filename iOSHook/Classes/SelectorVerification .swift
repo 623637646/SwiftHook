@@ -15,6 +15,7 @@ private let blacklist = [NSSelectorFromString("retain"),
                          NSSelectorFromString("dealloc")]
 
 func isSelectorAllowedForInstances(theClass: NSObject.Type, selector: Selector) throws -> Bool {
+    assert(!class_isMetaClass(theClass))
     guard !blacklist.contains(selector) else {
         throw iOSHookError(code: .selectorBlacklisted, description: "Selector \(selector) is blacklisted.")
     }
@@ -25,6 +26,7 @@ func isSelectorAllowedForInstances(theClass: NSObject.Type, selector: Selector) 
 }
 
 func isSelectorAllowedForClass(theClass: NSObject.Type, selector: Selector) throws -> Bool {
+    assert(!class_isMetaClass(theClass))
     guard !blacklist.contains(selector) else {
         throw iOSHookError(code: .selectorBlacklisted, description: "Selector \(selector) is blacklisted.")
     }

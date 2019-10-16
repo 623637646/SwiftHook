@@ -8,13 +8,19 @@
 
 import Foundation
 
-public extension NSObject {
+public protocol iOSHookProtocol {
+}
+
+extension NSObject: iOSHookProtocol {
+}
+
+public extension iOSHookProtocol where Self: NSObject {
         
     // MARK: Before
     @discardableResult
     func hookBefore(selector: Selector,
                     onlyOnce: Bool = false,
-                    block: (_ obj: NSObject, _ args: [Any]) -> Void) throws -> Token? {
+                    block: (_ obj: Self, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForSingleInstance(obj: self, selector: selector) else {
@@ -26,9 +32,9 @@ public extension NSObject {
     }
     
     @discardableResult
-    class func hookBeforeForAllInstances(selector: Selector,
-                                         onlyOnce: Bool = false,
-                                         block: (_ obj: NSObject, _ args: [Any]) -> Void) throws -> Token? {
+    static func hookBeforeForAllInstances(selector: Selector,
+                                          onlyOnce: Bool = false,
+                                          block: (_ obj: Self, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForAllInstances(theClass: self, selector: selector) else {
@@ -40,9 +46,9 @@ public extension NSObject {
     }
     
     @discardableResult
-    class func hookBeforeForClass(selector: Selector,
-                                  onlyOnce: Bool = false,
-                                  block: (_ class: AnyClass, _ args: [Any]) -> Void) throws -> Token? {
+    static func hookBeforeForClass(selector: Selector,
+                                   onlyOnce: Bool = false,
+                                   block: (_ class: AnyClass, _ args: [Any]) -> Void) throws -> Token? {
         var token: Token? = nil
         try performLocked {
             guard try isSelectorAllowedForClass(theClass: self, selector: selector) else {

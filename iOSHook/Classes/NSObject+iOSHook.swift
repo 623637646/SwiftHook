@@ -15,13 +15,12 @@ extension NSObject: iOSHookProtocol {
 }
 
 public extension iOSHookProtocol where Self: NSObject {
-    
     // MARK: Before
     @discardableResult
     func hookSelfAtBefore<T>(selector: Selector,
                              onlyOnce: Bool = false,
                              block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
-        var token: Token? = nil
+        var token: Token?
         try performLocked {
             guard try isSelectorAllowedForInstances(theClass: type(of: self), selector: selector) else {
                 return
@@ -30,12 +29,11 @@ public extension iOSHookProtocol where Self: NSObject {
         }
         return token
     }
-    
     @discardableResult
     static func hookAllInstancesAtBefore<T>(selector: Selector,
                                             onlyOnce: Bool = false,
                                             block: (_ obj: Self, _ args: T) -> Void) throws -> Token? {
-        var token: Token? = nil
+        var token: Token?
         try performLocked {
             guard try isSelectorAllowedForInstances(theClass: self, selector: selector) else {
                 return
@@ -44,12 +42,11 @@ public extension iOSHookProtocol where Self: NSObject {
         }
         return token
     }
-    
     @discardableResult
     static func hookClassMethodAtBefore<T>(selector: Selector,
                                            onlyOnce: Bool = false,
                                            block: (_ args: T) -> Void) throws -> Token? {
-        var token: Token? = nil
+        var token: Token?
         try performLocked {
             guard try isSelectorAllowedForClass(theClass: self, selector: selector) else {
                 return
@@ -58,7 +55,6 @@ public extension iOSHookProtocol where Self: NSObject {
         }
         return token
     }
-    
     // MARK: After
 //    @discardableResult
 //    func hookAfter(selector: Selector,
@@ -75,13 +71,14 @@ public extension iOSHookProtocol where Self: NSObject {
 //        }
 //        return token
 //    }
-    
+
     // instead
 //    @discardableResult
 //    func hookInstead<ReturnType>(selector: Selector,
 //                                 onlyOnce: Bool = false,
 //                                 error: AutoreleasingUnsafeMutablePointer<Error>? = nil,
-//                                 block: (_ obj: NSObject, _ origin: (_ args: [Any]) -> ReturnType, _ args: [Any]) -> ReturnType) -> Token? {
+//                                 block: (_ obj: NSObject,
+//    _ origin: (_ args: [Any]) -> ReturnType, _ args: [Any]) -> ReturnType) -> Token? {
 //        var token: Token? = nil
 //        performLocked {
 //            guard let `class` = object_getClass(self),
@@ -92,7 +89,6 @@ public extension iOSHookProtocol where Self: NSObject {
 //        }
 //        return token
 //    }
-    
 //    // before dealloc
 //    func hookBeforeDealloc(error: AutoreleasingUnsafeMutablePointer<Error>? = nil,
 //                           block: (_ obj: NSObject) -> Void) {
@@ -108,12 +104,8 @@ public extension iOSHookProtocol where Self: NSObject {
 //
 //        }
 //    }
-    
     // class
-    
     // before
-    
-    
     // after
 //    @discardableResult
 //    class func hookAfter(selector: Selector,
@@ -131,14 +123,14 @@ public extension iOSHookProtocol where Self: NSObject {
 //        }
 //        return token
 //    }
-    
     // instead
 //    @discardableResult
 //    class func hookInstead<ReturnType>(selector: Selector,
 //                                       isClassFunc: Bool = false,
 //                                       onlyOnce: Bool = false,
 //                                       error: AutoreleasingUnsafeMutablePointer<Error>? = nil,
-//                                       block: (_ obj: NSObject, _ origin: (_ args: [Any]) -> ReturnType, _ args: [Any]) -> ReturnType) -> Token? {
+//                                       block: (_ obj: NSObject,
+//    _ origin: (_ args: [Any]) -> ReturnType, _ args: [Any]) -> ReturnType) -> Token? {
 //        var token: Token? = nil
 //        performLocked {
 //            guard let `class` = object_getClass(self),
@@ -165,5 +157,4 @@ public extension iOSHookProtocol where Self: NSObject {
 //
 //        }
 //    }
-    
 }

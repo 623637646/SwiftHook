@@ -9,20 +9,14 @@
 import UIKit
 
 class TestObject: SuperTestObject {
-    
     @objc override func simpleMethod() {
         super.simpleMethod()
     }
-    
-    @objc func executedBlock(_ block: ()->()) {
-        
+    @objc func executedBlock(_ block: () -> Void) {
     }
-    
     @objc func returnParameter(_ value: Any) -> Any {
         return value
     }
-    
     @objc class func classSimpleMethod() {
-        
     }
 }

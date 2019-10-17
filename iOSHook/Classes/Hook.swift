@@ -8,7 +8,7 @@
 
 import Foundation
 
-let iOSHookSubclassSuffix = "_iOSHook_";
+let iOSHookSubclassSuffix = "_iOSHook_"
 
 // TODO: Probably a KVO'ed class. Swizzle in place. Also swizzle meta classes in place???
 func hook(instance: InstanceHookContainer) throws -> Token? {
@@ -24,7 +24,7 @@ func hook(instance: InstanceHookContainer) throws -> Token? {
     if !NSStringFromClass(theClass).hasPrefix(iOSHookSubclassSuffix) {
         // not create subclass yet
         let subclass: AnyClass = try createSubclass(baseClass: theClass)
-        object_setClass(obj, subclass);
+        object_setClass(obj, subclass)
     }
     return Token()
 }
@@ -36,8 +36,9 @@ func createSubclass(baseClass: AnyClass) throws -> AnyClass {
         throw iOSHookError(code: .internalError, description: "Existing iOS hook subclass of \(baseClass)")
     }
     guard let subclass: AnyClass = objc_allocateClassPair(baseClass, subclassName, 0) else {
-        throw iOSHookError(code: .internalError, description: "objc_allocateClassPair failed with name \(subclassName) base on \(baseClass)")
+        throw iOSHookError(code: .internalError,
+                           description: "objc_allocateClassPair failed with name \(subclassName) base on \(baseClass)")
     }
-    objc_registerClassPair(subclass);
+    objc_registerClassPair(subclass)
     return subclass
 }

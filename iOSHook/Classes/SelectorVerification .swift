@@ -20,7 +20,8 @@ func isSelectorAllowedForInstances(theClass: AnyClass, selector: Selector) throw
         throw iOSHookError(code: .selectorBlacklisted, description: "Selector \(selector) is blacklisted.")
     }
     guard theClass.instancesRespond(to: selector) else {
-        throw iOSHookError(code: .doesNotRespondToSelector, description: "Unable to find selector \(selector) of \(theClass)")
+        throw iOSHookError(code: .doesNotRespondToSelector,
+                           description: "Unable to find selector \(selector) of \(theClass)")
     }
     return true
 }
@@ -31,7 +32,8 @@ func isSelectorAllowedForClass(theClass: AnyClass, selector: Selector) throws ->
         throw iOSHookError(code: .selectorBlacklisted, description: "Selector \(selector) is blacklisted.")
     }
     guard theClass.responds(to: selector) else {
-        throw iOSHookError(code: .doesNotRespondToSelector, description: "Unable to find selector \(selector) of \(theClass)")
+        throw iOSHookError(code: .doesNotRespondToSelector,
+                           description: "Unable to find selector \(selector) of \(theClass)")
     }
     return true
 }

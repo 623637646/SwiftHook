@@ -10,15 +10,11 @@ import Foundation
 
 struct InstanceHookContainer {
     var obj: NSObject? {
-        get {
-            return self.objWeakBlock()
-        }
+        return self.objWeakBlock()
     }
     let selector: Selector
     let onlyOnce: Bool
-    
-    private var objWeakBlock: (()-> NSObject?)
-    
+    private var objWeakBlock: (() -> NSObject?)
     init(obj: NSObject, selector: Selector, onlyOnce: Bool = false) {
         self.selector = selector
         self.onlyOnce = onlyOnce

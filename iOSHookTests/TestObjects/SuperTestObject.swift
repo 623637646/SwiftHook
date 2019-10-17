@@ -11,7 +11,5 @@ import UIKit
 class SuperTestObject: NSObject {
 
     @objc func simpleMethod() {
-        
     }
-    
 }

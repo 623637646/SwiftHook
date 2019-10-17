@@ -21,15 +21,24 @@ func hook(instance: InstanceHookContainer) throws -> Token? {
     guard !class_isMetaClass(theClass) else {
         throw iOSHookError(code: .internalError, description: "class_isMetaClass of \(obj)'s class \(theClass) is true")
     }
-    if !NSStringFromClass(theClass).hasPrefix(iOSHookSubclassSuffix) {
-        // not create subclass yet
-        let subclass: AnyClass = try createSubclass(baseClass: theClass)
+    if NSStringFromClass(theClass) != "\(type(of: obj))\(iOSHookSubclassSuffix)" {
+        let subclass: AnyClass = try getHookedSubclass(baseClass: theClass)
         object_setClass(obj, subclass)
     }
+    // TODO
     return Token()
 }
 
-func createSubclass(baseClass: AnyClass) throws -> AnyClass {
+func getHookedSubclass(baseClass: AnyClass) throws -> AnyClass {
+    let className = NSStringFromClass(baseClass)
+    let subclassName = "\(className)\(iOSHookSubclassSuffix)"
+    guard let subclass = NSClassFromString(subclassName) else {
+        return try createHookedSubclass(baseClass: baseClass)
+    }
+    return subclass
+}
+
+func createHookedSubclass(baseClass: AnyClass) throws -> AnyClass {
     let className = NSStringFromClass(baseClass)
     let subclassName = "\(className)\(iOSHookSubclassSuffix)"
     guard NSClassFromString(subclassName) == nil else {

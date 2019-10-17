@@ -8,8 +8,7 @@
 
 import Foundation
 
-// Unavailable selectors in Swift.
-internal enum ObjCSelector {
+enum ObjCSelector {
     static let retain = Selector((("retain")))
     static let release = Selector((("release")))
     static let autorelease = Selector((("autorelease")))

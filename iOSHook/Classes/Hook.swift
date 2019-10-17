@@ -11,36 +11,33 @@ import Foundation
 let iOSHookSubclassSuffix = "_iOSHook_";
 
 // TODO: Probably a KVO'ed class. Swizzle in place. Also swizzle meta classes in place???
-func _hook(obj: NSObject) throws -> Token? {
-    let theClass = type(of: obj)
-    if class_isMetaClass(theClass) {
-        // TODO
-    } else if NSStringFromClass(theClass).hasPrefix(iOSHookSubclassSuffix) {
-        // already subclass
-    } else {
-        // normal instance
-        guard let subclass = try createSubclass(baseClass: theClass) else {
-            return nil
-        }
-        let _ = object_setClass(obj, subclass)
-        let _ = object_getClassName(obj)
-        let _ = object_getClass(obj)
-        print("")
+func hook(instance: InstanceHookContainer) throws -> Token? {
+    guard let obj = instance.obj else {
+        throw iOSHookError(code: .internalError, description: "obj is released")
+    }
+    guard let theClass: AnyClass = object_getClass(obj) else {
+        throw iOSHookError(code: .internalError, description: "object_getClass of \(obj) is nil")
+    }
+    guard !class_isMetaClass(theClass) else {
+        throw iOSHookError(code: .internalError, description: "class_isMetaClass of \(obj)'s class \(theClass) is true")
+    }
+    if !NSStringFromClass(theClass).hasPrefix(iOSHookSubclassSuffix) {
+        // not create subclass yet
+        let subclass: AnyClass = try createSubclass(baseClass: theClass)
+        object_setClass(obj, subclass);
     }
     return Token()
 }
 
-func createSubclass(baseClass: NSObject.Type) throws -> NSObject.Type? {
+func createSubclass(baseClass: AnyClass) throws -> AnyClass {
     let className = NSStringFromClass(baseClass)
     let subclassName = "\(className)\(iOSHookSubclassSuffix)"
-    var subclass = objc_getClass(subclassName) as? NSObject.Type
-    guard subclass == nil else {
+    guard NSClassFromString(subclassName) == nil else {
         throw iOSHookError(code: .internalError, description: "Existing iOS hook subclass of \(baseClass)")
     }
-    subclass = objc_allocateClassPair(baseClass, subclassName, 0) as? NSObject.Type
-    guard let subclassNoNil = subclass else {
-        throw iOSHookError(code: .internalError, description: "objc_allocateClassPair failed (baseClass: \(baseClass)")
+    guard let subclass: AnyClass = objc_allocateClassPair(baseClass, subclassName, 0) else {
+        throw iOSHookError(code: .internalError, description: "objc_allocateClassPair failed with name \(subclassName) base on \(baseClass)")
     }
-    objc_registerClassPair(subclassNoNil);
-    return subclassNoNil
+    objc_registerClassPair(subclass);
+    return subclass
 }

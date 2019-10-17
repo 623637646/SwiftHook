@@ -26,7 +26,7 @@ public extension iOSHookProtocol where Self: NSObject {
             guard try isSelectorAllowedForInstances(theClass: type(of: self), selector: selector) else {
                 return
             }
-            token = try _hook(obj: self)
+            token = try hook(instance: InstanceHookContainer(obj: self, selector: selector, onlyOnce: onlyOnce))
         }
         return token
     }

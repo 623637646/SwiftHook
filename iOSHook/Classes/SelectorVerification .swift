@@ -8,11 +8,11 @@
 
 import Foundation
 
-private let blacklist = [NSSelectorFromString("retain"),
-                         NSSelectorFromString("release"),
-                         NSSelectorFromString("autorelease"),
-                         NSSelectorFromString("forwardInvocation:"),
-                         NSSelectorFromString("dealloc")]
+private let blacklist = [ObjCSelector.retain,
+                         ObjCSelector.release,
+                         ObjCSelector.autorelease,
+                         ObjCSelector.forwardInvocation,
+                         ObjCSelector.dealloc]
 
 func isSelectorAllowedForInstances(theClass: NSObject.Type, selector: Selector) throws -> Bool {
     assert(!class_isMetaClass(theClass))

@@ -10,18 +10,21 @@ import XCTest
 import iOSHook
 
 class TestObject: NSObject {
-    @objc dynamic func simple(int: Int, double: Double, string: String) {
-        
+    @objc dynamic func simple() {
+        print("\(self) , \(#function)")
     }
 }
 
 class InstanceBeforeTests: XCTestCase {
     func testHook() {
         do {
-            try TestObject.hook(selector: #selector(TestObject.simple(int:double:string:))) { (original, args: (Int, Double, String)) -> Void in
-                return original(args)
-            }
-            TestObject().simple(int: 111, double: 2.12, string: "fff")
+            typealias TargetBlock = () -> Void
+            typealias HookBlock = @convention(block) (TargetBlock) -> Void
+
+            try TestObject.hook(selector: #selector(TestObject.simple), block: { (original) -> Void in
+                return original()
+            } as HookBlock)
+            TestObject().simple()
         } catch {
             print("%@", error)
         }

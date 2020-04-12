@@ -15,6 +15,8 @@
 		2A45EB78242CB70000CEEC94 /* iOSHook-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A45EB77242CB70000CEEC94 /* iOSHook-Bridging-Header.h */; };
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A7B25B9244331C000E35A75 /* iOSHookOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7B25B8244331C000E35A75 /* iOSHookOC.m */; };
+		2A7B25BB244331E700E35A75 /* iOSHookOC.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A7B25BA244331E700E35A75 /* iOSHookOC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD0745B2344908A00BA1FE1 /* NSObject+iOSHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */; };
 		2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD0745A2344908A00BA1FE1 /* Token.swift */; };
 /* End PBXBuildFile section */
@@ -41,6 +43,8 @@
 		2A467BBA234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A467BBF234308AE006D42F2 /* iOSHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BC6234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A7B25B8244331C000E35A75 /* iOSHookOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOSHookOC.m; sourceTree = "<group>"; };
+		2A7B25BA244331E700E35A75 /* iOSHookOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSHookOC.h; sourceTree = "<group>"; };
 		2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+iOSHook.swift"; sourceTree = "<group>"; };
 		2AD0745A2344908A00BA1FE1 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */,
+				2A7B25BA244331E700E35A75 /* iOSHookOC.h */,
+				2A7B25B8244331C000E35A75 /* iOSHookOC.m */,
 				2AD0745A2344908A00BA1FE1 /* Token.swift */,
 				2A0D7819235817EE003379C3 /* Constant.swift */,
 				2A45EB73242CB60900CEEC94 /* OCTest.h */,
@@ -125,6 +131,7 @@
 				2A45EB75242CB60900CEEC94 /* OCTest.h in Headers */,
 				2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */,
 				2A45EB78242CB70000CEEC94 /* iOSHook-Bridging-Header.h in Headers */,
+				2A7B25BB244331E700E35A75 /* iOSHookOC.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +239,7 @@
 				2A0D781A235817EE003379C3 /* Constant.swift in Sources */,
 				2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */,
 				2A45EB76242CB60900CEEC94 /* OCTest.m in Sources */,
+				2A7B25B9244331C000E35A75 /* iOSHookOC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

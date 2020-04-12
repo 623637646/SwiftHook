@@ -9,24 +9,24 @@
 import Foundation
 
 public enum iOSHookError: Error {
-    case invalidSelector
+    case canNotFindMethod(class:AnyClass, selector: Selector)
 }
 
 public extension NSObject {
     @discardableResult
-    class func hook(selector: Selector,
-                    block: (_ original: (_ args: [Any?]) -> Any?, _ args: [Any?]) -> Any?) throws -> Token? {
+    class func hook<Return, Args>(selector: Selector,
+                    block: (_ original: (_ args: Args) -> Return, _ args: Args) -> Return) throws -> Token? {
         var token: Token? = nil
         try DispatchQueue(label: "com.iOSHook.sync").sync {
             guard let method = class_getInstanceMethod(self, selector) else {
-                throw iOSHookError.invalidSelector
+                throw iOSHookError.canNotFindMethod(class: self, selector: selector)
             }
             
             let originalIMP = method_getImplementation(method)
-            let newIMPBlock: @convention(block) (AnyObject) -> Void = {`self` in
-                typealias MyCFunction = @convention(c) (AnyObject, Selector) -> Void
+            let newIMPBlock: @convention(block) (Self, Int, Double, String) -> Void = {`self`, i, d, s in
+                typealias MyCFunction = @convention(c) (AnyObject, Selector, Int, Double, String) -> Void
                 let curriedImplementation = unsafeBitCast(originalIMP, to: MyCFunction.self)
-                curriedImplementation(self, selector)
+                curriedImplementation(self, selector, i, d, s)
             }
 
             let newIMP = imp_implementationWithBlock(newIMPBlock)

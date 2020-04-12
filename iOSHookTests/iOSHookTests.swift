@@ -10,16 +10,20 @@ import XCTest
 import iOSHook
 
 class TestObject: NSObject {
-    @objc dynamic func simple() {
+    @objc dynamic func simple(int: Int, double: Double, string: String) {
         
     }
 }
 
 class InstanceBeforeTests: XCTestCase {
     func testHook() {
-        try! TestObject.hook(selector: #selector(TestObject.simple)) { (original, args) -> Any? in
-            return original(args)
+        do {
+            try TestObject.hook(selector: #selector(TestObject.simple(int:double:string:))) { (original, args: (Int, Double, String)) -> Void in
+                return original(args)
+            }
+            TestObject().simple(int: 111, double: 2.12, string: "fff")
+        } catch {
+            print("%@", error)
         }
-        TestObject().simple()
     }
 }

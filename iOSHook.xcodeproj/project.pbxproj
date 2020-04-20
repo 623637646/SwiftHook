@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B35BAD65F888D1EC7DF610A /* Pods_abstract_iOSHook_iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8950F8DBB12099DDFF8BAA46 /* Pods_abstract_iOSHook_iOSHook.framework */; };
 		2A0D781A235817EE003379C3 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0D7819235817EE003379C3 /* Constant.swift */; };
 		2A431055235479620090F7CA /* iOSHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A431054235479620090F7CA /* iOSHookTests.swift */; };
 		2A431057235479AD0090F7CA /* TestCases.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A431056235479AD0090F7CA /* TestCases.txt */; };
@@ -15,12 +16,14 @@
 		2A45EB78242CB70000CEEC94 /* iOSHook-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A45EB77242CB70000CEEC94 /* iOSHook-Bridging-Header.h */; };
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A7230DD244DE53E00193DE3 /* LibffiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7230DC244DE53E00193DE3 /* LibffiTests.m */; };
 		2A7B25B9244331C000E35A75 /* iOSHookOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7B25B8244331C000E35A75 /* iOSHookOC.m */; };
 		2A7B25BB244331E700E35A75 /* iOSHookOC.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A7B25BA244331E700E35A75 /* iOSHookOC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD0745B2344908A00BA1FE1 /* NSObject+iOSHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */; };
 		2AD0745C2344908A00BA1FE1 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD0745A2344908A00BA1FE1 /* Token.swift */; };
 		5F0CE536942208313F7EB1A0 /* Pods_iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F4F5C9DEFEAFD74FC1719AA /* Pods_iOSHook.framework */; };
 		620E727766CB842BCDAF566E /* Pods_iOSHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A4C6B9C3E6F7A744DFAA57B /* Pods_iOSHookTests.framework */; };
+		9834D4ACA8E6945A63C9737A /* Pods_abstract_iOSHook_iOSHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6E149220381613E4DC110D /* Pods_abstract_iOSHook_iOSHookTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,15 +49,23 @@
 		2A467BBA234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A467BBF234308AE006D42F2 /* iOSHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BC6234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A7230DB244DE53E00193DE3 /* iOSHookTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOSHookTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		2A7230DC244DE53E00193DE3 /* LibffiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibffiTests.m; sourceTree = "<group>"; };
 		2A7B25B8244331C000E35A75 /* iOSHookOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOSHookOC.m; sourceTree = "<group>"; };
 		2A7B25BA244331E700E35A75 /* iOSHookOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSHookOC.h; sourceTree = "<group>"; };
 		2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+iOSHook.swift"; sourceTree = "<group>"; };
 		2AD0745A2344908A00BA1FE1 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		372661A32CD604DACA85B4DB /* Pods-abstract-iOSHook-iOSHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-iOSHook-iOSHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-iOSHook-iOSHookTests/Pods-abstract-iOSHook-iOSHookTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3C3B36282DDDEFAA1016682C /* Pods-abstract-iOSHook-iOSHook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-iOSHook-iOSHook.debug.xcconfig"; path = "Target Support Files/Pods-abstract-iOSHook-iOSHook/Pods-abstract-iOSHook-iOSHook.debug.xcconfig"; sourceTree = "<group>"; };
 		5F4F5C9DEFEAFD74FC1719AA /* Pods_iOSHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A4C6B9C3E6F7A744DFAA57B /* Pods_iOSHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7693AA288EA769CD77F92DF4 /* Pods-abstract-iOSHook-iOSHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-iOSHook-iOSHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-iOSHook-iOSHook/Pods-abstract-iOSHook-iOSHook.release.xcconfig"; sourceTree = "<group>"; };
+		8950F8DBB12099DDFF8BAA46 /* Pods_abstract_iOSHook_iOSHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_iOSHook_iOSHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B6E149220381613E4DC110D /* Pods_abstract_iOSHook_iOSHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_iOSHook_iOSHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0D815F8CAA39B5E01549C5 /* Pods-iOSHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSHookTests.release.xcconfig"; path = "Target Support Files/Pods-iOSHookTests/Pods-iOSHookTests.release.xcconfig"; sourceTree = "<group>"; };
 		BD7224B38C72B831D7EBED04 /* Pods-iOSHook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSHook.debug.xcconfig"; path = "Target Support Files/Pods-iOSHook/Pods-iOSHook.debug.xcconfig"; sourceTree = "<group>"; };
 		E2821320EBF050E1632CDE5B /* Pods-iOSHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSHook.release.xcconfig"; path = "Target Support Files/Pods-iOSHook/Pods-iOSHook.release.xcconfig"; sourceTree = "<group>"; };
+		F054C95DF649A0033209393E /* Pods-abstract-iOSHook-iOSHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-iOSHook-iOSHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-iOSHook-iOSHookTests/Pods-abstract-iOSHook-iOSHookTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F0CE536942208313F7EB1A0 /* Pods_iOSHook.framework in Frameworks */,
+				1B35BAD65F888D1EC7DF610A /* Pods_abstract_iOSHook_iOSHook.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +84,7 @@
 			files = (
 				2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */,
 				620E727766CB842BCDAF566E /* Pods_iOSHookTests.framework in Frameworks */,
+				9834D4ACA8E6945A63C9737A /* Pods_abstract_iOSHook_iOSHookTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +98,11 @@
 				E2821320EBF050E1632CDE5B /* Pods-iOSHook.release.xcconfig */,
 				00B63174BB299F68B542DE8C /* Pods-iOSHookTests.debug.xcconfig */,
 				AA0D815F8CAA39B5E01549C5 /* Pods-iOSHookTests.release.xcconfig */,
+				3C3B36282DDDEFAA1016682C /* Pods-abstract-iOSHook-iOSHook.debug.xcconfig */,
+				7693AA288EA769CD77F92DF4 /* Pods-abstract-iOSHook-iOSHook.release.xcconfig */,
+				372661A32CD604DACA85B4DB /* Pods-abstract-iOSHook-iOSHookTests.debug.xcconfig */,
+				F054C95DF649A0033209393E /* Pods-abstract-iOSHook-iOSHookTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -124,8 +140,10 @@
 			isa = PBXGroup;
 			children = (
 				2A431054235479620090F7CA /* iOSHookTests.swift */,
+				2A7230DC244DE53E00193DE3 /* LibffiTests.m */,
 				2A467BC6234308AE006D42F2 /* Info.plist */,
 				2A431056235479AD0090F7CA /* TestCases.txt */,
+				2A7230DB244DE53E00193DE3 /* iOSHookTests-Bridging-Header.h */,
 			);
 			path = iOSHookTests;
 			sourceTree = "<group>";
@@ -150,6 +168,8 @@
 			children = (
 				5F4F5C9DEFEAFD74FC1719AA /* Pods_iOSHook.framework */,
 				6A4C6B9C3E6F7A744DFAA57B /* Pods_iOSHookTests.framework */,
+				8950F8DBB12099DDFF8BAA46 /* Pods_abstract_iOSHook_iOSHook.framework */,
+				8B6E149220381613E4DC110D /* Pods_abstract_iOSHook_iOSHookTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -198,6 +218,7 @@
 				2A467BBB234308AE006D42F2 /* Sources */,
 				2A467BBC234308AE006D42F2 /* Frameworks */,
 				2A467BBD234308AE006D42F2 /* Resources */,
+				9994B71ACFF6477E14F1AC0D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -225,6 +246,7 @@
 					};
 					2A467BBE234308AE006D42F2 = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -281,11 +303,33 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-iOSHookTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-abstract-iOSHook-iOSHookTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9994B71ACFF6477E14F1AC0D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-abstract-iOSHook-iOSHookTests/Pods-abstract-iOSHook-iOSHookTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/libffi/libffi.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libffi.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-abstract-iOSHook-iOSHookTests/Pods-abstract-iOSHook-iOSHookTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DED48EDF2C1A00FF88A3A3D6 /* [CP] Check Pods Manifest.lock */ = {
@@ -303,7 +347,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-iOSHook-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-abstract-iOSHook-iOSHook-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -330,6 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A431055235479620090F7CA /* iOSHookTests.swift in Sources */,
+				2A7230DD244DE53E00193DE3 /* LibffiTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,7 +513,7 @@
 		};
 		2A467BCB234308AE006D42F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD7224B38C72B831D7EBED04 /* Pods-iOSHook.debug.xcconfig */;
+			baseConfigurationReference = 3C3B36282DDDEFAA1016682C /* Pods-abstract-iOSHook-iOSHook.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -495,7 +540,7 @@
 		};
 		2A467BCC234308AE006D42F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E2821320EBF050E1632CDE5B /* Pods-iOSHook.release.xcconfig */;
+			baseConfigurationReference = 7693AA288EA769CD77F92DF4 /* Pods-abstract-iOSHook-iOSHook.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -521,9 +566,10 @@
 		};
 		2A467BCE234308AE006D42F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 00B63174BB299F68B542DE8C /* Pods-iOSHookTests.debug.xcconfig */;
+			baseConfigurationReference = 372661A32CD604DACA85B4DB /* Pods-abstract-iOSHook-iOSHookTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = iOSHookTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -533,6 +579,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.iOSHookTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "iOSHookTests/iOSHookTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -540,9 +588,10 @@
 		};
 		2A467BCF234308AE006D42F2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA0D815F8CAA39B5E01549C5 /* Pods-iOSHookTests.release.xcconfig */;
+			baseConfigurationReference = F054C95DF649A0033209393E /* Pods-abstract-iOSHook-iOSHookTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = iOSHookTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -552,6 +601,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.iOSHookTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "iOSHookTests/iOSHookTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

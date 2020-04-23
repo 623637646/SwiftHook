@@ -18,12 +18,11 @@ class TestObject: NSObject {
 class InstanceBeforeTests: XCTestCase {
     func testHook() {
         do {
-            typealias TargetBlock = () -> Void
-            typealias HookBlock = @convention(block) (TargetBlock) -> Void
-
-            try TestObject.hook(selector: #selector(TestObject.simple), block: { (original) -> Void in
-                return original()
-            } as HookBlock)
+            try TestObject.hook(selector: #selector(TestObject.simple),
+                                signature: (nil, nil),
+                                block: { (original, args: Void) -> Void in
+                                    return original(args)
+            })
             TestObject().simple()
         } catch {
             print("%@", error)

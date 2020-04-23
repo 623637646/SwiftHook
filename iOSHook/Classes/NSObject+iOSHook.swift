@@ -27,7 +27,6 @@ public extension NSObject {
                      2,
                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
                      unsafeBitCast(argumentTypes.baseAddress, to: UnsafeMutablePointer<UnsafeMutablePointer<ffi_type>?>?.self))
-//        argumentTypes.deallocate()
         
         
         var obj = self.init()
@@ -55,7 +54,8 @@ public extension NSObject {
                  unsafeBitCast(arguments.baseAddress, to: UnsafeMutablePointer<UnsafeMutableRawPointer?>?.self))
         
    
-        
+        argumentTypes.deallocate()
+        arguments.deallocate()
 
         
         

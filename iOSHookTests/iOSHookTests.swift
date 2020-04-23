@@ -11,19 +11,21 @@ import iOSHook
 
 class TestObject: NSObject {
     @objc dynamic func simple() {
-        print("\(self) , \(#function)")
+        
     }
 }
 
 class InstanceBeforeTests: XCTestCase {
     func testHook() {
         do {
-            try TestObject.hook(selector: #selector(TestObject.simple),
-                                signature: (nil, nil),
-                                block: { (original, args: Void) -> Void in
-                                    return original(args)
-            })
-            TestObject().simple()
+            for _ in 0...10000000 {
+                try TestObject.hook(selector: #selector(TestObject.simple),
+                                                signature: (nil, nil),
+                                                block: { (original, args: Void) -> Void in
+                                                    return original(args)
+                            })
+                //            TestObject().simple()
+            }
         } catch {
             print("%@", error)
         }

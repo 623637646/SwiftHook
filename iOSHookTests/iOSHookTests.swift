@@ -15,8 +15,8 @@ class InstanceBeforeTests: XCTestCase {
     func testHook() {
         withMemoryTest {
             try! TestObject.hook(selector: #selector(TestObject.noArgsNoReturnFunc),
-                                signature: (nil, nil),
-                                block: { (original, args: Void) -> Void in
+                                 signature: (nil, nil),
+                                 block: { (original, args: Void) -> Void in
                                     return original(args)
             })
         }
@@ -61,10 +61,29 @@ class InstanceBeforeTests: XCTestCase {
     }
     
     func testLibffiClosure() {
-        
+        withMemoryTest {
+            var cif: ffi_cif = ffi_cif()
+            let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
+            defer { argumentTypes.deallocate() }
+            argumentTypes[0] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
+                         FFI_DEFAULT_ABI,
+                         4,
+                         withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                         argumentTypes.baseAddress)
+            
+            let newIMP: IMP? = nil
+            var newIMPPointer = UnsafeMutableRawPointer.init(newIMP)
+            ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, withUnsafeMutablePointer(to: &newIMPPointer, {$0}))
+            
+            // TODO: 
+        }
     }
     
-// MARK: utilities
+    // MARK: utilities
     
     func getMemory() -> UInt64 {
         var taskInfo = mach_task_basic_info()
@@ -74,7 +93,7 @@ class InstanceBeforeTests: XCTestCase {
                 task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
             }
         }
-
+        
         if kerr == KERN_SUCCESS {
             return taskInfo.resident_size
         }

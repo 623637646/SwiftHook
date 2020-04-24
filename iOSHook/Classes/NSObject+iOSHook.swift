@@ -18,38 +18,7 @@ public extension NSObject {
     class func hook<Return, ArgsTuple>(selector: Selector,
                                        signature:(UInt?, [UInt]?),
                                        block: (_ original: (_ args: ArgsTuple) -> Return, _ args: ArgsTuple) -> Return) throws -> Token? {
-        var cif: ffi_cif = ffi_cif()
-        
-        let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 2)
-        argumentTypes[0] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-        argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-        
-        ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
-                     FFI_DEFAULT_ABI,
-                     2,
-                     withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                     argumentTypes.baseAddress)
-        
-        
-        var obj = self.init()
-        let imp = obj.method(for: selector)
-        var selectorTemp = selector
-        var returnValue: Any? = nil
-        let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 2)
-        arguments[0] = withUnsafeMutablePointer(to: &obj, {UnsafeMutableRawPointer($0)})
-        arguments[1] = withUnsafeMutablePointer(to: &selectorTemp, {UnsafeMutableRawPointer($0)})
-        
-        ffi_call(withUnsafeMutablePointer(to: &cif) {$0},
-                 unsafeBitCast(imp, to: (@convention(c) () -> Void)?.self),
-                 withUnsafeMutablePointer(to: &returnValue){$0},
-                 arguments.baseAddress)
-                
-        argumentTypes.deallocate()
-        arguments.deallocate()
-        
-        
-        var token: Token? = nil
-
+        let token: Token? = nil
 //        try DispatchQueue(label: "com.iOSHook.sync").sync {
 //            guard let method = class_getInstanceMethod(self, selector) else {
 //                throw iOSHookError.canNotFindMethod(class: self, selector: selector)

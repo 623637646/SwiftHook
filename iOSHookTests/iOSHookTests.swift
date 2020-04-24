@@ -77,9 +77,10 @@ class InstanceBeforeTests: XCTestCase {
             
             let newIMP: IMP? = nil
             var newIMPPointer = UnsafeMutableRawPointer.init(newIMP)
-            ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, withUnsafeMutablePointer(to: &newIMPPointer, {$0}))
-            
-            // TODO: 
+            let closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, withUnsafeMutablePointer(to: &newIMPPointer, {$0}))
+            defer { ffi_closure_free(closure) }
+            // TODO:
+            print("")
         }
     }
     

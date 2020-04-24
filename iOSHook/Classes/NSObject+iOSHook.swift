@@ -13,9 +13,6 @@ public enum iOSHookError: Error {
     case canNotFindMethod(class:AnyClass, selector: Selector)
 }
 
-// unsafeBitCast 和 withMemoryRebound区别？
-// withMemoryRebound 参数的含义
-// https://developer.apple.com/documentation/swift/unsafepointer/2430863-withmemoryrebound : Only use this method to rebind the pointer’s memory to a type with the same size and stride as the currently bound Pointee type. To bind a region of memory to a type that is a different size, convert the pointer to a raw pointer and use the bindMemory(to:capacity:) method
 public extension NSObject {
     @discardableResult
     class func hook<Return, ArgsTuple>(selector: Selector,
@@ -23,7 +20,7 @@ public extension NSObject {
                                        block: (_ original: (_ args: ArgsTuple) -> Return, _ args: ArgsTuple) -> Return) throws -> Token? {
         var cif: ffi_cif = ffi_cif()
         
-        let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>>.allocate(capacity: 2)
+        let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 2)
         argumentTypes[0] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
         argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
         
@@ -31,22 +28,22 @@ public extension NSObject {
                      FFI_DEFAULT_ABI,
                      2,
                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                     unsafeBitCast(argumentTypes.baseAddress, to: UnsafeMutablePointer<UnsafeMutablePointer<ffi_type>?>?.self))
+                     argumentTypes.baseAddress)
         
         
         var obj = self.init()
         let imp = obj.method(for: selector)
         var selectorTemp = selector
         var returnValue: Any? = nil
-        let arguments = UnsafeMutableBufferPointer<UnsafeMutablePointer<Any>>.allocate(capacity: 2)
-        arguments[0] = withUnsafeMutablePointer(to: &obj, { $0.withMemoryRebound(to: Any.self, capacity: 1, {$0})})
-        arguments[1] = withUnsafeMutablePointer(to: &selectorTemp, { $0.withMemoryRebound(to: Any.self, capacity: 1, {$0})})
+        let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 2)
+        arguments[0] = withUnsafeMutablePointer(to: &obj, {UnsafeMutableRawPointer($0)})
+        arguments[1] = withUnsafeMutablePointer(to: &selectorTemp, {UnsafeMutableRawPointer($0)})
         
         ffi_call(withUnsafeMutablePointer(to: &cif) {$0},
                  unsafeBitCast(imp, to: (@convention(c) () -> Void)?.self),
                  withUnsafeMutablePointer(to: &returnValue){$0},
-                 unsafeBitCast(arguments.baseAddress, to: UnsafeMutablePointer<UnsafeMutableRawPointer?>?.self))
-        
+                 arguments.baseAddress)
+                
         argumentTypes.deallocate()
         arguments.deallocate()
         

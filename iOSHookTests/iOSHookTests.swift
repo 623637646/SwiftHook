@@ -8,36 +8,65 @@
 
 import XCTest
 import iOSHook
-
-class TestObject: NSObject {
-    @objc dynamic func simple() {
-        
-    }
-}
+import libffi
 
 class InstanceBeforeTests: XCTestCase {
+    
     func testHook() {
-        do {
-            let before = try getMemory()
-            for _ in 0...1000000 {
-                try TestObject.hook(selector: #selector(TestObject.simple),
-                                                signature: (nil, nil),
-                                                block: { (original, args: Void) -> Void in
-                                                    return original(args)
-                            })
-                //            TestObject().simple()
-            }
-            let after = try getMemory()
-            let diff = Double(after - before)/1024/1024
-            print("Memory cast \(diff)M")
-            XCTAssertLessThan(diff, 0.5)
-        } catch {
-            print("error: %@", error)
-            XCTAssertTrue(false)
+        withMemoryTest {
+            try! TestObject.hook(selector: #selector(TestObject.noArgsNoReturnFunc),
+                                signature: (nil, nil),
+                                block: { (original, args: Void) -> Void in
+                                    return original(args)
+            })
         }
     }
     
-    func getMemory() throws -> UInt64 {
+    func testLibffiCall() {
+        withMemoryTest {
+            var cif: ffi_cif = ffi_cif()
+            let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
+            defer { argumentTypes.deallocate() }
+            argumentTypes[0] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
+            ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
+                         FFI_DEFAULT_ABI,
+                         4,
+                         withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                         argumentTypes.baseAddress)
+            
+            
+            var obj = TestObject.init()
+            var selector = #selector(TestObject.sumFunc(a:b:))
+            var arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
+            var arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
+            let imp = obj.method(for: selector)
+            var returnValue: Int = 0
+            let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 4)
+            defer { arguments.deallocate() }
+            arguments[0] = withUnsafeMutablePointer(to: &obj, {UnsafeMutableRawPointer($0)})
+            arguments[1] = withUnsafeMutablePointer(to: &selector, {UnsafeMutableRawPointer($0)})
+            arguments[2] = withUnsafeMutablePointer(to: &arg1, {UnsafeMutableRawPointer($0)})
+            arguments[3] = withUnsafeMutablePointer(to: &arg2, {UnsafeMutableRawPointer($0)})
+            
+            ffi_call(withUnsafeMutablePointer(to: &cif) {$0},
+                     unsafeBitCast(imp, to: (@convention(c) () -> Void)?.self),
+                     withUnsafeMutablePointer(to: &returnValue){$0},
+                     arguments.baseAddress)
+            
+            XCTAssertEqual(returnValue, arg1 + arg2)
+        }
+    }
+    
+    func testLibffiClosure() {
+        
+    }
+    
+// MARK: utilities
+    
+    func getMemory() -> UInt64 {
         var taskInfo = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
@@ -50,7 +79,19 @@ class InstanceBeforeTests: XCTestCase {
             return taskInfo.resident_size
         }
         else {
-            throw NSError.init()
+            XCTAssert(false)
+            assert(false)
         }
+    }
+    
+    func withMemoryTest(closure: ()->()) {
+        let before = getMemory()
+        for _ in 0...1000000 {
+            closure()
+        }
+        let after = getMemory()
+        let diff = Double(after - before)/1024/1024
+        print("Memory cast \(diff) M")
+        XCTAssertLessThan(diff, 0.5)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  LibffiTests.m
+//  LibffiTestsOC.m
 //  iOSHookTests
 //
 //  Created by Yanni Wang on 20/4/20.
@@ -21,7 +21,7 @@
 
 @end
 
-@interface LibffiTests : XCTestCase
+@interface LibffiTestsOC : XCTestCase
 
 @end
 
@@ -31,7 +31,7 @@ void closureCalled(ffi_cif *cif, void *ret, void **args, void *userdata) {
     *((int *)ret) = bar * baz;
 }
 
-@implementation LibffiTests
+@implementation LibffiTestsOC
 
 - (void)testFFICall {
     ffi_cif cif;

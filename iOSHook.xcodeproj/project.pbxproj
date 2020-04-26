@@ -16,7 +16,8 @@
 		2A45EB78242CB70000CEEC94 /* iOSHook-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A45EB77242CB70000CEEC94 /* iOSHook-Bridging-Header.h */; };
 		2A467BC0234308AE006D42F2 /* iOSHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A467BB6234308AE006D42F2 /* iOSHook.framework */; };
 		2A467BC7234308AE006D42F2 /* iOSHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A467BB9234308AE006D42F2 /* iOSHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2A7230DD244DE53E00193DE3 /* LibffiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7230DC244DE53E00193DE3 /* LibffiTests.m */; };
+		2A685C632455CA7F00B38A21 /* LibffiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A685C622455CA7F00B38A21 /* LibffiTests.swift */; };
+		2A7230DD244DE53E00193DE3 /* LibffiTestsOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7230DC244DE53E00193DE3 /* LibffiTestsOC.m */; };
 		2A7B25B9244331C000E35A75 /* iOSHookOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7B25B8244331C000E35A75 /* iOSHookOC.m */; };
 		2A7B25BB244331E700E35A75 /* iOSHookOC.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A7B25BA244331E700E35A75 /* iOSHookOC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD0745B2344908A00BA1FE1 /* NSObject+iOSHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */; };
@@ -50,8 +51,9 @@
 		2A467BBA234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A467BBF234308AE006D42F2 /* iOSHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A467BC6234308AE006D42F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A685C622455CA7F00B38A21 /* LibffiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibffiTests.swift; sourceTree = "<group>"; };
 		2A7230DB244DE53E00193DE3 /* iOSHookTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOSHookTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		2A7230DC244DE53E00193DE3 /* LibffiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibffiTests.m; sourceTree = "<group>"; };
+		2A7230DC244DE53E00193DE3 /* LibffiTestsOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibffiTestsOC.m; sourceTree = "<group>"; };
 		2A7B25B8244331C000E35A75 /* iOSHookOC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOSHookOC.m; sourceTree = "<group>"; };
 		2A7B25BA244331E700E35A75 /* iOSHookOC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSHookOC.h; sourceTree = "<group>"; };
 		2AD074592344908A00BA1FE1 /* NSObject+iOSHook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+iOSHook.swift"; sourceTree = "<group>"; };
@@ -143,7 +145,8 @@
 			children = (
 				2AEF28FA2452F41700DBDA39 /* TestObject.swift */,
 				2A431054235479620090F7CA /* iOSHookTests.swift */,
-				2A7230DC244DE53E00193DE3 /* LibffiTests.m */,
+				2A685C622455CA7F00B38A21 /* LibffiTests.swift */,
+				2A7230DC244DE53E00193DE3 /* LibffiTestsOC.m */,
 				2A467BC6234308AE006D42F2 /* Info.plist */,
 				2A431056235479AD0090F7CA /* TestCases.txt */,
 				2A7230DB244DE53E00193DE3 /* iOSHookTests-Bridging-Header.h */,
@@ -378,7 +381,8 @@
 			files = (
 				2AEF28FB2452F41700DBDA39 /* TestObject.swift in Sources */,
 				2A431055235479620090F7CA /* iOSHookTests.swift in Sources */,
-				2A7230DD244DE53E00193DE3 /* LibffiTests.m in Sources */,
+				2A7230DD244DE53E00193DE3 /* LibffiTestsOC.m in Sources */,
+				2A685C632455CA7F00B38A21 /* LibffiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

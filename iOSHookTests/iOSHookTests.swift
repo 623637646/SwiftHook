@@ -31,11 +31,12 @@ class InstanceBeforeTests: XCTestCase {
             argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-            let status = ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
-                                      FFI_DEFAULT_ABI,
-                                      4,
-                                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                                      argumentTypes.baseAddress)
+            let status = ffi_prep_cif(
+                withUnsafeMutablePointer(to: &cif) {$0},
+                FFI_DEFAULT_ABI,
+                4,
+                withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                argumentTypes.baseAddress)
             XCTAssertEqual(status, FFI_OK)
             
             
@@ -70,12 +71,13 @@ class InstanceBeforeTests: XCTestCase {
             argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-            let status = ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
-                                      FFI_DEFAULT_ABI,
-                                      4,
-                                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                                      argumentTypes.baseAddress)
-            XCTAssertEqual(status, FFI_OK)
+            let status_cif = ffi_prep_cif(
+                withUnsafeMutablePointer(to: &cif) {$0},
+                FFI_DEFAULT_ABI,
+                4,
+                withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                argumentTypes.baseAddress)
+            XCTAssertEqual(status_cif, FFI_OK)
             
             let newIMP: IMP? = nil
             var newIMPPointer = UnsafeMutableRawPointer.init(newIMP)

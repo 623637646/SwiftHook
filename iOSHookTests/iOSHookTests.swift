@@ -31,11 +31,12 @@ class InstanceBeforeTests: XCTestCase {
             argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-            ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
-                         FFI_DEFAULT_ABI,
-                         4,
-                         withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                         argumentTypes.baseAddress)
+            let status = ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
+                                      FFI_DEFAULT_ABI,
+                                      4,
+                                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                                      argumentTypes.baseAddress)
+            XCTAssertEqual(status, FFI_OK)
             
             
             var obj = TestObject.init()
@@ -69,17 +70,18 @@ class InstanceBeforeTests: XCTestCase {
             argumentTypes[1] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[2] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
             argumentTypes[3] = withUnsafeMutablePointer(to: &ffi_type_pointer, {$0})
-            ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
-                         FFI_DEFAULT_ABI,
-                         4,
-                         withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
-                         argumentTypes.baseAddress)
+            let status = ffi_prep_cif(withUnsafeMutablePointer(to: &cif) {$0},
+                                      FFI_DEFAULT_ABI,
+                                      4,
+                                      withUnsafeMutablePointer(to: &ffi_type_pointer) {$0},
+                                      argumentTypes.baseAddress)
+            XCTAssertEqual(status, FFI_OK)
             
             let newIMP: IMP? = nil
             var newIMPPointer = UnsafeMutableRawPointer.init(newIMP)
             let closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, withUnsafeMutablePointer(to: &newIMPPointer, {$0}))
             defer { ffi_closure_free(closure) }
-            // TODO: 
+            // TODO:
             _ = 1
         }
     }

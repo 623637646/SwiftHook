@@ -10,10 +10,20 @@ import XCTest
 import iOSHook
 import libffi
 
+func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
+                   ret: UnsafeMutableRawPointer?,
+                   args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
+                   userdata: UnsafeMutableRawPointer?) {
+    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: 4)
+    let arg1 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[2]))?.pointee)!
+    let arg2 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[3]))?.pointee)!
+    ret?.bindMemory(to: Int.self, capacity: 1).pointee = arg1 * arg2
+}
+
 class InstanceBeforeTests: XCTestCase {
     
     func testHook() {
-        withMemoryTest {
+        doMemoryTest {
             try! TestObject.hook(selector: #selector(TestObject.noArgsNoReturnFunc),
                                  signature: (nil, nil),
                                  block: { (original, args: Void) -> Void in
@@ -23,7 +33,7 @@ class InstanceBeforeTests: XCTestCase {
     }
     
     func testLibffiCall() {
-        withMemoryTest {
+        doMemoryTest {
             var cif: ffi_cif = ffi_cif()
             var argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
             defer { argumentTypes.deallocate() }
@@ -61,8 +71,9 @@ class InstanceBeforeTests: XCTestCase {
         }
     }
     
+    // TODO:
     func testLibffiClosure() {
-        withMemoryTest {
+        doMemoryTest {
             var cif: ffi_cif = ffi_cif()
             var argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
             defer { argumentTypes.deallocate() }
@@ -78,12 +89,34 @@ class InstanceBeforeTests: XCTestCase {
                 argumentTypes.baseAddress)
             XCTAssertEqual(status_cif, FFI_OK)
             
-            // TODO:
-            let newIMP: IMP? = nil
-            var newIMPPointer = UnsafeMutableRawPointer(newIMP)
-            let closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, UnsafeMutablePointer(&newIMPPointer))
+            var newIMP: IMP? = nil
+            var closure: UnsafeMutableRawPointer? = nil;
+            UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
+                closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)
+            }
+            
             defer { ffi_closure_free(closure) }
-            _ = 1
+            XCTAssertNotNil(closure)
+            XCTAssertNotNil(newIMP)
+            
+            var userData: Any? = nil
+            let status_closure = ffi_prep_closure_loc(
+                UnsafeMutablePointer<ffi_closure>(OpaquePointer(closure)),
+                UnsafeMutablePointer(&cif),
+                closureCalled,
+                UnsafeMutableRawPointer(&userData),
+                UnsafeMutableRawPointer(&newIMP))
+            XCTAssertEqual(status_closure, FFI_OK)
+            
+            let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.sumFunc(a:b:)))
+            method_setImplementation(method!, newIMP!)
+            
+            let object = TestObject()
+            let maxTestInt = Int(sqrt(Double(Int.max)))
+            let arg1 = Int.random(in: -maxTestInt ... maxTestInt)
+            let arg2 = Int.random(in: -maxTestInt ... maxTestInt)
+            let result = object.sumFunc(a: arg1, b: arg2)
+            XCTAssertEqual(result, arg1 * arg2)
         }
     }
     
@@ -107,7 +140,7 @@ class InstanceBeforeTests: XCTestCase {
         }
     }
     
-    func withMemoryTest(closure: ()->()) {
+    func doMemoryTest(closure: ()->()) {
         let before = getMemory()
         for _ in 0...1000000 {
             closure()

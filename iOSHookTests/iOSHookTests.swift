@@ -10,16 +10,6 @@ import XCTest
 import iOSHook
 import libffi
 
-func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
-                   ret: UnsafeMutableRawPointer?,
-                   args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
-                   userdata: UnsafeMutableRawPointer?) {
-    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: 4)
-    let arg1 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[2]))?.pointee)!
-    let arg2 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[3]))?.pointee)!
-    ret?.bindMemory(to: Int.self, capacity: 1).pointee = arg1 * arg2
-}
-
 class InstanceBeforeTests: XCTestCase {
     
     func testHook() {
@@ -71,7 +61,6 @@ class InstanceBeforeTests: XCTestCase {
         }
     }
     
-    // TODO:
     func testLibffiClosure() {
         doMemoryTest {
             var cif: ffi_cif = ffi_cif()
@@ -98,6 +87,16 @@ class InstanceBeforeTests: XCTestCase {
             defer { ffi_closure_free(closure) }
             XCTAssertNotNil(closure)
             XCTAssertNotNil(newIMP)
+            
+            func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
+                               ret: UnsafeMutableRawPointer?,
+                               args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
+                               userdata: UnsafeMutableRawPointer?) {
+                let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: 4)
+                let arg1 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[2]))?.pointee)!
+                let arg2 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[3]))?.pointee)!
+                ret?.bindMemory(to: Int.self, capacity: 1).pointee = arg1 * arg2
+            }
             
             var userData: Any? = nil
             let status_closure = ffi_prep_closure_loc(

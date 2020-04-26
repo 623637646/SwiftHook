@@ -109,7 +109,10 @@ class InstanceBeforeTests: XCTestCase {
             XCTAssertEqual(status_closure, FFI_OK)
             
             let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.sumFunc(a:b:)))
-            method_setImplementation(method!, newIMP!)
+            let originalMethod = method_setImplementation(method!, newIMP!)
+            defer {
+                method_setImplementation(method!, originalMethod)
+            }
             
             let object = TestObject()
             let maxTestInt = Int(sqrt(Double(Int.max)))

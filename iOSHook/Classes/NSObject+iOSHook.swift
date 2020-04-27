@@ -11,19 +11,24 @@ import libffi
 
 public enum iOSHookError: Error {
     case instancesDoNotRespondSelector(class: AnyClass, selector: Selector)
+    case ffiError
+    case unknow
 }
 
 public extension NSObject {
     
     @discardableResult
     class func hookBefore(selector: Selector, block: @convention(block) () -> ()) throws -> HookToken? {
+        // TODO: Thread synchronization
+        // TODO: Method signature and block signature checking
+        // TODO: Selector black list.
         guard self.instancesRespond(to: selector) else {
             throw iOSHookError.instancesDoNotRespondSelector(class: self, selector: selector)
         }
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
-        return HookToken.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
+        return try HookToken.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
     }
     
     // MARK: private

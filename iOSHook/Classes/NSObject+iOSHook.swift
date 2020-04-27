@@ -10,15 +10,33 @@ import Foundation
 import libffi
 
 public enum iOSHookError: Error {
-    case canNotFindMethod(class:AnyClass, selector: Selector)
+    case instancesDoNotRespondSelector(class: AnyClass, selector: Selector)
 }
 
 public extension NSObject {
     
-    class func hookBefore(selector: Selector, block: () -> ()) {
-        guard let method = class_getInstanceMethod(self, selector) else {
-            assert(false)
+    class func iOSHook_hookBefore(selector: Selector, block: () -> ()) throws {
+        guard self.instancesRespond(to: selector) else {
+            throw iOSHookError.instancesDoNotRespondSelector(class: self, selector: selector)
         }
-        
+        if isSelfMethod(selector: selector) {
+            
+        } else {
+            
+        }
+    }
+    
+    // MARK: private
+    
+    private class func isSelfMethod(selector: Selector) -> Bool {
+        var length: UInt32 = 0
+        let firstMethod = class_copyMethodList(self, UnsafeMutablePointer(&length))
+        let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
+        for method in bufferPointer {
+            if method_getName(method) == selector {
+                return true
+            }
+        }
+        return false
     }
 }

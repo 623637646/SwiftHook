@@ -8,7 +8,13 @@
 
 import UIKit
 
-class TestObject: NSObject {
+class SuperObject: NSObject {
+    @objc dynamic func superFunc() {
+        
+    }
+}
+
+class TestObject: SuperObject {
     @objc dynamic func noArgsNoReturnFunc() {
         
     }

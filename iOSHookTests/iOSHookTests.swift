@@ -11,9 +11,15 @@ import iOSHook
 
 class InstanceBeforeTests: XCTestCase {
     
-    func testHook() {
-        try! TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
-            
-        })
+    func testInstancesDoNotRespondSelector() {
+        do {
+            try TestObject.iOSHook_hookBefore(selector: #selector(NSArray.object(at:)), block: {})
+            XCTAssertTrue(false)
+        } catch iOSHookError.instancesDoNotRespondSelector(let `class`, let `selector`) {
+            XCTAssertTrue(`class` == TestObject.self)
+            XCTAssertEqual(`selector`, #selector(NSArray.object(at:)))
+        } catch {
+            XCTAssertTrue(false)
+        }
     }
 }

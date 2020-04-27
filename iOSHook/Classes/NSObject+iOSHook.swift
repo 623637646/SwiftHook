@@ -14,32 +14,11 @@ public enum iOSHookError: Error {
 }
 
 public extension NSObject {
-    @discardableResult
-    class func hook<Return, ArgsTuple>(selector: Selector,
-                                       signature:(UInt?, [UInt]?),
-                                       block: (_ original: (_ args: ArgsTuple) -> Return, _ args: ArgsTuple) -> Return) throws -> Token? {
-        let token: Token? = nil
-//        try DispatchQueue(label: "com.iOSHook.sync").sync {
-//            guard let method = class_getInstanceMethod(self, selector) else {
-//                throw iOSHookError.canNotFindMethod(class: self, selector: selector)
-//            }
-//
-//            let originalIMP = method_getImplementation(method)
-//            //            let newIMPBlock: @convention(block) (Self, Int, Double, String) -> Void = {`self`, i, d, s in
-//            //                typealias MyCFunction = @convention(c) (AnyObject, Selector, Int, Double, String) -> Void
-//            //                let curriedImplementation = unsafeBitCast(originalIMP, to: MyCFunction.self)
-//            //                curriedImplementation(self, selector, i, d, s)
-//            //            }
-//
-//            let newIMPBlock = iOSHookImplementationBlock(block, originalIMP, selector)
-//            let newIMP = imp_implementationWithBlock(newIMPBlock)
-//            let methodType = method_getTypeEncoding(method);
-//
-//            let addedNewMethod = class_replaceMethod(self, selector, newIMP, methodType) == nil
-//
-//
-//            token = Token()
-//        }
-        return token
+    
+    class func hookBefore(selector: Selector, block: () -> ()) {
+        guard let method = class_getInstanceMethod(self, selector) else {
+            assert(false)
+        }
+        
     }
 }

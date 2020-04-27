@@ -12,10 +12,8 @@ import iOSHook
 class InstanceBeforeTests: XCTestCase {
     
     func testHook() {
-        try! TestObject.hook(selector: #selector(TestObject.noArgsNoReturnFunc),
-                             signature: (nil, nil),
-                             block: { (original, args: Void) -> Void in
-                                return original(args)
+        try! TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
+            
         })
     }
 }

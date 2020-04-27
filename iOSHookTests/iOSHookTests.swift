@@ -13,7 +13,7 @@ class InstanceBeforeTests: XCTestCase {
     
     func testInstancesDoNotRespondSelector() {
         do {
-            try TestObject.iOSHook_hookBefore(selector: #selector(NSArray.object(at:)), block: {})
+            try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), block: {})
             XCTAssertTrue(false)
         } catch iOSHookError.instancesDoNotRespondSelector(let `class`, let `selector`) {
             XCTAssertTrue(`class` == TestObject.self)
@@ -21,5 +21,9 @@ class InstanceBeforeTests: XCTestCase {
         } catch {
             XCTAssertTrue(false)
         }
+    }
+    
+    func testTemp() {
+        
     }
 }

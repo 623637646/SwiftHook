@@ -15,15 +15,15 @@ public enum iOSHookError: Error {
 
 public extension NSObject {
     
-    class func iOSHook_hookBefore(selector: Selector, block: () -> ()) throws {
+    @discardableResult
+    class func hookBefore(selector: Selector, block: @convention(block) () -> ()) throws -> HookToken? {
         guard self.instancesRespond(to: selector) else {
             throw iOSHookError.instancesDoNotRespondSelector(class: self, selector: selector)
         }
-        if isSelfMethod(selector: selector) {
-            
-        } else {
-            
+        if !isSelfMethod(selector: selector) {
+            //  TODO: add method
         }
+        return HookToken.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
     }
     
     // MARK: private

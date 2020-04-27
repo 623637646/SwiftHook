@@ -9,24 +9,11 @@
 import XCTest
 import iOSHook
 
-class TestObject: NSObject {
-    @objc dynamic func simple() {
-        print("\(self) , \(#function)")
-    }
-}
-
 class InstanceBeforeTests: XCTestCase {
+    
     func testHook() {
-        do {
-            typealias TargetBlock = () -> Void
-            typealias HookBlock = @convention(block) (TargetBlock) -> Void
-
-            try TestObject.hook(selector: #selector(TestObject.simple), block: { (original) -> Void in
-                return original()
-            } as HookBlock)
-            TestObject().simple()
-        } catch {
-            print("%@", error)
-        }
+        try! TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
+            
+        })
     }
 }

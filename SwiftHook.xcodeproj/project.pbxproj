@@ -13,9 +13,11 @@
 		2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C6245835D600A63935 /* LibffiTests.swift */; };
 		2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C7245835D600A63935 /* LibffiTestsOC.m */; };
 		2A7F43CC245835D600A63935 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C8245835D600A63935 /* TestObject.swift */; };
+		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
 		2AB6735B245834E30011536D /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
 		2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB6735F245834E30011536D /* SwiftHookTests.swift */; };
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		BE68AC67384A7396BA67F4DD /* Pods_abstract_SwiftHook_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */; };
 /* End PBXBuildFile section */
@@ -38,12 +40,14 @@
 		2A7F43C6245835D600A63935 /* LibffiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibffiTests.swift; sourceTree = "<group>"; };
 		2A7F43C7245835D600A63935 /* LibffiTestsOC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibffiTestsOC.m; sourceTree = "<group>"; };
 		2A7F43C8245835D600A63935 /* TestObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestObject.swift; sourceTree = "<group>"; };
+		2A99159B24587BF4007955E7 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
 		2AB67351245834E30011536D /* SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB67354245834E30011536D /* SwiftHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook.h; sourceTree = "<group>"; };
 		2AB67355245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AB6735A245834E30011536D /* SwiftHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB6735F245834E30011536D /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
@@ -98,6 +102,7 @@
 			children = (
 				2A7F43BE2458359E00A63935 /* HookToken.swift */,
 				2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */,
+				2AC10C7F245872F200ED6815 /* Signature.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
+				2A99159B24587BF4007955E7 /* SignatureTests.swift */,
 				2A7F43C6245835D600A63935 /* LibffiTests.swift */,
 				2A7F43C7245835D600A63935 /* LibffiTestsOC.m */,
 				2A7F43C8245835D600A63935 /* TestObject.swift */,
@@ -329,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AC10C80245872F200ED6815 /* Signature.swift in Sources */,
 				2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */,
 				2A7F43C02458359E00A63935 /* HookToken.swift in Sources */,
 			);
@@ -339,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A7F43CC245835D600A63935 /* TestObject.swift in Sources */,
+				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
 				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,

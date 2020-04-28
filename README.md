@@ -1,2 +1,2 @@
 # iOSHook
-Hook in Swift by iOS runtime
+Hook for iOS runtime (Objective-C Swift)

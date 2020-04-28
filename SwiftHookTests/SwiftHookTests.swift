@@ -1,16 +1,16 @@
 //
-//  InstanceBeforeTests.swift
-//  iOSHookTests
+//  SwiftHookTests.swift
+//  SwiftHookTests
 //
-//  Created by Yanni Wang on 14/10/19.
-//  Copyright © 2019 Yanni. All rights reserved.
+//  Created by Yanni Wang on 28/4/20.
+//  Copyright © 2020 Yanni. All rights reserved.
 //
 
 import XCTest
-import iOSHook
+@testable import SwiftHook
 
-class InstanceBeforeTests: XCTestCase {
-    
+class SwiftHookTests: XCTestCase {
+
     func testInstancesDoNotRespondSelector() {
         do {
             try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), block: {})
@@ -26,4 +26,5 @@ class InstanceBeforeTests: XCTestCase {
     func testTemp() {
         
     }
+
 }

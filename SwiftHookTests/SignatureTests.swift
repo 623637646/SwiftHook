@@ -47,4 +47,9 @@ class SignatureTests: XCTestCase {
         XCTAssertEqual(signature!.argumentTypes, [])
     }
 
+    func testPointerSignature() {
+        let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testPointerSignature(pointerInt:pointerChar:pointerObj:pointerStruct:)))
+        XCTAssertNotNil(signature)
+        XCTAssertEqual(signature!.argumentTypes, [])
+    }
 }

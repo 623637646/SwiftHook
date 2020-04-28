@@ -84,4 +84,15 @@ class TestObject: SuperObject {
             return NSObject()
         }
     }
+    
+    @objc dynamic func testPointerSignature(
+        pointerInt: UnsafePointer<Int>,
+        pointerChar: UnsafePointer<CChar>,
+        pointerObj: UnsafePointer<AnyObject>,
+        pointerStruct: UnsafePointer<CGRect>
+    ) -> UnsafePointer<@convention(block) () -> ()> {
+        print("run \(#function)")
+        var block = {} as @convention(block) () -> ()
+        return UnsafePointer(&block)
+    }
 }

@@ -9,11 +9,11 @@
 import Foundation
 
 struct Types: Equatable {
-    let typeName: String
+    let typeCode: String
     let length: UInt
     
     static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.typeName == rhs.typeName && lhs.length == rhs.length
+        return lhs.typeCode == rhs.typeCode && lhs.length == rhs.length
     }
 }
 
@@ -27,9 +27,16 @@ struct Signature {
         self.returnType = returnType
     }
     
+    // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
     private init(typeEncoding: String) {
-        // TODO: 
-        self.init(argumentTypes: [], returnType: Types.init(typeName: "", length: 11))
+        
+        // TODO: Use NSMethodSignature?
+        for chart in typeEncoding {
+            print("\(chart)")
+        }
+        
+        
+        self.init(argumentTypes: [], returnType: Types.init(typeCode: "", length: 11))
     }
     
     init?(method: Method) {

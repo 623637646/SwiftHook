@@ -65,9 +65,9 @@ class LibffiTests: XCTestCase {
         XCTAssertEqual(status_cif, FFI_OK)
         
         var newIMP: IMP? = nil
-        var closure: UnsafeMutableRawPointer? = nil;
+        var closure: UnsafeMutablePointer<ffi_closure>? = nil;
         UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
-            closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)
+            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)))
         }
         
         defer { ffi_closure_free(closure) }
@@ -86,7 +86,7 @@ class LibffiTests: XCTestCase {
         
         var userData: Any? = nil
         let status_closure = ffi_prep_closure_loc(
-            UnsafeMutablePointer<ffi_closure>(OpaquePointer(closure)),
+            closure,
             UnsafeMutablePointer(&cif),
             closureCalled,
             UnsafeMutableRawPointer(&userData),

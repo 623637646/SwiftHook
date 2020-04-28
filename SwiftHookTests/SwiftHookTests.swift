@@ -23,10 +23,10 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
-    func testTemp() {
+    func testHookBefore() {
         do {
             try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
-                print("")
+                print("hookBefore")
             })
         } catch {
             XCTAssertTrue(false)

@@ -18,7 +18,16 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         return
     }
     let hookToken = Unmanaged<HookToken>.fromOpaque(userdata).takeUnretainedValue()
-    ffi_call(hookToken.cifPointer,unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self) , ret, args)
+    switch hookToken.mode {
+    case .before:
+        ffi_call(hookToken.cifPointer, unsafeBitCast(hookToken.hookBlockIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookToken.cifPointer,unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self) , ret, args)
+        break
+    case .after:
+        break
+    case .instead:
+        break
+    }
 }
 
 var allHookTokens = [HookToken]()
@@ -36,6 +45,7 @@ public class HookToken {
     let hookBlock: AnyObject
     let method: Method
     
+    let hookBlockIMP: IMP
     let originalIMP: IMP
     let newIMP: IMP
     let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
@@ -47,6 +57,9 @@ public class HookToken {
         self.selector = selector
         self.mode = mode
         self.hookBlock = hookBlock
+        
+        // hookBlockIMP
+        self.hookBlockIMP = imp_implementationWithBlock(self.hookBlock)
         
         // Method
         self.method = try {
@@ -111,6 +124,7 @@ public class HookToken {
         self.argumentTypes.deallocate()
         self.cifPointer.deallocate()
         ffi_closure_free(self.closure)
+        imp_removeBlock(self.hookBlockIMP)
     }
     
     class func hook(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws -> HookToken{

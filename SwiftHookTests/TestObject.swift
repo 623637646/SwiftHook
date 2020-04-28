@@ -90,9 +90,9 @@ class TestObject: SuperObject {
         pointerChar: UnsafePointer<CChar>,
         pointerObj: UnsafePointer<AnyObject>,
         pointerStruct: UnsafePointer<CGRect>
-    ) -> UnsafePointer<@convention(block) () -> ()> {
+    ) -> UnsafeMutablePointer<@convention(block) () -> ()> {
         print("run \(#function)")
         var block = {} as @convention(block) () -> ()
-        return UnsafePointer(&block)
+        return UnsafeMutablePointer(&block)
     }
 }

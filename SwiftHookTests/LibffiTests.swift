@@ -1,6 +1,6 @@
 //
 //  LibffiTests.swift
-//  iOSHookTests
+//  SwiftHookTests
 //
 //  Created by Yanni Wang on 26/4/20.
 //  Copyright © 2020 Yanni. All rights reserved.

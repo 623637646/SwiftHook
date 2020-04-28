@@ -15,7 +15,7 @@ class SwiftHookTests: XCTestCase {
         do {
             try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), block: {})
             XCTAssertTrue(false)
-        } catch iOSHookError.instancesDoNotRespondSelector(let `class`, let selector) {
+        } catch SwiftHookError.instancesDoNotRespondSelector(let `class`, let selector) {
             XCTAssertTrue(`class` == TestObject.self)
             XCTAssertEqual(selector, #selector(NSArray.object(at:)))
         } catch {

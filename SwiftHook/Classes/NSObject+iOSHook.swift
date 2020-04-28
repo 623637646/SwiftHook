@@ -1,6 +1,6 @@
 //
 //  NSObjectExtension.swift
-//  iOSHook
+//  SwiftHook
 //
 //  Created by Yanni Wang on 2/10/19.
 //  Copyright © 2019 Yanni. All rights reserved.
@@ -9,7 +9,7 @@
 import Foundation
 import libffi
 
-public enum iOSHookError: Error {
+public enum SwiftHookError: Error {
     case instancesDoNotRespondSelector(class: AnyClass, selector: Selector)
     case ffiError
     case unknow
@@ -23,7 +23,7 @@ public extension NSObject {
         // TODO: Method signature and block signature checking
         // TODO: Selector black list.
         guard self.instancesRespond(to: selector) else {
-            throw iOSHookError.instancesDoNotRespondSelector(class: self, selector: selector)
+            throw SwiftHookError.instancesDoNotRespondSelector(class: self, selector: selector)
         }
         if !isSelfMethod(selector: selector) {
             //  TODO: add method

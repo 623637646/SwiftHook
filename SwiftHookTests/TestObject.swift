@@ -1,6 +1,6 @@
 //
 //  TestObject.swift
-//  iOSHookTests
+//  SwiftHookTests
 //
 //  Created by Yanni Wang on 24/4/20.
 //  Copyright © 2020 Yanni. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  HookToken.swift
-//  iOSHook
+//  SwiftHook
 //
 //  Created by Yanni Wang on 27/4/20.
 //  Copyright © 2020 Yanni. All rights reserved.
@@ -43,7 +43,7 @@ public class HookToken {
                     return method_getImplementation(method)
                 }
             }
-            throw iOSHookError.unknow
+            throw SwiftHookError.unknow
             }()
         
         // argumentTypes
@@ -60,7 +60,7 @@ public class HookToken {
             UnsafeMutablePointer(&ffi_type_pointer),
             argumentTypes.baseAddress)
         guard status_cif == FFI_OK else {
-            throw iOSHookError.ffiError
+            throw SwiftHookError.ffiError
         }
         self.cif = cif
         
@@ -71,7 +71,7 @@ public class HookToken {
             closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)
         }
         guard let closureNoNil = closure, let newIMPNoNil = newIMP else {
-            throw iOSHookError.ffiError
+            throw SwiftHookError.ffiError
         }
         self.closure = closureNoNil
         self.newIMP = newIMPNoNil

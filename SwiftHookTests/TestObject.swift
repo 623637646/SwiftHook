@@ -16,7 +16,7 @@ class SuperObject: NSObject {
 
 class TestObject: SuperObject {
     @objc dynamic func noArgsNoReturnFunc() {
-        
+        print("run noArgsNoReturnFunc")
     }
     
     @objc dynamic func sumFunc(a: Int, b: Int) -> Int {

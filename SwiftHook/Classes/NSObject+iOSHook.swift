@@ -18,7 +18,7 @@ public enum SwiftHookError: Error {
 public extension NSObject {
     
     @discardableResult
-    class func hookBefore(selector: Selector, block: @convention(block) () -> ()) throws -> HookToken? {
+    class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> ()) throws -> HookToken? {
         // TODO: Thread synchronization
         // TODO: Method signature and block signature checking
         // TODO: Selector black list.

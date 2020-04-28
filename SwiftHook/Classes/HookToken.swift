@@ -9,6 +9,20 @@
 import Foundation
 import libffi
 
+func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
+                   ret: UnsafeMutableRawPointer?,
+                   args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
+                   userdata: UnsafeMutableRawPointer?) {
+    guard let userdata = userdata else {
+        assert(false)
+        return
+    }
+    let hookToken = Unmanaged<HookToken>.fromOpaque(userdata).takeUnretainedValue()
+    ffi_call(hookToken.cifPointer,unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self) , ret, args)
+}
+
+var allHookTokens = [HookToken]()
+
 public class HookToken {
     enum Mode {
         case before
@@ -20,12 +34,13 @@ public class HookToken {
     let selector : Selector
     let mode: Mode
     let hookBlock: AnyObject
+    let method: Method
     
     let originalIMP: IMP
     let newIMP: IMP
     let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    let cif: ffi_cif
-    let closure: UnsafeMutableRawPointer
+    let cifPointer: UnsafeMutablePointer<ffi_cif>
+    let closure: UnsafeMutablePointer<ffi_closure>
     
     private init(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws {
         self.`class` = `class`
@@ -33,18 +48,21 @@ public class HookToken {
         self.mode = mode
         self.hookBlock = hookBlock
         
-        // IMP
-        self.originalIMP = try {
+        // Method
+        self.method = try {
             var length: UInt32 = 0
             let firstMethod = class_copyMethodList(`class`, UnsafeMutablePointer(&length))
             let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
             for method in bufferPointer {
                 if method_getName(method) == selector {
-                    return method_getImplementation(method)
+                    return method
                 }
             }
             throw SwiftHookError.unknow
             }()
+        
+        // IMP
+        self.originalIMP = method_getImplementation(self.method)
         
         // argumentTypes
         self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 2)
@@ -52,23 +70,22 @@ public class HookToken {
         self.argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
         
         // cif
-        var cif: ffi_cif = ffi_cif()
+        self.cifPointer = UnsafeMutablePointer.allocate(capacity: 1)
         let status_cif = ffi_prep_cif(
-            UnsafeMutablePointer(&cif),
+            self.cifPointer,
             FFI_DEFAULT_ABI,
             2,
             UnsafeMutablePointer(&ffi_type_pointer),
-            argumentTypes.baseAddress)
+            self.argumentTypes.baseAddress)
         guard status_cif == FFI_OK else {
             throw SwiftHookError.ffiError
         }
-        self.cif = cif
         
         // closure & newIMP
         var newIMP: IMP? = nil
-        var closure: UnsafeMutableRawPointer? = nil
+        var closure: UnsafeMutablePointer<ffi_closure>? = nil;
         UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
-            closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)
+            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)))
         }
         guard let closureNoNil = closure, let newIMPNoNil = newIMP else {
             throw SwiftHookError.ffiError
@@ -76,33 +93,29 @@ public class HookToken {
         self.closure = closureNoNil
         self.newIMP = newIMPNoNil
         
-        // TODO:
-//        let status_closure = ffi_prep_closure_loc(
-//            UnsafeMutablePointer<ffi_closure>(OpaquePointer(closure)),
-//            UnsafeMutablePointer(&cif),
-//            HookToken.closureCalled,
-//            UnsafeMutableRawPointer(&self),
-//            UnsafeMutableRawPointer(&newIMP))
-//        XCTAssertEqual(status_closure, FFI_OK)
+        let status_closure = ffi_prep_closure_loc(
+            self.closure,
+            self.cifPointer,
+            closureCalled,
+            Unmanaged.passUnretained(self).toOpaque(),
+            UnsafeMutableRawPointer(&newIMP))
+        guard status_closure == FFI_OK else {
+            throw SwiftHookError.ffiError
+        }
+        
+        // swizzling
+        method_setImplementation(self.method, self.newIMP)
     }
     
     deinit {
-        argumentTypes.deallocate()
-        ffi_closure_free(closure)
-    }
-    
-    static func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
-                              ret: UnsafeMutableRawPointer?,
-                              args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
-                              userdata: UnsafeMutableRawPointer?) {
-        let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: 4)
-        let arg1 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[2]))?.pointee)!
-        let arg2 = (UnsafePointer<Int>(OpaquePointer(argsBuffer[3]))?.pointee)!
-        ret?.bindMemory(to: Int.self, capacity: 1).pointee = arg1 * arg2
+        self.argumentTypes.deallocate()
+        self.cifPointer.deallocate()
+        ffi_closure_free(self.closure)
     }
     
     class func hook(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws -> HookToken{
         let hookToken = try HookToken.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
+        allHookTokens.append(hookToken)
         return hookToken
     }
 }

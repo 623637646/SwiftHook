@@ -24,7 +24,14 @@ class SwiftHookTests: XCTestCase {
     }
     
     func testTemp() {
-        
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
+                print("")
+            })
+        } catch {
+            XCTAssertTrue(false)
+        }
+        TestObject().noArgsNoReturnFunc()
     }
 
 }

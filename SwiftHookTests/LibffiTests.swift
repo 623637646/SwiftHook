@@ -41,7 +41,7 @@ class LibffiTests: XCTestCase {
         arguments[3] = UnsafeMutableRawPointer(&arg2)
         
         ffi_call(UnsafeMutablePointer(&cif),
-                 unsafeBitCast(imp, to: (@convention(c) () -> Void)?.self),
+                 unsafeBitCast(imp, to: (@convention(c) () -> Void).self),
                  UnsafeMutableRawPointer(&returnValue),
                  arguments.baseAddress)
         

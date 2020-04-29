@@ -48,13 +48,13 @@ class TestObject: SuperObject {
         characterString: UnsafePointer<CChar>,
         object: AnyObject,
         class: AnyClass,
-        selector: Selector) -> Void {
+        selector: Selector) {
         print("run \(#function)")
     }
     
     @objc dynamic func testStructSignature(
         point: CGPoint,
-        rect: CGRect ) -> Void {
+        rect: CGRect ) {
         print("run \(#function)")
     }
     
@@ -62,7 +62,7 @@ class TestObject: SuperObject {
         arrayAny: [Any],
         arrayInt: [Int],
         arrayStruct: [CGRect]
-    ) -> Void {
+    ) {
         print("run \(#function)")
     }
     
@@ -70,12 +70,12 @@ class TestObject: SuperObject {
         dictionaryAny: [String: Any],
         dictionaryInt: [String: Int],
         dictionaryStruct: [String: CGRect]
-    ) -> Void {
+    ) {
         print("run \(#function)")
     }
     
     @objc dynamic func testBlockSignature(
-        block1: () -> (),
+        block1: () -> Void,
         block2: (Int, AnyObject) -> Int,
         block4: (Int, AnyObject) -> AnyObject
     ) -> (Int, AnyObject) -> AnyObject {
@@ -90,9 +90,9 @@ class TestObject: SuperObject {
         pointerChar: UnsafePointer<CChar>,
         pointerObj: UnsafePointer<AnyObject>,
         pointerStruct: UnsafePointer<CGRect>
-    ) -> UnsafeMutablePointer<@convention(block) () -> ()> {
+    ) -> UnsafeMutablePointer<@convention(block) () -> Void> {
         print("run \(#function)")
-        var block = {} as @convention(block) () -> ()
+        var block = {} as @convention(block) () -> Void
         return UnsafeMutablePointer(&block)
     }
 }

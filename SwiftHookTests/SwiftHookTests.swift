@@ -27,9 +27,13 @@ class SwiftHookTests: XCTestCase {
     
     func testHookBeforeNoArgsNoReturnFunc() {
         var called = false
-        try! TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
-            called = true
-        })
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
+                called = true
+            })
+        } catch {
+            XCTAssertTrue(false)
+        }
         XCTAssertFalse(called)
         TestObject().noArgsNoReturnFunc()
         XCTAssertTrue(called)
@@ -39,9 +43,12 @@ class SwiftHookTests: XCTestCase {
     func testHookBeforeSumFunc() {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
-        try! TestObject.hookBefore(selector: #selector(TestObject.sumFunc), block: {
-            
-        })
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), block: {
+            })
+        } catch {
+            XCTAssertTrue(false)
+        }
         let result = TestObject().sumFunc(a: arg1, b: arg2)
         XCTAssertEqual(result, arg1 + arg2)
     }

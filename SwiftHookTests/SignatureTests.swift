@@ -14,7 +14,7 @@ class SignatureTests: XCTestCase {
     func testNoArgsNoReturnFunc() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, ["@",":"])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":"])
     }
     
     func testSimpleSignature() {

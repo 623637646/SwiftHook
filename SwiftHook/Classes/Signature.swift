@@ -10,7 +10,7 @@ import Foundation
 
 struct Signature {
     
-    let argumentTypes:[String]
+    let argumentTypes: [String]
     let returnType: String
     
     private init(argumentTypes: [String], returnType: String) {

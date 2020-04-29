@@ -21,8 +21,7 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     switch hookToken.mode {
     case .before:
         ffi_call(hookToken.cifPointer, unsafeBitCast(hookToken.hookBlockIMP, to: (@convention(c) () -> Void).self), ret, args)
-        ffi_call(hookToken.cifPointer,unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self) , ret, args)
-        break
+        ffi_call(hookToken.cifPointer, unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .after:
         break
     case .instead:
@@ -40,7 +39,7 @@ public class HookToken {
     }
     
     let `class`: AnyClass
-    let selector : Selector
+    let selector: Selector
     let mode: Mode
     let hookBlock: AnyObject
     let method: Method
@@ -95,10 +94,10 @@ public class HookToken {
         }
         
         // closure & newIMP
-        var newIMP: IMP? = nil
-        var closure: UnsafeMutablePointer<ffi_closure>? = nil;
+        var newIMP: IMP?
+        var closure: UnsafeMutablePointer<ffi_closure>?
         UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
-            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride,$0)))
+            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
         }
         guard let closureNoNil = closure, let newIMPNoNil = newIMP else {
             throw SwiftHookError.ffiError
@@ -127,7 +126,7 @@ public class HookToken {
         imp_removeBlock(self.hookBlockIMP)
     }
     
-    class func hook(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws -> HookToken{
+    class func hook(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws -> HookToken {
         let hookToken = try HookToken.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
         allHookTokens.append(hookToken)
         return hookToken

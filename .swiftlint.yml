@@ -1,0 +1,11 @@
+excluded:
+  - Pods
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  # - cyclomatic_complexity
+  - function_body_length
+  - todo
+  - identifier_name
+  - function_parameter_count

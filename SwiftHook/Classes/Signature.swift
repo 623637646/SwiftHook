@@ -20,9 +20,6 @@ struct Signature {
     
     // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
     private init?(typeEncoding: UnsafePointer<Int8>) {
-        
-        
-        
         guard let methodSignature = SHMethodSignature.init(objCTypes: typeEncoding) else {
             return nil
         }

@@ -14,42 +14,42 @@ class SignatureTests: XCTestCase {
     func testNoArgsNoReturnFunc() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@",":"])
     }
     
     func testSimpleSignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "r*", "@", "#", ":"])
     }
     
     func testStructSignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testStructSignature(point:rect:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "{CGPoint=dd}", "{CGRect={CGPoint=dd}{CGSize=dd}}"])
     }
     
     func testArraySignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testArraySignature(arrayAny:arrayInt:arrayStruct:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "@", "@", "@"])
     }
     
     func testDictionarySignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testDictionarySignature(dictionaryAny:dictionaryInt:dictionaryStruct:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "@", "@", "@"])
     }
     
     func testBlockSignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testBlockSignature(block1:block2:block4:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "@?", "@?", "@?"])
     }
 
     func testPointerSignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testPointerSignature(pointerInt:pointerChar:pointerObj:pointerStruct:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, [])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "r^q", "r*", "r^@", "r^{CGRect={CGPoint=dd}{CGSize=dd}}"])
     }
 }

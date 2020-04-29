@@ -8,43 +8,32 @@
 
 import Foundation
 
-struct Types: Equatable {
-    let typeCode: String
-    let length: UInt
-    
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.typeCode == rhs.typeCode && lhs.length == rhs.length
-    }
-}
-
 struct Signature {
     
-    let argumentTypes:[Types]
-    let returnType: Types
+    let argumentTypes:[String]
+    let returnType: String
     
-    private init(argumentTypes: [Types], returnType: Types) {
+    private init(argumentTypes: [String], returnType: String) {
         self.argumentTypes = argumentTypes
         self.returnType = returnType
     }
     
     // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
-    private init(typeEncoding: String) {
+    private init?(typeEncoding: UnsafePointer<Int8>) {
         
-        // TODO: Use NSMethodSignature?
-        for chart in typeEncoding {
-            print("\(chart)")
+        
+        
+        guard let methodSignature = SHMethodSignature.init(objCTypes: typeEncoding) else {
+            return nil
         }
-        
-        
-        self.init(argumentTypes: [], returnType: Types.init(typeCode: "", length: 11))
+        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType)
     }
     
     init?(method: Method) {
-        guard let typeEncodingPointer = method_getTypeEncoding(method),
-            let typeEncoding = String.init(utf8String: typeEncodingPointer) else {
+        guard let typeEncodingPointer = method_getTypeEncoding(method) else {
                 return nil
         }
-        self.init(typeEncoding: typeEncoding)
+        self.init(typeEncoding: typeEncodingPointer)
     }
     
     init?(class: AnyClass, selector: Selector) {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
 		2A7F43C02458359E00A63935 /* HookToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BE2458359E00A63935 /* HookToken.swift */; };
 		2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */; };
 		2A7F43C3245835B700A63935 /* TestCases.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A7F43C2245835B700A63935 /* TestCases.txt */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
+		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
 		2A7F43BE2458359E00A63935 /* HookToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HookToken.swift; sourceTree = "<group>"; };
 		2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+iOSHook.swift"; sourceTree = "<group>"; };
 		2A7F43C2245835B700A63935 /* TestCases.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestCases.txt; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 				2A7F43BE2458359E00A63935 /* HookToken.swift */,
 				2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */,
 				2AC10C7F245872F200ED6815 /* Signature.swift */,
+				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
+				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -160,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB67362245834E30011536D /* SwiftHook.h in Headers */,
+				2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +224,7 @@
 				TargetAttributes = {
 					2AB67350245834E30011536D = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					2AB67359245834E30011536D = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -335,6 +343,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
 				2AC10C80245872F200ED6815 /* Signature.swift in Sources */,
 				2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */,
 				2A7F43C02458359E00A63935 /* HookToken.swift in Sources */,
@@ -488,6 +497,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D4EDF113598DFE359EA93505 /* Pods-abstract-SwiftHook-SwiftHook.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZQ7TZ3Q272;
@@ -504,6 +514,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.SwiftHook;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -513,6 +524,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = ZQ7TZ3Q272;

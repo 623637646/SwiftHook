@@ -11,6 +11,7 @@ import libffi
 
 public enum SwiftHookError: Error {
     case noRespondSelector(class: AnyClass, selector: Selector)
+    case missingSignature
     case incompatibleBlockSignature
     case ffiError
     case unknow
@@ -27,14 +28,7 @@ public extension NSObject {
     @discardableResult
     class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookToken? {
         // TODO: Thread synchronization
-        // TODO: Method signature and block signature checking
-        // TODO: Selector black list.
-        guard self.instancesRespond(to: selector) else {
-            throw SwiftHookError.noRespondSelector(class: self, selector: selector)
-        }
-        guard self.signatureCheck(selector: selector, hookBlock: block as AnyObject, mode: .before) else {
-            throw SwiftHookError.incompatibleBlockSignature
-        }
+        try self.parametersCheck(selector: selector, block: block as Any, mode: .before)
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
@@ -55,20 +49,31 @@ public extension NSObject {
         return false
     }
     
-    private class func signatureCheck(selector: Selector, hookBlock: AnyObject, mode: HookMode) -> Bool {
-        let methodSignature = Signature(class: self, selector: selector)
-        let closureSignature = Signature(closure: hookBlock)
+    private class func parametersCheck(selector: Selector, block: Any, mode: HookMode) throws {
+        // TODO: Selector black list.
+        guard self.instancesRespond(to: selector) else {
+            throw SwiftHookError.noRespondSelector(class: self, selector: selector)
+        }
+        guard let methodSignature = Signature(class: self, selector: selector),
+            let closureSignature = Signature(closure: block) else {
+                throw SwiftHookError.missingSignature
+        }
         guard methodSignature != closureSignature else {
-            return true
+            return
         }
         let emptyClosure = Signature(closure: (() -> Void).self)
         switch mode {
         case .before:
-            return closureSignature == emptyClosure
+            if closureSignature == emptyClosure {
+                return
+            }
         case .after:
-            return closureSignature == emptyClosure
-        case .instead:
-            return false
+            if closureSignature == emptyClosure {
+                return
+            }
+        case .instead: break
+            
         }
+        throw SwiftHookError.incompatibleBlockSignature
     }
 }

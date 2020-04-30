@@ -39,6 +39,9 @@ public class HookToken {
     let hookBlock: AnyObject
     let method: Method
     
+    let methodSignature: Signature
+    let closureSignature: Signature
+    
     let hookBlockIMP: IMP
     let originalIMP: IMP
     let newIMP: IMP
@@ -51,6 +54,13 @@ public class HookToken {
         self.selector = selector
         self.mode = mode
         self.hookBlock = hookBlock
+        
+        guard let methodSignature = Signature(class: `class`, selector: selector),
+            let closureSignature = Signature(closure: hookBlock) else {
+                throw SwiftHookError.missingSignature
+        }
+        self.methodSignature = methodSignature
+        self.closureSignature = closureSignature
         
         // hookBlockIMP
         self.hookBlockIMP = imp_implementationWithBlock(self.hookBlock)
@@ -72,10 +82,11 @@ public class HookToken {
         self.originalIMP = method_getImplementation(self.method)
         
         // argumentTypes
-        self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 2)
-        self.argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
-        self.argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
-        
+        self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
+            self.argumentTypes[index] = UnsafeMutablePointer(&ffi_type_pointer)
+        }
+                
         // cif
         self.cifPointer = UnsafeMutablePointer.allocate(capacity: 1)
         let status_cif = ffi_prep_cif(

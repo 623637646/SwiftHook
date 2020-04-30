@@ -32,15 +32,10 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
 var allHookTokens = [HookToken]()
 
 public class HookToken {
-    enum Mode {
-        case before
-        case after
-        case instead
-    }
     
     let `class`: AnyClass
     let selector: Selector
-    let mode: Mode
+    let mode: HookMode
     let hookBlock: AnyObject
     let method: Method
     
@@ -51,7 +46,7 @@ public class HookToken {
     let cifPointer: UnsafeMutablePointer<ffi_cif>
     let closure: UnsafeMutablePointer<ffi_closure>
     
-    private init(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws {
+    private init(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
         self.`class` = `class`
         self.selector = selector
         self.mode = mode
@@ -126,7 +121,7 @@ public class HookToken {
         imp_removeBlock(self.hookBlockIMP)
     }
     
-    class func hook(class: AnyClass, selector: Selector, mode: Mode, hookBlock: AnyObject) throws -> HookToken {
+    class func hook(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookToken {
         let hookToken = try HookToken.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
         allHookTokens.append(hookToken)
         return hookToken

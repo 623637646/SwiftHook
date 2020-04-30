@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Signature {
+struct Signature: Equatable {
     
     let argumentTypes: [String]
     let returnType: String

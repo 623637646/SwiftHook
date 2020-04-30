@@ -10,9 +10,16 @@ import Foundation
 import libffi
 
 public enum SwiftHookError: Error {
-    case instancesDoNotRespondSelector(class: AnyClass, selector: Selector)
+    case noRespondSelector(class: AnyClass, selector: Selector)
+    case incompatibleBlockSignature
     case ffiError
     case unknow
+}
+
+enum HookMode {
+    case before
+    case after
+    case instead
 }
 
 public extension NSObject {
@@ -23,7 +30,10 @@ public extension NSObject {
         // TODO: Method signature and block signature checking
         // TODO: Selector black list.
         guard self.instancesRespond(to: selector) else {
-            throw SwiftHookError.instancesDoNotRespondSelector(class: self, selector: selector)
+            throw SwiftHookError.noRespondSelector(class: self, selector: selector)
+        }
+        guard self.signatureCheck(selector: selector, hookBlock: block as AnyObject, mode: .before) else {
+            throw SwiftHookError.incompatibleBlockSignature
         }
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
@@ -43,5 +53,22 @@ public extension NSObject {
             }
         }
         return false
+    }
+    
+    private class func signatureCheck(selector: Selector, hookBlock: AnyObject, mode: HookMode) -> Bool {
+        let methodSignature = Signature(class: self, selector: selector)
+        let closureSignature = Signature(closure: hookBlock)
+        guard methodSignature != closureSignature else {
+            return true
+        }
+        let emptyClosure = Signature(closure: (() -> Void).self)
+        switch mode {
+        case .before:
+            return closureSignature == emptyClosure
+        case .after:
+            return closureSignature == emptyClosure
+        case .instead:
+            return false
+        }
     }
 }

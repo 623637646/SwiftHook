@@ -11,11 +11,11 @@ import XCTest
 
 class SwiftHookTests: XCTestCase {
     
-    func testInstancesDoNotRespondSelector() {
+    func testnoRespondSelector() {
         do {
             try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), block: {})
             XCTAssertTrue(false)
-        } catch SwiftHookError.instancesDoNotRespondSelector(let `class`, let selector) {
+        } catch SwiftHookError.noRespondSelector(let `class`, let selector) {
             XCTAssertTrue(`class` == TestObject.self)
             XCTAssertEqual(selector, #selector(NSArray.object(at:)))
         } catch {

@@ -21,7 +21,7 @@ class SignatureTests: XCTestCase {
     func testSimpleSignature() {
         let signature = Signature.init(class: TestObject.self, selector: #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:)))
         XCTAssertNotNil(signature)
-        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "r*", "@", "#", ":"])
+        XCTAssertEqual(signature!.argumentTypes, ["@", ":", "c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "c", "c", "r*", "@", "#", ":"])
         XCTAssertEqual(signature!.returnType, "v")
     }
     

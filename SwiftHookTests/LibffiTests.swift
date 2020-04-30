@@ -17,13 +17,13 @@ class LibffiTests: XCTestCase {
         defer { argumentTypes.deallocate() }
         argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
-        argumentTypes[2] = UnsafeMutablePointer(&ffi_type_pointer)
-        argumentTypes[3] = UnsafeMutablePointer(&ffi_type_pointer)
+        argumentTypes[2] = UnsafeMutablePointer(&ffi_type_sint64)
+        argumentTypes[3] = UnsafeMutablePointer(&ffi_type_sint64)
         let status_cif = ffi_prep_cif(
             UnsafeMutablePointer(&cif),
             FFI_DEFAULT_ABI,
             4,
-            UnsafeMutablePointer(&ffi_type_pointer),
+            UnsafeMutablePointer(&ffi_type_sint64),
             argumentTypes.baseAddress)
         XCTAssertEqual(status_cif, FFI_OK)
         
@@ -54,13 +54,13 @@ class LibffiTests: XCTestCase {
         defer { argumentTypes.deallocate() }
         argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
-        argumentTypes[2] = UnsafeMutablePointer(&ffi_type_pointer)
-        argumentTypes[3] = UnsafeMutablePointer(&ffi_type_pointer)
+        argumentTypes[2] = UnsafeMutablePointer(&ffi_type_sint64)
+        argumentTypes[3] = UnsafeMutablePointer(&ffi_type_sint64)
         let status_cif = ffi_prep_cif(
             UnsafeMutablePointer(&cif),
             FFI_DEFAULT_ABI,
             4,
-            UnsafeMutablePointer(&ffi_type_pointer),
+            UnsafeMutablePointer(&ffi_type_sint64),
             argumentTypes.baseAddress)
         XCTAssertEqual(status_cif, FFI_OK)
         

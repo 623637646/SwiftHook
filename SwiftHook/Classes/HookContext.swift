@@ -1,5 +1,5 @@
 //
-//  HookToken.swift
+//  HookContext.swift
 //  SwiftHook
 //
 //  Created by Yanni Wang on 27/4/20.
@@ -17,11 +17,11 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         assert(false)
         return
     }
-    let hookToken = Unmanaged<HookToken>.fromOpaque(userdata).takeUnretainedValue()
-    switch hookToken.mode {
+    let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
+    switch hookContext.mode {
     case .before:
-        ffi_call(hookToken.cifPointer, unsafeBitCast(hookToken.hookBlockIMP, to: (@convention(c) () -> Void).self), ret, args)
-        ffi_call(hookToken.cifPointer, unsafeBitCast(hookToken.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookBlockIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .after:
         break
     case .instead:
@@ -29,9 +29,9 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     }
 }
 
-var allHookTokens = [HookToken]()
+var allHookContext = [HookContext]()
 
-public class HookToken {
+public class HookContext {
     
     let `class`: AnyClass
     let selector: Selector
@@ -132,9 +132,9 @@ public class HookToken {
         imp_removeBlock(self.hookBlockIMP)
     }
     
-    class func hook(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookToken {
-        let hookToken = try HookToken.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
-        allHookTokens.append(hookToken)
-        return hookToken
+    class func hook(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookContext {
+        let hookContext = try HookContext.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
+        allHookContext.append(hookContext)
+        return hookContext
     }
 }

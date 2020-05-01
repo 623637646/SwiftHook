@@ -26,13 +26,13 @@ enum HookMode {
 public extension NSObject {
     
     @discardableResult
-    class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookToken? {
+    class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookContext? {
         // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, block: block as Any, mode: .before)
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
-        return try HookToken.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
+        return try HookContext.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
     }
     
     // MARK: private

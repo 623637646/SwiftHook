@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SHMethodSignature : NSObject
 
-+ (nullable SHMethodSignature *)signatureWithObjCTypes:(const char *)types;
++ (nullable SHMethodSignature *)signatureWithMethod:(Method)method;
 
 + (nullable SHMethodSignature *)signatureWithBlock:(id)block;
 

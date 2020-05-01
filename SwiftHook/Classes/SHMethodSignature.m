@@ -68,8 +68,9 @@ static NSMethodSignature *SHBlockMethodSignature(id block, NSError **error) {
 
 @implementation SHMethodSignature
 
-+ (nullable SHMethodSignature *)signatureWithObjCTypes:(const char *)types
++ (nullable SHMethodSignature *)signatureWithMethod:(Method)method
 {
+    const char * types = method_getTypeEncoding(method);
     NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:types];
     if (!methodSignature) {
         return nil;

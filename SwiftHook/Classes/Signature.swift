@@ -29,10 +29,7 @@ struct Signature {
         guard let method = class_getInstanceMethod(`class`, selector) else {
             return nil
         }
-        guard let typeEncoding = method_getTypeEncoding(method) else {
-            return nil
-        }
-        guard let methodSignature = SHMethodSignature.init(objCTypes: typeEncoding) else {
+        guard let methodSignature = SHMethodSignature.init(method: method) else {
             return nil
         }
         self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType, signatureType: .method)

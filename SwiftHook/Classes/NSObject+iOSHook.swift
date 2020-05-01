@@ -58,21 +58,22 @@ public extension NSObject {
             let closureSignature = Signature(closure: block) else {
                 throw SwiftHookError.missingSignature
         }
-        guard methodSignature != closureSignature else {
+        guard !methodSignature.isMatch(other: closureSignature) else {
             return
         }
-        let emptyClosure = Signature(closure: (() -> Void).self)
+        guard let emptyClosure = Signature(closure: (() -> Void).self) else {
+            throw SwiftHookError.unknow
+        }
         switch mode {
         case .before:
-            if closureSignature == emptyClosure {
+            if closureSignature.isMatch(other: emptyClosure) {
                 return
             }
         case .after:
-            if closureSignature == emptyClosure {
+            if closureSignature.isMatch(other: emptyClosure) {
                 return
             }
         case .instead: break
-            
         }
         throw SwiftHookError.incompatibleBlockSignature
     }

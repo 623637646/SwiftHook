@@ -8,14 +8,21 @@
 
 import Foundation
 
-struct Signature: Equatable {
+struct Signature {
+    
+    enum SignatureType {
+        case method
+        case block
+    }
     
     let argumentTypes: [String]
     let returnType: String
+    let signatureType: SignatureType
     
-    private init(argumentTypes: [String], returnType: String) {
+    private init(argumentTypes: [String], returnType: String, signatureType: SignatureType) {
         self.argumentTypes = argumentTypes
         self.returnType = returnType
+        self.signatureType = signatureType
     }
     
     init?(class: AnyClass, selector: Selector) {
@@ -23,18 +30,47 @@ struct Signature: Equatable {
             return nil
         }
         guard let typeEncoding = method_getTypeEncoding(method) else {
-                return nil
+            return nil
         }
         guard let methodSignature = SHMethodSignature.init(objCTypes: typeEncoding) else {
             return nil
         }
-        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType)
+        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType, signatureType: .method)
     }
     
     init?(closure: Any) {
         guard let methodSignature = SHMethodSignature.init(block: closure) else {
             return nil
         }
-        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType)
+        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType, signatureType: .block)
+    }
+    
+    func isMatch(other: Signature) -> Bool {
+        guard self.returnType == other.returnType else {
+            return false
+        }
+        let selfBusinessArgumentTypes: [String]
+        switch self.signatureType {
+        case .method:
+            var argumentTypes = self.argumentTypes
+            argumentTypes.removeFirst(2)
+            selfBusinessArgumentTypes = argumentTypes
+        case .block:
+            var argumentTypes = self.argumentTypes
+            argumentTypes.removeFirst()
+            selfBusinessArgumentTypes = argumentTypes
+        }
+        let otherBusinessArgumentTypes: [String]
+        switch other.signatureType {
+        case .method:
+            var argumentTypes = other.argumentTypes
+            argumentTypes.removeFirst(2)
+            otherBusinessArgumentTypes = argumentTypes
+        case .block:
+            var argumentTypes = other.argumentTypes
+            argumentTypes.removeFirst()
+            otherBusinessArgumentTypes = argumentTypes
+        }
+        return selfBusinessArgumentTypes == otherBusinessArgumentTypes
     }
 }

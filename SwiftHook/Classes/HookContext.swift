@@ -84,6 +84,8 @@ public class HookContext {
         // argumentTypes
         self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
+            // TODO: 
+            _ = argumentType
             self.argumentTypes[index] = UnsafeMutablePointer(&ffi_type_pointer)
         }
                 

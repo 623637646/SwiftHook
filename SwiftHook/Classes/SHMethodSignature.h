@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly) NSString *methodReturnType;
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 @end
 
 NS_ASSUME_NONNULL_END

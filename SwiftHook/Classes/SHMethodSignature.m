@@ -102,14 +102,27 @@ static NSMethodSignature *SHBlockMethodSignature(id block, NSError **error) {
     NSUInteger numberOfArguments = self.methodSignature.numberOfArguments;
     NSMutableArray *argumentsType = [[NSMutableArray alloc] initWithCapacity:numberOfArguments];
     for (int i = 0; i < numberOfArguments; i++) {
-        [argumentsType addObject:[[NSString alloc] initWithUTF8String:[self.methodSignature getArgumentTypeAtIndex:i]]];
+        NSString *argumentType = [[NSString alloc] initWithUTF8String:[self.methodSignature getArgumentTypeAtIndex:i]];
+        [argumentsType addObject: [self ignoreUnusedChar:argumentType]];
     }
     return [argumentsType copy];
 }
 
 - (NSString *)methodReturnType
 {
-    return [[NSString alloc] initWithUTF8String:self.methodSignature.methodReturnType];
+    return [self ignoreUnusedChar:[[NSString alloc] initWithUTF8String:self.methodSignature.methodReturnType]];
+}
+
+static NSRegularExpression *regex;
+- (NSString *)ignoreUnusedChar:(NSString *)type
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regex = [NSRegularExpression regularExpressionWithPattern:@"\\\".+?\\\"|\\<.+?\\>" options:NSRegularExpressionCaseInsensitive error:NULL];
+    });
+    NSMutableString *result = [[NSMutableString alloc] initWithString:type];
+    [regex replaceMatchesInString:result options:0 range:NSMakeRange(0, result.length) withTemplate:@""];
+    return [result copy];
 }
 
 @end

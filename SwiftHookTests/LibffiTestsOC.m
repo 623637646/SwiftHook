@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <objc/runtime.h>
 #import <SwiftHookTests-Swift.h>
-@import libffi;
+@import libffi_iOS;
 
 @interface LibffiTestsOC : XCTestCase
 

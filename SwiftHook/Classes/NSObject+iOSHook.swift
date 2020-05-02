@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import libffi
+import libffi_iOS
 
 public enum SwiftHookError: Error {
     case noRespondSelector(class: AnyClass, selector: Selector)

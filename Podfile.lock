@@ -1,22 +1,16 @@
 PODS:
-  - libffi (3.3)
+  - libffi-iOS (3.3-iOS)
 
 DEPENDENCIES:
-  - libffi (from `https://github.com/623637646/libffi.git`, tag `v3.3-iOS`)
+  - libffi-iOS (~> 3.3-iOS)
 
-EXTERNAL SOURCES:
-  libffi:
-    :git: https://github.com/623637646/libffi.git
-    :tag: v3.3-iOS
-
-CHECKOUT OPTIONS:
-  libffi:
-    :git: https://github.com/623637646/libffi.git
-    :tag: v3.3-iOS
+SPEC REPOS:
+  trunk:
+    - libffi-iOS
 
 SPEC CHECKSUMS:
-  libffi: b59ae870f5d3cd655723f8f9390bb6c5616ac7e2
+  libffi-iOS: e80dbd6d8ed3ba627709d2584ee21fda3235ecda
 
-PODFILE CHECKSUM: 8923b21adcc64fd0b58e17d415ebaf44e074a88e
+PODFILE CHECKSUM: 17a82c8e0d3841d2a3d2758244a530cfad9039fc
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.9.1

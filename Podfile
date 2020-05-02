@@ -4,8 +4,8 @@ abstract_target 'abstract-SwiftHook' do
   use_frameworks!
   inhibit_all_warnings!
   
-  pod 'libffi', :git => 'https://github.com/623637646/libffi.git', :tag => 'v3.3-iOS'
-  
+  pod 'libffi-iOS', '~> 3.3-iOS'
+
   target 'SwiftHook' do
   end
   

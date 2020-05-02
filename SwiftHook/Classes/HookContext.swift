@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import libffi
+import libffi_iOS
 
 func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
                    ret: UnsafeMutableRawPointer?,

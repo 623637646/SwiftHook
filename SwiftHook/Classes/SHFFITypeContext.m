@@ -36,7 +36,6 @@
     return self;
 }
 
-// TODO: need to test
 - (void)dealloc
 {
     for (int i = 0; i < self.mallocArray.count; i++) {
@@ -46,21 +45,7 @@
         }
         free(point);
     }
-//    [SHFFITypeContext freeFFIType:self.ffiType];
 }
-
-//// TODO: need to test
-//+ (void)freeFFIType:(ffi_type *)ffiType
-//{
-//    ffi_type *element = *(ffiType->elements);
-//    while (element != NULL) {
-//        [SHFFITypeContext freeFFIType:element];
-//        element++;
-//    }
-//    if (ffiType->type == FFI_TYPE_STRUCT) {
-//        free(ffiType);
-//    }
-//}
 
 // Refer: https://github.com/yulingtianxia/BlockHook/blob/master/BlockHook/BlockHook.m
 - (ffi_type *)ffiTypeForEncode:(const char *)str
@@ -194,5 +179,3 @@
 }
 
 @end
-
-// TODO: SHFFITypeContext tests.

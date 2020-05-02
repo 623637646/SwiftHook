@@ -23,6 +23,15 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    func testMemory() {
+//        while true {
+//            autoreleasepool {
+//                testHookBeforeNoArgsNoReturnFunc()
+//                testHookBeforeSumFunc()
+//            }
+//        }
+    }
+    
     // MARK: Before
     
     func testHookBeforeNoArgsNoReturnFunc() {

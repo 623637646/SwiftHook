@@ -109,8 +109,10 @@ class LibffiTests: XCTestCase {
     
     func testMemory() {
 //        while true {
-//            testLibffiCall()
-//            testLibffiClosure()
+//            autoreleasepool {
+//                testLibffiCall()
+//                testLibffiClosure()
+//            }
 //        }
     }
     

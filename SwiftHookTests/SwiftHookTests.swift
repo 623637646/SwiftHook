@@ -39,7 +39,6 @@ class SwiftHookTests: XCTestCase {
         XCTAssertTrue(called)
     }
     
-    // TODO: Not working
     func testHookBeforeSumFunc() {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)

@@ -51,13 +51,13 @@ void closureRerewrite(ffi_cif *cif, void *ret, void **args, void *userdata) {
     ffi_prep_closure_loc(closure, &cif, closureRerewrite, NULL, &newIMP);
 
     Method method = class_getInstanceMethod([TestObject class], @selector(sumFuncWithA:b:));
-    method_setImplementation(method, newIMP);
+    IMP originalIMP = method_setImplementation(method, newIMP);
 
     // after hook
     TestObject *testObject = [TestObject new];
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 * 456);
-    
+    method_setImplementation(method, originalIMP);
 }
 
 static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *userdata) {
@@ -82,6 +82,7 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
     TestObject *testObject = [TestObject new];
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 + 456);
+    method_setImplementation(method, originalIMP);
 }
 
 @end

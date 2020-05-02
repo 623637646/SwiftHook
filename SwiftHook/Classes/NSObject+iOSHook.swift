@@ -61,7 +61,7 @@ public extension NSObject {
         guard !methodSignature.isMatch(other: closureSignature) else {
             return
         }
-        guard let emptyClosure = Signature(closure: (() -> Void).self) else {
+        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void) else {
             throw SwiftHookError.unknow
         }
         switch mode {

@@ -49,12 +49,15 @@ public class HookContext {
     let cifPointer: UnsafeMutablePointer<ffi_cif>
     let closure: UnsafeMutablePointer<ffi_closure>
     
+    let typeContexts: [SHFFITypeContext]
+    
     private init(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
         self.`class` = `class`
         self.selector = selector
         self.mode = mode
         self.hookBlock = hookBlock
         
+        // Signature
         guard let methodSignature = Signature(class: `class`, selector: selector),
             let closureSignature = Signature(closure: hookBlock) else {
                 throw SwiftHookError.missingSignature
@@ -81,21 +84,34 @@ public class HookContext {
         // IMP
         self.originalIMP = method_getImplementation(self.method)
         
-        // argumentTypes
+        // argumentTypes,
         self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        var typeContexts = [SHFFITypeContext]()
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
-            // TODO: 
-            _ = argumentType
-            self.argumentTypes[index] = UnsafeMutablePointer(&ffi_type_pointer)
+            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
+                throw SwiftHookError.unknow
+            }
+            typeContexts.append(typeContext)
+            self.argumentTypes[index] = typeContext.ffiType
         }
-                
+        
+        // returnTypes
+        guard let returnTypeContext = SHFFITypeContext(typeEncoding: methodSignature.returnType) else {
+            throw SwiftHookError.unknow
+        }
+        typeContexts.append(returnTypeContext)
+        let returnFFIType = returnTypeContext.ffiType
+        
+        // typeContexts
+        self.typeContexts = typeContexts
+        
         // cif
         self.cifPointer = UnsafeMutablePointer.allocate(capacity: 1)
         let status_cif = ffi_prep_cif(
             self.cifPointer,
             FFI_DEFAULT_ABI,
-            2,
-            UnsafeMutablePointer(&ffi_type_pointer),
+            UInt32(methodSignature.argumentTypes.count),
+            returnFFIType,
             self.argumentTypes.baseAddress)
         guard status_cif == FFI_OK else {
             throw SwiftHookError.ffiError

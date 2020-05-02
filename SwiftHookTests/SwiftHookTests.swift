@@ -19,7 +19,7 @@ class SwiftHookTests: XCTestCase {
             XCTAssertTrue(`class` == TestObject.self)
             XCTAssertEqual(selector, #selector(NSArray.object(at:)))
         } catch {
-            XCTAssertTrue(false)
+            XCTAssertNil(error)
         }
     }
     
@@ -32,7 +32,7 @@ class SwiftHookTests: XCTestCase {
                 called = true
             })
         } catch {
-            XCTAssertTrue(false)
+            XCTAssertNil(error)
         }
         XCTAssertFalse(called)
         TestObject().noArgsNoReturnFunc()
@@ -41,16 +41,16 @@ class SwiftHookTests: XCTestCase {
     
     // TODO: Not working
     func testHookBeforeSumFunc() {
-//        let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
-//        let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
-//        do {
-//            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), block: {
-//            })
-//        } catch {
-//            XCTAssertTrue(false)
-//        }
-//        let result = TestObject().sumFunc(a: arg1, b: arg2)
-//        XCTAssertEqual(result, arg1 + arg2)
+        let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
+        let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), block: {
+            })
+        } catch {
+            XCTAssertNil(error)
+        }
+        let result = TestObject().sumFunc(a: arg1, b: arg2)
+        XCTAssertEqual(result, arg1 + arg2)
     }
     
 }

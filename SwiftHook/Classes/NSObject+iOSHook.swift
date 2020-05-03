@@ -23,10 +23,10 @@ enum HookMode {
     case instead
 }
 
-public extension NSObject {
+extension NSObject {
     
     @discardableResult
-    class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookContext? {
+    public class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookContext {
         // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, block: block as Any, mode: .before)
         if !isSelfMethod(selector: selector) {

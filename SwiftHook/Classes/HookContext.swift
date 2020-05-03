@@ -155,4 +155,18 @@ public class HookContext {
         allHookContext.append(hookContext)
         return hookContext
     }
+    
+    /**
+     # Cancel hook.
+     Try to change the Method's IMP from hooked to original and released context.
+     But it's dangerous when the current IMP is not previous hooked IMP. In this case. cancelHook() still works fine but the context will not be released.
+     
+     - returns:
+     If context will be released, return true. otherwise return false.
+     */
+    @discardableResult
+    public func cancelHook() -> Bool {
+        // TODO: 
+        return false
+    }
 }

@@ -320,6 +320,51 @@ class FFITypeContextTests: XCTestCase {
         ], ffiType: typeContext.ffiType.pointee)
     }
     
+    func testReusedContext() {
+        var blocks = [Any]()
+        blocks.append(({} as @convention(block) () -> Void))
+        blocks.append(({0} as @convention(block) () -> UInt8))
+        blocks.append(({0} as @convention(block) () -> Int8))
+        blocks.append(({0} as @convention(block) () -> UInt16))
+        blocks.append(({0} as @convention(block) () -> Int16))
+        blocks.append(({0} as @convention(block) () -> UInt32))
+        blocks.append(({0} as @convention(block) () -> Int32))
+        blocks.append(({0} as @convention(block) () -> UInt64))
+        blocks.append(({0} as @convention(block) () -> Int64))
+        blocks.append(({0} as @convention(block) () -> Float))
+        blocks.append(({0} as @convention(block) () -> CGFloat))
+        blocks.append(({0} as @convention(block) () -> Double))
+        blocks.append(({
+            var d: Double = 0
+            return UnsafePointer<Double>(&d)
+            } as @convention(block) () -> UnsafePointer<Double>))
+        blocks.append(({NSObject()} as @convention(block) () -> NSObject))
+        blocks.append(({false} as @convention(block) () -> Bool))
+        blocks.append(({Self.self} as @convention(block) () -> AnyClass))
+        blocks.append(({#function} as @convention(block) () -> Selector))
+        blocks.append(({0} as @convention(block) () -> Any))
+        blocks.forEach { (block) in
+            guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
+                XCTAssertTrue(false)
+                return
+            }
+            XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) ==
+                SHFFITypeContext.init(typeEncoding: typeEncoding))
+        }
+        blocks.removeAll()
+        blocks.append(({CGPoint.zero} as @convention(block) () -> CGPoint))
+        blocks.append(({CGRect.zero} as @convention(block) () -> CGRect))
+        blocks.append(({ComplexityStruct.init()} as @convention(block) () -> ComplexityStruct))
+        blocks.forEach { (block) in
+            guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
+                XCTAssertTrue(false)
+                return
+            }
+            XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) !=
+                SHFFITypeContext.init(typeEncoding: typeEncoding))
+        }
+    }
+    
     // MARK: Memory test
     
     func testMemory() {

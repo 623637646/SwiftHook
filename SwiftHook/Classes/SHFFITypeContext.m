@@ -19,7 +19,86 @@
 
 + (nullable instancetype)contextWithTypeEncodingString:(NSString *)typeEncoding;
 {
-    return [[self alloc] initWithTypeEncoding:typeEncoding.UTF8String];
+    __block SHFFITypeContext *context = [[self alloc] initWithTypeEncoding:typeEncoding.UTF8String];
+    // Return default static instance when the typeEncoding is non-struct to save memory.
+    [[self defaultContext] enumerateObjectsUsingBlock:^(SHFFITypeContext * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (context.ffiType == obj.ffiType) {
+            context = obj;
+            *stop = YES;
+        }
+    }];
+    return context;
+}
+
++ (NSArray<SHFFITypeContext *> *)defaultContext
+{
+    static NSArray<SHFFITypeContext *> *defaultContext = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        defaultContext = @[
+            ^{
+                SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                context.ffiType = &ffi_type_void;
+                return context;
+            }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_uint8;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_sint8;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_uint16;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_sint16;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_uint32;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_sint32;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_uint64;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_sint64;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_float;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_double;
+                 return context;
+             }(),
+             ^{
+                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 context.ffiType = &ffi_type_pointer;
+                 return context;
+             }(),
+        ];
+    });
+    return defaultContext;
 }
 
 - (nullable instancetype)initWithTypeEncoding:(const char *)typeEncoding;

@@ -9,8 +9,10 @@
 import UIKit
 
 class SuperObject: NSObject {
-    @objc dynamic func superFunc() {
-        
+    @objc dynamic func superFunc(arg: [AnyClass]) -> [AnyClass] {
+        var arg = arg
+        arg.append(SuperObject.self)
+        return arg
     }
 }
 

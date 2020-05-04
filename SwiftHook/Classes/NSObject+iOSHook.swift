@@ -9,6 +9,7 @@
 import Foundation
 import libffi_iOS
 
+// TODO: tests
 public enum SwiftHookError: Error {
     case noRespondSelector(class: AnyClass, selector: Selector)
     case missingSignature

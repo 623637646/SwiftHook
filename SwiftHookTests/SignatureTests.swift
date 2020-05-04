@@ -15,7 +15,11 @@ let argumentTypesBlockPrefix = ["@?"]
 class SignatureTests: XCTestCase {
     
     func testNoArgsNoReturnFunc() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc)) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noArgsNoReturnFunc)) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }
@@ -35,7 +39,11 @@ class SignatureTests: XCTestCase {
     }
     
     func testSimpleSignature() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:))) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:))) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }
@@ -57,7 +65,11 @@ class SignatureTests: XCTestCase {
     }
     
     func testStructSignature() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.testStructSignature(point:rect:))) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testStructSignature(point:rect:))) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }
@@ -77,7 +89,11 @@ class SignatureTests: XCTestCase {
     }
     
     func testArraySignature() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.testArraySignature(arrayAny:arrayInt:arrayStruct:))) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testArraySignature(arrayAny:arrayInt:arrayStruct:))) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }
@@ -97,7 +113,11 @@ class SignatureTests: XCTestCase {
     }
     
     func testDictionarySignature() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.testDictionarySignature(dictionaryAny:dictionaryInt:dictionaryStruct:))) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testDictionarySignature(dictionaryAny:dictionaryInt:dictionaryStruct:))) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }
@@ -117,7 +137,11 @@ class SignatureTests: XCTestCase {
     }
     
     func testBlockSignature() {
-        guard let signatureMethod = Signature.init(class: TestObject.self, selector: #selector(TestObject.testBlockSignature(block1:block2:block4:))) else {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testBlockSignature(block1:block2:block4:))) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
             XCTAssertTrue(false)
             return
         }

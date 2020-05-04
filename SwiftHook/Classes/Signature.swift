@@ -25,10 +25,7 @@ struct Signature {
         self.signatureType = signatureType
     }
     
-    init?(class: AnyClass, selector: Selector) {
-        guard let method = class_getInstanceMethod(`class`, selector) else {
-            return nil
-        }
+    init?(method: Method) {
         guard let methodSignature = SHMethodSignature.init(method: method) else {
             return nil
         }

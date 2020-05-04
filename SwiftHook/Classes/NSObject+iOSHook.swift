@@ -51,10 +51,10 @@ extension NSObject {
     
     private class func parametersCheck(selector: Selector, block: Any, mode: HookMode) throws {
         // TODO: Selector black list.
-        guard self.instancesRespond(to: selector) else {
+        guard let method = class_getInstanceMethod(self, selector) else {
             throw SwiftHookError.noRespondSelector(class: self, selector: selector)
         }
-        guard let methodSignature = Signature(class: self, selector: selector),
+        guard let methodSignature = Signature(method: method),
             let closureSignature = Signature(closure: block) else {
                 throw SwiftHookError.missingSignature
         }

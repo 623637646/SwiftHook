@@ -57,14 +57,6 @@ public class HookContext {
         self.mode = mode
         self.hookBlock = hookBlock
         
-        // Signature
-        guard let methodSignature = Signature(class: `class`, selector: selector),
-            let closureSignature = Signature(closure: hookBlock) else {
-                throw SwiftHookError.missingSignature
-        }
-        self.methodSignature = methodSignature
-        self.closureSignature = closureSignature
-        
         // hookBlockIMP
         self.hookBlockIMP = imp_implementationWithBlock(self.hookBlock)
         
@@ -80,6 +72,14 @@ public class HookContext {
             }
             throw SwiftHookError.unknow
             }()
+        
+        // Signature
+        guard let methodSignature = Signature(method: self.method),
+            let closureSignature = Signature(closure: hookBlock) else {
+                throw SwiftHookError.missingSignature
+        }
+        self.methodSignature = methodSignature
+        self.closureSignature = closureSignature
         
         // IMP
         self.originalIMP = method_getImplementation(self.method)

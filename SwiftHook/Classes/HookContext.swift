@@ -9,10 +9,10 @@
 import Foundation
 import libffi_iOS
 
-func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
-                   ret: UnsafeMutableRawPointer?,
-                   args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
-                   userdata: UnsafeMutableRawPointer?) {
+private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
+                           ret: UnsafeMutableRawPointer?,
+                           args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
+                           userdata: UnsafeMutableRawPointer?) {
     guard let userdata = userdata else {
         assert(false)
         return
@@ -29,27 +29,27 @@ func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     }
 }
 
-var allHookContext = [HookContext]()
+private var allHookContext = [HookContext]()
 
 public class HookContext {
     
-    let `class`: AnyClass
-    let selector: Selector
-    let mode: HookMode
-    let hookBlock: AnyObject
-    let method: Method
+    private let `class`: AnyClass
+    private let selector: Selector
+    fileprivate let mode: HookMode
+    private let hookBlock: AnyObject
+    private let method: Method
     
-    let methodSignature: Signature
-    let closureSignature: Signature
+    private let methodSignature: Signature
+    private let closureSignature: Signature
     
-    let hookBlockIMP: IMP
-    let originalIMP: IMP
-    let newIMP: IMP
-    let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    let cifPointer: UnsafeMutablePointer<ffi_cif>
-    let closure: UnsafeMutablePointer<ffi_closure>
+    fileprivate let hookBlockIMP: IMP
+    fileprivate let originalIMP: IMP
+    private let newIMP: IMP
+    private let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
+    fileprivate let cifPointer: UnsafeMutablePointer<ffi_cif>
+    private let closure: UnsafeMutablePointer<ffi_closure>
     
-    let typeContexts: [SHFFITypeContext]
+    private let typeContexts: [SHFFITypeContext]
     
     private init(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
         self.`class` = `class`

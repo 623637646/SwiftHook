@@ -70,7 +70,7 @@ public class HookContext {
                     return method
                 }
             }
-            throw SwiftHookError.unknow
+            throw SwiftHookError.internalError(file: #file, line: #line)
             }()
         
         // Signature
@@ -89,7 +89,7 @@ public class HookContext {
         var typeContexts = [SHFFITypeContext]()
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
-                throw SwiftHookError.unknow
+                throw SwiftHookError.internalError(file: #file, line: #line)
             }
             typeContexts.append(typeContext)
             self.argumentTypes[index] = typeContext.ffiType
@@ -97,7 +97,7 @@ public class HookContext {
         
         // returnTypes
         guard let returnTypeContext = SHFFITypeContext(typeEncoding: methodSignature.returnType) else {
-            throw SwiftHookError.unknow
+            throw SwiftHookError.internalError(file: #file, line: #line)
         }
         typeContexts.append(returnTypeContext)
         let returnFFIType = returnTypeContext.ffiType

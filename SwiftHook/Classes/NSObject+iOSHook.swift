@@ -14,7 +14,7 @@ public enum SwiftHookError: Error {
     case missingSignature
     case incompatibleBlockSignature
     case ffiError
-    case unknow
+    case internalError(file: String, line: Int)
 }
 
 enum HookMode {
@@ -62,7 +62,7 @@ extension NSObject {
             return
         }
         guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void) else {
-            throw SwiftHookError.unknow
+            throw SwiftHookError.internalError(file: #file, line: #line)
         }
         switch mode {
         case .before:

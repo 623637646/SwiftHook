@@ -16,6 +16,18 @@ class SuperObject: NSObject {
 
 class TestObject: SuperObject {
     
+    func swiftMethod() {
+        print("run \(#function)")
+    }
+    
+    @objc func noDynamicMethod() {
+        print("run \(#function)")
+    }
+    
+    dynamic func noObjcMethod() {
+        print("run \(#function)")
+    }
+    
     @objc dynamic func noArgsNoReturnFunc() {
         print("run \(#function)")
     }

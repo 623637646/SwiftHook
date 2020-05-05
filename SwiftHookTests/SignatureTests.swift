@@ -14,6 +14,42 @@ let argumentTypesBlockPrefix = ["@?"]
 
 class SignatureTests: XCTestCase {
     
+    func testSwiftMethod() {
+        let selector = NSSelectorFromString("swiftMethod")
+        let method = class_getInstanceMethod(TestObject.self, selector)
+        XCTAssertNil(method)
+    }
+    
+    func testNoDynamicMethod() {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureMethod = Signature.init(method: method) else {
+            XCTAssertTrue(false)
+            return
+        }
+        guard let signatureBlock = Signature.init(closure: {} as @convention(block) () -> Void) else {
+            XCTAssertTrue(false)
+            return
+        }
+        
+        let argumentTypesExpect: [String] = []
+        let returnTypesExpect: String = "v"
+        
+        XCTAssertEqual(signatureMethod.argumentTypes, argumentTypesMethodPrefix + argumentTypesExpect)
+        XCTAssertEqual(signatureMethod.returnType, returnTypesExpect)
+        XCTAssertEqual(signatureBlock.argumentTypes, argumentTypesBlockPrefix + argumentTypesExpect)
+        XCTAssertEqual(signatureBlock.returnType, returnTypesExpect)
+        XCTAssertTrue(signatureMethod.isMatch(other: signatureBlock))
+    }
+    
+    func testNoObjcMethod() {
+        let selector = NSSelectorFromString("noObjcMethod")
+        let method = class_getInstanceMethod(TestObject.self, selector)
+        XCTAssertNil(method)
+    }
+    
     func testNoArgsNoReturnFunc() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noArgsNoReturnFunc)) else {
             XCTAssertTrue(false)

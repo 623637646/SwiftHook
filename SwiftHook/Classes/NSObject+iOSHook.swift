@@ -32,7 +32,7 @@ extension NSObject {
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
-        return try HookContext.hook(class: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
     }
     
     // MARK: private

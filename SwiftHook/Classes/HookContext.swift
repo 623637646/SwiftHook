@@ -33,7 +33,7 @@ private var allHookContext = [HookContext]()
 
 public class HookContext {
     
-    private let `class`: AnyClass
+    private let targetClass: AnyClass
     private let selector: Selector
     fileprivate let mode: HookMode
     private let hookBlock: AnyObject
@@ -51,8 +51,8 @@ public class HookContext {
     
     private let typeContexts: [SHFFITypeContext]
     
-    private init(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
-        self.`class` = `class`
+    private init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
+        self.targetClass = targetClass
         self.selector = selector
         self.mode = mode
         self.hookBlock = hookBlock
@@ -63,7 +63,7 @@ public class HookContext {
         // Method
         self.method = try {
             var length: UInt32 = 0
-            let firstMethod = class_copyMethodList(`class`, UnsafeMutablePointer(&length))
+            let firstMethod = class_copyMethodList(targetClass, UnsafeMutablePointer(&length))
             let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
             for method in bufferPointer {
                 if method_getName(method) == selector {
@@ -150,8 +150,8 @@ public class HookContext {
         imp_removeBlock(self.hookBlockIMP)
     }
     
-    class func hook(class: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookContext {
-        let hookContext = try HookContext.init(class: `class`, selector: selector, mode: mode, hookBlock: hookBlock)
+    class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookContext {
+        let hookContext = try HookContext.init(targetClass: targetClass, selector: selector, mode: mode, hookBlock: hookBlock)
         allHookContext.append(hookContext)
         return hookContext
     }

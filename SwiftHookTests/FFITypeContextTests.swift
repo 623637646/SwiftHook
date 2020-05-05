@@ -312,6 +312,20 @@ class FFITypeContextTests: XCTestCase {
             UnsafeMutablePointer(&ffi_type_sint32),
             [
                 UnsafeMutablePointer(&ffi_type_double),
+                UnsafeMutablePointer(&ffi_type_double)
+            ],
+            [
+                [
+                    UnsafeMutablePointer(&ffi_type_double),
+                    UnsafeMutablePointer(&ffi_type_double)
+                ],
+                [
+                    UnsafeMutablePointer(&ffi_type_double),
+                    UnsafeMutablePointer(&ffi_type_double)
+                ]
+            ],
+            [
+                UnsafeMutablePointer(&ffi_type_double),
                 [
                     UnsafeMutablePointer(&ffi_type_pointer),
                     []

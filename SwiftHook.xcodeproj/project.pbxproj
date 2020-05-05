@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A1811CC2461A23000B5F18F /* OverrideMethodContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1811CB2461A23000B5F18F /* OverrideMethodContextTests.swift */; };
+		2A254E712461D1A4000F4AD7 /* HookContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A254E702461D1A4000F4AD7 /* HookContextTests.swift */; };
 		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
 		2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		2A1811CB2461A23000B5F18F /* OverrideMethodContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideMethodContextTests.swift; sourceTree = "<group>"; };
+		2A254E702461D1A4000F4AD7 /* HookContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextTests.swift; sourceTree = "<group>"; };
 		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
 		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
 		2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFFITypeContext.h; sourceTree = "<group>"; };
@@ -125,8 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */,
-				2A5363932460762F008B8A94 /* OverrideMethodContext.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
+				2A5363932460762F008B8A94 /* OverrideMethodContext.swift */,
 				2AC10C7F245872F200ED6815 /* Signature.swift */,
 				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
 				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
@@ -171,6 +173,7 @@
 			children = (
 				2A58BF9A245C94FE005227F5 /* Models */,
 				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
+				2A254E702461D1A4000F4AD7 /* HookContextTests.swift */,
 				2A1811CB2461A23000B5F18F /* OverrideMethodContextTests.swift */,
 				2A99159B24587BF4007955E7 /* SignatureTests.swift */,
 				2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */,
@@ -397,6 +400,7 @@
 			files = (
 				2A7F43CC245835D600A63935 /* TestObject.swift in Sources */,
 				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
+				2A254E712461D1A4000F4AD7 /* HookContextTests.swift in Sources */,
 				2A1811CC2461A23000B5F18F /* OverrideMethodContextTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
 				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,

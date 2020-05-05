@@ -14,6 +14,12 @@ let argumentTypesBlockPrefix = ["@?"]
 
 class SignatureTests: XCTestCase {
     
+    func testPureSwift() {
+        let selector = NSSelectorFromString("swiftMethod")
+        let method = class_getInstanceMethod(PureSwift.self, selector)
+        XCTAssertNil(method)
+    }
+    
     func testSwiftMethod() {
         let selector = NSSelectorFromString("swiftMethod")
         let method = class_getInstanceMethod(TestObject.self, selector)

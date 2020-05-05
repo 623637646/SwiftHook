@@ -8,6 +8,10 @@
 
 import UIKit
 
+class PureSwift {
+    
+}
+
 class SuperObject: NSObject {
     @objc dynamic func superFunc(arg: [AnyClass]) -> [AnyClass] {
         var arg = arg

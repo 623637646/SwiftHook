@@ -169,4 +169,12 @@ public class HookContext {
         // TODO: 
         return false
     }
+    
+    // MARK: This is debug tools.
+    
+    class func debugToolsGetAllHookContext() -> [HookContext] {
+        return allHookContext
+    }
 }
+
+// TODO: all hookBlock check

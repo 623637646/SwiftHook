@@ -8,9 +8,12 @@
 
 #ifndef ComplexityStruct_h
 #define ComplexityStruct_h
+#import <UIKit/UIKit.h>
 
 struct ComplexityStruct {
     int i;
+    CGPoint p;
+    CGRect frame;
     struct {
         double d;
         struct {

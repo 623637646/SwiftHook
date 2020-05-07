@@ -11,12 +11,50 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
-    func testInvalidClosure() {
+    func testInvalidClosureWithSwiftClosure() {
         let contextCount = HookContext.debugToolsGetAllHookContext().count
         let targetClass = TestObject.self
         let selector = #selector(TestObject.noArgsNoReturnFunc)
         let mode: HookMode = .before
-        let closure: AnyObject = {} as AnyObject
+        let closure = {} as AnyObject
+        do {
+            let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            XCTAssertNil(hookContext)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.internalError(file: let file, line: let line) {
+            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
+            XCTAssertEqual(line, 76)
+        } catch {
+            XCTAssertNil(error)
+        }
+        XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+    }
+    
+    func testInvalidClosureWithSwiftObject() {
+        let contextCount = HookContext.debugToolsGetAllHookContext().count
+        let targetClass = TestObject.self
+        let selector = #selector(TestObject.noArgsNoReturnFunc)
+        let mode: HookMode = .before
+        let closure = PureSwift()
+        do {
+            let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            XCTAssertNil(hookContext)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.internalError(file: let file, line: let line) {
+            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
+            XCTAssertEqual(line, 76)
+        } catch {
+            XCTAssertNil(error)
+        }
+        XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+    }
+    
+    func testInvalidClosureWithObjectiveCObject() {
+        let contextCount = HookContext.debugToolsGetAllHookContext().count
+        let targetClass = TestObject.self
+        let selector = #selector(TestObject.noArgsNoReturnFunc)
+        let mode: HookMode = .before
+        let closure = NSObject()
         do {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)

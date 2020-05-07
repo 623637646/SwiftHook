@@ -30,8 +30,8 @@ class TestsTestObject: TestsSuperObject {
 
 class OverrideMethodContextTests: XCTestCase {
     
-    let InternalErrorLineMethod = 54
-    let InternalErrorLineSuperMethod = 59
+    let InternalErrorLineMethod = 55
+    let InternalErrorLineSuperMethod = 60
     
     func testPureSwift() {
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count

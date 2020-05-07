@@ -28,6 +28,7 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(method, to: (@convention(c) () -> Void).self), ret, args)
 }
 
+// TODO: use manager
 private var allOverrideMethodContext = [OverrideMethodContext]()
 
 class OverrideMethodContext {

@@ -29,6 +29,7 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     }
 }
 
+// TODO: use manager
 private var allHookContext = [HookContext]()
 
 public class HookContext {
@@ -50,6 +51,8 @@ public class HookContext {
     private let closure: UnsafeMutablePointer<ffi_closure>
     
     private let typeContexts: [SHFFITypeContext]
+    
+    private var shouldSkipHookClosure = false
     
     private init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
         self.targetClass = targetClass
@@ -137,10 +140,11 @@ public class HookContext {
     }
     
     deinit {
-        self.argumentTypes.deallocate()
-        self.cifPointer.deallocate()
-        ffi_closure_free(self.closure)
+        method_setImplementation(self.method, self.originalIMP)
         imp_removeBlock(self.hookClosureIMP)
+        ffi_closure_free(self.closure)
+        self.cifPointer.deallocate()
+        self.argumentTypes.deallocate()
     }
     
     class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
@@ -159,8 +163,20 @@ public class HookContext {
      */
     @discardableResult
     public func cancelHook() -> Bool {
-        // TODO: 
-        return false
+        guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: self.targetClass, selector: self.selector) else {
+            assert(false)
+            self.shouldSkipHookClosure = true
+            return false
+        }
+        guard self.method == currentMethod &&
+            method_getImplementation(currentMethod) == self.newIMP else {
+                self.shouldSkipHookClosure = true
+                return false
+        }
+        allHookContext.removeAll { (hookContext) -> Bool in
+            return hookContext === self
+        }
+        return true
     }
     
     // MARK: This is debug tools.
@@ -169,3 +185,5 @@ public class HookContext {
         return allHookContext
     }
 }
+
+// TODO: shouldSkipHookClosure unfinish

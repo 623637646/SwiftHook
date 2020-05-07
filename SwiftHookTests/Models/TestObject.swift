@@ -92,10 +92,10 @@ class TestObject: SuperObject {
         print("run \(#function)")
     }
     
-    @objc dynamic func testBlockSignature(
-        block1: () -> Void,
-        block2: (Int, AnyObject) -> Int,
-        block4: (Int, AnyObject) -> AnyObject
+    @objc dynamic func testClosureSignature(
+        closure1: () -> Void,
+        closure2: (Int, AnyObject) -> Int,
+        closure3: (Int, AnyObject) -> AnyObject
     ) -> (Int, AnyObject) -> AnyObject {
         print("run \(#function)")
         return { i, obj in
@@ -110,7 +110,7 @@ class TestObject: SuperObject {
         pointerStruct: UnsafePointer<CGRect>
     ) -> UnsafeMutablePointer<@convention(block) () -> Void> {
         print("run \(#function)")
-        var block = {} as @convention(block) () -> Void
-        return UnsafeMutablePointer(&block)
+        var closure = {} as @convention(block) () -> Void
+        return UnsafeMutablePointer(&closure)
     }
 }

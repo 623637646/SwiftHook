@@ -20,7 +20,7 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
     switch hookContext.mode {
     case .before:
-        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookBlockIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookClosureIMP, to: (@convention(c) () -> Void).self), ret, args)
         ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .after:
         break
@@ -36,13 +36,13 @@ public class HookContext {
     private let targetClass: AnyClass
     private let selector: Selector
     fileprivate let mode: HookMode
-    private let hookBlock: AnyObject
+    private let hookClosure: AnyObject
     private let method: Method
     
     private let methodSignature: Signature
     private let closureSignature: Signature
     
-    fileprivate let hookBlockIMP: IMP
+    fileprivate let hookClosureIMP: IMP
     fileprivate let originalIMP: IMP
     private let newIMP: IMP
     private let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
@@ -51,14 +51,14 @@ public class HookContext {
     
     private let typeContexts: [SHFFITypeContext]
     
-    private init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws {
+    private init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
         self.targetClass = targetClass
         self.selector = selector
         self.mode = mode
-        self.hookBlock = hookBlock
+        self.hookClosure = hookClosure
         
-        // hookBlockIMP
-        self.hookBlockIMP = imp_implementationWithBlock(self.hookBlock)
+        // hookClosureIMP
+        self.hookClosureIMP = imp_implementationWithBlock(self.hookClosure)
         
         // Method
         self.method = try {
@@ -75,7 +75,7 @@ public class HookContext {
         
         // Signature
         guard let methodSignature = Signature(method: self.method),
-            let closureSignature = Signature(closure: hookBlock) else {
+            let closureSignature = Signature(closure: hookClosure) else {
                 throw SwiftHookError.missingSignature
         }
         self.methodSignature = methodSignature
@@ -147,11 +147,11 @@ public class HookContext {
         self.argumentTypes.deallocate()
         self.cifPointer.deallocate()
         ffi_closure_free(self.closure)
-        imp_removeBlock(self.hookBlockIMP)
+        imp_removeBlock(self.hookClosureIMP)
     }
     
-    class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookBlock: AnyObject) throws -> HookContext {
-        let hookContext = try HookContext.init(targetClass: targetClass, selector: selector, mode: mode, hookBlock: hookBlock)
+    class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
+        let hookContext = try HookContext.init(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
         allHookContext.append(hookContext)
         return hookContext
     }
@@ -177,4 +177,4 @@ public class HookContext {
     }
 }
 
-// TODO: all hookBlock check
+// TODO: all hookClosure check

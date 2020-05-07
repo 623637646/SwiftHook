@@ -13,7 +13,7 @@ class SwiftHookTests: XCTestCase {
     
     func testnoRespondSelector() {
         do {
-            try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), block: {})
+            try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), closure: {})
             XCTAssertTrue(false)
         } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == TestObject.self)
@@ -37,7 +37,7 @@ class SwiftHookTests: XCTestCase {
     func testHookBeforeNoArgsNoReturnFunc() {
         var called = false
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), block: {
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
                 called = true
             })
         } catch {
@@ -52,7 +52,7 @@ class SwiftHookTests: XCTestCase {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), block: {
+            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), closure: {
             })
         } catch {
             XCTAssertNil(error)

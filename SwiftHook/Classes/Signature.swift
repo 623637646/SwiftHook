@@ -12,7 +12,7 @@ struct Signature {
     
     enum SignatureType {
         case method
-        case block
+        case closure
     }
     
     let argumentTypes: [String]
@@ -36,7 +36,7 @@ struct Signature {
         guard let methodSignature = SHMethodSignature.init(block: closure) else {
             return nil
         }
-        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType, signatureType: .block)
+        self.init(argumentTypes: methodSignature.argumentsType, returnType: methodSignature.methodReturnType, signatureType: .closure)
     }
     
     func isMatch(other: Signature) -> Bool {
@@ -49,7 +49,7 @@ struct Signature {
             var argumentTypes = self.argumentTypes
             argumentTypes.removeFirst(2)
             selfBusinessArgumentTypes = argumentTypes
-        case .block:
+        case .closure:
             var argumentTypes = self.argumentTypes
             argumentTypes.removeFirst()
             selfBusinessArgumentTypes = argumentTypes
@@ -60,7 +60,7 @@ struct Signature {
             var argumentTypes = other.argumentTypes
             argumentTypes.removeFirst(2)
             otherBusinessArgumentTypes = argumentTypes
-        case .block:
+        case .closure:
             var argumentTypes = other.argumentTypes
             argumentTypes.removeFirst()
             otherBusinessArgumentTypes = argumentTypes

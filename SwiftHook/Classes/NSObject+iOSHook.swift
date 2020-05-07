@@ -13,7 +13,7 @@ import libffi_iOS
 public enum SwiftHookError: Error {
     case noRespondSelector(class: AnyClass, selector: Selector)
     case missingSignature
-    case incompatibleBlockSignature
+    case incompatibleClosureSignature
     case ffiError
     case internalError(file: String, line: Int)
 }
@@ -27,13 +27,13 @@ enum HookMode {
 extension NSObject {
     
     @discardableResult
-    public class func hookBefore(selector: Selector, block: @escaping @convention(block) () -> Void) throws -> HookContext {
+    public class func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
         // TODO: Thread synchronization
-        try self.parametersCheck(selector: selector, block: block as Any, mode: .before)
+        try self.parametersCheck(selector: selector, closure: closure as Any, mode: .before)
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookBlock: block as AnyObject)
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
     
     // MARK: private
@@ -50,13 +50,13 @@ extension NSObject {
         return false
     }
     
-    private class func parametersCheck(selector: Selector, block: Any, mode: HookMode) throws {
+    private class func parametersCheck(selector: Selector, closure: Any, mode: HookMode) throws {
         // TODO: Selector black list.
         guard let method = class_getInstanceMethod(self, selector) else {
             throw SwiftHookError.noRespondSelector(class: self, selector: selector)
         }
         guard let methodSignature = Signature(method: method),
-            let closureSignature = Signature(closure: block) else {
+            let closureSignature = Signature(closure: closure) else {
                 throw SwiftHookError.missingSignature
         }
         guard !methodSignature.isMatch(other: closureSignature) else {
@@ -76,6 +76,6 @@ extension NSObject {
             }
         case .instead: break
         }
-        throw SwiftHookError.incompatibleBlockSignature
+        throw SwiftHookError.incompatibleClosureSignature
     }
 }

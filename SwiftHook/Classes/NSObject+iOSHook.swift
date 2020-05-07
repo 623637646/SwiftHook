@@ -29,7 +29,7 @@ extension NSObject {
     @discardableResult
     public class func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
         // TODO: Thread synchronization
-        try self.parametersCheck(selector: selector, closure: closure as Any, mode: .before)
+        try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
         if !isSelfMethod(selector: selector) {
             //  TODO: add method
         }
@@ -50,7 +50,7 @@ extension NSObject {
         return false
     }
     
-    private class func parametersCheck(selector: Selector, closure: Any, mode: HookMode) throws {
+    private class func parametersCheck(selector: Selector, closure: AnyObject, mode: HookMode) throws {
         // TODO: Selector black list.
         guard let method = class_getInstanceMethod(self, selector) else {
             throw SwiftHookError.noRespondSelector(class: self, selector: selector)
@@ -62,7 +62,7 @@ extension NSObject {
         guard !methodSignature.isMatch(other: closureSignature) else {
             return
         }
-        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void) else {
+        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void as AnyObject) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         switch mode {

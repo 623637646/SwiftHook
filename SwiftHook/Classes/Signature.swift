@@ -32,7 +32,7 @@ struct Signature {
         self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .method)
     }
     
-    init?(closure: Any) {
+    init?(closure: AnyObject) {
         guard let methodSignature = SHMethodSignature.init(block: closure) else {
             return nil
         }

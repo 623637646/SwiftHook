@@ -14,6 +14,14 @@ let argumentTypesClosurePrefix = ["@?"]
 
 class SignatureTests: XCTestCase {
     
+    func testInvalidClosure() {
+        XCTAssertNil(Signature.init(closure: 1 as AnyObject))
+        XCTAssertNil(Signature.init(closure: {} as AnyObject))
+        XCTAssertNil(Signature.init(closure: NSObject()))
+        XCTAssertNil(Signature.init(closure: CGPoint.zero as AnyObject))
+        XCTAssertNil(Signature.init(closure: PureSwift()))
+    }
+    
     func testNoDynamicMethod() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {
             XCTAssertTrue(false)
@@ -23,7 +31,7 @@ class SignatureTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let signatureClosure = Signature.init(closure: {} as @convention(block) () -> Void) else {
+        guard let signatureClosure = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
             XCTAssertTrue(false)
             return
         }
@@ -47,7 +55,7 @@ class SignatureTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let signatureClosure = Signature.init(closure: {} as @convention(block) () -> Void) else {
+        guard let signatureClosure = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
             XCTAssertTrue(false)
             return
         }
@@ -72,7 +80,7 @@ class SignatureTests: XCTestCase {
             return
         }
         guard let signatureClosure = Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
-            } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void) else {
+            } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
                 XCTAssertTrue(false)
                 return
         }
@@ -97,7 +105,7 @@ class SignatureTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let signatureClosure = Signature.init(closure: {_, _ in } as @convention(block) (CGPoint, CGRect) -> Void) else {
+        guard let signatureClosure = Signature.init(closure: {_, _ in } as @convention(block) (CGPoint, CGRect) -> Void as AnyObject) else {
             XCTAssertTrue(false)
             return
         }
@@ -121,7 +129,7 @@ class SignatureTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let signatureClosure = Signature.init(closure: {_, _, _ in } as @convention(block) ([Any], [Int], [CGRect]) -> Void) else {
+        guard let signatureClosure = Signature.init(closure: {_, _, _ in } as @convention(block) ([Any], [Int], [CGRect]) -> Void as AnyObject) else {
             XCTAssertTrue(false)
             return
         }
@@ -145,7 +153,7 @@ class SignatureTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let signatureClosure = Signature.init(closure: {_, _, _ in } as @convention(block) ([String: Any], [String: Int], [String: CGRect]) -> Void) else {
+        guard let signatureClosure = Signature.init(closure: {_, _, _ in } as @convention(block) ([String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
             XCTAssertTrue(false)
             return
         }
@@ -173,7 +181,7 @@ class SignatureTests: XCTestCase {
             return {_, _ in
                 return NSObject()
             }
-            } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject) else {
+            } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject as AnyObject) else {
                 XCTAssertTrue(false)
                 return
         }

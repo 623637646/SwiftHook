@@ -10,6 +10,14 @@ import XCTest
 @testable import SwiftHook
 
 class SHMethodSignatureTests: XCTestCase {
+    
+    func testInvalidClosure() {
+        XCTAssertNil(SHMethodSignature.init(block: 1))
+        XCTAssertNil(SHMethodSignature.init(block: {}))
+        XCTAssertNil(SHMethodSignature.init(block: NSObject()))
+        XCTAssertNil(SHMethodSignature.init(block: CGPoint.zero))
+        XCTAssertNil(SHMethodSignature.init(block: PureSwift()))
+    }
 
     func testNoDynamicMethod() {
             guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {

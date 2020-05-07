@@ -80,6 +80,9 @@ static NSMethodSignature *SHBlockMethodSignature(id block, NSError **error) {
 
 + (nullable SHMethodSignature *)signatureWithBlock:(id)block
 {
+    if (![block isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        return nil;
+    }
     NSError *error = nil;
     NSMethodSignature *methodSignature = SHBlockMethodSignature(block, &error);
     if (!methodSignature || error) {

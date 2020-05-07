@@ -57,9 +57,6 @@ public class HookContext {
         self.mode = mode
         self.hookClosure = hookClosure
         
-        // hookClosureIMP
-        self.hookClosureIMP = imp_implementationWithBlock(self.hookClosure)
-        
         // Method
         self.method = try {
             var length: UInt32 = 0
@@ -76,13 +73,16 @@ public class HookContext {
         // Signature
         guard let methodSignature = Signature(method: self.method),
             let closureSignature = Signature(closure: hookClosure) else {
-                throw SwiftHookError.missingSignature
+                throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.methodSignature = methodSignature
         self.closureSignature = closureSignature
         
         // IMP
         self.originalIMP = method_getImplementation(self.method)
+        
+        // hookClosureIMP
+        self.hookClosureIMP = imp_implementationWithBlock(self.hookClosure)
         
         // argumentTypes,
         self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
@@ -176,5 +176,3 @@ public class HookContext {
         return allHookContext
     }
 }
-
-// TODO: all hookClosure check

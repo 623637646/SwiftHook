@@ -43,6 +43,10 @@ class TestObject: SuperObject {
         return a + b
     }
     
+    @objc dynamic func execute(closure: () -> Void) {
+        closure()
+    }
+    
     // signature
     @objc dynamic func testSimpleSignature(
         char: CChar,

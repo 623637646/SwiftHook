@@ -110,7 +110,7 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
     }
     
-    // MARK: Can't find method from self.
+    // MARK: No method from self.
     
     func testNoMethodFromSelf() {
         let contextCount = HookContext.debugToolsGetAllHookContext().count
@@ -129,6 +129,48 @@ class HookContextTests: XCTestCase {
             XCTAssertNil(error)
         }
         XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+    }
+    
+    // MARK: All instances & before
+    
+    func testAllInstancesBefore() {
+        do {
+            // hook
+            let contextCount = HookContext.debugToolsGetAllHookContext().count
+            let targetClass = TestObject.self
+            let selector = #selector(TestObject.execute(closure:))
+            let mode: HookMode = .before
+            var result = [Int]()
+            let closure = {
+                result.append(1)
+                } as @convention(block) () -> Void as AnyObject
+            let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount + 1)
+            
+            // test hook
+            let test = TestObject()
+            XCTAssertEqual(result, [])
+            test.execute {
+                XCTAssertEqual(result, [1])
+                result.append(2)
+            }
+            XCTAssertEqual(result, [1, 2])
+            
+            // cancel
+            hookContext.cancelHook()
+            result.removeAll()
+            
+            // test cancel
+            test.execute {
+                XCTAssertEqual(result, [])
+                result.append(2)
+            }
+            XCTAssertEqual(result, [2])
+            XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+            
+        } catch {
+            XCTAssertNil(error)
+        }
     }
     
 }

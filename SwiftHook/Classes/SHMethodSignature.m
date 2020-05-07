@@ -97,15 +97,15 @@ static NSMethodSignature *SHBlockMethodSignature(id block, NSError **error) {
     return self;
 }
 
-- (NSArray<NSString *> *)argumentsType
+- (NSArray<NSString *> *)argumentTypes
 {
     NSUInteger numberOfArguments = self.methodSignature.numberOfArguments;
-    NSMutableArray *argumentsType = [[NSMutableArray alloc] initWithCapacity:numberOfArguments];
+    NSMutableArray *argumentTypes = [[NSMutableArray alloc] initWithCapacity:numberOfArguments];
     for (int i = 0; i < numberOfArguments; i++) {
         NSString *argumentType = [[NSString alloc] initWithUTF8String:[self.methodSignature getArgumentTypeAtIndex:i]];
-        [argumentsType addObject: [self ignoreUnusedChar:argumentType]];
+        [argumentTypes addObject: [self ignoreUnusedChar:argumentType]];
     }
-    return [argumentsType copy];
+    return [argumentTypes copy];
 }
 
 - (NSString *)methodReturnType

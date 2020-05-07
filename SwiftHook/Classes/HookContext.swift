@@ -23,7 +23,8 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookClosureIMP, to: (@convention(c) () -> Void).self), ret, args)
         ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .after:
-        break
+        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookClosureIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .instead:
         break
     }

@@ -11,8 +11,8 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
-    let InternalErrorLineSignature = 72
-    let InternalErrorLineMethod = 65
+    let InternalErrorLineSignature = 73
+    let InternalErrorLineMethod = 66
     
     // MARK: invalid closure
     
@@ -136,7 +136,6 @@ class HookContextTests: XCTestCase {
     
     // MARK: All instances & before
     
-    // TODO: 
     func testAllInstancesBefore() {
         do {
             let contextCount = HookContext.debugToolsGetAllHookContext().count
@@ -149,6 +148,7 @@ class HookContextTests: XCTestCase {
                 let selector = #selector(TestObject.execute(closure:))
                 let mode: HookMode = .before
                 let closure = {
+                    XCTAssertEqual(result, [])
                     result.append(1)
                     } as @convention(block) () -> Void as AnyObject
                 let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
@@ -161,6 +161,52 @@ class HookContextTests: XCTestCase {
                     result.append(2)
                 }
                 XCTAssertEqual(result, [1, 2])
+                
+                // cancel
+                
+                XCTAssertTrue(hookContext.cancelHook())
+                result.removeAll()
+            }
+            
+            // test cancel
+            test.execute {
+                XCTAssertEqual(result, [])
+                result.append(2)
+            }
+            XCTAssertEqual(result, [2])
+            XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    // MARK: All instances & after
+    
+    func testAllInstancesAfter() {
+        do {
+            let contextCount = HookContext.debugToolsGetAllHookContext().count
+            let test = TestObject()
+            var result = [Int]()
+            
+            try autoreleasepool {
+                // hook
+                let targetClass = TestObject.self
+                let selector = #selector(TestObject.execute(closure:))
+                let mode: HookMode = .after
+                let closure = {
+                    XCTAssertEqual(result, [2])
+                    result.append(1)
+                    } as @convention(block) () -> Void as AnyObject
+                let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+                XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount + 1)
+                
+                // test hook
+                XCTAssertEqual(result, [])
+                test.execute {
+                    XCTAssertEqual(result, [])
+                    result.append(2)
+                }
+                XCTAssertEqual(result, [2, 1])
                 
                 // cancel
                 

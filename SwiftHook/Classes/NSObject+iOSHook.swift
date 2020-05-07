@@ -26,14 +26,61 @@ enum HookMode {
 
 extension NSObject {
     
+    // MARK: Before
+    
     @discardableResult
-    public class func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
+    public class func hookBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
         // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
         if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
             //  TODO: add method
         }
         return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    }
+    
+    // TODO: Try to improve API for this
+    @discardableResult
+    public class func hookBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
+        // TODO: Thread synchronization
+        try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
+        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
+            //  TODO: add method
+        }
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    }
+    
+    // MARK: After
+    
+    @discardableResult
+    public class func hookAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
+        // TODO: Thread synchronization
+        try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .after)
+        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
+            //  TODO: add method
+        }
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    }
+    
+    @discardableResult
+    public class func hookAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
+        // TODO: Thread synchronization
+        try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .after)
+        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
+            //  TODO: add method
+        }
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    }
+    
+    // MARK: Instead
+    
+    @discardableResult
+    public class func hookInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
+        // TODO: Thread synchronization
+        try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .instead)
+        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
+            //  TODO: add method
+        }
+        return try HookContext.hook(targetClass: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
     
     // MARK: private
@@ -47,22 +94,36 @@ extension NSObject {
             let closureSignature = Signature(closure: closure) else {
                 throw SwiftHookError.missingSignature
         }
-        guard !methodSignature.isMatch(other: closureSignature) else {
-            return
-        }
         guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void as AnyObject) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         switch mode {
         case .before:
-            if closureSignature.isMatch(other: emptyClosure) {
+            if methodSignature.isMatch(other: closureSignature) ||
+                closureSignature.isMatch(other: emptyClosure) {
                 return
             }
         case .after:
-            if closureSignature.isMatch(other: emptyClosure) {
+            if methodSignature.isMatch(other: closureSignature) ||
+                closureSignature.isMatch(other: emptyClosure) {
                 return
             }
-        case .instead: break
+        case .instead:
+            if methodSignature.argumentTypes.count + 1 == closureSignature.argumentTypes.count {
+                for (index, argumentType) in closureSignature.argumentTypes.enumerated() {
+                    if index == 0 {
+                        // TODO:
+                        guard argumentType == "@" else {
+                            throw SwiftHookError.incompatibleClosureSignature
+                        }
+                    } else {
+                        guard argumentType == methodSignature.argumentTypes[index - 1] else {
+                            throw SwiftHookError.incompatibleClosureSignature
+                        }
+                    }
+                }
+                return
+            }
         }
         throw SwiftHookError.incompatibleClosureSignature
     }

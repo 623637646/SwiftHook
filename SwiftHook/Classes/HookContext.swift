@@ -26,7 +26,22 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.originalIMP, to: (@convention(c) () -> Void).self), ret, args)
         ffi_call(hookContext.cifPointer, unsafeBitCast(hookContext.hookClosureIMP, to: (@convention(c) () -> Void).self), ret, args)
     case .instead:
-        break
+        let argsNumber = hookContext.methodSignature.argumentTypes.count
+        let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: argsNumber)
+        let newArgsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: argsNumber + 1)
+        defer {
+            // TODO:
+        }
+        for index in 0 ... argsNumber {
+            if index <= 1 {
+                newArgsBuffer[index] = argsBuffer[index]
+            } else if index == 2 {
+                newArgsBuffer[index] = unsafeBitCast(hookContext.originalIMP, to: UnsafeMutableRawPointer.self)
+            } else {
+                newArgsBuffer[index] = argsBuffer[index - 1]
+            }
+        }
+        ffi_call(hookContext.cifPointerForInstead, unsafeBitCast(hookContext.hookClosureIMP, to: (@convention(c) () -> Void).self), ret, newArgsBuffer.baseAddress)
     }
 }
 
@@ -41,14 +56,16 @@ public class HookContext {
     private let hookClosure: AnyObject
     private let method: Method
     
-    private let methodSignature: Signature
+    fileprivate let methodSignature: Signature
     private let closureSignature: Signature
     
     fileprivate let hookClosureIMP: IMP
     fileprivate let originalIMP: IMP
     private let newIMP: IMP
     private let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
+    private let argumentTypesForInstead: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     fileprivate let cifPointer: UnsafeMutablePointer<ffi_cif>
+    fileprivate let cifPointerForInstead: UnsafeMutablePointer<ffi_cif>
     private let closure: UnsafeMutablePointer<ffi_closure>
     
     private let typeContexts: [SHFFITypeContext]
@@ -81,15 +98,28 @@ public class HookContext {
         // hookClosureIMP
         self.hookClosureIMP = imp_implementationWithBlock(self.hookClosure)
         
-        // argumentTypes,
-        self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        // typeContexts
         var typeContexts = [SHFFITypeContext]()
+        
+        // argumentTypes
+        self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             typeContexts.append(typeContext)
             self.argumentTypes[index] = typeContext.ffiType
+        }
+        
+        // argumentTypes for instead
+        self.argumentTypesForInstead = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count + 1)
+        self.argumentTypesForInstead[0] = UnsafeMutablePointer(&ffi_type_pointer)
+        for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
+            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
+                throw SwiftHookError.internalError(file: #file, line: #line)
+            }
+            typeContexts.append(typeContext)
+            self.argumentTypesForInstead[index + 1] = typeContext.ffiType
         }
         
         // returnTypes
@@ -111,6 +141,18 @@ public class HookContext {
             returnFFIType,
             self.argumentTypes.baseAddress)
         guard status_cif == FFI_OK else {
+            throw SwiftHookError.ffiError
+        }
+        
+        // cifPointerForInstead
+        self.cifPointerForInstead = UnsafeMutablePointer.allocate(capacity: 1)
+        let instead_status_cif = ffi_prep_cif(
+            self.cifPointerForInstead,
+            FFI_DEFAULT_ABI,
+            UInt32(methodSignature.argumentTypes.count) + 1,
+            returnFFIType,
+            self.argumentTypesForInstead.baseAddress)
+        guard instead_status_cif == FFI_OK else {
             throw SwiftHookError.ffiError
         }
         
@@ -145,7 +187,9 @@ public class HookContext {
         imp_removeBlock(self.hookClosureIMP)
         ffi_closure_free(self.closure)
         self.cifPointer.deallocate()
+        self.cifPointerForInstead.deallocate()
         self.argumentTypes.deallocate()
+        self.argumentTypesForInstead.deallocate()
     }
     
     class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {

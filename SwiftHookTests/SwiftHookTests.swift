@@ -11,6 +11,8 @@ import XCTest
 
 class SwiftHookTests: XCTestCase {
     
+    // MARK: Parameters Check
+    
     func testNoRespondSelector() {
         do {
             try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), closure: {})
@@ -22,6 +24,73 @@ class SwiftHookTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
+    func testMissingSignature() {
+        // before
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.missingSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        // after
+        do {
+            try TestObject.hookAfter(selector: #selector(TestObject.noArgsNoReturnFunc), closure: 1 as Int as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.missingSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        // instead
+        do {
+            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject() as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.missingSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testIncompatibleClosureSignature() {
+        // before
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {_ in
+                
+                } as @convention(block) (Int) -> Void as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.incompatibleClosureSignature {
+            
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        // after
+        do {
+            try TestObject.hookAfter(selector: #selector(TestObject.execute(closure:)), closure: {_ in
+                
+                } as @convention(block) (String) -> Void as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        // instead
+        do {
+            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            
+            } as @convention(block) () -> Void as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    // MARK: Memory test
     
     func testMemory() {
 //        while true {

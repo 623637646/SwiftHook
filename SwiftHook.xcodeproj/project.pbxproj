@@ -16,6 +16,7 @@
 		2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */; };
 		2A5363942460762F008B8A94 /* OverrideMethodContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideMethodContext.swift */; };
 		2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */; };
+		2A701513246413CE00B81219 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A701512246413CE00B81219 /* Utilities.swift */; };
 		2A7F43C02458359E00A63935 /* HookContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BE2458359E00A63935 /* HookContext.swift */; };
 		2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */; };
 		2A7F43C3245835B700A63935 /* TestCases.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A7F43C2245835B700A63935 /* TestCases.txt */; };
@@ -52,6 +53,7 @@
 		2A5363932460762F008B8A94 /* OverrideMethodContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideMethodContext.swift; sourceTree = "<group>"; };
 		2A58BF99245C94F2005227F5 /* ComplexityStruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplexityStruct.h; sourceTree = "<group>"; };
 		2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHMethodSignatureTests.swift; sourceTree = "<group>"; };
+		2A701512246413CE00B81219 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2A7F43BE2458359E00A63935 /* HookContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HookContext.swift; sourceTree = "<group>"; };
 		2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+iOSHook.swift"; sourceTree = "<group>"; };
 		2A7F43C2245835B700A63935 /* TestCases.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestCases.txt; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
 				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
 				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
+				2A701512246413CE00B81219 /* Utilities.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				2A5363942460762F008B8A94 /* OverrideMethodContext.swift in Sources */,
 				2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */,
 				2A7F43C02458359E00A63935 /* HookContext.swift in Sources */,
+				2A701513246413CE00B81219 /* Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

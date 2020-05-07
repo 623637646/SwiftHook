@@ -58,17 +58,10 @@ public class HookContext {
         self.hookClosure = hookClosure
         
         // Method
-        self.method = try {
-            var length: UInt32 = 0
-            let firstMethod = class_copyMethodList(targetClass, UnsafeMutablePointer(&length))
-            let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
-            for method in bufferPointer {
-                if method_getName(method) == selector {
-                    return method
-                }
-            }
+        guard let method = getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
-            }()
+        }
+        self.method = method
         
         // Signature
         guard let methodSignature = Signature(method: self.method),

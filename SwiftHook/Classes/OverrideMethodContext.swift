@@ -50,13 +50,8 @@ class OverrideMethodContext {
         self.selector = selector
         
         // Check self Method
-        var length: UInt32 = 0
-        let firstMethod = class_copyMethodList(targetClass, UnsafeMutablePointer(&length))
-        let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
-        for method in bufferPointer {
-            if method_getName(method) == selector {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
+        guard getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
         }
         
         // superMethod

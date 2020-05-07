@@ -30,25 +30,13 @@ extension NSObject {
     public class func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
         // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
-        if !isSelfMethod(selector: selector) {
+        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
             //  TODO: add method
         }
         return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
     
     // MARK: private
-    
-    private class func isSelfMethod(selector: Selector) -> Bool {
-        var length: UInt32 = 0
-        let firstMethod = class_copyMethodList(self, UnsafeMutablePointer(&length))
-        let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
-        for method in bufferPointer {
-            if method_getName(method) == selector {
-                return true
-            }
-        }
-        return false
-    }
     
     private class func parametersCheck(selector: Selector, closure: AnyObject, mode: HookMode) throws {
         // TODO: Selector black list.

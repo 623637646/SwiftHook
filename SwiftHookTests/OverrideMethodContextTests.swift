@@ -30,6 +30,9 @@ class TestsTestObject: TestsSuperObject {
 
 class OverrideMethodContextTests: XCTestCase {
     
+    let InternalErrorLineMethod = 54
+    let InternalErrorLineSuperMethod = 59
+    
     func testPureSwift() {
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count
         do {
@@ -37,7 +40,7 @@ class OverrideMethodContextTests: XCTestCase {
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
-            XCTAssertEqual(line, 64)
+            XCTAssertEqual(line, InternalErrorLineSuperMethod)
         } catch {
             XCTAssertNil(error)
         }
@@ -51,7 +54,7 @@ class OverrideMethodContextTests: XCTestCase {
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
-            XCTAssertEqual(line, 58)
+            XCTAssertEqual(line, InternalErrorLineMethod)
         } catch {
             XCTAssertNil(error)
         }
@@ -65,7 +68,7 @@ class OverrideMethodContextTests: XCTestCase {
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
-            XCTAssertEqual(line, 64)
+            XCTAssertEqual(line, InternalErrorLineSuperMethod)
         } catch {
             XCTAssertNil(error)
         }

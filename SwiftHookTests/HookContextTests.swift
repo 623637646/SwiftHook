@@ -11,6 +11,8 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
+    // MARK: invalid closure
+    
     func testInvalidClosureWithSwiftClosure() {
         let contextCount = HookContext.debugToolsGetAllHookContext().count
         let targetClass = TestObject.self
@@ -68,12 +70,14 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
     }
     
+    // MARK: invalid class & selector
+    
     func testPureSwift() {
         let contextCount = HookContext.debugToolsGetAllHookContext().count
         let targetClass = PureSwift.self
         let selector = #selector(getter: UIView.alpha)
         let mode: HookMode = .before
-        let closure: AnyObject = ({} as @convention(block) () -> Void) as AnyObject
+        let closure = ({} as @convention(block) () -> Void) as AnyObject
         do {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -92,7 +96,28 @@ class HookContextTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(getter: UIView.alpha)
         let mode: HookMode = .before
-        let closure: AnyObject = ({} as @convention(block) () -> Void) as AnyObject
+        let closure = ({} as @convention(block) () -> Void) as AnyObject
+        do {
+            let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            XCTAssertNil(hookContext)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.internalError(file: let file, line: let line) {
+            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
+            XCTAssertEqual(line, 70)
+        } catch {
+            XCTAssertNil(error)
+        }
+        XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+    }
+    
+    // MARK: Can't find method from self.
+    
+    func testNoMethodFromSelf() {
+        let contextCount = HookContext.debugToolsGetAllHookContext().count
+        let targetClass = TestObject.self
+        let selector = #selector(TestObject.superFunc(arg:))
+        let mode: HookMode = .before
+        let closure = ({} as @convention(block) () -> Void) as AnyObject
         do {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)

@@ -9,12 +9,31 @@
 import XCTest
 @testable import SwiftHook
 
+class TestsPureSwift {
+    
+}
+
+class TestsSuperObject: NSObject {
+    @objc dynamic func superFunc(arg: [AnyClass]) -> [AnyClass] {
+        var arg = arg
+        arg.append(TestsSuperObject.self)
+        return arg
+    }
+}
+
+class TestsTestObject: TestsSuperObject {
+    
+    @objc dynamic func selfFunc() {
+        print("run \(#function)")
+    }
+}
+
 class OverrideMethodContextTests: XCTestCase {
     
     func testPureSwift() {
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count
         do {
-            try OverrideMethodContext.overrideSuperMethod(targetClass: PureSwift.self, selector: #selector(TestObject.noArgsNoReturnFunc))
+            try OverrideMethodContext.overrideSuperMethod(targetClass: TestsPureSwift.self, selector: #selector(TestsTestObject.selfFunc))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
@@ -28,7 +47,7 @@ class OverrideMethodContextTests: XCTestCase {
     func testOverrideSelfMethod() {
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count
         do {
-            try OverrideMethodContext.overrideSuperMethod(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc))
+            try OverrideMethodContext.overrideSuperMethod(targetClass: TestsTestObject.self, selector: #selector(TestsTestObject.selfFunc))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
@@ -42,7 +61,7 @@ class OverrideMethodContextTests: XCTestCase {
     func testOverrideNonSuperMethod() {
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count
         do {
-            try OverrideMethodContext.overrideSuperMethod(targetClass: TestObject.self, selector: #selector(getter: UIView.alpha))
+            try OverrideMethodContext.overrideSuperMethod(targetClass: TestsTestObject.self, selector: #selector(getter: UIView.alpha))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
@@ -54,8 +73,8 @@ class OverrideMethodContextTests: XCTestCase {
     }
     
     func testOverrideSuperMethod() {
-        let targetClass = TestObject.self
-        let selector = #selector(TestObject.superFunc(arg:))
+        let targetClass = TestsTestObject.self
+        let selector = #selector(TestsTestObject.superFunc(arg:))
         
         // beginning
         let contextCount = OverrideMethodContext.debugToolsGetAllOverrideMethodContext().count
@@ -63,20 +82,20 @@ class OverrideMethodContextTests: XCTestCase {
             XCTAssertTrue(false)
             return
         }
-        guard let methodSuper = class_getInstanceMethod(SuperObject.self, selector) else {
+        guard let methodSuper = class_getInstanceMethod(TestsSuperObject.self, selector) else {
             XCTAssertTrue(false)
             return
         }
         XCTAssertEqual(methodChild, methodSuper)
         
-        let object = TestObject()
+        let object = TestsTestObject()
         let result = object.superFunc(arg: [])
         XCTAssertEqual(result.count, 1)
-        XCTAssertTrue(result.first! == SuperObject.self)
+        XCTAssertTrue(result.first! == TestsSuperObject.self)
         
         // added method
         do {
-            try OverrideMethodContext.overrideSuperMethod(targetClass: TestObject.self, selector: selector)
+            try OverrideMethodContext.overrideSuperMethod(targetClass: TestsTestObject.self, selector: selector)
         } catch {
             XCTAssertNil(error)
         }
@@ -90,7 +109,7 @@ class OverrideMethodContextTests: XCTestCase {
         
         let resultAfter = object.superFunc(arg: [])
         XCTAssertEqual(resultAfter.count, 1)
-        XCTAssertTrue(resultAfter.first! == SuperObject.self)
+        XCTAssertTrue(resultAfter.first! == TestsSuperObject.self)
     }
     
 }

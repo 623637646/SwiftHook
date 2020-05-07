@@ -29,14 +29,14 @@ struct Signature {
         guard let methodSignature = SHMethodSignature.init(method: method) else {
             return nil
         }
-        self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.methodReturnType, signatureType: .method)
+        self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .method)
     }
     
     init?(closure: Any) {
         guard let methodSignature = SHMethodSignature.init(block: closure) else {
             return nil
         }
-        self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.methodReturnType, signatureType: .closure)
+        self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .closure)
     }
     
     func isMatch(other: Signature) -> Bool {

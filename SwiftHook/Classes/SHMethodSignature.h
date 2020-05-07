@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly) NSArray<NSString *> *argumentTypes;
 
-@property (readonly) NSString *methodReturnType;
+@property (readonly) NSString *returnType;
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;

@@ -399,7 +399,7 @@ class FFITypeContextTests: XCTestCase {
     
     func getReturnTypeEncoding(block: Any) -> String? {
         let methodSignature = SHMethodSignature.init(block: block)
-        return methodSignature?.methodReturnType
+        return methodSignature?.returnType
     }
     
     func structTestHelper(signature: [Any], ffiType: ffi_type) {

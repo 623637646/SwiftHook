@@ -108,7 +108,7 @@ static NSMethodSignature *SHBlockMethodSignature(id block, NSError **error) {
     return [argumentTypes copy];
 }
 
-- (NSString *)methodReturnType
+- (NSString *)returnType
 {
     return [self ignoreUnusedChar:[[NSString alloc] initWithUTF8String:self.methodSignature.methodReturnType]];
 }

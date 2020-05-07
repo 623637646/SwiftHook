@@ -14,18 +14,6 @@ let argumentTypesClosurePrefix = ["@?"]
 
 class SignatureTests: XCTestCase {
     
-    func testPureSwift() {
-        let selector = NSSelectorFromString("swiftMethod")
-        let method = class_getInstanceMethod(PureSwift.self, selector)
-        XCTAssertNil(method)
-    }
-    
-    func testSwiftMethod() {
-        let selector = NSSelectorFromString("swiftMethod")
-        let method = class_getInstanceMethod(TestObject.self, selector)
-        XCTAssertNil(method)
-    }
-    
     func testNoDynamicMethod() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {
             XCTAssertTrue(false)
@@ -48,12 +36,6 @@ class SignatureTests: XCTestCase {
         XCTAssertEqual(signatureClosure.argumentTypes, argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(signatureClosure.returnType, returnTypesExpect)
         XCTAssertTrue(signatureMethod.isMatch(other: signatureClosure))
-    }
-    
-    func testNoObjcMethod() {
-        let selector = NSSelectorFromString("noObjcMethod")
-        let method = class_getInstanceMethod(TestObject.self, selector)
-        XCTAssertNil(method)
     }
     
     func testNoArgsNoReturnFunc() {

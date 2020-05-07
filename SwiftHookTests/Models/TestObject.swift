@@ -23,23 +23,22 @@ class SuperObject: NSObject {
 class TestObject: SuperObject {
     
     func swiftMethod() {
-        print("run \(#function)")
+        
     }
     
     @objc func noDynamicMethod() {
-        print("run \(#function)")
+        
     }
     
     dynamic func noObjcMethod() {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func noArgsNoReturnFunc() {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func sumFunc(a: Int, b: Int) -> Int {
-        print("run \(#function)")
         return a + b
     }
     
@@ -71,13 +70,13 @@ class TestObject: SuperObject {
         object: AnyObject,
         class: AnyClass,
         selector: Selector) {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func testStructSignature(
         point: CGPoint,
         rect: CGRect ) {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func testArraySignature(
@@ -85,7 +84,7 @@ class TestObject: SuperObject {
         arrayInt: [Int],
         arrayStruct: [CGRect]
     ) {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func testDictionarySignature(
@@ -93,7 +92,7 @@ class TestObject: SuperObject {
         dictionaryInt: [String: Int],
         dictionaryStruct: [String: CGRect]
     ) {
-        print("run \(#function)")
+        
     }
     
     @objc dynamic func testClosureSignature(
@@ -101,7 +100,6 @@ class TestObject: SuperObject {
         closure2: (Int, AnyObject) -> Int,
         closure3: (Int, AnyObject) -> AnyObject
     ) -> (Int, AnyObject) -> AnyObject {
-        print("run \(#function)")
         return { i, obj in
             return NSObject()
         }
@@ -113,7 +111,6 @@ class TestObject: SuperObject {
         pointerObj: UnsafePointer<AnyObject>,
         pointerStruct: UnsafePointer<CGRect>
     ) -> UnsafeMutablePointer<@convention(block) () -> Void> {
-        print("run \(#function)")
         var closure = {} as @convention(block) () -> Void
         return UnsafeMutablePointer(&closure)
     }

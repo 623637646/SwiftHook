@@ -11,7 +11,7 @@ import XCTest
 
 class SwiftHookTests: XCTestCase {
     
-    func testnoRespondSelector() {
+    func testNoRespondSelector() {
         do {
             try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), closure: {})
             XCTAssertTrue(false)
@@ -37,28 +37,30 @@ class SwiftHookTests: XCTestCase {
     func testHookBeforeNoArgsNoReturnFunc() {
         var called = false
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            let hookContext = try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
                 called = true
             })
+            XCTAssertFalse(called)
+            TestObject().noArgsNoReturnFunc()
+            XCTAssertTrue(called)
+            XCTAssertTrue(hookContext.cancelHook())
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertFalse(called)
-        TestObject().noArgsNoReturnFunc()
-        XCTAssertTrue(called)
     }
     
     func testHookBeforeSumFunc() {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), closure: {
+            let hookContext = try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), closure: {
             })
+            let result = TestObject().sumFunc(a: arg1, b: arg2)
+            XCTAssertEqual(result, arg1 + arg2)
+            XCTAssertTrue(hookContext.cancelHook())
         } catch {
             XCTAssertNil(error)
         }
-        let result = TestObject().sumFunc(a: arg1, b: arg2)
-        XCTAssertEqual(result, arg1 + arg2)
     }
     
 }

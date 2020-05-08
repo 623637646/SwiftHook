@@ -28,6 +28,8 @@
 		2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB6735F245834E30011536D /* SwiftHookTests.swift */; };
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
+		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		BE68AC67384A7396BA67F4DD /* Pods_abstract_SwiftHook_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +71,8 @@
 		2AB6735F245834E30011536D /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
+		2AD183C924650AE500B8EC51 /* BlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockUtilities.h; sourceTree = "<group>"; };
+		2AD183CA24650AE500B8EC51 /* BlockUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlockUtilities.m; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
 				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
 				2A701512246413CE00B81219 /* Utilities.swift */,
+				2AD183C924650AE500B8EC51 /* BlockUtilities.h */,
+				2AD183CA24650AE500B8EC51 /* BlockUtilities.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -200,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB67362245834E30011536D /* SwiftHook.h in Headers */,
+				2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */,
 				2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */,
 				2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */,
 			);
@@ -393,6 +400,7 @@
 			files = (
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
 				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
+				2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */,
 				2AC10C80245872F200ED6815 /* Signature.swift in Sources */,
 				2A5363942460762F008B8A94 /* OverrideMethodContext.swift in Sources */,
 				2A7F43C12458359E00A63935 /* NSObject+iOSHook.swift in Sources */,

@@ -18,3 +18,4 @@ FOUNDATION_EXPORT const unsigned char SwiftHookVersionString[];
 
 #import <SwiftHook/SHMethodSignature.h>
 #import <SwiftHook/SHFFITypeContext.h>
+#import <SwiftHook/BlockUtilities.h>

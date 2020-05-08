@@ -19,7 +19,7 @@ typedef struct _SHBlockSignatureBlock {
     __unused Class isa;
     SHBlockSignatureBlockFlags flags;
     __unused int reserved;
-    void (__unused *invoke)(struct _SHBlockSignatureBlock *block, ...);
+    void (__unused *invoke)(void *, ...);
     struct {
         unsigned long int reserved;
         unsigned long int size;

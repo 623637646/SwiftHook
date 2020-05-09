@@ -9,6 +9,7 @@
 import XCTest
 @testable import SwiftHook
 
+// TODO: 做到这里了
 class HookContextErrorTests: XCTestCase {
 
     let InternalErrorLineSignature = 112
@@ -26,9 +27,7 @@ class HookContextErrorTests: XCTestCase {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
-            XCTAssertEqual(line, InternalErrorLineSignature)
+        } catch SwiftHookError.missingSignature {
         } catch {
             XCTAssertNil(error)
         }
@@ -45,9 +44,7 @@ class HookContextErrorTests: XCTestCase {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
-            XCTAssertEqual(line, InternalErrorLineSignature)
+        } catch SwiftHookError.missingSignature {
         } catch {
             XCTAssertNil(error)
         }
@@ -64,9 +61,26 @@ class HookContextErrorTests: XCTestCase {
             let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(HookContext.self).swift"))
-            XCTAssertEqual(line, InternalErrorLineSignature)
+        } catch SwiftHookError.missingSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+    }
+    
+    // MARK: closure signature doesn't match method
+    
+    func testBeforeReturn() {
+        let contextCount = HookContext.debugToolsGetAllHookContext().count
+        let targetClass = TestObject.self
+        let selector = #selector(TestObject.noArgsNoReturnFunc)
+        let mode: HookMode = .before
+        let closure = ({ return 1 } as @convention(block) () -> Int) as AnyObject
+        do {
+            let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            XCTAssertNil(hookContext)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
             XCTAssertNil(error)
         }

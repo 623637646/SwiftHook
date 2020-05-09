@@ -104,6 +104,7 @@ public class HookContext {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.method = method
+        try Signature.canHookClosureWorksByMethod(closure: hookClosure, method: method, mode: mode)
         self.typeContexts = [SHFFITypeContext]()
         
         // signature

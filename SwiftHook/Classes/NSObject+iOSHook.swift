@@ -90,41 +90,6 @@ extension NSObject {
         guard let method = class_getInstanceMethod(self, selector) else {
             throw SwiftHookError.noRespondSelector(class: self, selector: selector)
         }
-        guard let methodSignature = Signature(method: method),
-            let closureSignature = Signature(closure: closure) else {
-                throw SwiftHookError.missingSignature
-        }
-        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void as AnyObject) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        switch mode {
-        case .before:
-            if methodSignature.isMatch(other: closureSignature) ||
-                closureSignature.isMatch(other: emptyClosure) {
-                return
-            }
-        case .after:
-            if methodSignature.isMatch(other: closureSignature) ||
-                closureSignature.isMatch(other: emptyClosure) {
-                return
-            }
-        case .instead:
-            if methodSignature.argumentTypes.count + 1 == closureSignature.argumentTypes.count {
-                for (index, argumentType) in closureSignature.argumentTypes.enumerated() {
-                    if index == 0 {
-                        // TODO:
-                        guard argumentType == "@" else {
-                            throw SwiftHookError.incompatibleClosureSignature
-                        }
-                    } else {
-                        guard argumentType == methodSignature.argumentTypes[index - 1] else {
-                            throw SwiftHookError.incompatibleClosureSignature
-                        }
-                    }
-                }
-                return
-            }
-        }
-        throw SwiftHookError.incompatibleClosureSignature
+        try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
     }
 }

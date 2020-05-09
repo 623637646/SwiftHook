@@ -39,32 +39,71 @@ struct Signature {
         self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .closure)
     }
     
-    func isMatch(other: Signature) -> Bool {
-        guard self.returnType == other.returnType else {
-            return false
+    static func canHookClosureWorksByMethod(closure: AnyObject, method: Method, mode: HookMode) throws {
+        guard let methodSignature = Signature(method: method),
+            let closureSignature = Signature(closure: closure) else {
+                throw SwiftHookError.missingSignature
         }
-        let selfBusinessArgumentTypes: [String]
-        switch self.signatureType {
-        case .method:
-            var argumentTypes = self.argumentTypes
-            argumentTypes.removeFirst(2)
-            selfBusinessArgumentTypes = argumentTypes
-        case .closure:
-            var argumentTypes = self.argumentTypes
-            argumentTypes.removeFirst()
-            selfBusinessArgumentTypes = argumentTypes
+        try canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: mode)
+    }
+    
+    // TODO: Test cases
+    static func canHookClosureSignatureWorksByMethodSignature(closureSignature: Signature, methodSignature: Signature, mode: HookMode) throws {
+        guard closureSignature.signatureType == .closure else {
+            throw SwiftHookError.incompatibleClosureSignature
         }
-        let otherBusinessArgumentTypes: [String]
-        switch other.signatureType {
-        case .method:
-            var argumentTypes = other.argumentTypes
-            argumentTypes.removeFirst(2)
-            otherBusinessArgumentTypes = argumentTypes
-        case .closure:
-            var argumentTypes = other.argumentTypes
-            argumentTypes.removeFirst()
-            otherBusinessArgumentTypes = argumentTypes
+        guard methodSignature.signatureType == .method else {
+            throw SwiftHookError.incompatibleClosureSignature
         }
-        return selfBusinessArgumentTypes == otherBusinessArgumentTypes
+        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void as AnyObject) else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
+        }
+        guard closureSignature.argumentTypes[0] == "@?" else {
+            throw SwiftHookError.incompatibleClosureSignature
+        }
+        
+        let closureIsMatchMethod = { (closureSignature: Signature, methodSignature: Signature) -> Bool in
+            var closureArgumentTypes = closureSignature.argumentTypes
+            closureArgumentTypes.removeFirst()
+            var methodArgumentTypes = methodSignature.argumentTypes
+            methodArgumentTypes.removeFirst(2)
+            return closureArgumentTypes == methodArgumentTypes
+        }
+        
+        switch mode {
+        case .before:
+            guard closureSignature.returnType == emptyClosure.returnType else {
+                throw SwiftHookError.incompatibleClosureSignature
+            }
+            guard closureSignature.argumentTypes == emptyClosure.argumentTypes ||
+                closureIsMatchMethod(closureSignature, methodSignature) else {
+                    throw SwiftHookError.incompatibleClosureSignature
+            }
+        case .after:
+            guard closureSignature.returnType == emptyClosure.returnType else {
+                throw SwiftHookError.incompatibleClosureSignature
+            }
+            guard closureSignature.argumentTypes == emptyClosure.argumentTypes ||
+                closureIsMatchMethod(closureSignature, methodSignature) else {
+                    throw SwiftHookError.incompatibleClosureSignature
+            }
+        case .instead:
+            guard closureSignature.returnType == methodSignature.returnType else {
+                throw SwiftHookError.incompatibleClosureSignature
+            }
+            guard closureSignature.argumentTypes.count == methodSignature.argumentTypes.count  else {
+                throw SwiftHookError.incompatibleClosureSignature
+            }
+            guard closureSignature.argumentTypes[1] == "@?" else {
+                throw SwiftHookError.incompatibleClosureSignature
+            }
+            if closureSignature.argumentTypes.count >= 3 {
+                for index in 2 ... closureSignature.argumentTypes.count - 1 {
+                    guard closureSignature.argumentTypes[index] == methodSignature.argumentTypes[index] else {
+                        throw SwiftHookError.incompatibleClosureSignature
+                    }
+                }
+            }
+        }
     }
 }

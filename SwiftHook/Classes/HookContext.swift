@@ -200,6 +200,8 @@ public class HookContext {
         ffi_closure_free(self.closure)
         self.originalCIFPointer.deallocate()
         self.originalArgumentTypes.deallocate()
+        self.hookCIFPointer.deallocate()
+        self.hookArgumentTypes.deallocate()
     }
     
     class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {

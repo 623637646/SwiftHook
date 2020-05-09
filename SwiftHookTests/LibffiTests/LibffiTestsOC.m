@@ -87,12 +87,4 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
     ffi_closure_free(closure);
 }
 
-- (void)testMemory {
-//    while (true) {
-//        [self testFFICall];
-//        [self testFFIClosuRerewrite];
-//        [self testFFIClosureCallOriginal];
-//    }
-}
-
 @end

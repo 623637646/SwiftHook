@@ -106,48 +106,4 @@ class LibffiTests: XCTestCase {
         let result = object.sumFunc(a: arg1, b: arg2)
         XCTAssertEqual(result, arg1 * arg2)
     }
-    
-    func testMemory() {
-//        while true {
-//            autoreleasepool {
-//                testLibffiCall()
-//                testLibffiClosure()
-//            }
-//        }
-    }
-    
-//    func testMemory() {
-//        testLibffiCall()
-//        testLibffiClosure()
-//        let before = getMemory()
-//        for _ in 0...10000 {
-//            testLibffiCall()
-//            testLibffiClosure()
-//        }
-//        let after = getMemory()
-//        let diff = Double(after - before)/1024/1024
-//        print("Memory cast \(diff) M")
-//        XCTAssertLessThan(diff, 0.3)
-//    }
-//
-//    // MARK: utilities
-//
-//    func getMemory() -> UInt64 {
-//        var taskInfo = mach_task_basic_info()
-//        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
-//        let kerr: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
-//            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-//                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-//            }
-//        }
-//
-//        if kerr == KERN_SUCCESS {
-//            return taskInfo.resident_size
-//        }
-//        else {
-//            XCTAssert(false)
-//            assert(false)
-//        }
-//    }
-    
 }

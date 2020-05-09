@@ -379,22 +379,6 @@ class FFITypeContextTests: XCTestCase {
         }
     }
     
-    // MARK: Memory test
-    
-    func testMemory() {
-//        while true {
-//            autoreleasepool {
-//                testVoid()
-//                testInt8()
-//                testPointerObject()
-//                testPointerDouble()
-//                testVoidAsterisk()
-//                testStructCGRect()
-//                testComplexityStruct()
-//            }
-//        }
-    }
-    
     // MARK: utilities
     
     func getReturnTypeEncoding(block: Any) -> String? {

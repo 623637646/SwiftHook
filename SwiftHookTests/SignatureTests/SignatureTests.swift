@@ -195,15 +195,4 @@ class SignatureTests: XCTestCase {
         XCTAssertEqual(signatureClosure.returnType, returnTypesExpect)
         XCTAssertTrue(signatureMethod.isMatch(other: signatureClosure))
     }
-    
-    func testMemory() {
-//        while true {
-//            autoreleasepool {
-//                testNoArgsNoReturnFunc()
-//                testSimpleSignature()
-//                testStructSignature()
-//                testClosureSignature()
-//            }
-//        }
-    }
 }

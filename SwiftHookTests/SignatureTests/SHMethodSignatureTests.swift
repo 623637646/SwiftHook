@@ -192,17 +192,6 @@ class SHMethodSignatureTests: XCTestCase {
             XCTAssertEqual(signatureClosure.returnType, returnTypesExpect)
             XCTAssertTrue(isSHMethodSignatureMatch(signature: signatureMethod, methodSignatureFromClosure: signatureClosure))
         }
-        
-        func testMemory() {
-    //        while true {
-    //            autoreleasepool {
-    //                testNoArgsNoReturnFunc()
-    //                testSimpleSignature()
-    //                testStructSignature()
-    //                testClosureSignature()
-    //            }
-    //        }
-        }
     
     // MARK: utilities
     

@@ -58,6 +58,7 @@ void closureRerewrite(ffi_cif *cif, void *ret, void **args, void *userdata) {
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 * 456);
     method_setImplementation(method, originalIMP);
+    ffi_closure_free(closure);
 }
 
 static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *userdata) {
@@ -83,6 +84,15 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 + 456);
     method_setImplementation(method, originalIMP);
+    ffi_closure_free(closure);
+}
+
+- (void)testMemory {
+//    while (true) {
+//        [self testFFICall];
+//        [self testFFIClosuRerewrite];
+//        [self testFFIClosureCallOriginal];
+//    }
 }
 
 @end

@@ -24,7 +24,7 @@ class TestsSuperObject: NSObject {
 class TestsTestObject: TestsSuperObject {
     
     @objc dynamic func selfFunc() {
-        print("run \(#function)")
+        
     }
 }
 

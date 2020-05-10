@@ -64,12 +64,13 @@
     return [self ignoreUnusedChar:[[NSString alloc] initWithUTF8String:self.methodSignature.methodReturnType]];
 }
 
+// TODO: Can remove this, and improve the signature from [String] to [enumeration]
 static NSRegularExpression *regex;
 - (NSString *)ignoreUnusedChar:(NSString *)type
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        regex = [NSRegularExpression regularExpressionWithPattern:@"\\\".+?\\\"|\\<.+?\\>" options:NSRegularExpressionCaseInsensitive error:NULL];
+        regex = [NSRegularExpression regularExpressionWithPattern:@"\\\".+\\\"|\\<.+\\>" options:NSRegularExpressionCaseInsensitive error:NULL];
     });
     NSMutableString *result = [[NSMutableString alloc] initWithString:type];
     [regex replaceMatchesInString:result options:0 range:NSMakeRange(0, result.length) withTemplate:@""];

@@ -31,122 +31,120 @@ extension NSObject {
     // MARK: Hook single instance
     
     @discardableResult
-    public func hookBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    public func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
+        try parametersCheck(targetClass: type(of: self), selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure)
     }
     
     @discardableResult
-    public func hookBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    public func hookBefore(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: type(of: self), selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure)
     }
         
     @discardableResult
-    public func hookAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .after)
-        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    public func hookAfter(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
+        try parametersCheck(targetClass: type(of: self), selector: selector, closure: closure, mode: .after)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure)
     }
     
     @discardableResult
-    public func hookAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .after)
-        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    public func hookAfter(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: type(of: self), selector: selector, closure: closure, mode: .after)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure)
     }
         
     @discardableResult
-    public func hookInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .instead)
-        return try HookManager.shared.hook(object: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+    public func hookInstead(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: type(of: self), selector: selector, closure: closure, mode: .instead)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .instead, hookClosure: closure)
     }
     
     // MARK: Hook all instances
     
     @discardableResult
-    public class func hookBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        try self.parametersCheck(targetClass: self, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    public class func hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
+        try parametersCheck(targetClass: self, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure)
     }
     
     // TODO: Try to improve API for this
     @discardableResult
-    public class func hookBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try self.parametersCheck(targetClass: self, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    public class func hookBefore(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: self, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure)
     }
         
     @discardableResult
-    public class func hookAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        try self.parametersCheck(targetClass: self, selector: selector, closure: closure as AnyObject, mode: .after)
-        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    public class func hookAfter(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
+        try parametersCheck(targetClass: self, selector: selector, closure: closure, mode: .after)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure)
     }
     
     @discardableResult
-    public class func hookAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try self.parametersCheck(targetClass: self, selector: selector, closure: closure as AnyObject, mode: .after)
-        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    public class func hookAfter(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: self, selector: selector, closure: closure, mode: .after)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure)
     }
         
     @discardableResult
-    public class func hookInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
-        try self.parametersCheck(targetClass: self, selector: selector, closure: closure as AnyObject, mode: .instead)
-        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+    public class func hookInstead(selector: Selector, closure: Any) throws -> HookContext {
+        try parametersCheck(targetClass: self, selector: selector, closure: closure, mode: .instead)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .instead, hookClosure: closure)
     }
     
     // MARK: Hook class methods
     
     @discardableResult
-    public class func hookClassMethodBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
+    public class func hookClassMethodBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        try self.parametersCheck(targetClass: metaclass, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try parametersCheck(targetClass: metaclass, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure)
     }
     
     @discardableResult
-    public class func hookClassMethodBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
+    public class func hookClassMethodBefore(selector: Selector, closure: Any) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        try self.parametersCheck(targetClass: metaclass, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try parametersCheck(targetClass: metaclass, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure)
     }
         
     @discardableResult
-    public class func hookClassMethodAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
+    public class func hookClassMethodAfter(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        try self.parametersCheck(targetClass: metaclass, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        try parametersCheck(targetClass: metaclass, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure)
     }
     
     @discardableResult
-    public class func hookClassMethodAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
+    public class func hookClassMethodAfter(selector: Selector, closure: Any) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        try self.parametersCheck(targetClass: metaclass, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        try parametersCheck(targetClass: metaclass, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure)
     }
         
     @discardableResult
-    public class func hookClassMethodInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
+    public class func hookClassMethodInstead(selector: Selector, closure: Any) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        try self.parametersCheck(targetClass: metaclass, selector: selector, closure: closure as AnyObject, mode: .before)
-        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+        try parametersCheck(targetClass: metaclass, selector: selector, closure: closure, mode: .before)
+        return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure)
     }
-    
-    // MARK: Private
-    
-    private static func parametersCheck(targetClass: AnyClass, selector: Selector, closure: AnyObject, mode: HookMode) throws {
-        // TODO: Selector black list.
-        guard let method = class_getInstanceMethod(targetClass, selector) else {
-            throw SwiftHookError.noRespondSelector(class: targetClass, selector: selector)
-        }
-        try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
+}
+
+func parametersCheck(targetClass: AnyClass, selector: Selector, closure: Any, mode: HookMode) throws {
+    // TODO: Selector black list.
+    guard let method = class_getInstanceMethod(targetClass, selector) else {
+        throw SwiftHookError.noRespondSelector(class: targetClass, selector: selector)
     }
+    try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
 }

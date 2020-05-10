@@ -75,7 +75,7 @@ public class HookContext {
     fileprivate let closureSignature: Signature
     
     // hook
-    fileprivate let hookClosure: AnyObject
+    fileprivate let hookClosure: Any
     fileprivate let hookClosureInvoke: @convention(c) () -> Void
     private let hookArgumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let hookReturnFFIType: UnsafeMutablePointer<ffi_type>
@@ -91,7 +91,7 @@ public class HookContext {
     private let closure: UnsafeMutablePointer<ffi_closure>
     let newIMP: IMP
     
-    init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
+    init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: Any) throws {
         
         // basic
         self.targetClass = targetClass

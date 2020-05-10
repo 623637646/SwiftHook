@@ -18,7 +18,7 @@ final class HookManager {
         
     }
     
-    func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
+    func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: Any) throws -> HookContext {
         if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: targetClass, selector: selector)
         }
@@ -28,7 +28,7 @@ final class HookManager {
     }
     
     // TODO: 
-    func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
+    func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: Any) throws -> HookContext {
         throw SwiftHookError.ffiError
     }
     

@@ -21,7 +21,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(TestObject.noArgsNoReturnFunc)
         let mode: HookMode = .before
-        let closure = {} as AnyObject
+        let closure = {}
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -74,7 +74,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = PureSwift.self
         let selector = #selector(getter: UIView.alpha)
         let mode: HookMode = .before
-        let closure = ({} as @convention(block) () -> Void) as AnyObject
+        let closure = ({} as @convention(block) () -> Void)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -93,7 +93,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(getter: UIView.alpha)
         let mode: HookMode = .before
-        let closure = ({} as @convention(block) () -> Void) as AnyObject
+        let closure = ({} as @convention(block) () -> Void)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -114,7 +114,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(TestObject.sumFunc(a:b:))
         let mode: HookMode = .before
-        let closure = ({ _, _ in  return 1} as @convention(block) (Int, Int) -> Int) as AnyObject
+        let closure = ({ _, _ in  return 1} as @convention(block) (Int, Int) -> Int)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -131,7 +131,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(TestObject.sumFunc(a:b:))
         let mode: HookMode = .before
-        let closure = ({ _, _ in return 1 } as @convention(block) (Int, Double) -> Int) as AnyObject
+        let closure = ({ _, _ in return 1 } as @convention(block) (Int, Double) -> Int)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -148,7 +148,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(TestObject.testStructSignature(point:rect:))
         let mode: HookMode = .after
-        let closure = ({_, _ in } as @convention(block) (CGPoint, Double) -> Void) as AnyObject
+        let closure = ({_, _ in } as @convention(block) (CGPoint, Double) -> Void)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)
@@ -165,7 +165,7 @@ class HookContextErrorTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(TestObject.testStructSignature(point:rect:))
         let mode: HookMode = .instead
-        let closure = ({_, _ in } as @convention(block) (CGPoint, CGRect) -> Void) as AnyObject
+        let closure = ({_, _ in } as @convention(block) (CGPoint, CGRect) -> Void)
         do {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
             XCTAssertNil(hookContext)

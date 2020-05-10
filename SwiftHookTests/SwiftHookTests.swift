@@ -28,7 +28,7 @@ class SwiftHookTests: XCTestCase {
     func testMissingSignature() {
         // before
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
+            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as Any)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -37,7 +37,7 @@ class SwiftHookTests: XCTestCase {
         
         // after
         do {
-            try TestObject.hookAfter(selector: #selector(TestObject.noArgsNoReturnFunc), closure: 1 as Int as AnyObject)
+            try TestObject.hookAfter(selector: #selector(TestObject.noArgsNoReturnFunc), closure: 1)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -46,7 +46,7 @@ class SwiftHookTests: XCTestCase {
         
         // instead
         do {
-            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject() as AnyObject)
+            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -59,7 +59,7 @@ class SwiftHookTests: XCTestCase {
         do {
             try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {_ in
                 
-                } as @convention(block) (Int) -> Void as AnyObject)
+                } as @convention(block) (Int) -> Void)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
             
@@ -71,7 +71,7 @@ class SwiftHookTests: XCTestCase {
         do {
             try TestObject.hookAfter(selector: #selector(TestObject.execute(closure:)), closure: {_ in
                 
-                } as @convention(block) (String) -> Void as AnyObject)
+                } as @convention(block) (String) -> Void)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
@@ -82,7 +82,7 @@ class SwiftHookTests: XCTestCase {
         do {
             try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
             
-            } as @convention(block) () -> Void as AnyObject)
+            } as @convention(block) () -> Void)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {

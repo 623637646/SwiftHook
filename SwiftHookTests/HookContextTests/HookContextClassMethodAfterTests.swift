@@ -27,7 +27,7 @@ class HookContextClassMethodAfterTests: XCTestCase {
                 let closure = {
                     XCTAssertEqual(result, [2])
                     result.append(1)
-                    } as @convention(block) () -> Void as AnyObject
+                    } as @convention(block) () -> Void
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -76,7 +76,7 @@ class HookContextClassMethodAfterTests: XCTestCase {
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)
                     executed = true
-                    } as @convention(block) (Int, Int) -> Void as AnyObject
+                    } as @convention(block) (Int, Int) -> Void
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 

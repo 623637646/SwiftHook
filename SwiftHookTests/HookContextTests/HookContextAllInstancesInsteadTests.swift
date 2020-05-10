@@ -29,7 +29,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     let result = original(a, b)
                     XCTAssertEqual(result, a + b)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int as AnyObject
+                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -66,7 +66,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     let result = original(a, b)
                     XCTAssertEqual(result, a + b)
                     return a * b
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int as AnyObject
+                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -103,7 +103,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     let result = original(a * 2, b * 2)
                     XCTAssertEqual(result, a * 2 + b * 2)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int as AnyObject
+                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -140,7 +140,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     XCTAssertEqual(result, [])
                     result.append(1)
                     result.append(3)
-                    } as @convention(block) ((ExecuteType) -> Void, ExecuteType) -> Void as AnyObject
+                    } as @convention(block) ((ExecuteType) -> Void, ExecuteType) -> Void
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -187,7 +187,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     result.append(1)
                     original(arg)
                     result.append(3)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject
+                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void
                 let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
@@ -234,7 +234,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     result.append(1)
                     original(arg)
                     result.append(2)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
                 // second hook
@@ -242,7 +242,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                     result.append(3)
                     original(arg)
                     result.append(4)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void)
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook

@@ -60,18 +60,15 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     }
 }
 
-// TODO: use manager
-private var allHookContext = [HookContext]()
-
 public class HookContext {
     
     // basic
-    private let targetClass: AnyClass
-    private let selector: Selector
+    let targetClass: AnyClass
+    let selector: Selector
     fileprivate let mode: HookMode
-    private let method: Method
+    let method: Method
     private var typeContexts: [SHFFITypeContext]
-    private var shouldSkipHookClosure = false
+    var shouldSkipHookClosure = false
     
     // signature
     fileprivate let methodSignature: Signature
@@ -92,9 +89,9 @@ public class HookContext {
     
     // closure
     private let closure: UnsafeMutablePointer<ffi_closure>
-    private let newIMP: IMP
+    let newIMP: IMP
     
-    private init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
+    init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
         
         // basic
         self.targetClass = targetClass
@@ -205,12 +202,6 @@ public class HookContext {
         self.hookArgumentTypes.deallocate()
     }
     
-    class func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
-        let hookContext = try HookContext.init(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
-        allHookContext.append(hookContext)
-        return hookContext
-    }
-    
     /**
      # Cancel hook.
      Try to change the Method's IMP from hooked to original and released context.
@@ -221,27 +212,9 @@ public class HookContext {
      */
     @discardableResult
     public func cancelHook() -> Bool {
-        guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: self.targetClass, selector: self.selector) else {
-            assert(false)
-            self.shouldSkipHookClosure = true
-            return false
-        }
-        guard self.method == currentMethod &&
-            method_getImplementation(currentMethod) == self.newIMP else {
-                self.shouldSkipHookClosure = true
-                return false
-        }
-        allHookContext.removeAll { (hookContext) -> Bool in
-            return hookContext === self
-        }
-        return true
+        return HookManager.shared.cancelHook(context: self)
     }
     
-    // MARK: This is debug tools.
-    
-    class func debugToolsGetAllHookContext() -> [HookContext] {
-        return allHookContext
-    }
 }
 
 // TODO: shouldSkipHookClosure unfinish

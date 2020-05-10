@@ -19,6 +19,7 @@
 		2A5C8D5A24670C9400812DAD /* HookContextAllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* HookContextAllInstancesAfterTests.swift */; };
 		2A5C8D5C24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift */; };
 		2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5D24670DC800812DAD /* MemoryTests.swift */; };
+		2A65FB4B246800F800535203 /* HookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65FB4A246800F800535203 /* HookManager.swift */; };
 		2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */; };
 		2A701513246413CE00B81219 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A701512246413CE00B81219 /* Utilities.swift */; };
 		2A7F43C02458359E00A63935 /* HookContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BE2458359E00A63935 /* HookContext.swift */; };
@@ -62,6 +63,7 @@
 		2A5C8D5924670C9400812DAD /* HookContextAllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextAllInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A5C8D5B24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextAllInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A5C8D5D24670DC800812DAD /* MemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryTests.swift; sourceTree = "<group>"; };
+		2A65FB4A246800F800535203 /* HookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookManager.swift; sourceTree = "<group>"; };
 		2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHMethodSignatureTests.swift; sourceTree = "<group>"; };
 		2A701512246413CE00B81219 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2A7F43BE2458359E00A63935 /* HookContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HookContext.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				2A7F43BF2458359E00A63935 /* NSObject+iOSHook.swift */,
+				2A65FB4A246800F800535203 /* HookManager.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
 				2A5363932460762F008B8A94 /* OverrideMethodContext.swift */,
 				2AC10C7F245872F200ED6815 /* Signature.swift */,
@@ -436,6 +439,7 @@
 			files = (
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
 				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
+				2A65FB4B246800F800535203 /* HookManager.swift in Sources */,
 				2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */,
 				2AC10C80245872F200ED6815 /* Signature.swift in Sources */,
 				2A5363942460762F008B8A94 /* OverrideMethodContext.swift in Sources */,

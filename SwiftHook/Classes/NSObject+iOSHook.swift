@@ -24,63 +24,45 @@ enum HookMode {
     case instead
 }
 
+// TODO: Thread synchronization
+
 extension NSObject {
     
     // MARK: Before
     
     @discardableResult
     public class func hookBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
-        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
-            //  TODO: add method
-        }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
     
     // TODO: Try to improve API for this
     @discardableResult
     public class func hookBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
-        // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .before)
-        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
-            //  TODO: add method
-        }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
     
     // MARK: After
     
     @discardableResult
     public class func hookAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
-        // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .after)
-        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
-            //  TODO: add method
-        }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
     
     @discardableResult
     public class func hookAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
-        // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .after)
-        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
-            //  TODO: add method
-        }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
     
     // MARK: Instead
     
     @discardableResult
     public class func hookInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
-        // TODO: Thread synchronization
         try self.parametersCheck(selector: selector, closure: closure as AnyObject, mode: .instead)
-        if getMethodWithoutSearchingSuperClasses(targetClass: self, selector: selector) == nil {
-            //  TODO: add method
-        }
-        return try HookContext.hook(targetClass: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+        return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
     
     // MARK: private

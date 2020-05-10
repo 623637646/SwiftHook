@@ -28,9 +28,6 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(method, to: (@convention(c) () -> Void).self), ret, args)
 }
 
-// TODO: use manager
-private var allOverrideMethodContext = [OverrideMethodContext]()
-
 class OverrideMethodContext {
     
     fileprivate let targetClass: AnyClass
@@ -46,7 +43,7 @@ class OverrideMethodContext {
     
     private let typeContexts: [SHFFITypeContext]
     
-    private init(targetClass: AnyClass, selector: Selector) throws {
+    init(targetClass: AnyClass, selector: Selector) throws {
         self.targetClass = targetClass
         self.selector = selector
         
@@ -134,14 +131,4 @@ class OverrideMethodContext {
         ffi_closure_free(self.closure)
     }
     
-    class func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
-        let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
-        allOverrideMethodContext.append(overrideMethodContext)
-    }
-    
-    // MARK: This is debug tools.
-    
-    class func debugToolsGetAllOverrideMethodContext() -> [OverrideMethodContext] {
-        return allOverrideMethodContext
-    }
 }

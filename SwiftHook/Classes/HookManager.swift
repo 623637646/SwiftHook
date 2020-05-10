@@ -27,6 +27,11 @@ final class HookManager {
         return hookContext
     }
     
+    // TODO: 
+    func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookContext {
+        throw SwiftHookError.ffiError
+    }
+    
     func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
         let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
         allOverrideMethodContext.append(overrideMethodContext)

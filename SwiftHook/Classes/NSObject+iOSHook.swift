@@ -28,6 +28,38 @@ enum HookMode {
 
 extension NSObject {
     
+    // MARK: Hook single instance
+    
+    @discardableResult
+    public func hookBefore(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
+        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .before)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    }
+    
+    @discardableResult
+    public func hookBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
+        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .before)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+    }
+        
+    @discardableResult
+    public func hookAfter(selector: Selector, closure: @convention(block) () -> Void) throws -> HookContext {
+        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .after)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    }
+    
+    @discardableResult
+    public func hookAfter(selector: Selector, closure: AnyObject) throws -> HookContext {
+        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .after)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    }
+        
+    @discardableResult
+    public func hookInstead(selector: Selector, closure: AnyObject) throws -> HookContext {
+        try NSObject.parametersCheck(targetClass: type(of: self), selector: selector, closure: closure as AnyObject, mode: .instead)
+        return try HookManager.shared.hook(object: self, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+    }
+    
     // MARK: Hook all instances
     
     @discardableResult
@@ -72,7 +104,6 @@ extension NSObject {
         return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
     
-    // TODO: Try to improve API for this
     @discardableResult
     public class func hookClassMethodBefore(selector: Selector, closure: AnyObject) throws -> HookContext {
         guard let metaclass = object_getClass(self) else {

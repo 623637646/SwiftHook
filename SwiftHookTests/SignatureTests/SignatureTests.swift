@@ -18,7 +18,6 @@ let argumentTypesMethodPrefix = [objectSignature, selectoreSignature]
 let argumentTypesClosurePrefix = [blockSignature]
 let argumentTypesClosurePrefixForInstead = [blockSignature, blockSignature]
 
-
 class SignatureTests: XCTestCase {
     
     // MARK: before & after

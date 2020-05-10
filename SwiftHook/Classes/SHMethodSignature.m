@@ -64,7 +64,6 @@
     return [self ignoreUnusedChar:[[NSString alloc] initWithUTF8String:self.methodSignature.methodReturnType]];
 }
 
-// TODO: Can remove this, and improve the signature from [String] to [enumeration]
 static NSRegularExpression *regex;
 - (NSString *)ignoreUnusedChar:(NSString *)type
 {

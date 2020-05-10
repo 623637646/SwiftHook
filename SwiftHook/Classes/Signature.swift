@@ -47,7 +47,6 @@ struct Signature {
         try canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: mode)
     }
     
-    // TODO: Test cases
     static func canHookClosureSignatureWorksByMethodSignature(closureSignature: Signature, methodSignature: Signature, mode: HookMode) throws {
         guard closureSignature.signatureType == .closure else {
             throw SwiftHookError.incompatibleClosureSignature

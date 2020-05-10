@@ -28,8 +28,8 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     var originalClosureForInstead: Any?
     if hookContext.mode == .instead {
         originalClosureForInstead = createOriginalClosureForInstead(
-            argsBuffer[0]!.assumingMemoryBound(to: AnyObject.self).pointee,
-            argsBuffer[1]!.assumingMemoryBound(to: Selector.self).pointee,
+            argsBuffer[0]!,
+            argsBuffer[1]!,
             hookContext.originalIMP, hookContext.originalCIFPointer)
     }
     for index in 0 ... hookContext.closureSignature.argumentTypes.count - 1 {

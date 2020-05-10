@@ -70,8 +70,8 @@ void (*sh_blockInvoke(id block))(void *, ...)
 
 @interface OriginalClosureForInsteadContext : NSObject
 
-@property (nonatomic, weak) id targetObject;
-@property (nonatomic, assign) SEL selector;
+@property (nonatomic, assign) void *targetObject;
+@property (nonatomic, assign) void *selector;
 @property (nonatomic, assign) IMP originalIMP;
 @property (nonatomic, assign) ffi_cif *originalCifPointer;
 
@@ -88,7 +88,7 @@ void closureFunction(ffi_cif *cif, void *ret, void **args, void *userdata) {
     OriginalClosureForInsteadContext *context = (__bridge OriginalClosureForInsteadContext *)(userdata);
     int nargs = cif->nargs + 1;
     void **newArgs = malloc(sizeof(void *) * nargs);
-    newArgs[0] = (__bridge void *)(context.targetObject);
+    newArgs[0] = context.targetObject;
     newArgs[1] = context.selector;
     for (int i = 2; i <= nargs - 1; i++) {
         newArgs[i] = args[i - 1];
@@ -99,7 +99,7 @@ void closureFunction(ffi_cif *cif, void *ret, void **args, void *userdata) {
 
 @implementation OriginalClosureForInsteadContext
 
-- (instancetype)initWithTargetObject:(id)targetObject selector:(SEL)selector originalIMP:(IMP)originalIMP originalCifPointer:(ffi_cif *)originalCifPointer
+- (instancetype)initWithTargetObject:(void *)targetObject selector:(void *)selector originalIMP:(IMP)originalIMP originalCifPointer:(ffi_cif *)originalCifPointer
 {
     self = [super init];
     if (self) {
@@ -140,7 +140,7 @@ void closureFunction(ffi_cif *cif, void *ret, void **args, void *userdata) {
 
 @end
 
-id _Nullable createOriginalClosureForInstead(id targetObject, SEL selector, IMP originalIMP, ffi_cif *cifPointer)
+id _Nullable createOriginalClosureForInstead(void *targetObject, void *selector, IMP originalIMP, ffi_cif *cifPointer)
 {
     OriginalClosureForInsteadContext *context = [[OriginalClosureForInsteadContext alloc] initWithTargetObject:targetObject selector:selector originalIMP:originalIMP originalCifPointer:cifPointer];
     if (context == nil) {

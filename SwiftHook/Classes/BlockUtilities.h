@@ -15,6 +15,6 @@ extern const char * _Nullable sh_blockSignature(id block);
 
 extern void (*sh_blockInvoke(id block))(void *, ...);
 
-extern id _Nullable createOriginalClosureForInstead(id targetObject, SEL selector, IMP originalIMP, ffi_cif *cifPointer);
+extern id _Nullable createOriginalClosureForInstead(void *targetObject, void *selector, IMP originalIMP, ffi_cif *cifPointer);
 
 NS_ASSUME_NONNULL_END

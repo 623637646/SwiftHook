@@ -217,4 +217,58 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
         }
     }
     
+    func testHookTwice() {
+        do {
+            let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+            let test = TestObject()
+            var result = [Int]()
+            
+            try autoreleasepool {
+                let targetClass = TestObject.self
+                let selector = #selector(TestObject.execute(closure:))
+                typealias ExecuteType = () -> Void
+                let mode: HookMode = .instead
+                
+                // first hook
+                let hookContext1 = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, arg in
+                    result.append(1)
+                    original(arg)
+                    result.append(2)
+                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                
+                // second hook
+                let hookContext2 = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, arg in
+                    result.append(3)
+                    original(arg)
+                    result.append(4)
+                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
+                
+                // test hook
+                XCTAssertEqual(result, [])
+                test.execute {
+                    result.append(5)
+                }
+                XCTAssertEqual(result, [3, 1, 5, 2, 4])
+                
+                // TODO: not complete cancellation.
+                // cancel
+                XCTAssertFalse(hookContext1.cancelHook())
+                XCTAssertTrue(hookContext2.cancelHook())
+//                result.removeAll()
+            }
+            
+            // test cancel
+//            test.execute {
+//                XCTAssertEqual(result, [])
+//                result.append(2)
+//            }
+//            XCTAssertEqual(result, [2])
+//            XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

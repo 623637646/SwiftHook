@@ -11,57 +11,89 @@ import Foundation
 final class HookManager {
     static let shared = HookManager()
     
-    private var allHookContext = [HookContext]()
-    private var allOverrideMethodContext = [OverrideMethodContext]()
+    private var hookContextPool = Set<HookContext>()
     
-    private init() {
-        
-    }
+    private var overrideMethodContextPool = Set<OverrideMethodContext>()
     
-    func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: Any) throws -> HookContext {
+    private init() {}
+    
+    func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
+        try parametersCheck(targetClass: targetClass, selector: selector, mode: mode, closure: hookClosure)
         if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: targetClass, selector: selector)
         }
-        let hookContext = try HookContext.init(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
-        allHookContext.append(hookContext)
-        return hookContext
+        var hookContext: HookContext!
+        if !self.hookContextPool.contains(where: { (element) -> Bool in
+            guard element.targetClass == targetClass && element.selector == selector else {
+                return false
+            }
+            hookContext = element
+            return true
+        }) {
+            hookContext = try HookContext.init(targetClass: targetClass, selector: selector)
+            self.hookContextPool.insert(hookContext)
+        }
+        try hookContext.append(hookClosure: hookClosure, mode: mode)
+        return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
     }
     
     // TODO: 
-    func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: Any) throws -> HookContext {
+    func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
+        try parametersCheck(targetClass: type(of: object), selector: selector, mode: mode, closure: hookClosure)
         throw SwiftHookError.ffiError
+    }
+    
+    func cancelHook(token: HookToken) -> Bool {
+        do {
+            guard let hookContext = token.hookContext else {
+                assert(false)
+                return true
+            }
+            guard let hookClosure = token.hookClosure else {
+                assert(false)
+                return false
+            }
+            try hookContext.remove(hookClosure: hookClosure, mode: token.mode)
+            guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: hookContext.targetClass, selector: hookContext.selector) else {
+                assert(false)
+                return false
+            }
+            guard hookContext.method == currentMethod &&
+                method_getImplementation(currentMethod) == hookContext.methodNewIMPPointer.pointee else {
+                    return false
+            }
+            if hookContext.isHoolClosurePoolEmpty() {
+                self.hookContextPool.remove(hookContext)
+                return true
+            } else {
+                return false
+            }
+        } catch {}
+        return false
     }
     
     func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
         let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
-        allOverrideMethodContext.append(overrideMethodContext)
+        overrideMethodContextPool.insert(overrideMethodContext)
     }
     
-    func cancelHook(context: HookContext) -> Bool {
-        guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: context.targetClass, selector: context.selector) else {
-            assert(false)
-            context.shouldSkipHookClosure = true
-            return false
+    private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
+        // TODO: Selector black list.
+        guard let method = class_getInstanceMethod(targetClass, selector) else {
+            throw SwiftHookError.noRespondSelector(class: targetClass, selector: selector)
         }
-        guard context.method == currentMethod &&
-            method_getImplementation(currentMethod) == context.newIMP else {
-                context.shouldSkipHookClosure = true
-                return false
-        }
-        allHookContext.removeAll { (hookContext) -> Bool in
-            return hookContext === context
-        }
-        return true
+        try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
     }
     
     // MARK: This is debug tools.
+    // TODO: 优化
     
-    func debugToolsGetAllHookContext() -> [HookContext] {
-        return allHookContext
+    func debugToolsGetAllHookContext() -> Set<HookContext> {
+        return hookContextPool
     }
         
-    func debugToolsGetAllOverrideMethodContext() -> [OverrideMethodContext] {
-        return allOverrideMethodContext
+    func debugToolsGetAllOverrideMethodContext() -> Set<OverrideMethodContext> {
+        return overrideMethodContextPool
     }
     
 }

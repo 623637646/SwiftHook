@@ -23,7 +23,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = {}
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
@@ -40,7 +40,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = PureSwift()
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
@@ -57,7 +57,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = NSObject()
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
@@ -76,12 +76,12 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = ({} as @convention(block) () -> Void)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
-            XCTAssertEqual(line, InternalErrorLineMethod)
+        } catch SwiftHookError.noRespondSelector(class: let targetClass, selector: let selector) {
+            XCTAssertTrue(targetClass == PureSwift.self)
+            XCTAssertEqual(selector, #selector(getter: UIView.alpha))
         } catch {
             XCTAssertNil(error)
         }
@@ -95,12 +95,12 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = ({} as @convention(block) () -> Void)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
-            XCTAssertEqual(line, InternalErrorLineMethod)
+        } catch SwiftHookError.noRespondSelector(class: let targetClass, selector: let selector) {
+            XCTAssertTrue(targetClass == TestObject.self)
+            XCTAssertEqual(selector, #selector(getter: UIView.alpha))
         } catch {
             XCTAssertNil(error)
         }
@@ -116,7 +116,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = ({ _, _ in  return 1} as @convention(block) (Int, Int) -> Int)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
@@ -133,7 +133,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .before
         let closure = ({ _, _ in return 1 } as @convention(block) (Int, Double) -> Int)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
@@ -150,7 +150,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .after
         let closure = ({_, _ in } as @convention(block) (CGPoint, Double) -> Void)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
@@ -167,7 +167,7 @@ class HookContextErrorTests: XCTestCase {
         let mode: HookMode = .instead
         let closure = ({_, _ in } as @convention(block) (CGPoint, CGRect) -> Void)
         do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {

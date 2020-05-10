@@ -19,7 +19,7 @@ struct Signature {
     let returnType: String
     let signatureType: SignatureType
     
-    private init(argumentTypes: [String], returnType: String, signatureType: SignatureType) {
+    init(argumentTypes: [String], returnType: String, signatureType: SignatureType) {
         self.argumentTypes = argumentTypes
         self.returnType = returnType
         self.signatureType = signatureType
@@ -32,14 +32,14 @@ struct Signature {
         self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .method)
     }
     
-    init?(closure: Any) {
+    init?(closure: AnyObject) {
         guard let methodSignature = SHMethodSignature.init(block: closure) else {
             return nil
         }
         self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .closure)
     }
     
-    static func canHookClosureWorksByMethod(closure: Any, method: Method, mode: HookMode) throws {
+    static func canHookClosureWorksByMethod(closure: AnyObject, method: Method, mode: HookMode) throws {
         guard let methodSignature = Signature(method: method),
             let closureSignature = Signature(closure: closure) else {
                 throw SwiftHookError.missingSignature
@@ -54,7 +54,7 @@ struct Signature {
         guard methodSignature.signatureType == .method else {
             throw SwiftHookError.incompatibleClosureSignature
         }
-        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void) else {
+        guard let emptyClosure = Signature(closure: {} as @convention(block) () -> Void as AnyObject) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         guard closureSignature.argumentTypes[0] == "@?" else {

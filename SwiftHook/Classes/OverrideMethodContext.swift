@@ -21,11 +21,11 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         assert(false)
         return
     }
-    guard let method = class_getMethodImplementation(sueprClass, overrideMethodContext.selector) else {
+    guard let methodIMP = class_getMethodImplementation(sueprClass, overrideMethodContext.selector) else {
         assert(false)
         return
     }
-    ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(method, to: (@convention(c) () -> Void).self), ret, args)
+    ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
 }
 
 class OverrideMethodContext {
@@ -130,5 +130,15 @@ class OverrideMethodContext {
         self.cifPointer.deallocate()
         ffi_closure_free(self.closure)
     }
+}
+
+extension OverrideMethodContext: Hashable {
+    static func == (lhs: OverrideMethodContext, rhs: OverrideMethodContext) -> Bool {
+        lhs.targetClass == rhs.targetClass && lhs.selector == rhs.selector
+    }
     
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(targetClass))
+        hasher.combine(selector)
+    }
 }

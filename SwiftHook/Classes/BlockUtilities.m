@@ -68,99 +68,35 @@ void (*sh_blockInvoke(id block))(void *, ...)
     return layout->invoke;
 }
 
-@interface OriginalClosureForInsteadContext : NSObject
-
-@property (nonatomic, assign) void *targetObject;
-@property (nonatomic, assign) void *selector;
-@property (nonatomic, assign) IMP originalIMP;
-@property (nonatomic, assign) ffi_cif *originalCifPointer;
-
-@property (nonatomic, assign) ffi_type **argumentTypes;
-@property (nonatomic, assign) void (*invokeIMP)(void *, ...);
-@property (nonatomic, assign) ffi_cif *closureCifPointer;
-@property (nonatomic, assign) ffi_closure *closure;
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
-@end
-
-void closureFunction(ffi_cif *cif, void *ret, void **args, void *userdata) {
-    OriginalClosureForInsteadContext *context = (__bridge OriginalClosureForInsteadContext *)(userdata);
-    int nargs = cif->nargs + 1;
-    void **newArgs = malloc(sizeof(void *) * nargs);
-    newArgs[0] = context.targetObject;
-    newArgs[1] = context.selector;
-    for (int i = 2; i <= nargs - 1; i++) {
-        newArgs[i] = args[i - 1];
-    }
-    ffi_call(context.originalCifPointer, context.originalIMP, ret, newArgs);
-    free(newArgs);
+void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...))
+{
+    struct Block_literal_1 *layout = (__bridge void *)block;
+    layout->invoke = blockInvoke;
 }
 
-@implementation OriginalClosureForInsteadContext
 
-- (instancetype)initWithTargetObject:(void *)targetObject selector:(void *)selector originalIMP:(IMP)originalIMP originalCifPointer:(ffi_cif *)originalCifPointer
-{
-    self = [super init];
-    if (self) {
-        self.targetObject = targetObject;
-        self.selector = selector;
-        self.originalIMP = originalIMP;
-        self.originalCifPointer = originalCifPointer;
-        
-        int nargs = originalCifPointer->nargs - 1;
-        self.argumentTypes = malloc(sizeof(ffi_type *) * nargs);
-        self.argumentTypes[0] = &ffi_type_pointer;
-        for (int i = 1; i <= nargs - 1; i++) {
-            self.argumentTypes[i] = originalCifPointer->arg_types[i + 1];
-        }
-        self.closureCifPointer = malloc(sizeof(ffi_cif));
-        ffi_status status = ffi_prep_cif(self.closureCifPointer, FFI_DEFAULT_ABI, nargs, originalCifPointer->rtype, self.argumentTypes);
-        if (status != FFI_OK) {
-            return nil;
-        }
-        void (*invokeIMP)(void *, ...);
-        self.closure = ffi_closure_alloc(sizeof(ffi_closure), (void *)&invokeIMP);
-        
-        status = ffi_prep_closure_loc(self.closure, self.closureCifPointer, closureFunction, (__bridge void *)(self), &invokeIMP);
-        if (status != FFI_OK) {
-            return nil;
-        }
-        self.invokeIMP = invokeIMP;
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    ffi_closure_free(self.closure);
-    free(self.closureCifPointer);
-    free(self.argumentTypes);
-}
-
-@end
-
-id _Nullable createOriginalClosureForInstead(void *targetObject, void *selector, IMP originalIMP, ffi_cif *cifPointer)
-{
-    OriginalClosureForInsteadContext *context = [[OriginalClosureForInsteadContext alloc] initWithTargetObject:targetObject selector:selector originalIMP:originalIMP originalCifPointer:cifPointer];
-    if (context == nil) {
-        return nil;
-    }
-    
-    // TODO: Why crash?
-//    id block = ^{
+ // TODO: remove this
+//id _Nullable sh_createClosure(void *arg0, void *arg1, IMP targetIMP, ffi_cif *cifPointer)
+//{
+//    ClosureContext *context = [[ClosureContext alloc] initWithArg0:arg0 arg1:arg1 targetIMP:targetIMP cifPointer:cifPointer];
+//    if (context == nil) {
+//        return nil;
+//    }
 //
-//    };
-//    objc_setAssociatedObject(block, "createOriginalClosureForInstead", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//    struct Block_literal_1 *layout = (__bridge void *)block;
+//    // TODO: Why crash?
+////    id block = ^{
+////
+////    };
+////    objc_setAssociatedObject(block, "sh_createClosure", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+////    struct Block_literal_1 *layout = (__bridge void *)block;
+////    layout->invoke = context.invokeIMP;
+//
+//
+//    struct Block_literal_1 *layout = malloc(sizeof(struct Block_literal_1));
+//    *layout = *(__bridge struct Block_literal_1 *)(^{});
 //    layout->invoke = context.invokeIMP;
-    
-    
-    struct Block_literal_1 *layout = malloc(sizeof(struct Block_literal_1));
-    *layout = *(__bridge struct Block_literal_1 *)(^{});
-    layout->invoke = context.invokeIMP;
-    id block = (__bridge_transfer id)(layout);
-    objc_setAssociatedObject(block, "createOriginalClosureForInstead", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    return block;
-}
+//    id block = (__bridge_transfer id)(layout);
+//    objc_setAssociatedObject(block, "sh_createClosure", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//
+//    return block;
+//}

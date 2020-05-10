@@ -146,3 +146,6 @@ class SwiftHookTests: XCTestCase {
     }
     
 }
+
+// TODO: performance tests measureBlock
+// TODO: test cases 多线程

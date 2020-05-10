@@ -1,0 +1,35 @@
+//
+//  HookToken.swift
+//  SwiftHook
+//
+//  Created by Yanni Wang on 12/5/20.
+//  Copyright © 2020 Yanni. All rights reserved.
+//
+
+import Foundation
+
+// TODO: can be struct? check all classes.
+public class HookToken {
+    
+    weak var hookContext: HookContext?
+    weak var hookClosure: AnyObject?
+    let mode: HookMode
+    
+    init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
+        self.hookContext = hookContext
+        self.hookClosure = hookClosure
+        self.mode = mode
+    }
+    
+    /**
+    # Cancel hook.
+    Try to change the Method's IMP from hooked to original and released context.
+    But it's dangerous when the current IMP is not previous hooked IMP. In this case. cancelHook() still works fine but the context will not be released.
+    
+    - returns:
+    If context will be released, return true. otherwise return false.
+    */
+    public func cancelHook() -> Bool {
+        return HookManager.shared.cancelHook(token: self)
+    }
+}

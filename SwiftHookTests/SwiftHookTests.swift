@@ -90,6 +90,30 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    func testHookClassMethodWithInstanceSelector() {
+        do {
+            try TestObject.hookClassMethodBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
+            XCTAssertTrue(false)
+        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
+            XCTAssertTrue(targetClass == object_getClass(TestObject.self))
+            XCTAssertEqual(selector, #selector(TestObject.noArgsNoReturnFunc))
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testHookInstanceMethodWithClassMethodSelector() {
+        do {
+            try TestObject.hookBefore(selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
+            XCTAssertTrue(false)
+        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
+            XCTAssertTrue(targetClass == TestObject.self)
+            XCTAssertEqual(selector, #selector(TestObject.classMethodNoArgsNoReturnFunc))
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
     // MARK: Before
     
     func testHookBeforeNoArgsNoReturnFunc() {

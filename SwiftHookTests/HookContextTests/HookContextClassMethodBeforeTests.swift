@@ -1,5 +1,5 @@
 //
-//  HookContextAllInstancesBeforeTests.swift
+//  HookContextClassMethodBeforeTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 10/5/20.
@@ -9,20 +9,20 @@
 import XCTest
 @testable import SwiftHook
 
-class HookContextAllInstancesBeforeTests: XCTestCase {
-    
-    // MARK: All instances & before
+class HookContextClassMethodBeforeTests: XCTestCase {
     
     func testBefore() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
-            let test = TestObject()
             var result = [Int]()
             
             try autoreleasepool {
                 // hook
-                let targetClass = TestObject.self
-                let selector = #selector(TestObject.execute(closure:))
+                guard let targetClass = object_getClass(TestObject.self) else {
+                    XCTAssertTrue(false)
+                    return
+                }
+                let selector = #selector(TestObject.classMethodExecute(closure:))
                 let mode: HookMode = .before
                 let closure = {
                     XCTAssertEqual(result, [])
@@ -33,7 +33,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                 
                 // test hook
                 XCTAssertEqual(result, [])
-                test.execute {
+                TestObject.classMethodExecute {
                     XCTAssertEqual(result, [1])
                     result.append(2)
                 }
@@ -46,7 +46,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
             }
             
             // test cancel
-            test.execute {
+            TestObject.classMethodExecute {
                 XCTAssertEqual(result, [])
                 result.append(2)
             }
@@ -60,15 +60,17 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
     func testBeforeCheckArguments() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
-            let test = TestObject()
             let argumentA = 77
             let argumentB = 88
             var executed = false
             
             try autoreleasepool {
                 // hook
-                let targetClass = TestObject.self
-                let selector = #selector(TestObject.sumFunc(a:b:))
+                guard let targetClass = object_getClass(TestObject.self) else {
+                    XCTAssertTrue(false)
+                    return
+                }
+                let selector = #selector(TestObject.classMethodSumFunc(a:b:))
                 let mode: HookMode = .before
                 let closure = { a, b in
                     XCTAssertEqual(argumentA, a)
@@ -79,7 +81,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                 XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
                 
                 // test hook
-                let result = test.sumFunc(a: argumentA, b: argumentB)
+                let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA + argumentB)
                 XCTAssertTrue(executed)
                 
@@ -88,7 +90,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
             }
             
             // test cancel
-            let result = test.sumFunc(a: argumentA, b: argumentB)
+            let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
         } catch {

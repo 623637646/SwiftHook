@@ -56,5 +56,41 @@ class HookContextAllInstancesAfterTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
+    func testAllInstancesAfterCheckArguments() {
+        do {
+            let contextCount = HookContext.debugToolsGetAllHookContext().count
+            let test = TestObject()
+            let argumentA = 77
+            let argumentB = 88
+            
+            try autoreleasepool {
+                // hook
+                let targetClass = TestObject.self
+                let selector = #selector(TestObject.sumFunc(a:b:))
+                let mode: HookMode = .after
+                let closure = { a, b in
+                    XCTAssertEqual(argumentA, a)
+                    XCTAssertEqual(argumentB, b)
+                    } as @convention(block) (Int, Int) -> Void as AnyObject
+                let hookContext = try HookContext.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure)
+                XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount + 1)
+                
+                // test hook
+                let result = test.sumFunc(a: argumentA, b: argumentB)
+                XCTAssertEqual(result, argumentA + argumentB)
+                
+                // cancel
+                XCTAssertTrue(hookContext.cancelHook())
+            }
+            
+            // test cancel
+            let result = test.sumFunc(a: argumentA, b: argumentB)
+            XCTAssertEqual(result, argumentA + argumentB)
+            XCTAssertEqual(HookContext.debugToolsGetAllHookContext().count, contextCount)
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
 
 }

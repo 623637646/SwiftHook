@@ -10,7 +10,7 @@ import XCTest
 @testable import SwiftHook
 
 class HookContextClassMethodInsteadTests: XCTestCase {
-
+    
     func testCallOriginal() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
@@ -262,20 +262,19 @@ class HookContextClassMethodInsteadTests: XCTestCase {
                 }
                 XCTAssertEqual(result, [3, 1, 5, 2, 4])
                 
-                // TODO: not complete cancellation.
                 // cancel
                 XCTAssertFalse(hookContext1.cancelHook())
                 XCTAssertTrue(hookContext2.cancelHook())
-                //                result.removeAll()
+                result.removeAll()
             }
             
             // test cancel
-            //            test.execute {
-            //                XCTAssertEqual(result, [])
-            //                result.append(2)
-            //            }
-            //            XCTAssertEqual(result, [2])
-            //            XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+            TestObject.classMethodExecute {
+                XCTAssertEqual(result, [])
+                result.append(2)
+            }
+            XCTAssertEqual(result, [2])
+            XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
         } catch {
             XCTAssertNil(error)
         }

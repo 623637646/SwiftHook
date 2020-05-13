@@ -12,7 +12,6 @@ final class HookManager {
     static let shared = HookManager()
     
     private var hookContextPool = Set<HookContext>()
-    
     private var overrideMethodContextPool = Set<OverrideMethodContext>()
     
     private init() {}
@@ -37,10 +36,11 @@ final class HookManager {
         return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
     }
     
-    // TODO: 
     func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
         try parametersCheck(targetClass: type(of: object), selector: selector, mode: mode, closure: hookClosure)
-        throw SwiftHookError.ffiError
+        // create dynamic class for single hook
+        let dynamicClass: AnyClass = try DynamicClassContext.getDynamicClass(object: object)
+        return try hook(targetClass: dynamicClass, selector: selector, mode: mode, hookClosure: hookClosure)
     }
     
     func cancelHook(token: HookToken) -> Bool {

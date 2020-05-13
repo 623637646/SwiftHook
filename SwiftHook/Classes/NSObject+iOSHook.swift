@@ -140,3 +140,5 @@ extension NSObject {
         return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure)
     }
 }
+
+// TODO: 性能优化，只在入口校验参数.

@@ -9,9 +9,9 @@
 import Foundation
 import libffi_iOS
 
-private var AssociatedInsteadClosureHandle: UInt8 = 0
-private var AssociatedArg0Handle: UInt8 = 0
-private var AssociatedArg1Handle: UInt8 = 0
+private var associatedInsteadClosureHandle: UInt8 = 0
+private var associatedArg0Handle: UInt8 = 0
+private var associatedArg1Handle: UInt8 = 0
 
 private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
                                   ret: UnsafeMutableRawPointer?,
@@ -52,9 +52,9 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         sh_setBlockInvoke(insteadClosure, OpaquePointer(hookContext.blockInvoke.pointee!))
         let object = argsBuffer[0]!.assumingMemoryBound(to: NSObject.self).pointee
         let selectorString = NSStringFromSelector(argsBuffer[1]!.assumingMemoryBound(to: Selector.self).pointee)
-        objc_setAssociatedObject(insteadClosure, &AssociatedInsteadClosureHandle, lastInstead, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(insteadClosure, &AssociatedArg0Handle, object, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(insteadClosure, &AssociatedArg1Handle, selectorString, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(insteadClosure, &associatedInsteadClosureHandle, lastInstead, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(insteadClosure, &associatedArg0Handle, object, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(insteadClosure, &associatedArg1Handle, selectorString, .OBJC_ASSOCIATION_ASSIGN)
         
         let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
         var insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
@@ -94,7 +94,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         assert(false)
         return
     }
-    guard let lastHookClosure = objc_getAssociatedObject(dynamicClosure, &AssociatedInsteadClosureHandle) as AnyObject? else {
+    guard let lastHookClosure = objc_getAssociatedObject(dynamicClosure, &associatedInsteadClosureHandle) as AnyObject? else {
         assert(false)
         return
     }
@@ -109,8 +109,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         defer {
             methodArgsBuffer.deallocate()
         }
-        guard var object = objc_getAssociatedObject(dynamicClosure, &AssociatedArg0Handle) as? NSObject,
-            let selectorString = objc_getAssociatedObject(dynamicClosure, &AssociatedArg1Handle) as? String
+        guard var object = objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as? NSObject,
+            let selectorString = objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? String
             else {
                 assert(false)
                 return
@@ -136,7 +136,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         defer {
             hookArgsBuffer.deallocate()
         }
-        objc_setAssociatedObject(dynamicClosure, &AssociatedInsteadClosureHandle, previousHookClosure, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(dynamicClosure, &associatedInsteadClosureHandle, previousHookClosure, .OBJC_ASSOCIATION_ASSIGN)
         hookArgsBuffer[0] = UnsafeMutableRawPointer(&previousHookClosure)
         hookArgsBuffer[1] = argsBuffer[0]
         if nargs >= 3 {

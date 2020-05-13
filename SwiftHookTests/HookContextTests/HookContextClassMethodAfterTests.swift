@@ -90,8 +90,10 @@ class HookContextClassMethodAfterTests: XCTestCase {
             }
             
             // test cancel
+            executed = false
             let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
+            XCTAssertFalse(executed)
             XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
         } catch {
             XCTAssertNil(error)

@@ -11,7 +11,7 @@ import XCTest
 
 class HookContextClassMethodBeforeTests: XCTestCase {
     
-    func testBefore() {
+    func testNormal() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
             var result = [Int]()
@@ -57,7 +57,7 @@ class HookContextClassMethodBeforeTests: XCTestCase {
         }
     }
     
-    func testBeforeCheckArguments() {
+    func testCheckArguments() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
             let argumentA = 77

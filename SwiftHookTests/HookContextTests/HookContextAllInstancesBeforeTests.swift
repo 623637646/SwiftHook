@@ -10,10 +10,8 @@ import XCTest
 @testable import SwiftHook
 
 class HookContextAllInstancesBeforeTests: XCTestCase {
-    
-    // MARK: All instances & before
-    
-    func testBefore() {
+        
+    func testNormal() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
             let test = TestObject()
@@ -57,7 +55,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
         }
     }
     
-    func testBeforeCheckArguments() {
+    func testCheckArguments() {
         do {
             let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
             let test = TestObject()

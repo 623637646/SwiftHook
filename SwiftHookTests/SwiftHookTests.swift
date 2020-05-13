@@ -148,5 +148,4 @@ class SwiftHookTests: XCTestCase {
 }
 
 // TODO: performance tests measureBlock
-// TODO: test cases 多线程
-// TODO: test cases Aspects 的bug
+// TODO: test cases 多线程, Swift 属性是否需要加锁？ https://gist.github.com/623637646/43c4561cdf128e99eda124cd79bd6c16

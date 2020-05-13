@@ -30,9 +30,10 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         hookArgsBuffer?.deallocate()
     }
     if !hookContext.beforeHookClosures.isEmpty || !hookContext.afterHookClosures.isEmpty {
-        hookArgsBuffer = UnsafeMutableBufferPointer.allocate(capacity: hookContext.hookSignature.argumentTypes.count)
-        if hookContext.hookSignature.argumentTypes.count >= 2 {
-            for index in 1 ... hookContext.hookSignature.argumentTypes.count - 1 {
+        let nargs = Int(hookContext.hookCif.pointee.nargs)
+        hookArgsBuffer = UnsafeMutableBufferPointer.allocate(capacity: nargs)
+        if nargs >= 2 {
+            for index in 1 ... nargs - 1 {
                 hookArgsBuffer![index] = argsBuffer[index + 1]
             }
         }
@@ -55,14 +56,15 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         objc_setAssociatedObject(insteadClosure, &AssociatedArg0Handle, object, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(insteadClosure, &AssociatedArg1Handle, selectorString, .OBJC_ASSOCIATION_ASSIGN)
         
-        var insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: hookContext.insteadHookSignature.argumentTypes.count)
+        let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
+        var insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             insteadHookArgsBuffer.deallocate()
         }
         insteadHookArgsBuffer[0] = UnsafeMutableRawPointer(&lastInstead)
         insteadHookArgsBuffer[1] = UnsafeMutableRawPointer(&insteadClosure)
-        if hookContext.insteadHookSignature.argumentTypes.count >= 3 {
-            for index in 2 ... hookContext.insteadHookSignature.argumentTypes.count - 1 {
+        if nargs >= 3 {
+            for index in 2 ... nargs - 1 {
                 insteadHookArgsBuffer[index] = argsBuffer[index]
             }
         }
@@ -102,7 +104,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
     }
     if lastHookClosure === firstHookClosureInList {
         // call original method
-        var methodArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: hookContext.methodSignature.argumentTypes.count)
+        let nargs = Int(hookContext.methodCif.pointee.nargs)
+        var methodArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             methodArgsBuffer.deallocate()
         }
@@ -115,8 +118,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         var selector = NSSelectorFromString(selectorString as String)
         methodArgsBuffer[0] = UnsafeMutableRawPointer(&object)
         methodArgsBuffer[1] = UnsafeMutableRawPointer(&selector)
-        if hookContext.methodSignature.argumentTypes.count >= 3 {
-            for index in 2 ... hookContext.methodSignature.argumentTypes.count - 1 {
+        if nargs >= 3 {
+            for index in 2 ... nargs - 1 {
                 methodArgsBuffer[index] = argsBuffer[index - 1]
             }
         }
@@ -128,15 +131,16 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
             return
         }
         var previousHookClosure = hookContext.insteadHookClosures[lastIndex - 1]
-        var hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: hookContext.insteadHookSignature.argumentTypes.count)
+        let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
+        var hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             hookArgsBuffer.deallocate()
         }
         objc_setAssociatedObject(dynamicClosure, &AssociatedInsteadClosureHandle, previousHookClosure, .OBJC_ASSOCIATION_ASSIGN)
         hookArgsBuffer[0] = UnsafeMutableRawPointer(&previousHookClosure)
         hookArgsBuffer[1] = argsBuffer[0]
-        if hookContext.insteadHookSignature.argumentTypes.count >= 3 {
-            for index in 2 ... hookContext.insteadHookSignature.argumentTypes.count - 1 {
+        if nargs >= 3 {
+            for index in 2 ... nargs - 1 {
                 hookArgsBuffer[index] = argsBuffer[index - 1]
             }
         }
@@ -159,8 +163,6 @@ class HookContext {
     fileprivate var afterHookClosures = [AnyObject]()
     
     // original
-    // TODO: can remove this?
-    fileprivate let methodSignature: Signature
     fileprivate let methodIMP: IMP
     private let methodArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let methodReturnType: UnsafeMutablePointer<ffi_type>
@@ -169,15 +171,11 @@ class HookContext {
     let methodNewIMPPointer: UnsafeMutablePointer<IMP> = UnsafeMutablePointer.allocate(capacity: 1)
 
     // Before & after
-    // TODO: can remove this?
-    fileprivate let hookSignature: Signature
     private let hookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let hookReturnType: UnsafeMutablePointer<ffi_type>
     fileprivate let hookCif: UnsafeMutablePointer<ffi_cif>
     
     // Instead
-    // TODO: can remove this?
-    fileprivate let insteadHookSignature: Signature
     private let insteadHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let insteadHookReturnType: UnsafeMutablePointer<ffi_type>
     fileprivate let insteadHookCif: UnsafeMutablePointer<ffi_cif>
@@ -198,10 +196,9 @@ class HookContext {
         guard let methodSignature = Signature(method: self.method) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        self.methodSignature = methodSignature
         self.methodIMP = method_getImplementation(self.method)
-        self.methodArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: self.methodSignature.argumentTypes.count)
-        for (index, argumentType) in self.methodSignature.argumentTypes.enumerated() {
+        self.methodArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
@@ -217,7 +214,7 @@ class HookContext {
         guard (ffi_prep_cif(
             self.methodCif,
             FFI_DEFAULT_ABI,
-            UInt32(self.methodSignature.argumentTypes.count),
+            UInt32(methodSignature.argumentTypes.count),
             self.methodReturnType,
             self.methodArgTypes.baseAddress)) == FFI_OK else {
                 throw SwiftHookError.ffiError
@@ -227,14 +224,14 @@ class HookContext {
             self.methodNewIMPPointer.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1, {$0})).assumingMemoryBound(to: ffi_closure.self)
         
         // Before & after
-        self.hookSignature = Signature(argumentTypes: {
+        let hookSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
             types.insert("@?", at: 0)
             return types
-        }(), returnType: self.methodSignature.returnType, signatureType: .closure)
-        self.hookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: self.hookSignature.argumentTypes.count)
-        for (index, argumentType) in self.hookSignature.argumentTypes.enumerated() {
+        }(), returnType: methodSignature.returnType, signatureType: .closure)
+        self.hookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: hookSignature.argumentTypes.count)
+        for (index, argumentType) in hookSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
@@ -250,22 +247,22 @@ class HookContext {
         guard (ffi_prep_cif(
             self.hookCif,
             FFI_DEFAULT_ABI,
-            UInt32(self.hookSignature.argumentTypes.count),
+            UInt32(hookSignature.argumentTypes.count),
             self.hookReturnType,
             self.hookArgTypes.baseAddress)) == FFI_OK else {
                 throw SwiftHookError.ffiError
         }
         
         // Instead
-        self.insteadHookSignature = Signature(argumentTypes: {
+        let insteadHookSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
             types.insert("@?", at: 0)
             types.insert("@?", at: 1)
             return types
-        }(), returnType: self.methodSignature.returnType, signatureType: .closure)
-        self.insteadHookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: self.insteadHookSignature.argumentTypes.count)
-        for (index, argumentType) in self.insteadHookSignature.argumentTypes.enumerated() {
+        }(), returnType: methodSignature.returnType, signatureType: .closure)
+        self.insteadHookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: insteadHookSignature.argumentTypes.count)
+        for (index, argumentType) in insteadHookSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
@@ -281,7 +278,7 @@ class HookContext {
         guard (ffi_prep_cif(
             self.insteadHookCif,
             FFI_DEFAULT_ABI,
-            UInt32(self.insteadHookSignature.argumentTypes.count),
+            UInt32(insteadHookSignature.argumentTypes.count),
             self.insteadHookReturnType,
             self.insteadHookArgTypes.baseAddress)) == FFI_OK else {
                 throw SwiftHookError.ffiError

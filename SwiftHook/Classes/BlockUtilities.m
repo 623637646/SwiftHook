@@ -73,30 +73,3 @@ void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...))
     struct Block_literal_1 *layout = (__bridge void *)block;
     layout->invoke = blockInvoke;
 }
-
-
- // TODO: remove this
-//id _Nullable sh_createClosure(void *arg0, void *arg1, IMP targetIMP, ffi_cif *cifPointer)
-//{
-//    ClosureContext *context = [[ClosureContext alloc] initWithArg0:arg0 arg1:arg1 targetIMP:targetIMP cifPointer:cifPointer];
-//    if (context == nil) {
-//        return nil;
-//    }
-//
-//    // TODO: Why crash?
-////    id block = ^{
-////
-////    };
-////    objc_setAssociatedObject(block, "sh_createClosure", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-////    struct Block_literal_1 *layout = (__bridge void *)block;
-////    layout->invoke = context.invokeIMP;
-//
-//
-//    struct Block_literal_1 *layout = malloc(sizeof(struct Block_literal_1));
-//    *layout = *(__bridge struct Block_literal_1 *)(^{});
-//    layout->invoke = context.invokeIMP;
-//    id block = (__bridge_transfer id)(layout);
-//    objc_setAssociatedObject(block, "sh_createClosure", context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//
-//    return block;
-//}

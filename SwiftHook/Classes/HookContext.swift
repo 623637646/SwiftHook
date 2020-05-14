@@ -148,7 +148,6 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
     }
 }
 
-// TODO: arrange properties access
 class HookContext {
     
     // basic
@@ -394,3 +393,5 @@ extension HookContext: Hashable {
         hasher.combine(selector)
     }
 }
+
+// TODO: 对hook后执行的代码优化。无需优化hook方法

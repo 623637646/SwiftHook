@@ -9,9 +9,8 @@
 import Foundation
 import libffi_iOS
 
-// TODO: tests
 public enum SwiftHookError: Error {
-    case noRespondSelector(class: AnyClass, selector: Selector)
+    case noRespondSelector(targetClass: AnyClass, selector: Selector)
     case missingSignature
     case incompatibleClosureSignature
     case ffiError
@@ -68,7 +67,6 @@ extension NSObject {
         return try HookManager.shared.hook(targetClass: self, selector: selector, mode: .before, hookClosure: closure)
     }
     
-    // TODO: Try to improve API for this
     @discardableResult
     public class func hookBefore(selector: Selector, closure: Any) throws -> HookToken {
         let closure = closure as AnyObject
@@ -140,5 +138,3 @@ extension NSObject {
         return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure)
     }
 }
-
-// TODO: 性能优化，只在入口校验参数.

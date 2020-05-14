@@ -80,7 +80,7 @@ final class HookManager {
     private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
         // TODO: Selector black list.
         guard let method = class_getInstanceMethod(targetClass, selector) else {
-            throw SwiftHookError.noRespondSelector(class: targetClass, selector: selector)
+            throw SwiftHookError.noRespondSelector(targetClass: targetClass, selector: selector)
         }
         try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
     }

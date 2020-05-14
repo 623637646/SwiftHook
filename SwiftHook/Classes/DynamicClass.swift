@@ -12,10 +12,10 @@ private let prefix = "SwiftHook_"
 private var associatedDynamicClassContextHandle: UInt8 = 0
 
 private class DynamicClassContext {
-    let dynamicClass: AnyClass
-    let originalClass: AnyClass
-    weak var object: AnyObject?
-    let dynamicClassHookToken: HookToken
+    fileprivate let dynamicClass: AnyClass
+    private let originalClass: AnyClass
+    private weak var object: AnyObject?
+    private let dynamicClassHookToken: HookToken
     
     fileprivate init(object: AnyObject) throws {
         self.object = object

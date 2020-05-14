@@ -87,4 +87,34 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
     ffi_closure_free(closure);
 }
 
+// TODO: Why crash?
+- (void)testCrash
+{
+//    struct Block_literal_1 {
+//        void *isa; // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
+//        int flags;
+//        int reserved;
+//        void (*invoke)(void *, ...);
+//        struct Block_descriptor_1 {
+//            unsigned long int reserved;         // NULL
+//            unsigned long int size;         // sizeof(struct Block_literal_1)
+//            // optional helper functions
+//            void (*copy_helper)(void *dst, void *src);     // IFF (1<<25)
+//            void (*dispose_helper)(void *src);             // IFF (1<<25)
+//            // required ABI.2010.3.16
+//            const char *signature;                         // IFF (1<<30)
+//        } *descriptor;
+//        // imported variables
+//    };
+//    
+//    Method method = class_getInstanceMethod([TestObject class], @selector(sumFuncWithA:b:));
+//    IMP originalIMP =  method_getImplementation(method);
+//    
+//    id block = ^{
+//    };
+//    
+//    struct Block_literal_1 *layout = (__bridge void *)block;
+//    layout->invoke = (void *)originalIMP;
+}
+
 @end

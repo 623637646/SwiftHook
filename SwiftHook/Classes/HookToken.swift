@@ -8,8 +8,7 @@
 
 import Foundation
 
-// TODO: can be struct? check all classes.
-public class HookToken {
+public struct HookToken {
     
     weak var hookContext: HookContext?
     weak var hookClosure: AnyObject?

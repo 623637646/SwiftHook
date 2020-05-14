@@ -79,7 +79,7 @@ class HookContextErrorTests: XCTestCase {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(class: let targetClass, selector: let selector) {
+        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == PureSwift.self)
             XCTAssertEqual(selector, #selector(getter: UIView.alpha))
         } catch {
@@ -98,7 +98,7 @@ class HookContextErrorTests: XCTestCase {
             let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
             XCTAssertNil(hookContext)
             XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(class: let targetClass, selector: let selector) {
+        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == TestObject.self)
             XCTAssertEqual(selector, #selector(getter: UIView.alpha))
         } catch {

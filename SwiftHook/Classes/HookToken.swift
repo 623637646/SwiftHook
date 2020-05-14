@@ -29,6 +29,7 @@ public class HookToken {
     - returns:
     If context will be released, return true. otherwise return false.
     */
+    @discardableResult
     public func cancelHook() -> Bool {
         return HookManager.shared.cancelHook(token: self)
     }

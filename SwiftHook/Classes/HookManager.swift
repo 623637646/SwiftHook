@@ -39,7 +39,7 @@ final class HookManager {
     func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
         try parametersCheck(targetClass: type(of: object), selector: selector, mode: mode, closure: hookClosure)
         // create dynamic class for single hook
-        let dynamicClass: AnyClass = try DynamicClassContext.getDynamicClass(object: object)
+        let dynamicClass: AnyClass = try wrapDynamicClass(object: object, hookClosure: hookClosure)
         return try hook(targetClass: dynamicClass, selector: selector, mode: mode, hookClosure: hookClosure)
     }
     

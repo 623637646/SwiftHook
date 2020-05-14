@@ -28,17 +28,19 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     return result
                     } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA + argumentB)
                 
                 // cancel
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext.cancelHook())
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
@@ -64,17 +66,19 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     return a * b
                     } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA * argumentB)
                 
                 // cancel
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext.cancelHook())
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
@@ -100,17 +104,19 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     return result
                     } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA * 2 + argumentB * 2)
                 
                 // cancel
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext.cancelHook())
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
@@ -136,7 +142,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     result.append(3)
                     } as @convention(block) ((ExecuteType) -> Void, ExecuteType) -> Void
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -148,11 +154,13 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext.cancelHook())
                 result.removeAll()
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -182,7 +190,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     result.append(3)
                     } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -194,11 +202,13 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext.cancelHook())
                 result.removeAll()
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -227,7 +237,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     original(arg)
                     result.append(2)
                     } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // second hook
                 let hookContext2 = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: { original, arg in
@@ -235,7 +245,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     original(arg)
                     result.append(4)
                     } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -245,12 +255,15 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [3, 1, 5, 2, 4])
                 
                 // cancel
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertFalse(hookContext1.cancelHook())
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext2.cancelHook())
                 result.removeAll()
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -278,7 +291,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     original(arg)
                     result.append(2)
                     } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 1)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
                 
                 // second hook
                 let hookContext2 = try HookManager.shared.hook(object: test, selector: #selector(TestObject.sumFunc(a:b:)), mode: mode, hookClosure: { original, a, b in
@@ -286,7 +299,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                     XCTAssertEqual(result, a + b)
                     return result
                     } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
+                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 3)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -298,12 +311,15 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [1, 5, 2])
                 
                 // cancel
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext1.cancelHook())
+                XCTAssertTrue(isDynamicClass(object: test))
                 XCTAssertTrue(hookContext2.cancelHook())
                 result.removeAll()
             }
             
             // test cancel
+            XCTAssertTrue(isNotDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)

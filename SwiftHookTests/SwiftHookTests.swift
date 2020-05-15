@@ -125,7 +125,7 @@ class SwiftHookTests: XCTestCase {
             XCTAssertFalse(called)
             TestObject().noArgsNoReturnFunc()
             XCTAssertTrue(called)
-            XCTAssertTrue(hookContext.cancelHook())
+            XCTAssertTrue(hookContext.cancelHook()!)
         } catch {
             XCTAssertNil(error)
         }
@@ -139,7 +139,7 @@ class SwiftHookTests: XCTestCase {
             })
             let result = TestObject().sumFunc(a: arg1, b: arg2)
             XCTAssertEqual(result, arg1 + arg2)
-            XCTAssertTrue(hookContext.cancelHook())
+            XCTAssertTrue(hookContext.cancelHook()!)
         } catch {
             XCTAssertNil(error)
         }

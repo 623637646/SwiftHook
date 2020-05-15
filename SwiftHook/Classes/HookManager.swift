@@ -43,20 +43,19 @@ final class HookManager {
         return try hook(targetClass: dynamicClass, selector: selector, mode: mode, hookClosure: hookClosure)
     }
     
-    func cancelHook(token: HookToken) -> Bool {
+    // TODO: test cases for cancelHook again.
+    func cancelHook(token: HookToken) -> Bool? {
         do {
             guard let hookContext = token.hookContext else {
-                assert(false)
-                return true
+                return nil
             }
             guard let hookClosure = token.hookClosure else {
-                assert(false)
-                return false
+                return nil
             }
             try hookContext.remove(hookClosure: hookClosure, mode: token.mode)
             guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: hookContext.targetClass, selector: hookContext.selector) else {
                 assert(false)
-                return false
+                return nil
             }
             guard hookContext.method == currentMethod &&
                 method_getImplementation(currentMethod) == hookContext.methodNewIMPPointer.pointee else {
@@ -69,7 +68,7 @@ final class HookManager {
                 return false
             }
         } catch {}
-        return false
+        return nil
     }
     
     func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {

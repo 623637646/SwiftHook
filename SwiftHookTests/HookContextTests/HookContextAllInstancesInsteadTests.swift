@@ -36,7 +36,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA + argumentB)
                 
                 // cancel
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -73,7 +73,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * argumentB)
                 
                 // cancel
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -110,7 +110,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * 2 + argumentB * 2)
                 
                 // cancel
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -152,7 +152,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
                 result.removeAll()
             }
             
@@ -199,7 +199,7 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
                 result.removeAll()
             }
             
@@ -251,8 +251,8 @@ class HookContextAllInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [3, 1, 5, 2, 4])
                 
                 // cancel
-                XCTAssertFalse(hookContext1.cancelHook())
-                XCTAssertTrue(hookContext2.cancelHook())
+                XCTAssertFalse(hookContext1.cancelHook()!)
+                XCTAssertTrue(hookContext2.cancelHook()!)
                 result.removeAll()
             }
             

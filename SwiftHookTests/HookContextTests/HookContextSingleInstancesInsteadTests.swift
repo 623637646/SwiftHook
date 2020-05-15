@@ -36,7 +36,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -74,7 +74,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -112,7 +112,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel
@@ -155,7 +155,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 // cancel
                 
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
                 result.removeAll()
             }
             
@@ -203,7 +203,7 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 // cancel
                 
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
                 result.removeAll()
             }
             
@@ -256,9 +256,9 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertFalse(hookContext1.cancelHook())
+                XCTAssertFalse(hookContext1.cancelHook()!)
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext2.cancelHook())
+                XCTAssertTrue(hookContext2.cancelHook()!)
                 result.removeAll()
             }
             
@@ -312,9 +312,9 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext1.cancelHook())
+                XCTAssertTrue(hookContext1.cancelHook()!)
                 XCTAssertTrue(isDynamicClass(object: test))
-                XCTAssertTrue(hookContext2.cancelHook())
+                XCTAssertTrue(hookContext2.cancelHook()!)
                 result.removeAll()
             }
             

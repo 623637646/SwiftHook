@@ -41,7 +41,7 @@ class HookContextClassMethodAfterTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
                 result.removeAll()
             }
             
@@ -86,7 +86,7 @@ class HookContextClassMethodAfterTests: XCTestCase {
                 XCTAssertTrue(executed)
                 
                 // cancel
-                XCTAssertTrue(hookContext.cancelHook())
+                XCTAssertTrue(hookContext.cancelHook()!)
             }
             
             // test cancel

@@ -49,11 +49,13 @@ class OverrideMethodContext {
         
         // Check self Method
         guard getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil else {
+            // Test: OverrideMethodContextTests:testSelfExistingMethod
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         
         // superMethod
         guard let superMethod = class_getInstanceMethod(self.targetClass, self.selector) else {
+            // Test: OverrideMethodContextTests:testCanNotGetMethod
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.superMethod = superMethod

@@ -21,3 +21,5 @@ func isDynamicClass(object: AnyObject) -> Bool {
         class_getSuperclass(isaClass)! == typeClass &&
     objectiveCClass == typeClass
 }
+
+// TODO: is KVO Class

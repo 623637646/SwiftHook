@@ -27,7 +27,6 @@ class SignatureTests: XCTestCase {
         XCTAssertNil(Signature.init(closure: {} as AnyObject))
         XCTAssertNil(Signature.init(closure: NSObject()))
         XCTAssertNil(Signature.init(closure: CGPoint.zero as AnyObject))
-        XCTAssertNil(Signature.init(closure: PureSwift()))
     }
     
     func testNoDynamicMethod() {

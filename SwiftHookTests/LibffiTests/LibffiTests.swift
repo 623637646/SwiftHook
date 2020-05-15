@@ -29,7 +29,7 @@ class LibffiTests: XCTestCase {
         
         var obj = TestObject.init()
         var selector = #selector(TestObject.sumFunc(a:b:))
-        let imp = obj.method(for: selector)
+        let imp = class_getMethodImplementation(TestObject.self, selector)
         var arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         var arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
         var returnValue: Int = 0

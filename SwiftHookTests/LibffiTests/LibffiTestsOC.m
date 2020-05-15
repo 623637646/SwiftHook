@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <objc/runtime.h>
 #import <SwiftHookTests-Swift.h>
+#import "ObjectiveCTestObject.h"
 @import libffi_iOS;
 
 @interface LibffiTestsOC : XCTestCase
@@ -22,7 +23,7 @@
     ffi_type *argumentTypes[] = {&ffi_type_pointer, &ffi_type_pointer, &ffi_type_sint64, &ffi_type_sint64};
     ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 4, &ffi_type_sint64, argumentTypes);
     
-    TestObject *testObject = [[TestObject alloc] init];
+    ObjectiveCTestObject *testObject = [[ObjectiveCTestObject alloc] init];
     SEL selector = @selector(sumFuncWithA:b:);
     NSInteger arg1 = 123;
     NSInteger arg2 = 456;
@@ -50,11 +51,11 @@ void closureRerewrite(ffi_cif *cif, void *ret, void **args, void *userdata) {
     ffi_closure *closure = ffi_closure_alloc(sizeof(ffi_closure), (void *)&newIMP);
     ffi_prep_closure_loc(closure, &cif, closureRerewrite, NULL, &newIMP);
 
-    Method method = class_getInstanceMethod([TestObject class], @selector(sumFuncWithA:b:));
+    Method method = class_getInstanceMethod([ObjectiveCTestObject class], @selector(sumFuncWithA:b:));
     IMP originalIMP = method_setImplementation(method, newIMP);
 
     // after hook
-    TestObject *testObject = [TestObject new];
+    ObjectiveCTestObject *testObject = [ObjectiveCTestObject new];
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 * 456);
     method_setImplementation(method, originalIMP);
@@ -66,7 +67,7 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
 }
 
 - (void)testFFIClosureCallOriginal {
-    Method method = class_getInstanceMethod([TestObject class], @selector(sumFuncWithA:b:));
+    Method method = class_getInstanceMethod([ObjectiveCTestObject class], @selector(sumFuncWithA:b:));
     IMP originalIMP =  method_getImplementation(method);
     
     ffi_cif cif;
@@ -80,7 +81,7 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
     method_setImplementation(method, newIMP);
 
     // after hook
-    TestObject *testObject = [TestObject new];
+    ObjectiveCTestObject *testObject = [ObjectiveCTestObject new];
     NSInteger ret = [testObject sumFuncWithA:123 b:456];
     XCTAssertEqual(ret, 123 + 456);
     method_setImplementation(method, originalIMP);
@@ -107,7 +108,7 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
 //        // imported variables
 //    };
 //    
-//    Method method = class_getInstanceMethod([TestObject class], @selector(sumFuncWithA:b:));
+//    Method method = class_getInstanceMethod([ObjectiveCTestObject class], @selector(sumFuncWithA:b:));
 //    IMP originalIMP =  method_getImplementation(method);
 //    
 //    id block = ^{

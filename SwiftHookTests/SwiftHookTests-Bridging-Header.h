@@ -3,4 +3,5 @@
 //
 #import "ComplexityStruct.h"
 #import "ObjectiveCUtilities.h"
+#import "ObjectiveCTestObject.h"
 

@@ -23,6 +23,7 @@ private class DynamicClassContext {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.originalClass = baseClass
+        // TODO: 这里不应该用address，应该用UUID
         let address = Unmanaged.passUnretained(object).toOpaque()
         let dynamicClassName = prefix + "\(baseClass)" + "_\(address)"
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
@@ -40,7 +41,7 @@ private class DynamicClassContext {
     deinit {
         // TODO: 这里可能有问题，如果这个对象在HOOK后被KVO，那么会miss掉KVO。
         object_setClass(self.object, originalClass)
-        dynamicClassHookToken.cancelHook()
+        HookManager.shared.cancelHook(token: dynamicClassHookToken)
         objc_disposeClassPair(dynamicClass)
     }
 }

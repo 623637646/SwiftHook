@@ -16,7 +16,6 @@ class SHMethodSignatureTests: XCTestCase {
         XCTAssertNil(SHMethodSignature.init(block: {}))
         XCTAssertNil(SHMethodSignature.init(block: NSObject()))
         XCTAssertNil(SHMethodSignature.init(block: CGPoint.zero))
-        XCTAssertNil(SHMethodSignature.init(block: PureSwift()))
     }
 
     func testNoDynamicMethod() {

@@ -15,7 +15,7 @@ class SwiftHookTests: XCTestCase {
     
     func testNoRespondSelector() {
         do {
-            try TestObject.hookBefore(selector: #selector(NSArray.object(at:)), closure: {})
+            try hookBefore(targetClass: TestObject.self, selector: #selector(NSArray.object(at:)), closure: {})
             XCTAssertTrue(false)
         } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == TestObject.self)
@@ -28,7 +28,7 @@ class SwiftHookTests: XCTestCase {
     func testMissingSignature() {
         // before
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as Any)
+            try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as Any)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -37,7 +37,7 @@ class SwiftHookTests: XCTestCase {
         
         // after
         do {
-            try TestObject.hookAfter(selector: #selector(TestObject.noArgsNoReturnFunc), closure: 1)
+            try hookAfter(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: 1)
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -46,7 +46,7 @@ class SwiftHookTests: XCTestCase {
         
         // instead
         do {
-            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
             XCTAssertTrue(false)
         } catch SwiftHookError.missingSignature {
         } catch {
@@ -57,7 +57,7 @@ class SwiftHookTests: XCTestCase {
     func testIncompatibleClosureSignature() {
         // before
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {_ in
+            try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {_ in
                 
                 } as @convention(block) (Int) -> Void)
             XCTAssertTrue(false)
@@ -69,7 +69,7 @@ class SwiftHookTests: XCTestCase {
         
         // after
         do {
-            try TestObject.hookAfter(selector: #selector(TestObject.execute(closure:)), closure: {_ in
+            try hookAfter(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)), closure: {_ in
                 
                 } as @convention(block) (String) -> Void)
             XCTAssertTrue(false)
@@ -80,7 +80,7 @@ class SwiftHookTests: XCTestCase {
         
         // instead
         do {
-            try TestObject.hookInstead(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
             
             } as @convention(block) () -> Void)
             XCTAssertTrue(false)
@@ -92,7 +92,7 @@ class SwiftHookTests: XCTestCase {
     
     func testHookClassMethodWithInstanceSelector() {
         do {
-            try TestObject.hookClassMethodBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
+            try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
             XCTAssertTrue(false)
         } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == object_getClass(TestObject.self))
@@ -104,7 +104,7 @@ class SwiftHookTests: XCTestCase {
     
     func testHookInstanceMethodWithClassMethodSelector() {
         do {
-            try TestObject.hookBefore(selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
+            try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
             XCTAssertTrue(false)
         } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
             XCTAssertTrue(targetClass == TestObject.self)
@@ -119,7 +119,7 @@ class SwiftHookTests: XCTestCase {
     func testHookBeforeNoArgsNoReturnFunc() {
         var called = false
         do {
-            let hookContext = try TestObject.hookBefore(selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            let hookContext = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
                 called = true
             })
             XCTAssertFalse(called)
@@ -135,7 +135,7 @@ class SwiftHookTests: XCTestCase {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
         do {
-            let hookContext = try TestObject.hookBefore(selector: #selector(TestObject.sumFunc), closure: {
+            let hookContext = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc), closure: {
             })
             let result = TestObject().sumFunc(a: arg1, b: arg2)
             XCTAssertEqual(result, arg1 + arg2)

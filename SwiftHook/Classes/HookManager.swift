@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum HookMode {
+    case before
+    case after
+    case instead
+}
+
 final class HookManager {
     static let shared = HookManager()
     
@@ -36,6 +42,7 @@ final class HookManager {
         return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
     }
     
+    // TODO: 如果 object 或者 hookClosure 释放了；应该取消hook!
     func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
         try parametersCheck(targetClass: type(of: object), selector: selector, mode: mode, closure: hookClosure)
         // create dynamic class for single hook
@@ -44,6 +51,7 @@ final class HookManager {
     }
     
     // TODO: test cases for cancelHook again.
+    @discardableResult
     func cancelHook(token: HookToken) -> Bool? {
         do {
             guard let hookContext = token.hookContext else {
@@ -90,7 +98,7 @@ final class HookManager {
     func debugToolsGetAllHookContext() -> Set<HookContext> {
         return hookContextPool
     }
-        
+    
     func debugToolsGetAllOverrideMethodContext() -> Set<OverrideMethodContext> {
         return overrideMethodContextPool
     }

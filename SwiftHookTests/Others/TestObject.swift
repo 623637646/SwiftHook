@@ -8,11 +8,7 @@
 
 import UIKit
 
-class PureSwift {
-    
-}
-
-class SuperObject: NSObject {
+class SuperObject {
     @objc dynamic func superFunc(arg: [AnyClass]) -> [AnyClass] {
         var arg = arg
         arg.append(SuperObject.self)

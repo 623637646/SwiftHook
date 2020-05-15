@@ -50,7 +50,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         // preparation for instead
         var insteadClosure: (@convention(block) () -> Void) = {}
         sh_setBlockInvoke(insteadClosure, OpaquePointer(hookContext.blockInvoke.pointee!))
-        let object = argsBuffer[0]!.assumingMemoryBound(to: NSObject.self).pointee
+        let object = argsBuffer[0]!.assumingMemoryBound(to: AnyObject.self).pointee
         let selectorString = NSStringFromSelector(argsBuffer[1]!.assumingMemoryBound(to: Selector.self).pointee)
         objc_setAssociatedObject(insteadClosure, &associatedInsteadClosureHandle, lastInstead, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(insteadClosure, &associatedArg0Handle, object, .OBJC_ASSOCIATION_ASSIGN)
@@ -109,7 +109,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         defer {
             methodArgsBuffer.deallocate()
         }
-        guard var object = objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as? NSObject,
+        guard var object = objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as AnyObject?,
             let selectorString = objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? String
             else {
                 assert(false)

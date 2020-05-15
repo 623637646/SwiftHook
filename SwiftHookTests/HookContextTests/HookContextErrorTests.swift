@@ -33,23 +33,6 @@ class HookContextErrorTests: XCTestCase {
         XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
     }
     
-    func testInvalidClosureWithSwiftObject() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
-        let targetClass = TestObject.self
-        let selector = #selector(TestObject.noArgsNoReturnFunc)
-        let mode: HookMode = .before
-        let closure = PureSwift()
-        do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-            XCTAssertNil(hookContext)
-            XCTAssertTrue(false)
-        } catch SwiftHookError.missingSignature {
-        } catch {
-            XCTAssertNil(error)
-        }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
-    }
-    
     func testInvalidClosureWithObjectiveCObject() {
         let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
         let targetClass = TestObject.self
@@ -68,25 +51,6 @@ class HookContextErrorTests: XCTestCase {
     }
     
     // MARK: invalid class & selector
-    
-    func testPureSwift() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
-        let targetClass = PureSwift.self
-        let selector = #selector(getter: UIView.alpha)
-        let mode: HookMode = .before
-        let closure = ({} as @convention(block) () -> Void)
-        do {
-            let hookContext = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-            XCTAssertNil(hookContext)
-            XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
-            XCTAssertTrue(targetClass == PureSwift.self)
-            XCTAssertEqual(selector, #selector(getter: UIView.alpha))
-        } catch {
-            XCTAssertNil(error)
-        }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
-    }
     
     func testHookNoRespondSelector() {
         let contextCount = HookManager.shared.debugToolsGetAllHookContext().count

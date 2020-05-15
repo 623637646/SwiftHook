@@ -1,5 +1,5 @@
 //
-//  OverrideMethodContextTests.swift
+//  OverrideSuperMethodTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 5/5/20.
@@ -33,48 +33,48 @@ class OverrideOCObject: OverrideSuperOCObject {
     
 }
 
-class OverrideMethodContextTests: XCTestCase {
+class OverrideSuperMethodTests: XCTestCase {
     
-    let InternalExistingMethod = 53
-    let InternalErrorCanNotGetMethod = 59
+    let InternalExistingMethod = 55
+    let InternalErrorCanNotGetMethod = 61
     
     // MARK: Wrong cases
     
     func testSelfExistingMethod() {
-        let contextCount = HookManager.shared.debugToolsGetAllOverrideMethodContext().count
+        let contextCount = overrideMethodContextPool.count
         do {
-            try HookManager.shared.overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(OverrideOCObject.selfFunc))
+            try overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(OverrideOCObject.selfFunc))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
+            XCTAssertTrue(file.hasSuffix("OverrideSuperMethod.swift"))
             XCTAssertEqual(line, InternalExistingMethod)
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllOverrideMethodContext().count, contextCount)
+        XCTAssertEqual(overrideMethodContextPool.count, contextCount)
     }
     
     func testCanNotGetMethod() {
-        let contextCount = HookManager.shared.debugToolsGetAllOverrideMethodContext().count
+        let contextCount = overrideMethodContextPool.count
         do {
-            try HookManager.shared.overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(UIView.animate(withDuration:animations:)))
+            try overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(UIView.animate(withDuration:animations:)))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
+            XCTAssertTrue(file.hasSuffix("OverrideSuperMethod.swift"))
             XCTAssertEqual(line, InternalErrorCanNotGetMethod)
         } catch {
             XCTAssertNil(error)
         }
         do {
-            try HookManager.shared.overrideSuperMethod(targetClass: OverrideOCObject.self, selector: NSSelectorFromString("superFuncWithoutObjc"))
+            try overrideSuperMethod(targetClass: OverrideOCObject.self, selector: NSSelectorFromString("superFuncWithoutObjc"))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
-            XCTAssertTrue(file.hasSuffix("\(OverrideMethodContext.self).swift"))
+            XCTAssertTrue(file.hasSuffix("OverrideSuperMethod.swift"))
             XCTAssertEqual(line, InternalErrorCanNotGetMethod)
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllOverrideMethodContext().count, contextCount)
+        XCTAssertEqual(overrideMethodContextPool.count, contextCount)
     }
     
     // MARK: Right cases
@@ -84,7 +84,7 @@ class OverrideMethodContextTests: XCTestCase {
         let selector = #selector(OverrideOCObject.superFunc(arg:))
         
         // beginning
-        let contextCount = HookManager.shared.debugToolsGetAllOverrideMethodContext().count
+        let contextCount = overrideMethodContextPool.count
         guard let methodChild = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
             return
@@ -102,11 +102,11 @@ class OverrideMethodContextTests: XCTestCase {
         
         // added method
         do {
-            try HookManager.shared.overrideSuperMethod(targetClass: targetClass, selector: selector)
+            try overrideSuperMethod(targetClass: targetClass, selector: selector)
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllOverrideMethodContext().count, contextCount + 1)
+        XCTAssertEqual(overrideMethodContextPool.count, contextCount + 1)
         
         guard let methodChildAfter = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
@@ -124,7 +124,7 @@ class OverrideMethodContextTests: XCTestCase {
         let selector = #selector(OverrideOCObject.superFuncWithoutDynamic)
         
         // beginning
-        let contextCount = HookManager.shared.debugToolsGetAllOverrideMethodContext().count
+        let contextCount = overrideMethodContextPool.count
         guard let methodChild = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
             return
@@ -142,11 +142,11 @@ class OverrideMethodContextTests: XCTestCase {
         
         // added method
         do {
-            try HookManager.shared.overrideSuperMethod(targetClass: targetClass, selector: selector)
+            try overrideSuperMethod(targetClass: targetClass, selector: selector)
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllOverrideMethodContext().count, contextCount + 1)
+        XCTAssertEqual(overrideMethodContextPool.count, contextCount + 1)
         
         guard let methodChildAfter = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)

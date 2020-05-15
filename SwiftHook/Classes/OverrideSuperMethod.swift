@@ -28,7 +28,9 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
 }
 
-class OverrideMethodContext {
+var overrideMethodContextPool = Set<OverrideMethodContext>()
+
+class OverrideMethodContext: Hashable {
     
     fileprivate let targetClass: AnyClass
     fileprivate let selector: Selector
@@ -49,13 +51,13 @@ class OverrideMethodContext {
         
         // Check self Method
         guard getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil else {
-            // Test: OverrideMethodContextTests:testSelfExistingMethod
+            // Test: OverrideSuperMethodTests:testSelfExistingMethod
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         
         // superMethod
         guard let superMethod = class_getInstanceMethod(self.targetClass, self.selector) else {
-            // Test: OverrideMethodContextTests:testCanNotGetMethod
+            // Test: OverrideSuperMethodTests:testCanNotGetMethod
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.superMethod = superMethod
@@ -132,9 +134,9 @@ class OverrideMethodContext {
         self.cifPointer.deallocate()
         ffi_closure_free(self.closure)
     }
-}
-
-extension OverrideMethodContext: Hashable {
+    
+    // MARK: Hashable
+    
     static func == (lhs: OverrideMethodContext, rhs: OverrideMethodContext) -> Bool {
         lhs.targetClass == rhs.targetClass && lhs.selector == rhs.selector
     }
@@ -143,4 +145,9 @@ extension OverrideMethodContext: Hashable {
         hasher.combine(ObjectIdentifier(targetClass))
         hasher.combine(selector)
     }
+}
+
+func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
+    let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
+    overrideMethodContextPool.insert(overrideMethodContext)
 }

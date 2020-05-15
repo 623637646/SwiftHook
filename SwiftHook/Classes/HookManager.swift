@@ -18,7 +18,6 @@ final class HookManager {
     static let shared = HookManager()
     
     private var hookContextPool = Set<HookContext>()
-    private var overrideMethodContextPool = Set<OverrideMethodContext>()
     
     private init() {}
     
@@ -79,11 +78,6 @@ final class HookManager {
         return nil
     }
     
-    func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
-        let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
-        overrideMethodContextPool.insert(overrideMethodContext)
-    }
-    
     private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
         // TODO: Selector black list.
         guard let method = class_getInstanceMethod(targetClass, selector) else {
@@ -98,9 +92,4 @@ final class HookManager {
     func debugToolsGetAllHookContext() -> Set<HookContext> {
         return hookContextPool
     }
-    
-    func debugToolsGetAllOverrideMethodContext() -> Set<OverrideMethodContext> {
-        return overrideMethodContextPool
-    }
-    
 }

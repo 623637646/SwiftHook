@@ -13,7 +13,7 @@
 		2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */; };
 		2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */; };
 		2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */; };
-		2A2744A4246DA37F00AE6A9A /* DynamicClassContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A3246DA37F00AE6A9A /* DynamicClassContextTests.swift */; };
+		2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */; };
 		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
 		2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -76,7 +76,7 @@
 		2A27449E246D8B7E00AE6A9A /* ObjectiveCUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveCUtilities.h; sourceTree = "<group>"; };
 		2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCUtilities.m; sourceTree = "<group>"; };
 		2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUtilities.swift; sourceTree = "<group>"; };
-		2A2744A3246DA37F00AE6A9A /* DynamicClassContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicClassContextTests.swift; sourceTree = "<group>"; };
+		2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicClassTests.swift; sourceTree = "<group>"; };
 		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
 		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
 		2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFFITypeContext.h; sourceTree = "<group>"; };
@@ -310,7 +310,7 @@
 			children = (
 				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A5C8D5224670B1D00812DAD /* HookContextTests */,
-				2A2744A3246DA37F00AE6A9A /* DynamicClassContextTests.swift */,
+				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
 				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
 				2A5C8D5124670B0600812DAD /* SignatureTests */,
 				2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */,
@@ -638,7 +638,7 @@
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,
 				2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */,
 				2A5C8D5624670BFB00812DAD /* HookContextErrorTests.swift in Sources */,
-				2A2744A4246DA37F00AE6A9A /* DynamicClassContextTests.swift in Sources */,
+				2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */,
 				2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */,
 				2A0BE1B3246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift in Sources */,
 				2A8FBD4A246ED53300037E7E /* SpecialMethodTests.swift in Sources */,

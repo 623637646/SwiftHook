@@ -28,9 +28,9 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
 }
 
-var overrideMethodContextPool = Set<OverrideMethodContext>()
+private var overrideMethodContextPool = Set<OverrideMethodContext>()
 
-class OverrideMethodContext: Hashable {
+private class OverrideMethodContext: Hashable {
     
     fileprivate let targetClass: AnyClass
     fileprivate let selector: Selector
@@ -150,4 +150,10 @@ class OverrideMethodContext: Hashable {
 func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
     let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
     overrideMethodContextPool.insert(overrideMethodContext)
+}
+
+// MARK: This is debug tools.
+
+func debugOverrideMethodContextCount() -> Int {
+    return overrideMethodContextPool.count
 }

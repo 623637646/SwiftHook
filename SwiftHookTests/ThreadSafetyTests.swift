@@ -35,16 +35,18 @@ class ThreadSafetyTests: XCTestCase {
     }
     
     // TODO: related to: 如果 object 或者 hookClosure 释放了；应该取消hook!
-//    func testHookObject() {
-//        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
-//            do {
-//                try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _ in
-//                    } as @convention(block) (() -> Void) -> Void)
-//            } catch {
-//                XCTAssertNil(error)
-//            }
-//        }
-//    }
+    func testHookObject() {
+        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
+            do {
+                _ = try autoreleasepool {
+                    try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _ in
+                        } as @convention(block) (() -> Void) -> Void)
+                }
+            } catch {
+                XCTAssertNil(error)
+            }
+        }
+    }
     
     // TODO: related to: 如果 object 或者 hookClosure 释放了；应该取消hook!
 //    func testCancelHook() {

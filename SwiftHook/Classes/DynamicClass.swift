@@ -54,15 +54,37 @@ func wrapDynamicClass(object: AnyObject, hookClosure: AnyObject) throws -> AnyCl
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     guard !NSStringFromClass(baseClass).hasPrefix(prefix) else {
-        guard let dynamicClassContext: DynamicClassContext = objc_getAssociatedObject(object, &associatedDynamicClassContextHandle) as? DynamicClassContext else {
+        guard let dynamicClassContext = getDynamicClassContext(object: object) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
+        // Tests: DynamicClassContextTests: testReuseContext
         objc_setAssociatedObject(hookClosure, &associatedDynamicClassContextHandle, dynamicClassContext, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return dynamicClassContext.dynamicClass
     }
     let dynamicClassContext = try DynamicClassContext.init(object: object)
     objc_setAssociatedObject(hookClosure, &associatedDynamicClassContextHandle, dynamicClassContext, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    // Here do objc_setAssociatedObject with OBJC_ASSOCIATION_ASSIGN. But no crash when objc_getAssociatedObject. Because after DynamicClassContext released. The object's class will be reset to original class.
-    objc_setAssociatedObject(object, &associatedDynamicClassContextHandle, dynamicClassContext, .OBJC_ASSOCIATION_ASSIGN)
+    objc_setAssociatedObject(object, &associatedDynamicClassContextHandle, { [weak dynamicClassContext] () -> DynamicClassContext? in
+        return dynamicClassContext
+    }, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     return dynamicClassContext.dynamicClass
+}
+
+private func getDynamicClassContext(object: AnyObject) -> DynamicClassContext? {
+    guard let closure = objc_getAssociatedObject(object, &associatedDynamicClassContextHandle) as? () -> DynamicClassContext? else {
+        return nil
+    }
+    return closure()
+}
+
+// MARK: This is debug tools.
+
+func debugGetDynamicClassContextAsAnyObject(object: AnyObject) -> AnyObject? {
+    return getDynamicClassContext(object: object)
+}
+
+func debugGetDynamicClassContextAsAnyObject(closure: AnyObject) -> AnyObject? {
+    guard let dynamicClassContext: DynamicClassContext = objc_getAssociatedObject(closure, &associatedDynamicClassContextHandle) as? DynamicClassContext else {
+        return nil
+    }
+    return dynamicClassContext as AnyObject
 }

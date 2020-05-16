@@ -206,4 +206,5 @@ class TestObject: SuperObject {
         var closure = {} as @convention(block) () -> Void
         return UnsafeMutablePointer(&closure)
     }
+    
 }

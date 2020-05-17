@@ -80,7 +80,7 @@ final class HookManager {
     
     private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
         // TODO: Selector black list.
-        if selector == NSSelectorFromString("dealloc") {
+        if selector == deallocSelector {
             guard targetClass is NSObject.Type else {
                 throw SwiftHookError.unsupport(type: .hookSwiftObjectDealloc)
             }

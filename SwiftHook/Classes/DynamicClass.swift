@@ -36,6 +36,7 @@ private class DynamicClassContext {
         objc_registerClassPair(dynamicClass)
         object_setClass(object, dynamicClass)
         self.dynamicClass = dynamicClass
+        // TODO: HOOK dealloc
     }
     
     deinit {

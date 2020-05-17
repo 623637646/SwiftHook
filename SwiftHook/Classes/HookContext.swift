@@ -40,7 +40,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     }
     
     // before
-    for var item in hookContext.beforeHookClosures {
+    for var item in hookContext.beforeHookClosures.reversed() {
         hookArgsBuffer![0] = UnsafeMutableRawPointer(&item)
         ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }
@@ -74,7 +74,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     }
     
     // after
-    for var item in hookContext.afterHookClosures {
+    for var item in hookContext.afterHookClosures.reversed() {
         hookArgsBuffer![0] = UnsafeMutableRawPointer(&item)
         ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }

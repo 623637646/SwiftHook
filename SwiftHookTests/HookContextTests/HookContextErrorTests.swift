@@ -17,7 +17,7 @@ class HookContextErrorTests: XCTestCase {
     // MARK: invalid closure
     
     func testInvalidClosureWithSwiftClosure() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.noArgsNoReturnFunc)
         let mode: HookMode = .before
@@ -30,11 +30,11 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     func testInvalidClosureWithObjectiveCObject() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.noArgsNoReturnFunc)
         let mode: HookMode = .before
@@ -47,13 +47,13 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     // MARK: invalid class & selector
     
     func testHookNoRespondSelector() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(getter: UIView.alpha)
         let mode: HookMode = .before
@@ -68,13 +68,13 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     // MARK: closure signature doesn't match method
     
     func testBeforeNoVoidReturn() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.sumFunc(a:b:))
         let mode: HookMode = .before
@@ -87,11 +87,11 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     func testBeforeNoMatchArguments() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.sumFunc(a:b:))
         let mode: HookMode = .before
@@ -104,11 +104,11 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     func testAfterNoMatchArguments() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.testStructSignature(point:rect:))
         let mode: HookMode = .after
@@ -121,11 +121,11 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
     func testInsteadNoMatchArguments() {
-        let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+        let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
         let targetClass = TestObject.self
         let selector = #selector(TestObject.testStructSignature(point:rect:))
         let mode: HookMode = .instead
@@ -138,7 +138,7 @@ class HookContextErrorTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+        XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
     }
     
 }

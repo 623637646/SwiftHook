@@ -13,7 +13,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
 
     func testNormal() {
         do {
-            let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+            let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
             let hookedTestObject = TestObject()
             let nonHookTestObject = TestObject()
             var result = [Int]()
@@ -27,7 +27,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                     result.append(1)
                     } as @convention(block) () -> Void
                 let hookContext = try HookManager.shared.hook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
+                XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount + 2)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -57,7 +57,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-            XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+            XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }
@@ -65,7 +65,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
     
     func testCheckArguments() {
         do {
-            let contextCount = HookManager.shared.debugToolsGetAllHookContext().count
+            let contextCount = HookManager.shared.debugToolsGetHookContextsCount()
             let test = TestObject()
             let argumentA = 77
             let argumentB = 88
@@ -81,7 +81,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                     executed = true
                     } as @convention(block) (Int, Int) -> Void
                 let hookContext = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount + 2)
+                XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount + 2)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
@@ -99,7 +99,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-            XCTAssertEqual(HookManager.shared.debugToolsGetAllHookContext().count, contextCount)
+            XCTAssertEqual(HookManager.shared.debugToolsGetHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }

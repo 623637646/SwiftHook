@@ -98,7 +98,7 @@ final class HookManager {
     // MARK: This is debug tools.
     // TODO: 优化
     
-    func debugToolsGetAllHookContext() -> Set<HookContext> {
-        return hookContextPool
+    func debugToolsGetHookContextsCount() -> Int {
+        return hookContextPool.count
     }
 }

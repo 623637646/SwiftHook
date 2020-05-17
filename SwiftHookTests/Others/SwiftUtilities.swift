@@ -14,18 +14,12 @@ func isDynamicClass(object: AnyObject) throws -> Bool {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     guard NSStringFromClass(isaClass).hasPrefix("SwiftHook_") else {
-        guard debugGetDynamicClassContextAsAnyObject(object: object) == nil else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
         return false
     }
     guard class_getSuperclass(isaClass) == typeClass else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard NSStringFromClass(isaClass) == "SwiftHook_\(typeClass)_\(Unmanaged.passUnretained(object).toOpaque())" else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    guard debugGetDynamicClassContextAsAnyObject(object: object) != nil else {
+    guard NSStringFromClass(isaClass) == "SwiftHook_\(typeClass)" else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     return true

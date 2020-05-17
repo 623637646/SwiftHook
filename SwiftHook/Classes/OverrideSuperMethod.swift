@@ -153,7 +153,8 @@ func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
 }
 
 // MARK: This is debug tools.
-
+#if DEBUG
 func debugOverrideMethodContextCount() -> Int {
     return overrideMethodContextPool.count
 }
+#endif

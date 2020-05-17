@@ -119,13 +119,16 @@ class SwiftHookTests: XCTestCase {
     func testHookBeforeNoArgsNoReturnFunc() {
         var called = false
         do {
-            let hookContext = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            guard let token = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
                 called = true
-            })
+            }) as? HookToken else {
+                XCTAssert(false)
+                return
+            }
             XCTAssertFalse(called)
             TestObject().noArgsNoReturnFunc()
             XCTAssertTrue(called)
-            XCTAssertTrue(hookContext.cancelHook()!)
+            XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
         } catch {
             XCTAssertNil(error)
         }
@@ -135,15 +138,33 @@ class SwiftHookTests: XCTestCase {
         let arg1 = Int.random(in: Int.min / 2 ... Int.max / 2)
         let arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
         do {
-            let hookContext = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc), closure: {
-            })
+            guard let token = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc), closure: {
+            }) as? HookToken else {
+                XCTAssert(false)
+                return
+            }
             let result = TestObject().sumFunc(a: arg1, b: arg2)
             XCTAssertEqual(result, arg1 + arg2)
-            XCTAssertTrue(hookContext.cancelHook()!)
+            XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
         } catch {
             XCTAssertNil(error)
         }
     }
+    
+//    func testCancelHookAfterObjectReleased() {
+//        do {
+//            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+//            try autoreleasepool {
+//                let testObject = TestObject()
+//                try hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
+//                }
+//                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 2)
+//            }
+//            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+//        } catch {
+//            XCTAssertNil(error)
+//        }
+//    }
     
 }
 

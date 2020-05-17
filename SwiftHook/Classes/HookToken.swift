@@ -8,11 +8,17 @@
 
 import Foundation
 
-public struct HookToken {
+public protocol Token {
+    func cancelHook()
+}
+
+struct HookToken: Token {
     
     weak var hookContext: HookContext?
     weak var hookClosure: AnyObject?
     let mode: HookMode
+    
+    weak var hookObject: AnyObject? // This is only for single instance hook
     
     init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
         self.hookContext = hookContext
@@ -20,18 +26,9 @@ public struct HookToken {
         self.mode = mode
     }
     
-    /**
-     # Cancel hook.
-     Try to change the Method's IMP from hooked to original and released context.
-     But it's dangerous when the current IMP is not previous hooked IMP. In this case. cancelHook() still works fine but the context will not be released.
-     
-     - returns:
-     Return true if the context will be released. Return false if the context will not be released. Returen nil means some issues like token already canceled.
-     */
-    @discardableResult
-    public func cancelHook() -> Bool? {
+    public func cancelHook() {
         swiftHookSerialQueue.sync {
-            HookManager.shared.cancelHook(token: self)
+            _ = HookManager.shared.cancelHook(token: self)
         }
     }
 }

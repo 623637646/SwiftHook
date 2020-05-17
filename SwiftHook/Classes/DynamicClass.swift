@@ -9,23 +9,17 @@
 import Foundation
 
 private let prefix = "SwiftHook_"
-private var associatedDynamicClassContextHandle: UInt8 = 0
+private var dynamicClassContextPool = Set<DynamicClassContext>()
 
-private class DynamicClassContext {
+private class DynamicClassContext: Hashable {
+
+    fileprivate let baseClass: AnyClass
     fileprivate let dynamicClass: AnyClass
-    private let originalClass: AnyClass
-    private weak var object: AnyObject?
     private let dynamicClassHookToken: HookToken
     
-    fileprivate init(object: AnyObject) throws {
-        self.object = object
-        guard let baseClass = object_getClass(object) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        self.originalClass = baseClass
-        // TODO: 这里不应该用address，应该用UUID
-        let address = Unmanaged.passUnretained(object).toOpaque()
-        let dynamicClassName = prefix + "\(baseClass)" + "_\(address)"
+    fileprivate init(baseClass: AnyClass) throws {
+        self.baseClass = baseClass
+        let dynamicClassName = prefix + "\(baseClass)"
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
@@ -34,58 +28,61 @@ private class DynamicClassContext {
             return baseClass
             } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject)
         objc_registerClassPair(dynamicClass)
-        object_setClass(object, dynamicClass)
         self.dynamicClass = dynamicClass
-        // TODO: HOOK dealloc
     }
     
     deinit {
         // TODO: 这里可能有问题，如果这个对象在HOOK后被KVO，那么会miss掉KVO。
-        object_setClass(self.object, originalClass)
         HookManager.shared.cancelHook(token: dynamicClassHookToken)
         objc_disposeClassPair(dynamicClass)
+    }
+    
+    static func == (lhs: DynamicClassContext, rhs: DynamicClassContext) -> Bool {
+        lhs.dynamicClass == rhs.dynamicClass
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(dynamicClass))
     }
 }
 
 /**
  Wrap dynamic class to object for single hook. Return new class
  */
-func wrapDynamicClass(object: AnyObject, hookClosure: AnyObject) throws -> AnyClass {
+func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard let baseClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard !NSStringFromClass(baseClass).hasPrefix(prefix) else {
-        guard let dynamicClassContext = getDynamicClassContext(object: object) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        // Tests: DynamicClassContextTests: testReuseContext
-        objc_setAssociatedObject(hookClosure, &associatedDynamicClassContextHandle, dynamicClassContext, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        return dynamicClassContext.dynamicClass
+    guard !isDynamicClass(targetClass: baseClass) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    let dynamicClassContext = try DynamicClassContext.init(object: object)
-    objc_setAssociatedObject(hookClosure, &associatedDynamicClassContextHandle, dynamicClassContext, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    objc_setAssociatedObject(object, &associatedDynamicClassContextHandle, { [weak dynamicClassContext] () -> DynamicClassContext? in
-        return dynamicClassContext
-    }, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    return dynamicClassContext.dynamicClass
+    var context: DynamicClassContext! = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
+        dynamicClassContext.baseClass == baseClass
+    }
+    if context == nil {
+        context = try DynamicClassContext.init(baseClass: baseClass)
+        dynamicClassContextPool.insert(context)
+    }
+    object_setClass(object, context.dynamicClass)
+    return context.dynamicClass
 }
 
-private func getDynamicClassContext(object: AnyObject) -> DynamicClassContext? {
-    guard let closure = objc_getAssociatedObject(object, &associatedDynamicClassContextHandle) as? () -> DynamicClassContext? else {
-        return nil
+func unwrapDynamicClass(object: AnyObject) throws {
+    guard let dynamicClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return closure()
+    guard isDynamicClass(targetClass: dynamicClass) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let firstContext = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
+        dynamicClassContext.dynamicClass == dynamicClass
+    }
+    guard let context = firstContext else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    object_setClass(object, context.baseClass)
 }
 
-// MARK: This is debug tools.
-
-func debugGetDynamicClassContextAsAnyObject(object: AnyObject) -> AnyObject? {
-    return getDynamicClassContext(object: object)
-}
-
-func debugGetDynamicClassContextAsAnyObject(closure: AnyObject) -> AnyObject? {
-    guard let dynamicClassContext: DynamicClassContext = objc_getAssociatedObject(closure, &associatedDynamicClassContextHandle) as? DynamicClassContext else {
-        return nil
-    }
-    return dynamicClassContext as AnyObject
+func isDynamicClass(targetClass: AnyClass) -> Bool {
+    NSStringFromClass(targetClass).hasPrefix(prefix)
 }

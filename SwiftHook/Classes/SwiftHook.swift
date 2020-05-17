@@ -24,12 +24,11 @@ public enum SwiftHookError: Error {
 
 let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
 let deallocSelector = NSSelectorFromString("dealloc")
-private var associatedDelegateHandle: UInt8 = 0
 
 // MARK: Hook single instance
 
 @discardableResult
-public func hookBefore(object: AnyObject, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+public func hookBefore(object: AnyObject, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
@@ -39,27 +38,17 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: @escaping
 }
 
 @discardableResult
-public func hookBefore(object: AnyObject, selector: Selector, closure: Any) throws -> HookToken {
+public func hookBefore(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
     return try swiftHookSerialQueue.sync {
-        return try HookManager.shared.hook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try HookManager.shared.hook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookAfter(object: AnyObject, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
-    guard !(object is AnyClass) else {
-        throw SwiftHookError.canNotHookClassWithObjectAPI
-    }
-    return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
-    }
-}
-
-@discardableResult
-public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throws -> HookToken {
+public func hookAfter(object: AnyObject, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
@@ -69,7 +58,17 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throw
 }
 
 @discardableResult
-public func hookInstead(object: AnyObject, selector: Selector, closure: Any) throws -> HookToken {
+public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
+    guard !(object is AnyClass) else {
+        throw SwiftHookError.canNotHookClassWithObjectAPI
+    }
+    return try swiftHookSerialQueue.sync {
+        try HookManager.shared.hook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+    }
+}
+
+@discardableResult
+public func hookInstead(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
@@ -81,35 +80,35 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
 // MARK: Hook all instances
 
 @discardableResult
-public func hookBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+public func hookBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+public func hookAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
@@ -118,7 +117,7 @@ public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any)
 // MARK: Hook class methods
 
 @discardableResult
-public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -128,7 +127,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
 }
 
 @discardableResult
-public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -138,7 +137,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
 }
 
 @discardableResult
-public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -148,7 +147,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
 }
 
 @discardableResult
-public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -158,7 +157,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
 }
 
 @discardableResult
-public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
+public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -169,42 +168,34 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
 
 // MARK: Hook dealloc
 
-// NSObject
-
 @discardableResult
-public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
-    return try swiftHookSerialQueue.sync {
+public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookDeallocAfter(object: AnyObject, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
-    if object is NSObject {
-        return try swiftHookSerialQueue.sync {
-            try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
-        }
-    } else {
-        let delegate = NSObject()
-        objc_setAssociatedObject(object, &associatedDelegateHandle, delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        return try swiftHookSerialQueue.sync {
-            try HookManager.shared.hook(object: delegate, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
+public func hookDeallocAfter(object: AnyObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
+        if object is NSObject {
+            return try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
+        } else {
+            return hookDeallocAfterByDelegate(object: object, closure: closure as AnyObject)
         }
     }
 }
 
 @discardableResult
-public func hookDeallocBefore(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
-    return try swiftHookSerialQueue.sync {
+public func hookDeallocBefore(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
-public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
-    return try swiftHookSerialQueue.sync {
+public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
-
-// SwfitObject

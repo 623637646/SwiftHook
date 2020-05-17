@@ -80,6 +80,15 @@ final class HookManager {
     
     private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
         // TODO: Selector black list.
+        if selector == NSSelectorFromString("dealloc") {
+            guard targetClass is NSObject.Type else {
+                throw SwiftHookError.unsupport(type: .hookSwiftObjectDealloc)
+            }
+            guard mode != .instead else {
+                throw SwiftHookError.unsupport(type: .insteadHookNSObjectDealloc)
+            }
+        }
+        
         guard let method = class_getInstanceMethod(targetClass, selector) else {
             throw SwiftHookError.noRespondSelector(targetClass: targetClass, selector: selector)
         }

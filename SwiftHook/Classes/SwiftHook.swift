@@ -7,9 +7,16 @@
 //
 
 public enum SwiftHookError: Error {
+    
+    public enum UnsupportType {
+        case insteadHookNSObjectDealloc
+        case hookSwiftObjectDealloc
+    }
+    
     case noRespondSelector(targetClass: AnyClass, selector: Selector)
     case missingSignature // Please check if there is keyword @convention(block) for the clousre
     case incompatibleClosureSignature
+    case unsupport(type: UnsupportType)
     case ffiError
     case internalError(file: String, line: Int)
 }
@@ -141,3 +148,5 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
         return try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
+
+// MARK: Hook dealloc

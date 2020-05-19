@@ -156,6 +156,7 @@ final class HookManager {
         return nil
     }
     
+    // TODO: move this to SwiftHook.swift?
     private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
         // TODO: Selector black list.
         if selector == deallocSelector {

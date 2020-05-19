@@ -16,7 +16,7 @@ public enum SwiftHookError: Error {
     case missingSignature // Please check if there is keyword @convention(block) for the clousre
     case incompatibleClosureSignature
     case unsupport(type: UnsupportType)
-    case canNotHookClassWithObjectAPI
+    case canNotHookClassWithObjectAPI // Please use "hookClassMethod*" instead.
     case ffiError
     case internalError(file: String, line: Int)
 }

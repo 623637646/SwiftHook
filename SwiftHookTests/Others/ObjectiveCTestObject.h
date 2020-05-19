@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSInteger)sumFuncWithA:(NSInteger)a b:(NSInteger)b;
 
++ (void)classNoArgsNoReturnFunc;
+
 @end
 
 NS_ASSUME_NONNULL_END

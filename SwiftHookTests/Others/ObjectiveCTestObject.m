@@ -27,4 +27,9 @@
     return a + b;
 }
 
++ (void)classNoArgsNoReturnFunc
+{
+    
+}
+
 @end

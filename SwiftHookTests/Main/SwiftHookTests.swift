@@ -210,6 +210,23 @@ class SwiftHookTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
+    func testTemp1() {
+        do {
+            var result = [Int]()
+            try hookBefore(object: ObjectiveCTestObject.self as AnyObject, selector: #selector(ObjectiveCTestObject.classNoArgsNoReturnFunc)) {
+                result.append(8)
+            }
+            ObjectiveCTestObject.classNoArgsNoReturnFunc()
+            ObjectiveCTestObject.classNoArgsNoReturnFunc()
+            ObjectiveCTestObject.classNoArgsNoReturnFunc()
+            XCTAssertEqual(result, [8, 8, 8])
+            XCTAssertTrue(false)
+        } catch SwiftHookError.canNotHookClassWithObjectAPI {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
 }
 
 // TODO: performance tests measureBlock

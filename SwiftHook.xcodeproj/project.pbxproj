@@ -195,6 +195,18 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		2A3B8C0C24742362007E6D65 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
+				2A5C8D5224670B1D00812DAD /* HookContextTests */,
+				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
+				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
+				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		2A58BF9A245C94FE005227F5 /* Others */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,7 +263,6 @@
 				2AA5591E2469C81900440E32 /* HookToken.swift */,
 				2A65FB4A246800F800535203 /* HookManager.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
-				2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */,
 				2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */,
 				2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */,
 				2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */,
@@ -261,6 +272,7 @@
 				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
 				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
 				2A701512246413CE00B81219 /* Utilities.swift */,
+				2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */,
 				2AD183C924650AE500B8EC51 /* BlockUtilities.h */,
 				2AD183CA24650AE500B8EC51 /* BlockUtilities.m */,
 			);
@@ -316,11 +328,7 @@
 		2AB6735E245834E30011536D /* SwiftHookTests */ = {
 			isa = PBXGroup;
 			children = (
-				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
-				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
-				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
-				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
-				2A5C8D5224670B1D00812DAD /* HookContextTests */,
+				2A3B8C0C24742362007E6D65 /* Main */,
 				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
 				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
 				2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */,

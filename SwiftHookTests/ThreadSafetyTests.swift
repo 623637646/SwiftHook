@@ -34,7 +34,6 @@ class ThreadSafetyTests: XCTestCase {
         }
     }
     
-    // TODO: related to: 如果 object 或者 hookClosure 释放了；应该取消hook!
     func testHookObject() {
         DispatchQueue.concurrentPerform(iterations: 1000) { _ in
             do {
@@ -48,20 +47,19 @@ class ThreadSafetyTests: XCTestCase {
         }
     }
     
-    // TODO: related to: 如果 object 或者 hookClosure 释放了；应该取消hook!
-//    func testCancelHook() {
-//        do {
-//            var tokens = [HookToken]()
-//            for _ in 0 ... 1000 {
-//                tokens.append(try HookManager.shared.hook(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: .instead, hookClosure: { _ in
-//                    } as @convention(block) (() -> Void) -> Void as AnyObject))
-//            }
-//            DispatchQueue.concurrentPerform(iterations: 1000) { index in
-//                tokens[index].cancelHook()
-//            }
-//        } catch {
-//            XCTAssertNil(error)
-//        }
-//    }
+    func testCancelHook() {
+        do {
+            var tokens = [HookToken]()
+            for _ in 0 ... 1000 {
+                tokens.append(try HookManager.shared.hook(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: .instead, hookClosure: { _ in
+                    } as @convention(block) (() -> Void) -> Void as AnyObject))
+            }
+            DispatchQueue.concurrentPerform(iterations: 1000) { index in
+                tokens[index].cancelHook()
+            }
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
     
 }

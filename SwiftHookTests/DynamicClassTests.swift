@@ -15,9 +15,9 @@ class DynamicClassContextTests: XCTestCase {
 //    func testNormal() {
 //        do {
 //            let testObject = TestObject()
-//            XCTAssertFalse(try isDynamicClass(object: testObject))
+//            XCTAssertFalse(try testIsDynamicClass(object: testObject))
 //            let context: AnyClass = try wrapDynamicClass(object: testObject)
-//            XCTAssertTrue(try isDynamicClass(object: testObject))
+//            XCTAssertTrue(try testIsDynamicClass(object: testObject))
 //            XCTAssertTrue(class_getSuperclass(context) == TestObject.self)
 //            XCTAssertEqual(NSStringFromClass(context), "SwiftHook_\(TestObject.self)")
 //        } catch {
@@ -28,17 +28,17 @@ class DynamicClassContextTests: XCTestCase {
 //    func testReuseContext() {
 //        do {
 //            let testObject = TestObject()
-//            XCTAssertFalse(try isDynamicClass(object: testObject))
+//            XCTAssertFalse(try testIsDynamicClass(object: testObject))
 //            
 //            // 1
 //            let context: AnyClass = try wrapDynamicClass(object: testObject)
-//            XCTAssertTrue(try isDynamicClass(object: testObject))
+//            XCTAssertTrue(try testIsDynamicClass(object: testObject))
 //            XCTAssertTrue(class_getSuperclass(context) == TestObject.self)
 //            XCTAssertEqual(NSStringFromClass(context), "SwiftHook_\(TestObject.self)")
 //            
 //            // 2
 //            let context2: AnyClass = try wrapDynamicClass(object: testObject)
-//            XCTAssertTrue(try isDynamicClass(object: testObject))
+//            XCTAssertTrue(try testIsDynamicClass(object: testObject))
 //            XCTAssertTrue(class_getSuperclass(context2) == TestObject.self)
 //            XCTAssertEqual(NSStringFromClass(context2), "SwiftHook_\(TestObject.self)")
 //            
@@ -55,11 +55,11 @@ class DynamicClassContextTests: XCTestCase {
 //            
 //            try autoreleasepool {
 //                let testObject = TestObject()
-//                XCTAssertFalse(try isDynamicClass(object: testObject))
+//                XCTAssertFalse(try testIsDynamicClass(object: testObject))
 //                
 //                let context: AnyClass = try wrapDynamicClass(object: testObject, hookClosure: hookClosure)
 //                
-//                XCTAssertTrue(try isDynamicClass(object: testObject))
+//                XCTAssertTrue(try testIsDynamicClass(object: testObject))
 //                XCTAssertNotNil(debugGetDynamicClassContextAsAnyObject(closure: hookClosure))
 //                XCTAssertTrue(debugGetDynamicClassContextAsAnyObject(object: testObject) === debugGetDynamicClassContextAsAnyObject(closure: hookClosure))
 //                XCTAssertTrue(class_getSuperclass(context) == TestObject.self)
@@ -74,7 +74,7 @@ class DynamicClassContextTests: XCTestCase {
 //    func testReleaseAllClosure() {
 //        do {
 //            let testObject = TestObject()
-//            XCTAssertFalse(try isDynamicClass(object: testObject))
+//            XCTAssertFalse(try testIsDynamicClass(object: testObject))
 //            
 //            try autoreleasepool {
 //                let hookClosure = {} as @convention(block) () -> Void as AnyObject
@@ -82,13 +82,13 @@ class DynamicClassContextTests: XCTestCase {
 //                
 //                let context: AnyClass = try wrapDynamicClass(object: testObject, hookClosure: hookClosure)
 //                
-//                XCTAssertTrue(try isDynamicClass(object: testObject))
+//                XCTAssertTrue(try testIsDynamicClass(object: testObject))
 //                XCTAssertNotNil(debugGetDynamicClassContextAsAnyObject(closure: hookClosure))
 //                XCTAssertTrue(debugGetDynamicClassContextAsAnyObject(object: testObject) === debugGetDynamicClassContextAsAnyObject(closure: hookClosure))
 //                XCTAssertTrue(class_getSuperclass(context) == TestObject.self)
 //                XCTAssertEqual(NSStringFromClass(context), "SwiftHook_\(TestObject.self)")
 //            }
-//            XCTAssertFalse(try isDynamicClass(object: testObject))
+//            XCTAssertFalse(try testIsDynamicClass(object: testObject))
 //        } catch {
 //            XCTAssertNil(error)
 //        }

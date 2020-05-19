@@ -42,7 +42,6 @@ final class HookManager {
         return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
     }
     
-    // TODO: 如果 object 或者 hookClosure 释放了；应该取消hook!
     @discardableResult
     func hook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
         guard let baseClass = object_getClass(object) else {

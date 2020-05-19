@@ -35,12 +35,12 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA + argumentB)
                 
                 // cancel
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
 //            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
@@ -73,12 +73,12 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * argumentB)
                 
                 // cancel
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
 //            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
@@ -111,12 +111,12 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * 2 + argumentB * 2)
                 
                 // cancel
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
 //            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
@@ -154,13 +154,13 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
                 result.removeAll()
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -202,13 +202,13 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
                 result.removeAll()
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -255,15 +255,15 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [3, 1, 5, 2, 4])
                 
                 // cancel
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertFalse(HookManager.shared.cancelHook(token: token1)!)
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token2)!)
                 result.removeAll()
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
@@ -311,15 +311,15 @@ class HookContextSingleInstancesInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [1, 5, 2])
                 
                 // cancel
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertFalse(HookManager.shared.cancelHook(token: token1)!)
-                XCTAssertTrue(try isDynamicClass(object: test))
+                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(HookManager.shared.cancelHook(token: token2)!)
                 result.removeAll()
             }
             
             // test cancel
-            XCTAssertFalse(try isDynamicClass(object: test))
+            XCTAssertFalse(try testIsDynamicClass(object: test))
             test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)

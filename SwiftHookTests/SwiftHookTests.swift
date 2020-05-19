@@ -170,20 +170,20 @@ class SwiftHookTests: XCTestCase {
     func testResetClassAfterCancel() {
         do {
             var object: AnyObject = TestObject()
-            XCTAssertFalse(try isDynamicClass(object: object))
+            XCTAssertFalse(try testIsDynamicClass(object: object))
             var token = try hookBefore(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
             })
-            XCTAssertTrue(try isDynamicClass(object: object))
+            XCTAssertTrue(try testIsDynamicClass(object: object))
             token.cancelHook()
-            XCTAssertFalse(try isDynamicClass(object: object))
+            XCTAssertFalse(try testIsDynamicClass(object: object))
             
             object = ObjectiveCTestObject()
-            XCTAssertFalse(try isDynamicClass(object: object))
+            XCTAssertFalse(try testIsDynamicClass(object: object))
             token = try hookBefore(object: object, selector: #selector(ObjectiveCTestObject.noArgsNoReturnFunc), closure: {
             })
-            XCTAssertTrue(try isDynamicClass(object: object))
+            XCTAssertTrue(try testIsDynamicClass(object: object))
             token.cancelHook()
-            XCTAssertFalse(try isDynamicClass(object: object))
+            XCTAssertFalse(try testIsDynamicClass(object: object))
         } catch {
             XCTAssertNil(error)
         }
@@ -192,20 +192,20 @@ class SwiftHookTests: XCTestCase {
     func testNoClassChangeForSwiftObject() {
         do {
             let swiftObject = TestObject()
-            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            XCTAssertFalse(try testIsDynamicClass(object: swiftObject))
             var token = try hookDeallocTail(object: swiftObject) {
             }
-            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            XCTAssertFalse(try testIsDynamicClass(object: swiftObject))
             token.cancelHook()
-            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            XCTAssertFalse(try testIsDynamicClass(object: swiftObject))
             
             let ocObject = ObjectiveCTestObject()
-            XCTAssertFalse(try isDynamicClass(object: ocObject))
+            XCTAssertFalse(try testIsDynamicClass(object: ocObject))
             token = try hookDeallocAfter(object: ocObject) {
             }
-            XCTAssertTrue(try isDynamicClass(object: ocObject))
+            XCTAssertTrue(try testIsDynamicClass(object: ocObject))
             token.cancelHook()
-            XCTAssertFalse(try isDynamicClass(object: ocObject))
+            XCTAssertFalse(try testIsDynamicClass(object: ocObject))
         } catch {
             XCTAssertNil(error)
         }

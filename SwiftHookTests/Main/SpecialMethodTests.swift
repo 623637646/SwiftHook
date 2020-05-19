@@ -48,7 +48,7 @@ class SpecialMethodTests: XCTestCase {
                 try hookDeallocAfter(object: object, closure: {
                     executed.append(2)
                 })
-                try hookDeallocTail(object: object, closure: {
+                try hookDeallocAfterByTail(object: object, closure: {
                     executed.append(5)
                 })
                 
@@ -68,46 +68,7 @@ class SpecialMethodTests: XCTestCase {
                 object.deinitExecution = {
                     executed.append(0)
                 }
-                
-                // before
-                do {
-                    try hookBefore(object: object, selector: deallocSelector) {
-                        executed.append(-1)
-                    }
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                // instead
-                do {
-                    try hookInstead(object: object, selector: deallocSelector, closure: { original in
-                        executed.append(-3)
-                        original()
-                        executed.append(3)
-                        } as @convention(block) (() -> Void) -> Void)
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                // after
-                do {
-                    try hookAfter(object: object, selector: deallocSelector) {
-                        executed.append(1)
-                    }
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                try hookDeallocTail(object: object, closure: {
+                try hookDeallocAfterByTail(object: object, closure: {
                     executed.append(2)
                 })
                 

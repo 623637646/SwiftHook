@@ -13,18 +13,6 @@ class SwiftHookTests: XCTestCase {
     
     // MARK: Parameters Check
     
-    func testNoRespondSelector() {
-        do {
-            try hookBefore(targetClass: TestObject.self, selector: #selector(NSArray.object(at:)), closure: {})
-            XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
-            XCTAssertTrue(targetClass == TestObject.self)
-            XCTAssertEqual(selector, #selector(NSArray.object(at:)))
-        } catch {
-            XCTAssertNil(error)
-        }
-    }
-    
     func testMissingSignature() {
         // before
         do {
@@ -85,30 +73,6 @@ class SwiftHookTests: XCTestCase {
             } as @convention(block) () -> Void)
             XCTAssertTrue(false)
         } catch SwiftHookError.incompatibleClosureSignature {
-        } catch {
-            XCTAssertNil(error)
-        }
-    }
-    
-    func testHookClassMethodWithInstanceSelector() {
-        do {
-            try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
-            XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
-            XCTAssertTrue(targetClass == object_getClass(TestObject.self))
-            XCTAssertEqual(selector, #selector(TestObject.noArgsNoReturnFunc))
-        } catch {
-            XCTAssertNil(error)
-        }
-    }
-    
-    func testHookInstanceMethodWithClassMethodSelector() {
-        do {
-            try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
-            XCTAssertTrue(false)
-        } catch SwiftHookError.noRespondSelector(let targetClass, let selector) {
-            XCTAssertTrue(targetClass == TestObject.self)
-            XCTAssertEqual(selector, #selector(TestObject.classMethodNoArgsNoReturnFunc))
         } catch {
             XCTAssertNil(error)
         }
@@ -193,7 +157,7 @@ class SwiftHookTests: XCTestCase {
         do {
             let swiftObject = TestObject()
             XCTAssertFalse(try testIsDynamicClass(object: swiftObject))
-            var token = try hookDeallocTail(object: swiftObject) {
+            var token = try hookDeallocAfterByTail(object: swiftObject) {
             }
             XCTAssertFalse(try testIsDynamicClass(object: swiftObject))
             token.cancelHook()

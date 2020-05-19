@@ -39,14 +39,6 @@ struct Signature {
         self.init(argumentTypes: methodSignature.argumentTypes, returnType: methodSignature.returnType, signatureType: .closure)
     }
     
-    static func canHookClosureWorksByMethod(closure: AnyObject, method: Method, mode: HookMode) throws {
-        guard let methodSignature = Signature(method: method),
-            let closureSignature = Signature(closure: closure) else {
-                throw SwiftHookError.missingSignature
-        }
-        try canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: mode)
-    }
-    
     static func canHookClosureSignatureWorksByMethodSignature(closureSignature: Signature, methodSignature: Signature, mode: HookMode) throws {
         guard closureSignature.signatureType == .closure else {
             throw SwiftHookError.incompatibleClosureSignature

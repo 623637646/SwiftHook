@@ -23,7 +23,6 @@ final class HookManager {
     
     @discardableResult
     func hook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: mode, closure: hookClosure)
         if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: targetClass, selector: selector)
         }
@@ -47,8 +46,6 @@ final class HookManager {
         guard let baseClass = object_getClass(object) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        // parameters check
-        try parametersCheck(targetClass: baseClass, selector: selector, mode: mode, closure: hookClosure)
         // create dynamic class for single hook
         let dynamicClass: AnyClass
         if isDynamicClass(targetClass: baseClass) {
@@ -154,21 +151,6 @@ final class HookManager {
             }
         } catch {}
         return nil
-    }
-    
-    // TODO: move this to SwiftHook.swift?
-    private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
-        // TODO: Selector black list.
-        if selector == deallocSelector {
-            guard targetClass is NSObject.Type else {
-                throw SwiftHookError.unsupport(type: .hookSwiftObjectDealloc)
-            }
-        }
-        
-        guard let method = class_getInstanceMethod(targetClass, selector) else {
-            throw SwiftHookError.noRespondSelector(targetClass: targetClass, selector: selector)
-        }
-        try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
     }
     
     // MARK: This is debug tools.

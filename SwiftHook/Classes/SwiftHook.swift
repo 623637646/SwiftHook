@@ -31,6 +31,10 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: @escaping
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -41,6 +45,10 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: Any) thro
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -51,6 +59,10 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: @escaping 
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -61,6 +73,10 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throw
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -71,6 +87,10 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
     guard !(object is AnyClass) else {
         throw SwiftHookError.canNotHookClassWithObjectAPI
     }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(object: object, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
@@ -80,35 +100,40 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
 
 @discardableResult
 public func hookBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try parametersCheck(targetClass: targetClass, selector: selector, mode: .before, closure: closure as AnyObject)
+    return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try parametersCheck(targetClass: targetClass, selector: selector, mode: .before, closure: closure as AnyObject)
+    return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try parametersCheck(targetClass: targetClass, selector: selector, mode: .after, closure: closure as AnyObject)
+    return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try parametersCheck(targetClass: targetClass, selector: selector, mode: .after, closure: closure as AnyObject)
+    return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try parametersCheck(targetClass: targetClass, selector: selector, mode: .instead, closure: closure as AnyObject)
+    return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
@@ -120,6 +145,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    try parametersCheck(targetClass: metaclass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -130,6 +156,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    try parametersCheck(targetClass: metaclass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -140,6 +167,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    try parametersCheck(targetClass: metaclass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -150,6 +178,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    try parametersCheck(targetClass: metaclass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -160,6 +189,7 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
     guard let metaclass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    try parametersCheck(targetClass: metaclass, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
@@ -231,4 +261,18 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
+}
+
+private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
+    // TODO: Selector black list.
+    if selector == deallocSelector {
+        guard targetClass is NSObject.Type else {
+            throw SwiftHookError.unsupport(type: .hookSwiftObjectDealloc)
+        }
+    }
+    
+    guard let method = class_getInstanceMethod(targetClass, selector) else {
+        throw SwiftHookError.noRespondSelector(targetClass: targetClass, selector: selector)
+    }
+    try Signature.canHookClosureWorksByMethod(closure: closure, method: method, mode: mode)
 }

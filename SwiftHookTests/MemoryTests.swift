@@ -42,6 +42,11 @@ class MemoryTests: XCTestCase {
 //                let swiftHookTests = SwiftHookTests()
 //                swiftHookTests.testHookBeforeNoArgsNoReturnFunc()
 //                swiftHookTests.testHookBeforeSumFunc()
+//
+//                let specialMethodTests = SpecialMethodTests()
+//                specialMethodTests.testDeallocForSingleOCObject()
+//                specialMethodTests.testDeallocForSingleSwiftObject()
+//                specialMethodTests.testDeallocForAllInstancesOCObject() 这个内存暴增
 //            }
 //        }
     }

@@ -151,6 +151,7 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    // TODO: 整理一下的testCase
 //    func testCancelHookAfterObjectReleased() {
 //        do {
 //            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
@@ -166,6 +167,49 @@ class SwiftHookTests: XCTestCase {
 //        }
 //    }
     
+    func testResetClassAfterCancel() {
+        do {
+            var object: AnyObject = TestObject()
+            XCTAssertFalse(try isDynamicClass(object: object))
+            var token = try hookBefore(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {
+            })
+            XCTAssertTrue(try isDynamicClass(object: object))
+            token.cancelHook()
+            XCTAssertFalse(try isDynamicClass(object: object))
+            
+            object = ObjectiveCTestObject()
+            XCTAssertFalse(try isDynamicClass(object: object))
+            token = try hookBefore(object: object, selector: #selector(ObjectiveCTestObject.noArgsNoReturnFunc), closure: {
+            })
+            XCTAssertTrue(try isDynamicClass(object: object))
+            token.cancelHook()
+            XCTAssertFalse(try isDynamicClass(object: object))
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testNoClassChangeForSwiftObject() {
+        do {
+            let swiftObject = TestObject()
+            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            var token = try hookDeallocTail(object: swiftObject) {
+            }
+            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            token.cancelHook()
+            XCTAssertFalse(try isDynamicClass(object: swiftObject))
+            
+            let ocObject = ObjectiveCTestObject()
+            XCTAssertFalse(try isDynamicClass(object: ocObject))
+            token = try hookDeallocAfter(object: ocObject) {
+            }
+            XCTAssertTrue(try isDynamicClass(object: ocObject))
+            token.cancelHook()
+            XCTAssertFalse(try isDynamicClass(object: ocObject))
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
 }
 
 // TODO: performance tests measureBlock

@@ -18,6 +18,12 @@ class SuperObject {
 
 class TestObject: SuperObject {
     
+    var deinitExecution: (() -> Void)?
+    
+    deinit {
+        deinitExecution?()
+    }
+    
     // Instance method
     func swiftMethod() {
         

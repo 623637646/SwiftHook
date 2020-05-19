@@ -9,7 +9,6 @@
 public enum SwiftHookError: Error {
     
     public enum UnsupportType {
-        case insteadHookNSObjectDealloc
         case hookSwiftObjectDealloc
     }
     
@@ -176,13 +175,33 @@ public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(b
 }
 
 @discardableResult
-public func hookDeallocAfter(object: AnyObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
+public func hookDeallocAfter(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        if object is NSObject {
-            return try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
-        } else {
-            return hookDeallocAfterByDelegate(object: object, closure: closure as AnyObject)
-        }
+        try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
+    }
+}
+
+/**
+ This method can hook dealloc in after WITHOUT runtime. Just add a object (tail) to observe dealloc.
+ */
+@discardableResult
+public func hookDeallocTail(object: AnyObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
+    swiftHookSerialQueue.sync {
+        return hookDeallocAfterByDelegate(object: object, closure: closure as AnyObject)
+    }
+}
+
+/**
+ Have to call original to avoid memory leak.
+ eg:
+ try hookDeallocInstead(object: object, closure: { original in
+ original()
+ } as @convention(block) (() -> Void) -> Void)
+ */
+@discardableResult
+public func hookDeallocInstead(object: NSObject, closure: @escaping @convention(block) (() -> Void) -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
+        try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 
@@ -197,5 +216,19 @@ public func hookDeallocBefore(targetClass: NSObject.Type, closure: @escaping @co
 public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
         try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
+    }
+}
+
+/**
+ Have to call original to avoid memory leak.
+ eg:
+ try hookDeallocInstead(targetClass: targetClass, closure: { original in
+ original()
+ } as @convention(block) (() -> Void) -> Void)
+ */
+@discardableResult
+public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @convention(block) (() -> Void) -> Void) throws -> Token {
+    try swiftHookSerialQueue.sync {
+        try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }

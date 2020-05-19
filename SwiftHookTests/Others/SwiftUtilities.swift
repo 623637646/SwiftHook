@@ -7,6 +7,7 @@
 //
 @testable import SwiftHook
 
+// TODO: 重命名为 testIsDynamicClass(object
 func isDynamicClass(object: AnyObject) throws -> Bool {
     let isaClass: AnyClass = object_getClass(object)!
     let typeClass: AnyClass = type(of: object)

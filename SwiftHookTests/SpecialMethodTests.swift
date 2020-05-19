@@ -12,150 +12,161 @@ import XCTest
 // TODO: Unfinish
 class SpecialMethodTests: XCTestCase {
     
-    func testDeallocForSingle() {
+    func testDeallocForSingleOCObject() {
         do {
             var executed = [Int]()
             try autoreleasepool {
                 let object = ObjectiveCTestObject()
-                let object2 = TestObject()
+                object.deallocExecution = {
+                    executed.append(0)
+                }
                 
-                // Customize API
+                // before
                 try hookBefore(object: object, selector: deallocSelector) {
+                    executed.append(-1)
+                }
+                try hookDeallocBefore(object: object, closure: {
+                    executed.append(-2)
+                })
+                
+                // instead
+                try hookInstead(object: object, selector: deallocSelector, closure: { original in
+                    executed.append(-3)
+                    original()
+                    executed.append(3)
+                    } as @convention(block) (() -> Void) -> Void)
+                try hookDeallocInstead(object: object, closure: { original in
+                    executed.append(-4)
+                    original()
+                    executed.append(4)
+                    } as @convention(block) (() -> Void) -> Void)
+                
+                // after
+                try hookAfter(object: object, selector: deallocSelector) {
                     executed.append(1)
                 }
-                try hookAfter(object: object, selector: deallocSelector) {
-                    executed.append(2)
-                }
-                
-                do {
-                    try hookBefore(object: TestObject(), selector: deallocSelector) {}
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookAfter(object: TestObject(), selector: deallocSelector) {}
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookInstead(object: TestObject(), selector: deallocSelector, closure: { original in
-                        original()
-                        } as @convention(block) (() -> Void) -> Void)
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookInstead(object: object, selector: deallocSelector, closure: { original in
-                        original()
-                        } as @convention(block) (() -> Void) -> Void)
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .insteadHookNSObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                // Public API
-                try hookDeallocBefore(object: object, closure: {
-                    executed.append(3)
-                })
                 try hookDeallocAfter(object: object, closure: {
-                    executed.append(4)
+                    executed.append(2)
                 })
-                try hookDeallocAfter(object: object2, closure: {
+                try hookDeallocTail(object: object, closure: {
                     executed.append(5)
                 })
                 
                 XCTAssertEqual(executed, [])
             }
-            XCTAssertEqual(executed, [5, 3, 1, 4, 2])
+            XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 5, 3, 4, 2, 1])
         } catch {
             XCTAssertNil(error)
         }
     }
     
-    func testDeallocForAllInstances() {
+    func testDeallocForSingleSwiftObject() {
         do {
             var executed = [Int]()
             try autoreleasepool {
-                let object1 = ObjectiveCTestObject()
-                _ = ObjectiveCTestObject() // This will not trigger hook because it will release immediately. Maybe compiler optimization.
-                
-                // Customize API
-                try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
-                    executed.append(1)
+                let object = TestObject()
+                object.deinitExecution = {
+                    executed.append(0)
                 }
-                try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                
+                // before
+                do {
+                    try hookBefore(object: object, selector: deallocSelector) {
+                        executed.append(-1)
+                    }
+                    XCTAssertTrue(false)
+                } catch SwiftHookError.unsupport((let type)) {
+                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
+                } catch {
+                    XCTAssertNil(error)
+                }
+                
+                // instead
+                do {
+                    try hookInstead(object: object, selector: deallocSelector, closure: { original in
+                        executed.append(-3)
+                        original()
+                        executed.append(3)
+                        } as @convention(block) (() -> Void) -> Void)
+                    XCTAssertTrue(false)
+                } catch SwiftHookError.unsupport((let type)) {
+                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
+                } catch {
+                    XCTAssertNil(error)
+                }
+                
+                // after
+                do {
+                    try hookAfter(object: object, selector: deallocSelector) {
+                        executed.append(1)
+                    }
+                    XCTAssertTrue(false)
+                } catch SwiftHookError.unsupport((let type)) {
+                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
+                } catch {
+                    XCTAssertNil(error)
+                }
+                
+                try hookDeallocTail(object: object, closure: {
                     executed.append(2)
-                }
-                
-                do {
-                    try hookBefore(targetClass: TestObject.self, selector: deallocSelector) {}
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookAfter(targetClass: TestObject.self, selector: deallocSelector) {}
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: { original in
-                        original()
-                        } as @convention(block) (() -> Void) -> Void)
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .hookSwiftObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                do {
-                    try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
-                        original()
-                        } as @convention(block) (() -> Void) -> Void)
-                    XCTAssertTrue(false)
-                } catch SwiftHookError.unsupport((let type)) {
-                    XCTAssertTrue(type == .insteadHookNSObjectDealloc)
-                } catch {
-                    XCTAssertNil(error)
-                }
-                
-                // Public API
-                try hookDeallocBefore(targetClass: ObjectiveCTestObject.self, closure: {
-                    executed.append(3)
-                })
-                try hookDeallocAfter(targetClass: ObjectiveCTestObject.self, closure: {
-                    executed.append(4)
                 })
                 
                 XCTAssertEqual(executed, [])
-                
-                let object2 = ObjectiveCTestObject()
-                _ = ObjectiveCTestObject() // This will trigger hook
-                _ = [object1, object2]
             }
-            XCTAssertEqual(executed, [3, 1, 4, 2, 3, 1, 4, 2, 3, 1, 4, 2])
+            XCTAssertEqual(executed, [0, 2])
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testDeallocForAllInstancesOCObject() {
+        do {
+            var executed = [Int]()
+            try autoreleasepool {
+                let objectBefore = ObjectiveCTestObject()
+                objectBefore.deallocExecution = {
+                    executed.append(0)
+                }
+                _ = ObjectiveCTestObject() // This will not trigger hook because it will release immediately. Maybe compiler optimization.
+                
+                // before
+                try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                    executed.append(-1)
+                }
+                try hookDeallocBefore(targetClass: ObjectiveCTestObject.self, closure: {
+                    executed.append(-2)
+                })
+                
+                // instead
+                try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                    executed.append(-3)
+                    original()
+                    executed.append(3)
+                    } as @convention(block) (() -> Void) -> Void)
+                try hookDeallocInstead(targetClass: ObjectiveCTestObject.self, closure: { original in
+                    executed.append(-4)
+                    original()
+                    executed.append(4)
+                    } as @convention(block) (() -> Void) -> Void)
+                
+                // after
+                try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                    executed.append(1)
+                }
+                try hookDeallocAfter(targetClass: ObjectiveCTestObject.self, closure: {
+                    executed.append(2)
+                })
+                
+                let objectAfter = ObjectiveCTestObject()
+                objectAfter.deallocExecution = {
+                    executed.append(0)
+                }
+                _ = ObjectiveCTestObject() // This will trigger hook immediately.
+                
+                XCTAssertEqual(executed, [-2, -1, -4, -3, 3, 4, 2, 1])
+                executed.removeAll()
+            }
+            XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 3, 4, 2, 1, -2, -1, -4, -3, 0, 3, 4, 2, 1])
         } catch {
             XCTAssertNil(error)
         }

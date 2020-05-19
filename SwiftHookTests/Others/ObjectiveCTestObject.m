@@ -10,6 +10,13 @@
 
 @implementation ObjectiveCTestObject
 
+- (void)dealloc
+{
+    if (self.deallocExecution) {
+        self.deallocExecution();
+    }
+}
+
 - (void)noArgsNoReturnFunc
 {
     

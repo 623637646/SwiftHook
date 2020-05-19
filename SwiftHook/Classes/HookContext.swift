@@ -113,8 +113,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         assert(false)
         return
     }
-    guard var object = objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as AnyObject?,
-        let selectorString = objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? String
+    unowned(unsafe) var object = (objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as AnyObject?)!
+    guard let selectorString = objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? String
         else {
             assert(false)
             return

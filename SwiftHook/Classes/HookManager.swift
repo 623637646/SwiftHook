@@ -77,14 +77,9 @@ final class HookManager {
         // set hook closure
         try associatedAppendClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
         // Hook dealloc
-        let deallocClosure = {
+        hookDeallocAfterByDelegate(object: object, closure: {
             self.cancelHook(token: token)
-            } as @convention(block) () -> Void as AnyObject
-        if object is NSObject {
-            try hookContext.append(hookClosure: deallocClosure, mode: .after)
-        } else {
-            hookDeallocAfterByDelegate(object: object, closure: deallocClosure)
-        }
+            } as @convention(block) () -> Void as AnyObject)
         return token
     }
     
@@ -167,9 +162,6 @@ final class HookManager {
         if selector == deallocSelector {
             guard targetClass is NSObject.Type else {
                 throw SwiftHookError.unsupport(type: .hookSwiftObjectDealloc)
-            }
-            guard mode != .instead else {
-                throw SwiftHookError.unsupport(type: .insteadHookNSObjectDealloc)
             }
         }
         

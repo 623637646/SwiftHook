@@ -33,7 +33,7 @@ private class DynamicClassContext: Hashable {
     
     deinit {
         // TODO: 这里可能有问题，如果这个对象在HOOK后被KVO，那么会miss掉KVO。
-        internalCancelHook(token: dynamicClassHookToken)
+        _ = internalCancelHook(token: dynamicClassHookToken)
         objc_disposeClassPair(dynamicClass)
     }
     

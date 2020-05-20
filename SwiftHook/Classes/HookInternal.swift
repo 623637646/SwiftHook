@@ -16,7 +16,6 @@ enum HookMode {
 
 private var hookContextPool = Set<HookContext>()
 
-@discardableResult
 func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
     if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
         try overrideSuperMethod(targetClass: targetClass, selector: selector)
@@ -32,7 +31,6 @@ func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hoo
     return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
 }
 
-@discardableResult
 func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
     guard let baseClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
@@ -55,8 +53,8 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
     // set hook closure
     try associatedAppendClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
     // Hook dealloc
-    hookDeallocAfterByDelegate(object: object, closure: {
-        internalCancelHook(token: token)
+    _ = hookDeallocAfterByDelegate(object: object, closure: {
+        _ = internalCancelHook(token: token)
         } as @convention(block) () -> Void as AnyObject)
     return token
 }
@@ -94,7 +92,6 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
  1. always return nil
  */
 
-@discardableResult
 func internalCancelHook(token: HookToken) -> Bool? {
     do {
         guard let hookContext = token.hookContext else {

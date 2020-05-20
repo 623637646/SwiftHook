@@ -38,7 +38,6 @@ private struct HookDeallocAfterToken: Token {
     }
 }
 
-@discardableResult
 func hookDeallocAfterByDelegate(object: AnyObject, closure: AnyObject) -> Token {
     var delegate: HookDeallocAfterDelegate! = objc_getAssociatedObject(object, &associatedDelegateHandle) as? HookDeallocAfterDelegate
     if delegate == nil {

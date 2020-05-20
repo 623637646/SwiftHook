@@ -154,5 +154,8 @@ final class HookManager {
     func debugGetDynamicClassHookContextsCount() -> Int {
         return hookContextPool.count - debugGetNormalClassHookContextsCount()
     }
+    func cleanUpHookContextPool() {
+        hookContextPool.removeAll()
+    }
     #endif
 }

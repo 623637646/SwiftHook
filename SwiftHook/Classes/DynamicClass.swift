@@ -86,3 +86,10 @@ func unwrapDynamicClass(object: AnyObject) throws {
 func isDynamicClass(targetClass: AnyClass) -> Bool {
     NSStringFromClass(targetClass).hasPrefix(prefix)
 }
+
+// MARK: This is debug tools.
+#if DEBUG
+func cleanUpDynamicClassContextPool() {
+    dynamicClassContextPool.removeAll()
+}
+#endif

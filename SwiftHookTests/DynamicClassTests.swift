@@ -15,7 +15,7 @@ class DynamicClassContextTests: XCTestCase {
     let InternalUnwrapNonDynamicClass = 75
     
     override class func setUp() {
-        cleanUpDynamicClassContextPool()
+        debug_cleanUpDynamicClassContextPool()
     }
     
     func testNormal() {

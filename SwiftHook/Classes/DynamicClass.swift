@@ -89,7 +89,7 @@ func isDynamicClass(targetClass: AnyClass) -> Bool {
 
 // MARK: This is debug tools.
 #if DEBUG
-func cleanUpDynamicClassContextPool() {
+func debug_cleanUpDynamicClassContextPool() {
     dynamicClassContextPool.removeAll()
 }
 #endif

@@ -41,7 +41,7 @@ class OverrideSuperMethodTests: XCTestCase {
     // MARK: Wrong cases
     
     func testSelfExistingMethod() {
-        let contextCount = debugOverrideMethodContextCount()
+        let contextCount = debug_overrideMethodContextCount()
         do {
             try overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(OverrideOCObject.selfFunc))
             XCTAssertTrue(false)
@@ -51,11 +51,11 @@ class OverrideSuperMethodTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(debugOverrideMethodContextCount(), contextCount)
+        XCTAssertEqual(debug_overrideMethodContextCount(), contextCount)
     }
     
     func testCanNotGetMethod() {
-        let contextCount = debugOverrideMethodContextCount()
+        let contextCount = debug_overrideMethodContextCount()
         do {
             try overrideSuperMethod(targetClass: OverrideOCObject.self, selector: #selector(UIView.animate(withDuration:animations:)))
             XCTAssertTrue(false)
@@ -74,7 +74,7 @@ class OverrideSuperMethodTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(debugOverrideMethodContextCount(), contextCount)
+        XCTAssertEqual(debug_overrideMethodContextCount(), contextCount)
     }
     
     // MARK: Right cases
@@ -84,7 +84,7 @@ class OverrideSuperMethodTests: XCTestCase {
         let selector = #selector(OverrideOCObject.superFunc(arg:))
         
         // beginning
-        let contextCount = debugOverrideMethodContextCount()
+        let contextCount = debug_overrideMethodContextCount()
         guard let methodChild = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
             return
@@ -106,7 +106,7 @@ class OverrideSuperMethodTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(debugOverrideMethodContextCount(), contextCount + 1)
+        XCTAssertEqual(debug_overrideMethodContextCount(), contextCount + 1)
         
         guard let methodChildAfter = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
@@ -124,7 +124,7 @@ class OverrideSuperMethodTests: XCTestCase {
         let selector = #selector(OverrideOCObject.superFuncWithoutDynamic)
         
         // beginning
-        let contextCount = debugOverrideMethodContextCount()
+        let contextCount = debug_overrideMethodContextCount()
         guard let methodChild = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)
             return
@@ -146,7 +146,7 @@ class OverrideSuperMethodTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        XCTAssertEqual(debugOverrideMethodContextCount(), contextCount + 1)
+        XCTAssertEqual(debug_overrideMethodContextCount(), contextCount + 1)
         
         guard let methodChildAfter = class_getInstanceMethod(targetClass, selector) else {
             XCTAssertTrue(false)

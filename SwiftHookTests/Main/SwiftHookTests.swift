@@ -118,14 +118,14 @@ class SwiftHookTests: XCTestCase {
     // TODO: 整理一下的testCase
 //    func testCancelHookAfterObjectReleased() {
 //        do {
-//            let contextCount = debugGetNormalClassHookContextsCount()
+//            let contextCount = debug_getNormalClassHookContextsCount()
 //            try autoreleasepool {
 //                let testObject = TestObject()
 //                try hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
 //                }
-//                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 2)
+//                XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount + 2)
 //            }
-//            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
+//            XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount)
 //        } catch {
 //            XCTAssertNil(error)
 //        }

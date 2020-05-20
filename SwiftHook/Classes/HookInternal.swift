@@ -137,7 +137,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
 
 // MARK: This is debug tools.
 #if DEBUG
-func debugGetNormalClassHookContextsCount() -> Int {
+func debug_getNormalClassHookContextsCount() -> Int {
     var count = 0
     for item in hookContextPool {
         if !isDynamicClass(targetClass: item.targetClass) {
@@ -146,8 +146,8 @@ func debugGetNormalClassHookContextsCount() -> Int {
     }
     return count
 }
-func debugGetDynamicClassHookContextsCount() -> Int {
-    return hookContextPool.count - debugGetNormalClassHookContextsCount()
+func debug_getDynamicClassHookContextsCount() -> Int {
+    return hookContextPool.count - debug_getNormalClassHookContextsCount()
 }
 func cleanUpHookContextPool() {
     hookContextPool.removeAll()

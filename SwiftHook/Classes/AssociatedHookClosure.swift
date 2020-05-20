@@ -83,3 +83,23 @@ func associatedHasNonClosures(object: AnyObject) -> Bool {
     }
     return true
 }
+
+// MARK: This is debug tools.
+#if DEBUG
+func debug_associatedClosureCount(object: AnyObject) -> Int {
+    let before = associatedGetAllClosures(object: object, mode: .before)
+    let instead = associatedGetAllClosures(object: object, mode: .instead)
+    let after = associatedGetAllClosures(object: object, mode: .after)
+    var count = 0
+    for (_, value) in before where !value.isEmpty {
+        count += value.count
+    }
+    for (_, value) in instead where !value.isEmpty {
+        count += value.count
+    }
+    for (_, value) in after where !value.isEmpty {
+        count += value.count
+    }
+    return count
+}
+#endif

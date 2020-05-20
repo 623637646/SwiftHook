@@ -16,7 +16,7 @@ class HookInternalTests: XCTestCase {
         debug_cleanUpDynamicClassContextPool()
     }
 
-    func testClassReuseHookContext() {
+    func testHookClass() {
         let targetClass = TestObject.self
         let selector = #selector(SuperObject.superFunc(arg:))
         do {
@@ -59,7 +59,7 @@ class HookInternalTests: XCTestCase {
         }
     }
     
-    func testObjectReuseHookContext() {
+    func testHookObject() {
         let object = TestObject()
         let superObject = SuperObject()
         let selector = #selector(SuperObject.superFunc(arg:))
@@ -67,37 +67,47 @@ class HookInternalTests: XCTestCase {
             let token1 = try internalHook(object: object, selector: selector, mode: .before, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 1)
             
             let token2 = try internalHook(object: object, selector: selector, mode: .after, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 2)
             
             let token3 = try internalHook(object: object, selector: selector, mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 3)
             
             let token4 = try internalHook(object: superObject, selector: selector, mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 4)
+            XCTAssertEqual(debug_associatedClosureCount(object: superObject), 1)
             
             let token5 = try internalHook(object: object, selector: #selector(TestObject.noDynamicMethod), mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 4)
             
             XCTAssertFalse(internalCancelHook(token: token1)!)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 3)
             
             XCTAssertFalse(internalCancelHook(token: token2)!)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 2)
             
             XCTAssertFalse(internalCancelHook(token: token3)!)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 1)
             
             XCTAssertTrue(internalCancelHook(token: token4)!)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: superObject), 0)
             
             XCTAssertTrue(internalCancelHook(token: token5)!)
             XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_associatedClosureCount(object: object), 0)
         } catch {
             XCTAssertNil(error)
         }

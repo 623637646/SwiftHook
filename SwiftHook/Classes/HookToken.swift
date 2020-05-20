@@ -28,7 +28,7 @@ struct HookToken: Token {
     
     public func cancelHook() {
         swiftHookSerialQueue.sync {
-            _ = HookManager.shared.cancelHook(token: self)
+            _ = internalCancelHook(token: self)
         }
     }
 }

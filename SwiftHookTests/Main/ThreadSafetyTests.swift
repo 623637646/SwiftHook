@@ -51,7 +51,7 @@ class ThreadSafetyTests: XCTestCase {
         do {
             var tokens = [HookToken]()
             for _ in 0 ... 1000 {
-                tokens.append(try HookManager.shared.hook(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: .instead, hookClosure: { _ in
+                tokens.append(try internalHook(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: .instead, hookClosure: { _ in
                     } as @convention(block) (() -> Void) -> Void as AnyObject))
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in

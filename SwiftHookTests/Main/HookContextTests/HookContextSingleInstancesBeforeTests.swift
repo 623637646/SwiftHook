@@ -13,7 +13,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
 
     func testNormal() {
         do {
-//            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+//            let contextCount = debugGetNormalClassHookContextsCount()
             let hookedTestObject = TestObject()
             let nonHookTestObject = TestObject()
             var result = [Int]()
@@ -26,8 +26,8 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                     XCTAssertEqual(result, [])
                     result.append(1)
                     } as @convention(block) () -> Void
-                let token = try HookManager.shared.hook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-//                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 2)
+                let token = try internalHook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+//                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 2)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -46,7 +46,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testIsDynamicClass(object: hookedTestObject))
-                XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+                XCTAssertTrue(internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -57,7 +57,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-//            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+//            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }
@@ -65,7 +65,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
     
     func testCheckArguments() {
         do {
-//            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+//            let contextCount = debugGetNormalClassHookContextsCount()
             let test = TestObject()
             let argumentA = 77
             let argumentB = 88
@@ -80,8 +80,8 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                     XCTAssertEqual(argumentB, b)
                     executed = true
                     } as @convention(block) (Int, Int) -> Void
-                let token = try HookManager.shared.hook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-//                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 2)
+                let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+//                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 2)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
@@ -90,7 +90,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testIsDynamicClass(object: test))
-                XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+                XCTAssertTrue(internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -99,7 +99,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-//            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+//            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }

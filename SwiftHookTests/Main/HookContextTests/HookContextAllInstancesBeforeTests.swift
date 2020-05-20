@@ -13,7 +13,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
         
     func testNormal() {
         do {
-            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+            let contextCount = debugGetNormalClassHookContextsCount()
             let test = TestObject()
             var result = [Int]()
             
@@ -26,8 +26,8 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                     XCTAssertEqual(result, [])
                     result.append(1)
                     } as @convention(block) () -> Void
-                let token = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 1)
+                let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 1)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -39,7 +39,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+                XCTAssertTrue(internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -49,7 +49,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }
@@ -57,7 +57,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
     
     func testCheckArguments() {
         do {
-            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+            let contextCount = debugGetNormalClassHookContextsCount()
             let test = TestObject()
             let argumentA = 77
             let argumentB = 88
@@ -73,8 +73,8 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                     XCTAssertEqual(argumentB, b)
                     executed = true
                     } as @convention(block) (Int, Int) -> Void
-                let token = try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 1)
+                let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 1)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
@@ -82,7 +82,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
                 XCTAssertTrue(executed)
                 
                 // cancel
-                XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+                XCTAssertTrue(internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -90,7 +90,7 @@ class HookContextAllInstancesBeforeTests: XCTestCase {
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
         } catch {
             XCTAssertNil(error)
         }

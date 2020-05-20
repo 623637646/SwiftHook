@@ -92,7 +92,7 @@ class SwiftHookTests: XCTestCase {
             XCTAssertFalse(called)
             TestObject().noArgsNoReturnFunc()
             XCTAssertTrue(called)
-            XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+            XCTAssertTrue(internalCancelHook(token: token)!)
         } catch {
             XCTAssertNil(error)
         }
@@ -109,7 +109,7 @@ class SwiftHookTests: XCTestCase {
             }
             let result = TestObject().sumFunc(a: arg1, b: arg2)
             XCTAssertEqual(result, arg1 + arg2)
-            XCTAssertTrue(HookManager.shared.cancelHook(token: token)!)
+            XCTAssertTrue(internalCancelHook(token: token)!)
         } catch {
             XCTAssertNil(error)
         }
@@ -118,14 +118,14 @@ class SwiftHookTests: XCTestCase {
     // TODO: 整理一下的testCase
 //    func testCancelHookAfterObjectReleased() {
 //        do {
-//            let contextCount = HookManager.shared.debugGetNormalClassHookContextsCount()
+//            let contextCount = debugGetNormalClassHookContextsCount()
 //            try autoreleasepool {
 //                let testObject = TestObject()
 //                try hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
 //                }
-//                XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount + 2)
+//                XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount + 2)
 //            }
-//            XCTAssertEqual(HookManager.shared.debugGetNormalClassHookContextsCount(), contextCount)
+//            XCTAssertEqual(debugGetNormalClassHookContextsCount(), contextCount)
 //        } catch {
 //            XCTAssertNil(error)
 //        }

@@ -24,7 +24,7 @@ private class DynamicClassContext: Hashable {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         // Hook "Get Class"
-        dynamicClassHookToken = try HookManager.shared.hook(targetClass: dynamicClass, selector: NSSelectorFromString("class"), mode: .instead, hookClosure: {_ in
+        dynamicClassHookToken = try internalHook(targetClass: dynamicClass, selector: NSSelectorFromString("class"), mode: .instead, hookClosure: {_ in
             return baseClass
             } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject)
         objc_registerClassPair(dynamicClass)
@@ -33,7 +33,7 @@ private class DynamicClassContext: Hashable {
     
     deinit {
         // TODO: 这里可能有问题，如果这个对象在HOOK后被KVO，那么会miss掉KVO。
-        HookManager.shared.cancelHook(token: dynamicClassHookToken)
+        internalCancelHook(token: dynamicClassHookToken)
         objc_disposeClassPair(dynamicClass)
     }
     

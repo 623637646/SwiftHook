@@ -36,7 +36,7 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: Any) thro
     }
     try parametersCheck(targetClass: baseClass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
@@ -55,7 +55,7 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throw
     }
     try parametersCheck(targetClass: baseClass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
@@ -69,7 +69,7 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
     }
     try parametersCheck(targetClass: baseClass, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 
@@ -84,7 +84,7 @@ public func hookBefore(targetClass: AnyClass, selector: Selector, closure: @esca
 public func hookBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try parametersCheck(targetClass: targetClass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
@@ -97,7 +97,7 @@ public func hookAfter(targetClass: AnyClass, selector: Selector, closure: @escap
 public func hookAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try parametersCheck(targetClass: targetClass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
@@ -105,7 +105,7 @@ public func hookAfter(targetClass: AnyClass, selector: Selector, closure: Any) t
 public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
     try parametersCheck(targetClass: targetClass, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 
@@ -123,7 +123,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
     }
     try parametersCheck(targetClass: metaclass, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: metaclass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
@@ -139,7 +139,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
     }
     try parametersCheck(targetClass: metaclass, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: metaclass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
@@ -150,7 +150,7 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
     }
     try parametersCheck(targetClass: metaclass, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: metaclass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 
@@ -159,14 +159,14 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
 @discardableResult
 public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookDeallocAfter(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
@@ -190,7 +190,7 @@ public func hookDeallocAfterByTail(object: AnyObject, closure: @escaping @conven
 @discardableResult
 public func hookDeallocInstead(object: NSObject, closure: @escaping @convention(block) (() -> Void) -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(object: object, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
+        try internalHook(object: object, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 
@@ -199,14 +199,14 @@ public func hookDeallocInstead(object: NSObject, closure: @escaping @convention(
 @discardableResult
 public func hookDeallocBefore(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
 }
 
 @discardableResult
 public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @convention(block) () -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
     }
 }
 
@@ -220,7 +220,7 @@ public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @con
 @discardableResult
 public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @convention(block) (() -> Void) -> Void) throws -> Token {
     try swiftHookSerialQueue.sync {
-        try HookManager.shared.hook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
+        try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
 

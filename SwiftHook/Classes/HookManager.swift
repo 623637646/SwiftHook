@@ -26,14 +26,10 @@ final class HookManager {
         if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: targetClass, selector: selector)
         }
-        var hookContext: HookContext!
-        if !self.hookContextPool.contains(where: { (element) -> Bool in
-            guard element.targetClass == targetClass && element.selector == selector else {
-                return false
-            }
-            hookContext = element
-            return true
-        }) {
+        var hookContext: HookContext! = self.hookContextPool.first(where: { (element) -> Bool in
+            element.targetClass == targetClass && element.selector == selector
+        })
+        if hookContext == nil {
             hookContext = try HookContext.init(targetClass: targetClass, selector: selector)
             self.hookContextPool.insert(hookContext)
         }
@@ -47,24 +43,15 @@ final class HookManager {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         // create dynamic class for single hook
-        let dynamicClass: AnyClass
-        if isDynamicClass(targetClass: baseClass) {
-            dynamicClass = baseClass
-        } else {
-            dynamicClass = try wrapDynamicClass(object: object)
-        }
+        let dynamicClass: AnyClass = isDynamicClass(targetClass: baseClass) ? baseClass : try wrapDynamicClass(object: object)
         // hook
         if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: dynamicClass, selector: selector)
         }
-        var hookContext: HookContext!
-        if !self.hookContextPool.contains(where: { (element) -> Bool in
-            guard element.targetClass == dynamicClass && element.selector == selector else {
-                return false
-            }
-            hookContext = element
-            return true
-        }) {
+        var hookContext: HookContext! = self.hookContextPool.first(where: { (element) -> Bool in
+            element.targetClass == dynamicClass && element.selector == selector
+        })
+        if hookContext == nil {
             hookContext = try HookContext.init(targetClass: dynamicClass, selector: selector)
             self.hookContextPool.insert(hookContext)
         }

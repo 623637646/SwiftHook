@@ -191,6 +191,7 @@ class SwiftHookTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
 }
 
 // TODO: performance tests measureBlock

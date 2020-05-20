@@ -145,4 +145,48 @@ class HookInternalTests: XCTestCase {
         
     }
     
+    func testDuplicateHookClosure() {
+        do {
+            let closure: @convention(block) () -> Void = {
+            }
+            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.duplicateHookClosure {
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            let closure: @convention(block) () -> Void = {
+            }
+            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            let object = TestObject()
+            let closure: @convention(block) () -> Void = {
+            }
+            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            XCTAssertTrue(false)
+        } catch SwiftHookError.duplicateHookClosure {
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            let object = TestObject()
+            let closure: @convention(block) () -> Void = {
+            }
+            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

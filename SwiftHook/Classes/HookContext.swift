@@ -345,21 +345,21 @@ class HookContext {
             guard !beforeHookClosures.contains(where: {
                 hookClosure  === $0
             }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
+                throw SwiftHookError.duplicateHookClosure
             }
             beforeHookClosures.append(hookClosure)
         case .after:
             guard !afterHookClosures.contains(where: {
                 hookClosure  === $0
             }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
+                throw SwiftHookError.duplicateHookClosure
             }
             afterHookClosures.append(hookClosure)
         case .instead:
             guard !insteadHookClosures.contains(where: {
                 hookClosure  === $0
             }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
+                throw SwiftHookError.duplicateHookClosure
             }
             insteadHookClosures.append(hookClosure)
         }

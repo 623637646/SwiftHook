@@ -49,7 +49,7 @@ func associatedAppendClosure(object: AnyObject, selector: Selector, hookClosure:
     guard !closures.contains(where: {
         hookClosure  === $0
     }) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
+        throw SwiftHookError.duplicateHookClosure
     }
     closures.append(hookClosure)
     associatedSetClosures(object: object, selector: selector, mode: mode, closures: closures)

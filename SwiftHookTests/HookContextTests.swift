@@ -76,4 +76,60 @@ class HookContextTests: XCTestCase {
         }
     }
     
+    func testAppend() {
+        do {
+            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)))
+            XCTAssertTrue(context.isHoolClosurePoolEmpty())
+            
+            let closure = {
+                } as @convention(block) () -> Void as AnyObject
+            
+            let mode = randomMode()
+            
+            try context.append(hookClosure: closure, mode: mode)
+            XCTAssertFalse(context.isHoolClosurePoolEmpty())
+            
+            do {
+                try context.append(hookClosure: closure, mode: mode)
+                XCTAssertTrue(false)
+            } catch SwiftHookError.duplicateHookClosure {
+            } catch {
+                XCTAssertNil(error)
+            }
+            
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testRemove() {
+        do {
+            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)))
+            XCTAssertTrue(context.isHoolClosurePoolEmpty())
+            
+            let closure = {
+                } as @convention(block) () -> Void as AnyObject
+            
+            let mode = randomMode()
+            
+            try context.append(hookClosure: closure, mode: mode)
+            XCTAssertFalse(context.isHoolClosurePoolEmpty())
+            
+            try context.remove(hookClosure: closure, mode: mode)
+            XCTAssertTrue(context.isHoolClosurePoolEmpty())
+            
+            do {
+                try context.remove(hookClosure: closure, mode: mode)
+                XCTAssertTrue(false)
+            } catch SwiftHookError.internalError(file: let file, line: _) {
+                XCTAssertTrue(file.hasSuffix("HookContext.swift"))
+            } catch {
+                XCTAssertNil(error)
+            }
+            
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

@@ -1,5 +1,5 @@
 //
-//  HookContextClassMethodAfterTests.swift
+//  ClassMethodBeforeTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 10/5/20.
@@ -9,8 +9,8 @@
 import XCTest
 @testable import SwiftHook
 
-class HookContextClassMethodAfterTests: XCTestCase {
-
+class ClassMethodBeforeTests: XCTestCase {
+    
     func testNormal() {
         do {
             var result = [Int]()
@@ -22,9 +22,9 @@ class HookContextClassMethodAfterTests: XCTestCase {
                     return
                 }
                 let selector = #selector(TestObject.classMethodExecute(closure:))
-                let mode: HookMode = .after
+                let mode: HookMode = .before
                 let closure = {
-                    XCTAssertEqual(result, [2])
+                    XCTAssertEqual(result, [])
                     result.append(1)
                     } as @convention(block) () -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
@@ -33,10 +33,10 @@ class HookContextClassMethodAfterTests: XCTestCase {
                 // test hook
                 XCTAssertEqual(result, [])
                 TestObject.classMethodExecute {
-                    XCTAssertEqual(result, [])
+                    XCTAssertEqual(result, [1])
                     result.append(2)
                 }
-                XCTAssertEqual(result, [2, 1])
+                XCTAssertEqual(result, [1, 2])
                 
                 // cancel
                 
@@ -69,7 +69,7 @@ class HookContextClassMethodAfterTests: XCTestCase {
                     return
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
-                let mode: HookMode = .after
+                let mode: HookMode = .before
                 let closure = { a, b in
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)
@@ -97,5 +97,5 @@ class HookContextClassMethodAfterTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
-
+    
 }

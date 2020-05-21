@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A0BE1AF2468210800B30BE3 /* HookContextClassMethodBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1AE2468210800B30BE3 /* HookContextClassMethodBeforeTests.swift */; };
-		2A0BE1B12468241C00B30BE3 /* HookContextClassMethodAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B02468241C00B30BE3 /* HookContextClassMethodAfterTests.swift */; };
-		2A0BE1B3246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B2246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift */; };
+		2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */; };
+		2A0BE1B12468241C00B30BE3 /* ClassMethodAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */; };
+		2A0BE1B3246824B800B30BE3 /* ClassMethodInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B2246824B800B30BE3 /* ClassMethodInsteadTests.swift */; };
 		2A1134EC24713D30008555F9 /* HookDeallocAfterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */; };
 		2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */; };
 		2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A172A5324756B18001FD825 /* HookInternalTests.swift */; };
@@ -24,9 +24,9 @@
 		2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */; };
 		2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */; };
 		2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */; };
-		2A5C8D5824670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5724670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift */; };
-		2A5C8D5A24670C9400812DAD /* HookContextAllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* HookContextAllInstancesAfterTests.swift */; };
-		2A5C8D5C24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift */; };
+		2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */; };
+		2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */; };
+		2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */; };
 		2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5D24670DC800812DAD /* MemoryTests.swift */; };
 		2A65762F2472BA9A00FE57CE /* AssociatedHookClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */; };
 		2A65FB4B246800F800535203 /* HookInternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65FB4A246800F800535203 /* HookInternal.swift */; };
@@ -41,9 +41,9 @@
 		2A8BB5092474458700942DDC /* ParametersCheckingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */; };
 		2A8FBD4A246ED53300037E7E /* SpecialMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */; };
 		2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A8FBD4C246ED5AA00037E7E /* ObjectiveCTestObject.m */; };
-		2A951D41246BF784000DB1E7 /* HookContextSingleInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D40246BF784000DB1E7 /* HookContextSingleInstancesBeforeTests.swift */; };
-		2A951D43246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D42246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift */; };
-		2A951D45246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift */; };
+		2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D40246BF784000DB1E7 /* SingleInstancesBeforeTests.swift */; };
+		2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */; };
+		2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */; };
 		2A951D4F246C33E8000DB1E7 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D4E246C33E8000DB1E7 /* AspectsTests.m */; };
 		2A951D56246C34A6000DB1E7 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D55246C34A6000DB1E7 /* TestObject.m */; };
 		2A951D58246C3F00000DB1E7 /* AspectsInsteadHookTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D57246C3F00000DB1E7 /* AspectsInsteadHookTests.m */; };
@@ -73,9 +73,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2A0BE1AE2468210800B30BE3 /* HookContextClassMethodBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextClassMethodBeforeTests.swift; sourceTree = "<group>"; };
-		2A0BE1B02468241C00B30BE3 /* HookContextClassMethodAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextClassMethodAfterTests.swift; sourceTree = "<group>"; };
-		2A0BE1B2246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextClassMethodInsteadTests.swift; sourceTree = "<group>"; };
+		2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodBeforeTests.swift; sourceTree = "<group>"; };
+		2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodAfterTests.swift; sourceTree = "<group>"; };
+		2A0BE1B2246824B800B30BE3 /* ClassMethodInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodInsteadTests.swift; sourceTree = "<group>"; };
 		2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookDeallocAfterDelegate.swift; sourceTree = "<group>"; };
 		2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookDeallocAfterDelegateTests.swift; sourceTree = "<group>"; };
 		2A172A5324756B18001FD825 /* HookInternalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookInternalTests.swift; sourceTree = "<group>"; };
@@ -92,9 +92,9 @@
 		2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFITypeContextTests.swift; sourceTree = "<group>"; };
 		2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethod.swift; sourceTree = "<group>"; };
 		2A58BF99245C94F2005227F5 /* ComplexityStruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplexityStruct.h; sourceTree = "<group>"; };
-		2A5C8D5724670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextAllInstancesBeforeTests.swift; sourceTree = "<group>"; };
-		2A5C8D5924670C9400812DAD /* HookContextAllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextAllInstancesAfterTests.swift; sourceTree = "<group>"; };
-		2A5C8D5B24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextAllInstancesInsteadTests.swift; sourceTree = "<group>"; };
+		2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesBeforeTests.swift; sourceTree = "<group>"; };
+		2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesAfterTests.swift; sourceTree = "<group>"; };
+		2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A5C8D5D24670DC800812DAD /* MemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryTests.swift; sourceTree = "<group>"; };
 		2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedHookClosure.swift; sourceTree = "<group>"; };
 		2A65FB4A246800F800535203 /* HookInternal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookInternal.swift; sourceTree = "<group>"; };
@@ -111,9 +111,9 @@
 		2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialMethodTests.swift; sourceTree = "<group>"; };
 		2A8FBD4B246ED5AA00037E7E /* ObjectiveCTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveCTestObject.h; sourceTree = "<group>"; };
 		2A8FBD4C246ED5AA00037E7E /* ObjectiveCTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCTestObject.m; sourceTree = "<group>"; };
-		2A951D40246BF784000DB1E7 /* HookContextSingleInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextSingleInstancesBeforeTests.swift; sourceTree = "<group>"; };
-		2A951D42246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextSingleInstancesAfterTests.swift; sourceTree = "<group>"; };
-		2A951D44246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextSingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
+		2A951D40246BF784000DB1E7 /* SingleInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesBeforeTests.swift; sourceTree = "<group>"; };
+		2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesAfterTests.swift; sourceTree = "<group>"; };
+		2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A951D4C246C33E8000DB1E7 /* AspectsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AspectsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A951D4E246C33E8000DB1E7 /* AspectsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
 		2A951D50246C33E8000DB1E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -244,15 +244,15 @@
 		2A5C8D5224670B1D00812DAD /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				2A5C8D5724670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift */,
-				2A5C8D5924670C9400812DAD /* HookContextAllInstancesAfterTests.swift */,
-				2A5C8D5B24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift */,
-				2A0BE1AE2468210800B30BE3 /* HookContextClassMethodBeforeTests.swift */,
-				2A0BE1B02468241C00B30BE3 /* HookContextClassMethodAfterTests.swift */,
-				2A0BE1B2246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift */,
-				2A951D40246BF784000DB1E7 /* HookContextSingleInstancesBeforeTests.swift */,
-				2A951D42246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift */,
-				2A951D44246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift */,
+				2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */,
+				2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */,
+				2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */,
+				2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */,
+				2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */,
+				2A0BE1B2246824B800B30BE3 /* ClassMethodInsteadTests.swift */,
+				2A951D40246BF784000DB1E7 /* SingleInstancesBeforeTests.swift */,
+				2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */,
+				2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -640,12 +640,12 @@
 				2A7F43CC245835D600A63935 /* TestObject.swift in Sources */,
 				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
 				2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */,
-				2A951D41246BF784000DB1E7 /* HookContextSingleInstancesBeforeTests.swift in Sources */,
+				2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */,
 				2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */,
 				2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */,
 				2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */,
-				2A0BE1AF2468210800B30BE3 /* HookContextClassMethodBeforeTests.swift in Sources */,
-				2A951D45246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift in Sources */,
+				2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */,
+				2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
 				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
@@ -654,17 +654,17 @@
 				2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */,
 				2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */,
 				2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */,
-				2A0BE1B3246824B800B30BE3 /* HookContextClassMethodInsteadTests.swift in Sources */,
+				2A0BE1B3246824B800B30BE3 /* ClassMethodInsteadTests.swift in Sources */,
 				2A8FBD4A246ED53300037E7E /* SpecialMethodTests.swift in Sources */,
 				2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */,
-				2A5C8D5A24670C9400812DAD /* HookContextAllInstancesAfterTests.swift in Sources */,
-				2A0BE1B12468241C00B30BE3 /* HookContextClassMethodAfterTests.swift in Sources */,
-				2A5C8D5C24670CA500812DAD /* HookContextAllInstancesInsteadTests.swift in Sources */,
+				2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */,
+				2A0BE1B12468241C00B30BE3 /* ClassMethodAfterTests.swift in Sources */,
+				2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */,
 				2A728721246E76F7002D63A1 /* ThreadSafetyTests.swift in Sources */,
-				2A951D43246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift in Sources */,
+				2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */,
 				2A8BB5092474458700942DDC /* ParametersCheckingTests.swift in Sources */,
 				2A2F212424758C7D0032A64D /* HookContextTests.swift in Sources */,
-				2A5C8D5824670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift in Sources */,
+				2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

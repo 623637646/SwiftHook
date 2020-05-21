@@ -1,5 +1,5 @@
 //
-//  HookContextClassMethodBeforeTests.swift
+//  AllInstancesBeforeTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 10/5/20.
@@ -9,19 +9,17 @@
 import XCTest
 @testable import SwiftHook
 
-class HookContextClassMethodBeforeTests: XCTestCase {
-    
+class AllInstancesBeforeTests: XCTestCase {
+        
     func testNormal() {
         do {
+            let test = TestObject()
             var result = [Int]()
             
             try autoreleasepool {
                 // hook
-                guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
-                    return
-                }
-                let selector = #selector(TestObject.classMethodExecute(closure:))
+                let targetClass = TestObject.self
+                let selector = #selector(TestObject.execute(closure:))
                 let mode: HookMode = .before
                 let closure = {
                     XCTAssertEqual(result, [])
@@ -32,7 +30,7 @@ class HookContextClassMethodBeforeTests: XCTestCase {
                 
                 // test hook
                 XCTAssertEqual(result, [])
-                TestObject.classMethodExecute {
+                test.execute {
                     XCTAssertEqual(result, [1])
                     result.append(2)
                 }
@@ -45,7 +43,7 @@ class HookContextClassMethodBeforeTests: XCTestCase {
             }
             
             // test cancel
-            TestObject.classMethodExecute {
+            test.execute {
                 XCTAssertEqual(result, [])
                 result.append(2)
             }
@@ -58,17 +56,15 @@ class HookContextClassMethodBeforeTests: XCTestCase {
     
     func testCheckArguments() {
         do {
+            let test = TestObject()
             let argumentA = 77
             let argumentB = 88
             var executed = false
             
             try autoreleasepool {
                 // hook
-                guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
-                    return
-                }
-                let selector = #selector(TestObject.classMethodSumFunc(a:b:))
+                let targetClass = TestObject.self
+                let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .before
                 let closure = { a, b in
                     XCTAssertEqual(argumentA, a)
@@ -79,7 +75,7 @@ class HookContextClassMethodBeforeTests: XCTestCase {
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
                 // test hook
-                let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
+                let result = test.sumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA + argumentB)
                 XCTAssertTrue(executed)
                 
@@ -89,7 +85,7 @@ class HookContextClassMethodBeforeTests: XCTestCase {
             
             // test cancel
             executed = false
-            let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
+            let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
             XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)

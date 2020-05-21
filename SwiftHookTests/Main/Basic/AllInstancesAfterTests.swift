@@ -1,5 +1,5 @@
 //
-//  HookContextAllInstancesAfterTests.swift
+//  AllInstancesAfterTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 10/5/20.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftHook
 
-class HookContextAllInstancesAfterTests: XCTestCase {
+class AllInstancesAfterTests: XCTestCase {
         
     func testNormal() {
         do {

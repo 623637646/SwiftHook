@@ -1,5 +1,5 @@
 //
-//  HookContextSingleInstancesBeforeTests.swift
+//  SingleInstancesAfterTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 13/5/20.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftHook
 
-class HookContextSingleInstancesBeforeTests: XCTestCase {
+class SingleInstancesAfterTests: XCTestCase {
 
     func testNormal() {
         do {
@@ -20,9 +20,9 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 let selector = #selector(TestObject.execute(closure:))
-                let mode: HookMode = .before
+                let mode: HookMode = .after
                 let closure = {
-                    XCTAssertEqual(result, [])
+                    XCTAssertEqual(result, [2])
                     result.append(1)
                     } as @convention(block) () -> Void
                 let token = try internalHook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
@@ -31,17 +31,17 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
                 // test hook
                 XCTAssertEqual(result, [])
                 hookedTestObject.execute {
-                    XCTAssertEqual(result, [1])
+                    XCTAssertEqual(result, [])
                     result.append(2)
                 }
-                XCTAssertEqual(result, [1, 2])
+                XCTAssertEqual(result, [2, 1])
                 
                 nonHookTestObject.execute {
-                    XCTAssertEqual(result, [1, 2])
+                    XCTAssertEqual(result, [2, 1])
                     result.append(3)
-                    XCTAssertEqual(result, [1, 2, 3])
+                    XCTAssertEqual(result, [2, 1, 3])
                 }
-                XCTAssertEqual(result, [1, 2, 3])
+                XCTAssertEqual(result, [2, 1, 3])
                 
                 // cancel
                 XCTAssertTrue(try testIsDynamicClass(object: hookedTestObject))
@@ -73,7 +73,7 @@ class HookContextSingleInstancesBeforeTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 let selector = #selector(TestObject.sumFunc(a:b:))
-                let mode: HookMode = .before
+                let mode: HookMode = .after
                 let closure = { a, b in
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)

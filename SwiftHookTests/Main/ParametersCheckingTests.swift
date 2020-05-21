@@ -38,7 +38,7 @@ class ParametersCheckingTests: XCTestCase {
         }
     }
     
-    func testHookSwiftObjectDealloc() {
+    func testUnsupportHookPureSwiftObjectDealloc() {
         do {
             try hookBefore(object: TestObject(), selector: deallocSelector, closure: {
             })
@@ -57,6 +57,30 @@ class ParametersCheckingTests: XCTestCase {
         }
         do {
             try hookInstead(object: TestObject(), selector: deallocSelector, closure: {
+            })
+            XCTAssertTrue(false)
+        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookBefore(targetClass: TestObject.self, selector: deallocSelector, closure: {
+            })
+            XCTAssertTrue(false)
+        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookAfter(targetClass: TestObject.self, selector: deallocSelector, closure: {
+            })
+            XCTAssertTrue(false)
+        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTAssertTrue(false)
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
@@ -112,7 +136,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
-        
+    
     func testIncompatibleClosureSignature() {
         do {
             try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in

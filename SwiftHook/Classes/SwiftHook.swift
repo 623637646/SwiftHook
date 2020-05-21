@@ -10,7 +10,7 @@ public enum SwiftHookError: Error {
     case noRespondSelector
     case missingSignature // Please check if there is keyword @convention(block) for the clousre
     case incompatibleClosureSignature
-    case unsupportHookPureSwiftObjectDealloc
+    case unsupportHookPureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
     case canNotHookClassWithObjectAPI // Please use "hookClassMethod*" instead.
     case duplicateHookClosure // This closure already hooked with one mode.
     case ffiError
@@ -228,7 +228,6 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
 // MARK: private
 
 private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
-    // TODO: Selector black list.
     if selector == deallocSelector {
         guard targetClass is NSObject.Type else {
             throw SwiftHookError.unsupportHookPureSwiftObjectDealloc

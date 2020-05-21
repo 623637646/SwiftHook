@@ -7,6 +7,9 @@
 //
 @testable import SwiftHook
 
+let dynamicClassPrefix = "SwiftHook_"
+let kvoPrefix = "NSKVONotifying_"
+
 // MARK: utilities
 
 func randomTestObject() -> AnyObject {
@@ -53,19 +56,84 @@ func testIsDynamicClass(object: AnyObject) throws -> Bool {
     guard typeClass == sht_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard NSStringFromClass(isaClass).hasPrefix("SwiftHook_") else {
+    let className = NSStringFromClass(isaClass)
+    guard className.hasPrefix(dynamicClassPrefix) else {
         return false
     }
     guard class_getSuperclass(isaClass) == typeClass else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard NSStringFromClass(isaClass) == "SwiftHook_\(typeClass)" else {
+    guard className == "SwiftHook_\(typeClass)" else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     return true
 }
 
-// TODO: is KVO Class
+func testIsKVO(object: AnyObject) throws -> Bool {
+    let isaClass: AnyClass = object_getClass(object)!
+    let typeClass: AnyClass = type(of: object)
+    guard typeClass == sht_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let className = NSStringFromClass(isaClass)
+    guard className.hasPrefix(kvoPrefix) else {
+        return false
+    }
+    guard class_getSuperclass(isaClass) == typeClass else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    guard className == "NSKVONotifying_\(typeClass)" else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    return true
+}
+
+func testIsDynamicClassThenKVO(object: AnyObject) throws -> Bool {
+    let isaClass: AnyClass = object_getClass(object)!
+    let typeClass: AnyClass = type(of: object)
+    guard typeClass == sht_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let className = NSStringFromClass(isaClass)
+    guard className.hasPrefix(kvoPrefix) else {
+        return false
+    }
+    guard class_getSuperclass(isaClass) == typeClass else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    guard className == "NSKVONotifying_\(typeClass)" else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let isaClassName = String(className.dropFirst(kvoPrefix.count))
+    return isaClassName.hasPrefix(dynamicClassPrefix)
+}
+
+func testIsKVOThenDynamicClass(object: AnyObject) throws -> Bool {
+    let isaClass: AnyClass = object_getClass(object)!
+    let typeClass: AnyClass = type(of: object)
+    guard typeClass == sht_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let className = NSStringFromClass(isaClass)
+    guard className.hasPrefix(dynamicClassPrefix) else {
+        return false
+    }
+    guard class_getSuperclass(isaClass) == typeClass else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    guard className == "SwiftHook_\(typeClass)" else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    let isaClassName = String(className.dropFirst(dynamicClassPrefix.count))
+    return isaClassName.hasPrefix(kvoPrefix)
+}
+
+func testIsNormalClass(object: AnyObject) throws -> Bool {
+    return try !testIsDynamicClass(object: object) &&
+        !testIsKVO(object: object) &&
+        !testIsDynamicClassThenKVO(object: object) &&
+        !testIsKVOThenDynamicClass(object: object)
+}
 
 #if DEBUG
 func debug_cleanUp() {

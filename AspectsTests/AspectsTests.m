@@ -30,6 +30,20 @@
     } error:NULL];
     [object setNumber:99];
 }
+
+/**
+ Aspect is not compatible with KVO. Hook aspects first, Then KVO, Then cancel aspects hook. call the method. crash.
+ */
+- (void)testCrashOnCancellationAspectsAfterKVO
+{
+    TestObject *object = [[TestObject alloc] init];
+    id<AspectToken> token = [object aspect_hookSelector:@selector(setNumber:) withOptions:AspectPositionAfter usingBlock:^(){
+    } error:NULL];
+    [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
+    [object setNumber:99];
+    [token remove];
+    [object setNumber:888];
+}
 /**
  This is similar with testCrashWithKVOObject. But crash on EXC_BAD_ACCESS.
  */

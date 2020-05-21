@@ -57,6 +57,7 @@
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
 		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
+		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
 		9189855ACA554CFBDAD42B3F /* Pods_AspectsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2329BB3948E080990AE138F /* Pods_AspectsTests.framework */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		BE68AC67384A7396BA67F4DD /* Pods_abstract_SwiftHook_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */; };
@@ -134,6 +135,7 @@
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		2AD183C924650AE500B8EC51 /* BlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockUtilities.h; sourceTree = "<group>"; };
 		2AD183CA24650AE500B8EC51 /* BlockUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlockUtilities.m; sourceTree = "<group>"; };
+		2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityTests.swift; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
 				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
+				2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */,
 				2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */,
 				2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */,
+				2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */,
 				2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
 				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,

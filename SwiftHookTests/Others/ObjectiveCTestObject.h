@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ObjectiveCTestObject : NSObject
 
+@property(nonatomic, assign) NSInteger number;
+
 @property(nonatomic, copy, nullable) void(^deallocExecution)(void);
 
 - (void)noArgsNoReturnFunc;

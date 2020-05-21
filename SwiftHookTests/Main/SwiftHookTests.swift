@@ -9,9 +9,9 @@
 import XCTest
 @testable import SwiftHook
 
+// TODO: some complicated test cases
 class SwiftHookTests: XCTestCase {
     
 }
 
 // TODO: performance tests measureBlock
-// TODO: 兼容性测试 （KVO, swizzling, aspects）

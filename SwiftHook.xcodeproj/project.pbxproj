@@ -35,7 +35,6 @@
 		2A728721246E76F7002D63A1 /* ThreadSafetyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */; };
 		2A728728246EC1AB002D63A1 /* SwiftHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A728727246EC1AB002D63A1 /* SwiftHook.swift */; };
 		2A7F43C02458359E00A63935 /* HookContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43BE2458359E00A63935 /* HookContext.swift */; };
-		2A7F43C3245835B700A63935 /* TestCases.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2A7F43C2245835B700A63935 /* TestCases.txt */; };
 		2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C6245835D600A63935 /* LibffiTests.swift */; };
 		2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C7245835D600A63935 /* LibffiTestsOC.m */; };
 		2A7F43CC245835D600A63935 /* TestObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7F43C8245835D600A63935 /* TestObject.swift */; };
@@ -104,7 +103,6 @@
 		2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafetyTests.swift; sourceTree = "<group>"; };
 		2A728727246EC1AB002D63A1 /* SwiftHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHook.swift; sourceTree = "<group>"; };
 		2A7F43BE2458359E00A63935 /* HookContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HookContext.swift; sourceTree = "<group>"; };
-		2A7F43C2245835B700A63935 /* TestCases.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestCases.txt; sourceTree = "<group>"; };
 		2A7F43C4245835D500A63935 /* SwiftHookTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftHookTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2A7F43C6245835D600A63935 /* LibffiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibffiTests.swift; sourceTree = "<group>"; };
 		2A7F43C7245835D600A63935 /* LibffiTestsOC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibffiTestsOC.m; sourceTree = "<group>"; };
@@ -199,9 +197,27 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		2A0C85DA2476B5A9003AA9D9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2A172A5324756B18001FD825 /* HookInternalTests.swift */,
+				2A2F212324758C7D0032A64D /* HookContextTests.swift */,
+				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
+				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
+				2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */,
+				2A99159B24587BF4007955E7 /* SignatureTests.swift */,
+				2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */,
+				2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */,
+				2A7F43C6245835D600A63935 /* LibffiTests.swift */,
+				2A7F43C7245835D600A63935 /* LibffiTestsOC.m */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		2A3B8C0C24742362007E6D65 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A5C8D5224670B1D00812DAD /* HookContextTests */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
@@ -223,24 +239,6 @@
 				2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */,
 			);
 			path = Others;
-			sourceTree = "<group>";
-		};
-		2A5C8D5024670AD200812DAD /* LibffiTests */ = {
-			isa = PBXGroup;
-			children = (
-				2A7F43C6245835D600A63935 /* LibffiTests.swift */,
-				2A7F43C7245835D600A63935 /* LibffiTestsOC.m */,
-			);
-			path = LibffiTests;
-			sourceTree = "<group>";
-		};
-		2A5C8D5124670B0600812DAD /* SignatureTests */ = {
-			isa = PBXGroup;
-			children = (
-				2A99159B24587BF4007955E7 /* SignatureTests.swift */,
-				2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */,
-			);
-			path = SignatureTests;
 			sourceTree = "<group>";
 		};
 		2A5C8D5224670B1D00812DAD /* HookContextTests */ = {
@@ -332,18 +330,9 @@
 			isa = PBXGroup;
 			children = (
 				2A3B8C0C24742362007E6D65 /* Main */,
-				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
-				2A172A5324756B18001FD825 /* HookInternalTests.swift */,
-				2A2F212324758C7D0032A64D /* HookContextTests.swift */,
-				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
-				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
-				2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */,
-				2A5C8D5124670B0600812DAD /* SignatureTests */,
-				2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */,
-				2A5C8D5024670AD200812DAD /* LibffiTests */,
+				2A0C85DA2476B5A9003AA9D9 /* Components */,
 				2A58BF9A245C94FE005227F5 /* Others */,
 				2AB67361245834E30011536D /* Info.plist */,
-				2A7F43C2245835B700A63935 /* TestCases.txt */,
 				2A7F43C4245835D500A63935 /* SwiftHookTests-Bridging-Header.h */,
 			);
 			path = SwiftHookTests;
@@ -487,7 +476,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A7F43C3245835B700A63935 /* TestCases.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

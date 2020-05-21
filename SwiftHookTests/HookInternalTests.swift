@@ -10,11 +10,6 @@ import XCTest
 @testable import SwiftHook
 
 class HookInternalTests: XCTestCase {
-    
-    override class func setUp() {
-        cleanUpHookContextPool()
-        debug_cleanUpDynamicClassContextPool()
-    }
 
     func testHookClass() {
         let targetClass = TestObject.self
@@ -123,6 +118,7 @@ class HookInternalTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
     func testDuplicateCancellation() {
@@ -142,14 +138,17 @@ class HookInternalTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        
+        debug_cleanUp()
     }
     
     func testDuplicateHookClosure() {
         do {
             let closure: @convention(block) () -> Void = {
             }
-            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            let token = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            defer {
+                XCTAssertTrue(internalCancelHook(token: token)!)
+            }
             _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             XCTAssertTrue(false)
         } catch SwiftHookError.duplicateHookClosure {
@@ -160,8 +159,10 @@ class HookInternalTests: XCTestCase {
         do {
             let closure: @convention(block) () -> Void = {
             }
-            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
-            _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+            let token1 = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            let token2 = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+            XCTAssertFalse(internalCancelHook(token: token1)!)
+            XCTAssertTrue(internalCancelHook(token: token2)!)
         } catch {
             XCTAssertNil(error)
         }
@@ -170,7 +171,10 @@ class HookInternalTests: XCTestCase {
             let object = TestObject()
             let closure: @convention(block) () -> Void = {
             }
-            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            let token = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            defer {
+                XCTAssertTrue(internalCancelHook(token: token)!)
+            }
             _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             XCTAssertTrue(false)
         } catch SwiftHookError.duplicateHookClosure {
@@ -182,11 +186,14 @@ class HookInternalTests: XCTestCase {
             let object = TestObject()
             let closure: @convention(block) () -> Void = {
             }
-            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
-            _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+            let token1 = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
+            let token2 = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
+            XCTAssertFalse(internalCancelHook(token: token1)!)
+            XCTAssertTrue(internalCancelHook(token: token2)!)
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
 }

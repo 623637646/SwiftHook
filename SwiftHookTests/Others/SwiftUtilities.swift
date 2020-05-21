@@ -66,3 +66,10 @@ func testIsDynamicClass(object: AnyObject) throws -> Bool {
 }
 
 // TODO: is KVO Class
+
+#if DEBUG
+func debug_cleanUp() {
+    debug_cleanUpHookContextPool()
+    debug_cleanUpDynamicClassContextPool()
+}
+#endif

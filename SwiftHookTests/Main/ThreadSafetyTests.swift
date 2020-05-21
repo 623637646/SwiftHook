@@ -100,4 +100,13 @@ class ThreadSafetyTests: XCTestCase {
         }
     }
     
+    // This test case shows Swift is not thread safety.
+    func testSwiftNotThreadSafety() {
+//        var object = TestObject()
+//        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
+//            object = TestObject()
+//        }
+//        _ = object
+    }
+    
 }

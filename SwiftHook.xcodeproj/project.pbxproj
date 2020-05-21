@@ -218,7 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
-				2A5C8D5224670B1D00812DAD /* HookContextTests */,
+				2A5C8D5224670B1D00812DAD /* Basic */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
@@ -241,7 +241,7 @@
 			path = Others;
 			sourceTree = "<group>";
 		};
-		2A5C8D5224670B1D00812DAD /* HookContextTests */ = {
+		2A5C8D5224670B1D00812DAD /* Basic */ = {
 			isa = PBXGroup;
 			children = (
 				2A5C8D5724670C6E00812DAD /* HookContextAllInstancesBeforeTests.swift */,
@@ -254,7 +254,7 @@
 				2A951D42246BF796000DB1E7 /* HookContextSingleInstancesAfterTests.swift */,
 				2A951D44246BF7A4000DB1E7 /* HookContextSingleInstancesInsteadTests.swift */,
 			);
-			path = HookContextTests;
+			path = Basic;
 			sourceTree = "<group>";
 		};
 		2A7F43BD2458359E00A63935 /* Classes */ = {

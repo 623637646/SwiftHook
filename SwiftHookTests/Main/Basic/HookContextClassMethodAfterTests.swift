@@ -1,63 +1,56 @@
 //
-//  HookContextSingleInstancesAfterTests.swift
+//  HookContextClassMethodAfterTests.swift
 //  SwiftHookTests
 //
-//  Created by Yanni Wang on 13/5/20.
+//  Created by Yanni Wang on 10/5/20.
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
 import XCTest
 @testable import SwiftHook
 
-class HookContextSingleInstancesAfterTests: XCTestCase {
+class HookContextClassMethodAfterTests: XCTestCase {
 
     func testNormal() {
         do {
-//            let contextCount = debug_getNormalClassHookContextsCount()
-            let hookedTestObject = TestObject()
-            let nonHookTestObject = TestObject()
             var result = [Int]()
             
             try autoreleasepool {
                 // hook
-                let selector = #selector(TestObject.execute(closure:))
+                guard let targetClass = object_getClass(TestObject.self) else {
+                    XCTAssertTrue(false)
+                    return
+                }
+                let selector = #selector(TestObject.classMethodExecute(closure:))
                 let mode: HookMode = .after
                 let closure = {
                     XCTAssertEqual(result, [2])
                     result.append(1)
                     } as @convention(block) () -> Void
-                let token = try internalHook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-//                XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount + 2)
+                let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+                XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
                 // test hook
                 XCTAssertEqual(result, [])
-                hookedTestObject.execute {
+                TestObject.classMethodExecute {
                     XCTAssertEqual(result, [])
                     result.append(2)
                 }
                 XCTAssertEqual(result, [2, 1])
                 
-                nonHookTestObject.execute {
-                    XCTAssertEqual(result, [2, 1])
-                    result.append(3)
-                    XCTAssertEqual(result, [2, 1, 3])
-                }
-                XCTAssertEqual(result, [2, 1, 3])
-                
                 // cancel
-                XCTAssertTrue(try testIsDynamicClass(object: hookedTestObject))
+                
                 XCTAssertTrue(internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
             // test cancel
-            XCTAssertFalse(try testIsDynamicClass(object: hookedTestObject))
-            hookedTestObject.execute {
+            TestObject.classMethodExecute {
                 XCTAssertEqual(result, [])
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-//            XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)
         } catch {
             XCTAssertNil(error)
         }
@@ -65,44 +58,44 @@ class HookContextSingleInstancesAfterTests: XCTestCase {
     
     func testCheckArguments() {
         do {
-//            let contextCount = debug_getNormalClassHookContextsCount()
-            let test = TestObject()
             let argumentA = 77
             let argumentB = 88
             var executed = false
             
             try autoreleasepool {
                 // hook
-                let selector = #selector(TestObject.sumFunc(a:b:))
+                guard let targetClass = object_getClass(TestObject.self) else {
+                    XCTAssertTrue(false)
+                    return
+                }
+                let selector = #selector(TestObject.classMethodSumFunc(a:b:))
                 let mode: HookMode = .after
                 let closure = { a, b in
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)
                     executed = true
                     } as @convention(block) (Int, Int) -> Void
-                let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-//                XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount + 2)
+                let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
+                XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
                 // test hook
-                let result = test.sumFunc(a: argumentA, b: argumentB)
+                let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
                 XCTAssertEqual(result, argumentA + argumentB)
                 XCTAssertTrue(executed)
                 
                 // cancel
-                XCTAssertTrue(try testIsDynamicClass(object: test))
                 XCTAssertTrue(internalCancelHook(token: token)!)
             }
             
             // test cancel
-            XCTAssertFalse(try testIsDynamicClass(object: test))
             executed = false
-            let result = test.sumFunc(a: argumentA, b: argumentB)
+            let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-//            XCTAssertEqual(debug_getNormalClassHookContextsCount(), contextCount)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)
         } catch {
             XCTAssertNil(error)
         }
     }
-    
+
 }

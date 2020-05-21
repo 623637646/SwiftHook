@@ -20,6 +20,7 @@ class SpecialMethodTests: XCTestCase {
                 object.deallocExecution = {
                     executed.append(0)
                 }
+                XCTAssertFalse(try testIsDynamicClass(object: object))
                 
                 // before
                 try hookBefore(object: object, selector: deallocSelector) {
@@ -51,6 +52,7 @@ class SpecialMethodTests: XCTestCase {
                 try hookDeallocAfterByTail(object: object, closure: {
                     executed.append(5)
                 })
+                XCTAssertTrue(try testIsDynamicClass(object: object))
                 
                 XCTAssertEqual(executed, [])
             }
@@ -68,9 +70,12 @@ class SpecialMethodTests: XCTestCase {
                 object.deinitExecution = {
                     executed.append(0)
                 }
+                
+                XCTAssertFalse(try testIsDynamicClass(object: object))
                 try hookDeallocAfterByTail(object: object, closure: {
                     executed.append(2)
                 })
+                XCTAssertFalse(try testIsDynamicClass(object: object))
                 
                 XCTAssertEqual(executed, [])
             }

@@ -202,7 +202,6 @@
 		2A3B8C0C24742362007E6D65 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A5C8D5224670B1D00812DAD /* HookContextTests */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
@@ -333,8 +332,9 @@
 			isa = PBXGroup;
 			children = (
 				2A3B8C0C24742362007E6D65 /* Main */,
-				2A2F212324758C7D0032A64D /* HookContextTests.swift */,
+				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A172A5324756B18001FD825 /* HookInternalTests.swift */,
+				2A2F212324758C7D0032A64D /* HookContextTests.swift */,
 				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
 				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
 				2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */,

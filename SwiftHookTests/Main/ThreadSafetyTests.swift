@@ -47,12 +47,50 @@ class ThreadSafetyTests: XCTestCase {
         }
     }
     
-    func testCancelHook() {
+    func testCancelHookForClass() {
         do {
             var tokens = [HookToken]()
             for _ in 0 ... 1000 {
-                tokens.append(try internalHook(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: .instead, hookClosure: { _ in
+                tokens.append(try internalHook(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _ in
                     } as @convention(block) (() -> Void) -> Void as AnyObject))
+            }
+            DispatchQueue.concurrentPerform(iterations: 1000) { index in
+                tokens[index].cancelHook()
+//                _ = internalCancelHook(token: tokens[index]) // This will crash
+            }
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testCancelHookForObject() {
+        do {
+            var tokens = [HookToken]()
+            var objects = [AnyObject]()
+            for _ in 0 ... 1000 {
+                let object = randomTestObject()
+                objects.append(object)
+                tokens.append(try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _ in
+                    } as @convention(block) (() -> Void) -> Void as AnyObject))
+            }
+            DispatchQueue.concurrentPerform(iterations: 1000) { index in
+                tokens[index].cancelHook()
+//                _ = internalCancelHook(token: tokens[index]) // This will not crash
+            }
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testCancelHookForHookDeallocAfterToken() {
+        do {
+            var tokens = [Token]()
+            var objects = [AnyObject]()
+            for _ in 0 ... 1000 {
+                let object = randomTestObject()
+                objects.append(object)
+                tokens.append(try hookDeallocAfterByTail(object: object, closure: {
+                }))
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in
                 tokens[index].cancelHook()

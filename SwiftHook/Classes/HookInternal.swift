@@ -59,17 +59,8 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
     return token
 }
 
-// TODO: test cases for cancelHook again.
 /*
- TODO:
- object release
- context release
- cancel hook
- 
- object release -> cancel hook -> context release
- cancel hook -> context release -> reset class
- 
- Case: hook 一个object A方法，然后KVO，然后取消hook，hookContext无法释放（有KVO），导致object的lClass无法恢复
+ TODO: Case: hook 一个object A方法，然后KVO，然后取消hook，hookContext无法释放（有KVO），导致object的lClass无法恢复
  */
 
 /**

@@ -9,7 +9,6 @@
 import XCTest
 @testable import SwiftHook
 
-// TODO: Unfinish
 class SpecialMethodTests: XCTestCase {
     
     func testDeallocForSingleOCObject() {

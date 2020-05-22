@@ -140,4 +140,11 @@ func debug_cleanUp() {
     debug_cleanUpHookContextPool()
     debug_cleanUpDynamicClassContextPool()
 }
+
+@objcMembers class CleanUpOCBridge: NSObject {
+    class func oc_debug_cleanUp() {
+        debug_cleanUp()
+    }
+}
+
 #endif

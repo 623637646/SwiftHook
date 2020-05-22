@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import <objc/runtime.h>
-#import <SwiftHookTests-Swift.h>
 #import "ObjectiveCTestObject.h"
 @import libffi_iOS;
 

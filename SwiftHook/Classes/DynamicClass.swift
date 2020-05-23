@@ -12,10 +12,10 @@ private let prefix = "SwiftHook_"
 private var dynamicClassContextPool = Set<DynamicClassContext>()
 
 private class DynamicClassContext: Hashable {
-
+    
     fileprivate let baseClass: AnyClass
     fileprivate let dynamicClass: AnyClass
-    private let dynamicClassHookToken: HookToken
+    private let getClassHookContext: HookContext
     
     fileprivate init(baseClass: AnyClass) throws {
         self.baseClass = baseClass
@@ -23,16 +23,20 @@ private class DynamicClassContext: Hashable {
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        // Hook "Get Class"
-        dynamicClassHookToken = try internalHook(targetClass: dynamicClass, selector: NSSelectorFromString("class"), mode: .instead, hookClosure: {_ in
-            return baseClass
-            } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject)
         objc_registerClassPair(dynamicClass)
+        // Hook "Get Class"
+        let selector = NSSelectorFromString("class")
+        if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {
+            try overrideSuperMethod(targetClass: dynamicClass, selector: selector)
+        }
+        getClassHookContext = try HookContext.init(targetClass: dynamicClass, selector: selector)
+        try getClassHookContext.append(hookClosure: {_ in
+            return baseClass
+            } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject, mode: .instead)
         self.dynamicClass = dynamicClass
     }
     
     deinit {
-        _ = internalCancelHook(token: dynamicClassHookToken)
         objc_disposeClassPair(dynamicClass)
     }
     
@@ -85,10 +89,3 @@ func unwrapDynamicClass(object: AnyObject) throws {
 func isDynamicClass(targetClass: AnyClass) -> Bool {
     NSStringFromClass(targetClass).hasPrefix(prefix)
 }
-
-// MARK: This is debug tools.
-#if DEBUG
-func debug_cleanUpDynamicClassContextPool() {
-    dynamicClassContextPool.removeAll()
-}
-#endif

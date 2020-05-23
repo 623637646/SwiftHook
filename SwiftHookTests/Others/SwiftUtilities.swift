@@ -138,7 +138,6 @@ func testIsNormalClass(object: AnyObject) throws -> Bool {
 #if DEBUG
 func debug_cleanUp() {
     debug_cleanUpHookContextPool()
-    debug_cleanUpDynamicClassContextPool()
 }
 
 @objcMembers class CleanUpOCBridge: NSObject {

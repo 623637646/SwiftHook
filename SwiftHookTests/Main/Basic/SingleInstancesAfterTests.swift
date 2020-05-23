@@ -26,7 +26,7 @@ class SingleInstancesAfterTests: XCTestCase {
                     result.append(1)
                     } as @convention(block) () -> Void
                 let token = try internalHook(object: hookedTestObject, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+                XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -56,7 +56,7 @@ class SingleInstancesAfterTests: XCTestCase {
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
         } catch {
             XCTAssertNil(error)
         }
@@ -80,7 +80,7 @@ class SingleInstancesAfterTests: XCTestCase {
                     executed = true
                     } as @convention(block) (Int, Int) -> Void
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+                XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
                 
                 // test hook
                 let result = test.sumFunc(a: argumentA, b: argumentB)
@@ -98,7 +98,7 @@ class SingleInstancesAfterTests: XCTestCase {
             let result = test.sumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
         } catch {
             XCTAssertNil(error)
         }

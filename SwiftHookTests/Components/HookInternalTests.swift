@@ -63,56 +63,56 @@ class HookInternalTests: XCTestCase {
         do {
             let token1 = try internalHook(object: object, selector: selector, mode: .before, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 1)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             let token2 = try internalHook(object: object, selector: selector, mode: .after, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 2)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             let token3 = try internalHook(object: object, selector: selector, mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 1)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 3)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             let token4 = try internalHook(object: superObject, selector: selector, mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 4)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 2)
             XCTAssertEqual(debug_associatedClosureCount(object: superObject), 1)
             XCTAssertTrue(try testIsDynamicClass(object: superObject))
             
             let token5 = try internalHook(object: object, selector: #selector(TestObject.noDynamicMethod), mode: .instead, hookClosure: {
             } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 4)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             XCTAssertFalse(internalCancelHook(token: token1)!)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 3)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             XCTAssertFalse(internalCancelHook(token: token2)!)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 2)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             XCTAssertFalse(internalCancelHook(token: token3)!)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 1)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             
             XCTAssertTrue(internalCancelHook(token: token4)!)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: superObject), 0)
             XCTAssertFalse(try testIsDynamicClass(object: superObject))
             
             XCTAssertTrue(internalCancelHook(token: token5)!)
-            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 5)
+            XCTAssertEqual(debug_getDynamicClassHookContextsCount(), 3)
             XCTAssertEqual(debug_associatedClosureCount(object: object), 0)
             XCTAssertFalse(try testIsDynamicClass(object: object))
         } catch {

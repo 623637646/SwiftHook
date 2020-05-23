@@ -11,6 +11,7 @@ public enum SwiftHookError: Error {
     case missingSignature // Please check if there is keyword @convention(block) for the clousre
     case incompatibleClosureSignature
     case unsupportHookPureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
+    case unsupportHookKVOedObject // Unsupport to hook KVO'ed Object
     case canNotHookClassWithObjectAPI // Please use "hookClassMethod*" instead.
     case duplicateHookClosure // This closure already hooked with one mode.
     case ffiError
@@ -19,6 +20,7 @@ public enum SwiftHookError: Error {
 
 let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
 let deallocSelector = NSSelectorFromString("dealloc")
+private let KVOPrefix = "NSKVONotifying_"
 
 // MARK: Hook single instance
 
@@ -233,7 +235,9 @@ private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: Ho
             throw SwiftHookError.unsupportHookPureSwiftObjectDealloc
         }
     }
-    
+    guard !NSStringFromClass(targetClass).hasPrefix(KVOPrefix) else {
+        throw SwiftHookError.unsupportHookKVOedObject
+    }
     guard let method = class_getInstanceMethod(targetClass, selector) else {
         throw SwiftHookError.noRespondSelector
     }

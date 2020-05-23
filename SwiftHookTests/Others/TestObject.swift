@@ -49,6 +49,12 @@ class TestObject: SuperObject {
         closure()
     }
     
+    @objc dynamic func generateView(backgroundColor: UIColor) -> UIView {
+        let view = UIView()
+        view.backgroundColor = backgroundColor
+        return view
+    }
+    
     // signature
     @objc dynamic func testSimpleSignature(
         char: CChar,

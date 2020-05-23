@@ -1,5 +1,5 @@
 //
-//  DynamicClassContextTests.swift
+//  DynamicClassTests.swift
 //  SwiftHookTests
 //
 //  Created by Yanni Wang on 15/5/20.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftHook
 
-class DynamicClassContextTests: XCTestCase {
+class DynamicClassTests: XCTestCase {
     
     let InternalWrapDynamicClass = 56
     let InternalUnwrapNonDynamicClass = 74

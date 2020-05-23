@@ -262,4 +262,22 @@ class AllInstancesInsteadTests: XCTestCase {
         }
     }
     
+    func testChangeReturn() {
+        do {
+            let token = try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.generateView(backgroundColor:)), closure: { original, color in
+                XCTAssertEqual(color, UIColor.red)
+                let view = original(UIColor.green)
+                XCTAssertEqual(view.backgroundColor, UIColor.green)
+                let newView = UIView()
+                newView.backgroundColor = UIColor.yellow
+                return newView
+            } as @convention(block) ((UIColor) -> UIView, UIColor) -> UIView)
+            let view = TestObject().generateView(backgroundColor: UIColor.red)
+            XCTAssertEqual(view.backgroundColor, UIColor.yellow)
+            token.cancelHook()
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

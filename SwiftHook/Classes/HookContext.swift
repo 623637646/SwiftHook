@@ -412,5 +412,3 @@ extension HookContext: Hashable {
         hasher.combine(selector)
     }
 }
-
-// TODO: 对hook后执行的代码优化。无需优化hook方法

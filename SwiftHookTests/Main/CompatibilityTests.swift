@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftHook
 
-// TODO: 兼容性测试 （KVO, swizzling, aspects）
+// TODO: Compatibility testing （KVO, swizzling, aspects）
 class CompatibilityTests: XCTestCase {
     
     // MARK: KVO

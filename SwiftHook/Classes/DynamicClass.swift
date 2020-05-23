@@ -24,6 +24,12 @@ private class DynamicClassContext: Hashable {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         objc_registerClassPair(dynamicClass)
+        var deallocateHelper: AnyClass? = dynamicClass
+        defer {
+            if let deallocateHelper = deallocateHelper {
+                objc_disposeClassPair(deallocateHelper)
+            }
+        }
         // Hook "Get Class"
         let selector = NSSelectorFromString("class")
         if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {
@@ -34,6 +40,7 @@ private class DynamicClassContext: Hashable {
             return baseClass
             } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject, mode: .instead)
         self.dynamicClass = dynamicClass
+        deallocateHelper = nil
     }
     
     deinit {

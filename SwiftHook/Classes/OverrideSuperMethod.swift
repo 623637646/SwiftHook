@@ -70,6 +70,10 @@ private class OverrideMethodContext: Hashable {
         
         // argumentTypes,
         self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        var deallocateHelperArgumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.argumentTypes
+        defer {
+            deallocateHelperArgumentTypes?.deallocate()
+        }
         var typeContexts = [SHFFITypeContext]()
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
@@ -91,6 +95,10 @@ private class OverrideMethodContext: Hashable {
         
         // cif
         self.cifPointer = UnsafeMutablePointer.allocate(capacity: 1)
+        var deallocateHelperCifPointer: UnsafeMutablePointer? = self.cifPointer
+        defer {
+            deallocateHelperCifPointer?.deallocate()
+        }
         let status_cif = ffi_prep_cif(
             self.cifPointer,
             FFI_DEFAULT_ABI,
@@ -106,6 +114,11 @@ private class OverrideMethodContext: Hashable {
         var closure: UnsafeMutablePointer<ffi_closure>?
         UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
             closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
+        }
+        defer {
+            if let closure = closure {
+                ffi_closure_free(closure)
+            }
         }
         guard let closureNoNil = closure, let newIMPNoNil = newIMP else {
             throw SwiftHookError.ffiError
@@ -127,6 +140,11 @@ private class OverrideMethodContext: Hashable {
         guard class_addMethod(self.targetClass, self.selector, self.newIMP, method_getTypeEncoding(self.superMethod)) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
+        
+        // clean deallocate helpers, refer to: https://stackoverflow.com/a/61976157/9315497
+        deallocateHelperArgumentTypes = nil
+        deallocateHelperCifPointer = nil
+        closure = nil
     }
     
     deinit {

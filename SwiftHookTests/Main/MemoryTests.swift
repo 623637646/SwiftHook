@@ -14,10 +14,7 @@ class MemoryTests: XCTestCase {
     func testMemory() {
 //        while true {
 //            autoreleasepool {
-//                let libffiTests = LibffiTests()
-//                libffiTests.testLibffiCall()
-//                libffiTests.testLibffiClosure()
-//                
+//
 //                let ffiTypeContextTests = FFITypeContextTests()
 //                ffiTypeContextTests.testVoid()
 //                ffiTypeContextTests.testInt8()
@@ -26,19 +23,36 @@ class MemoryTests: XCTestCase {
 //                ffiTypeContextTests.testVoidAsterisk()
 //                ffiTypeContextTests.testStructCGRect()
 //                ffiTypeContextTests.testComplexityStruct()
-//                
-//                let signatureTests = SignatureTests()
-//                signatureTests.testNoArgsNoReturnFunc()
-//                signatureTests.testSimpleSignature()
-//                signatureTests.testStructSignature()
-//                signatureTests.testClosureSignature()
-//                
+//
 //                let sHMethodSignatureTests = SHMethodSignatureTests()
 //                sHMethodSignatureTests.testNoArgsNoReturnFunc()
 //                sHMethodSignatureTests.testSimpleSignature()
 //                sHMethodSignatureTests.testStructSignature()
 //                sHMethodSignatureTests.testClosureSignature()
-//                
+//
+//                let signatureTests = SignatureTests()
+//                signatureTests.testNoArgsNoReturnFunc()
+//                signatureTests.testSimpleSignature()
+//                signatureTests.testStructSignature()
+//                signatureTests.testClosureSignature()
+//
+//                let hookDeallocAfterDelegateTests = HookDeallocAfterDelegateTests()
+//                hookDeallocAfterDelegateTests.testSingleClosure()
+//                hookDeallocAfterDelegateTests.testMultipleClosure()
+//                hookDeallocAfterDelegateTests.testCancellation()
+//
+//                let dynamicClassTests = DynamicClassTests()
+//                dynamicClassTests.testNormal()
+//                dynamicClassTests.testWrapDynamicClass()
+//                dynamicClassTests.testUnwrapNonDynamicClass()
+//
+//                let hookContextTests = HookContextTests()
+//                hookContextTests.testNoMethod()
+//                hookContextTests.testHook()
+//                hookContextTests.testAppend()
+//                hookContextTests.testRemove()
+                // TODO: 做到这里了
+                
 //                let swiftHookTests = SwiftHookTests()
 //                swiftHookTests.testHookBeforeNoArgsNoReturnFunc()
 //                swiftHookTests.testHookBeforeSumFunc()
@@ -47,6 +61,7 @@ class MemoryTests: XCTestCase {
 //                specialMethodTests.testDeallocForSingleOCObject()
 //                specialMethodTests.testDeallocForSingleSwiftObject()
 //                specialMethodTests.testDeallocForAllInstancesOCObject() 这个内存暴增
+        
 //            }
 //        }
     }

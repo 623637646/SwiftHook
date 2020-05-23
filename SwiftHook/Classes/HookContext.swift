@@ -202,6 +202,16 @@ class HookContext {
     
     init(targetClass: AnyClass, selector: Selector) throws {
         
+        // deallocate helper
+        var deallocateHelperMethodNewIMPPointer: UnsafeMutablePointer<IMP>? = self.methodNewIMPPointer
+        defer {
+            deallocateHelperMethodNewIMPPointer?.deallocate()
+        }
+        var deallocateHelperBlockInvoke: UnsafeMutablePointer<UnsafeMutableRawPointer?>? = self.blockInvoke
+        defer {
+            deallocateHelperBlockInvoke?.deallocate()
+        }
+        
         // basic
         self.targetClass = targetClass
         self.selector = selector
@@ -216,6 +226,10 @@ class HookContext {
         }
         self.methodIMP = method_getImplementation(self.method)
         self.methodArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
+        var deallocateHelperMethodArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.methodArgTypes
+        defer {
+            deallocateHelperMethodArgTypes?.deallocate()
+        }
         for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
@@ -229,6 +243,10 @@ class HookContext {
         self.typeContexts.insert(methodReturnTypeContext)
         self.methodReturnType = methodReturnTypeContext.ffiType
         self.methodCif = UnsafeMutablePointer.allocate(capacity: 1)
+        var deallocateHelperMethodCif: UnsafeMutablePointer? = self.methodCif
+        defer {
+            deallocateHelperMethodCif?.deallocate()
+        }
         guard (ffi_prep_cif(
             self.methodCif,
             FFI_DEFAULT_ABI,
@@ -240,6 +258,12 @@ class HookContext {
         self.methodFFIClosure = ffi_closure_alloc(
             MemoryLayout<ffi_closure>.stride,
             self.methodNewIMPPointer.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1, {$0})).assumingMemoryBound(to: ffi_closure.self)
+        var deallocateHelperMethodFFIClosure: UnsafeMutablePointer<ffi_closure>? = self.methodFFIClosure
+        defer {
+            if let deallocateHelperMethodFFIClosure = deallocateHelperMethodFFIClosure {
+                ffi_closure_free(deallocateHelperMethodFFIClosure)
+            }
+        }
         
         // Before & after
         let hookSignature = Signature(argumentTypes: {
@@ -249,6 +273,10 @@ class HookContext {
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
         self.hookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: hookSignature.argumentTypes.count)
+        var deallocateHelperHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.hookArgTypes
+        defer {
+            deallocateHelperHookArgTypes?.deallocate()
+        }
         for (index, argumentType) in hookSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
@@ -262,6 +290,10 @@ class HookContext {
         self.typeContexts.insert(hookClosureReturnTypeContext)
         self.hookReturnType = hookClosureReturnTypeContext.ffiType
         self.hookCif = UnsafeMutablePointer.allocate(capacity: 1)
+        var deallocateHelperHookCif: UnsafeMutablePointer? = self.hookCif
+        defer {
+            deallocateHelperHookCif?.deallocate()
+        }
         guard (ffi_prep_cif(
             self.hookCif,
             FFI_DEFAULT_ABI,
@@ -280,6 +312,10 @@ class HookContext {
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
         self.insteadHookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: insteadHookSignature.argumentTypes.count)
+        var deallocateHelperInsteadHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.insteadHookArgTypes
+        defer {
+            deallocateHelperInsteadHookArgTypes?.deallocate()
+        }
         for (index, argumentType) in insteadHookSignature.argumentTypes.enumerated() {
             guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
@@ -293,6 +329,10 @@ class HookContext {
         self.typeContexts.insert(insteadHookClosureReturnTypeContext)
         self.insteadHookReturnType = insteadHookClosureReturnTypeContext.ffiType
         self.insteadHookCif = UnsafeMutablePointer.allocate(capacity: 1)
+        var deallocateHelperInsteadHookCif: UnsafeMutablePointer? = self.insteadHookCif
+        defer {
+            deallocateHelperInsteadHookCif?.deallocate()
+        }
         guard (ffi_prep_cif(
             self.insteadHookCif,
             FFI_DEFAULT_ABI,
@@ -302,6 +342,12 @@ class HookContext {
                 throw SwiftHookError.ffiError
         }
         self.insteadHookFFIClosure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, UnsafeMutablePointer(blockInvoke)).assumingMemoryBound(to: ffi_closure.self)
+        var deallocateHelperInsteadHookFFIClosure: UnsafeMutablePointer<ffi_closure>? = self.insteadHookFFIClosure
+        defer {
+            if let deallocateHelperInsteadHookFFIClosure = deallocateHelperInsteadHookFFIClosure {
+                ffi_closure_free(deallocateHelperInsteadHookFFIClosure)
+            }
+        }
 
         // Prep closure
         guard ffi_prep_closure_loc(
@@ -323,6 +369,18 @@ class HookContext {
         
         // swizzling
         method_setImplementation(self.method, self.methodNewIMPPointer.pointee)
+        
+        // clean deallocate helpers, refer to: https://stackoverflow.com/a/61976157/9315497
+        deallocateHelperMethodNewIMPPointer = nil
+        deallocateHelperBlockInvoke = nil
+        deallocateHelperMethodArgTypes = nil
+        deallocateHelperMethodCif = nil
+        deallocateHelperMethodFFIClosure = nil
+        deallocateHelperHookArgTypes = nil
+        deallocateHelperHookCif = nil
+        deallocateHelperInsteadHookArgTypes = nil
+        deallocateHelperInsteadHookCif = nil
+        deallocateHelperInsteadHookFFIClosure = nil
     }
     
     deinit {

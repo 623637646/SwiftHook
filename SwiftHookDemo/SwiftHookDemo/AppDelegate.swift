@@ -7,12 +7,20 @@
 //
 
 import UIKit
+import SwiftHook
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // hook
+        do {
+            try hookBefore(targetClass: UIViewController.self, selector: #selector(UIViewController.viewDidAppear(_:))) {
+                print("UIViewController did appear")
+            }
+        } catch {}
+        
         return true
     }
 

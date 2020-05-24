@@ -7,27 +7,7 @@
 //
 
 import UIKit
-import SwiftHook
 
 class ViewController: UIViewController {
-    
-    var context: HookContext?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        do {
-            context = try ViewController.hookBefore(selector: #selector(ViewController.viewWillAppear(_:))) {
-                print("viewWillAppear")
-            }
-        } catch SwiftHookError.noRespondSelector(class: let c, selector: let s) {
-            print("\(c)  \(s)")
-        } catch {
-            print("\(error)")
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        context?.cancelHook()
-    }
+    // Hooking code is in AppDelegate.swift
 }

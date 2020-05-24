@@ -100,3 +100,53 @@ let token = try? hookClassMethodBefore(targetClass: TestObject.self, selector: #
 TestObject.classMethodNoArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
 ```
+
+### Advanced usage
+
+Hook before executing `dealloc` for single NSObject.
+
+```swift
+autoreleasepool {
+    let object = NSObject()
+    _ = try? hookDeallocBefore(object: object) {
+        print("released!")
+    }
+}
+```
+
+Hook after executing `dealloc` for single object (inclued pure swift object).
+
+```swift
+autoreleasepool {
+    let object = TestObject()
+    _ = try? hookDeallocAfterByTail(object: object) {
+        print("released!")
+    }
+}
+```
+
+Hook a single NSObject to override the `dealloc` function.
+
+```swift
+autoreleasepool {
+    let object = NSObject()
+    _ = try? hookDeallocInstead(object: object) { original in
+        print("before release!")
+        original() // have to call original "dealloc" to avoid memory leak!!!
+        print("released!")
+    }
+}
+```
+
+Hook before executing `dealloc` for All NSObject.
+
+```swift
+_ = try? hookDeallocBefore(targetClass: NSObject.self) {
+    // will print many "released!" because hooked all NSObject.
+    print("released!")
+}
+autoreleasepool {
+    _ = NSObject()
+}
+```
+

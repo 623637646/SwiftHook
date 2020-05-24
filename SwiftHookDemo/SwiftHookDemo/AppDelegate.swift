@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SwiftHook
+import EasySwiftHook
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

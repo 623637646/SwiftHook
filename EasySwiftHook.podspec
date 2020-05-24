@@ -15,9 +15,9 @@ Pod::Spec.new do |spec|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  spec.name         = "SwiftHook"
-  spec.version      = "0.0.1"
-  spec.summary      = "Hook in Swift by iOS runtime"
+  spec.name         = "EasySwiftHook"
+  spec.version      = "1.0.0"
+  spec.summary      = "Hook in Swift and Objective C by iOS runtime and libffi."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-                      Hook in Swift by iOS runtime
+                      This is a framework to hook in Swift and Objective C by iOS runtime and libffi.
                    DESC
 
   spec.homepage     = "https://github.com/623637646/SwiftHook"
@@ -66,6 +66,7 @@ Pod::Spec.new do |spec|
 
   # spec.platform     = :ios
   spec.platform     = :ios, "10.0"
+  spec.swift_version = '5.0'
 
   #  When using multiple platforms
   # spec.ios.deployment_target = "5.0"

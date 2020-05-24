@@ -7,7 +7,7 @@
 //
 
 #import "SHMethodSignature.h"
-#import <SwiftHook/SwiftHook.h>
+#import "BlockUtilities.h"
 
 @interface SHMethodSignature()
 

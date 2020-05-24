@@ -16,21 +16,13 @@ For example, this is your class
 
 ```swift
 class TestObject {
-
     @objc dynamic func noArgsNoReturnFunc() {
-        
     }
-    
     @objc dynamic func sumFunc(a: Int, b: Int) -> Int {
         return a + b
     }
-    
-    
-    
     @objc dynamic class func classMethodNoArgsNoReturnFunc() {
-        
     }
-
 }
 
 ```

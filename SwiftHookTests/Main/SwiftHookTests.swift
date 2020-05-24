@@ -12,6 +12,8 @@ import XCTest
 // TODO: some complicated test cases
 class SwiftHookTests: XCTestCase {
     
+    // MARK: Basic usage
+    
     func testSingleHookBefore() {
         let testObject = TestObject()
         let token = try? hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
@@ -66,6 +68,47 @@ class SwiftHookTests: XCTestCase {
         }
         TestObject.classMethodNoArgsNoReturnFunc()
         token?.cancelHook() // cancel the hook
+    }
+    
+    // MARK: Advanced usage
+    
+    func testSingleHookBeforeDeallocForNSObject() {
+        autoreleasepool {
+            let object = NSObject()
+            _ = try? hookDeallocBefore(object: object) {
+                print("released!")
+            }
+        }
+    }
+    
+    func testSingleHookAfterDeallocForAnyObject() {
+        autoreleasepool {
+            let object = TestObject()
+            _ = try? hookDeallocAfterByTail(object: object) {
+                print("released!")
+            }
+        }
+    }
+    
+    func testSingleHookInsteadDeallocForNSObject() {
+        autoreleasepool {
+            let object = NSObject()
+            _ = try? hookDeallocInstead(object: object) { original in
+                print("before release!")
+                original() // have to call original "dealloc" to avoid memory leak!!!
+                print("released!")
+            }
+        }
+    }
+    
+    func testAllInstancesHookBeforeDeallocForNSObject() {
+        _ = try? hookDeallocBefore(targetClass: NSObject.self) {
+            // will print many "released!" because hooked all NSObject.
+//            print("released!")
+        }
+        autoreleasepool {
+            _ = NSObject()
+        }
     }
     
 }

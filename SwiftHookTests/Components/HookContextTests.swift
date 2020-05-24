@@ -15,7 +15,7 @@ class HookContextTests: XCTestCase {
     
     func testNoMethod() {
         do {
-            _ = try HookContext.init(targetClass: TestObject.self, selector: #selector(SuperObject.superFunc(arg:)))
+            _ = try HookContext.init(targetClass: TestObject.self, selector: #selector(SuperObject.superFuncNoArgs))
             XCTAssertTrue(false)
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("HookContext.swift"))

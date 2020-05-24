@@ -274,4 +274,21 @@ class ClassMethodInsteadTests: XCTestCase {
         }
     }
     
+    func testChangeReturn() {
+        do {
+            let token = try hookClassMethodInstead(targetClass: TestObject.self, selector: #selector(TestObject.classGenerateNumber(number:)), closure: { original, number in
+                XCTAssertEqual(number, 4)
+                let number = original(5)
+                XCTAssertEqual(number.intValue, 5)
+                let newNumber = NSNumber(6)
+                return newNumber
+            } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
+            let number = TestObject.classGenerateNumber(number: 4)
+            XCTAssertEqual(number.intValue, 6)
+            token.cancelHook()
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

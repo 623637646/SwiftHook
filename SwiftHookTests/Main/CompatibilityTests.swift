@@ -68,6 +68,7 @@ class CompatibilityTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
     func testBeforeKVOReverseCancel() {
@@ -107,6 +108,7 @@ class CompatibilityTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
     func testAfterKVO() {

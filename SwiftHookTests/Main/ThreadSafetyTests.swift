@@ -26,7 +26,8 @@ class ThreadSafetyTests: XCTestCase {
             do {
                 let targetClass: AnyClass = objc_allocateClassPair(TestObject.self, "ThreadSafetyTests_\(index)", 0)!
                 objc_registerClassPair(targetClass)
-                try hookAfter(targetClass: targetClass, selector: #selector(TestObject.noArgsNoReturnFunc)) {}
+                let token = try hookAfter(targetClass: targetClass, selector: #selector(TestObject.noArgsNoReturnFunc)) {}
+                token.cancelHook()
                 objc_disposeClassPair(targetClass)
             } catch {
                 XCTAssertNil(error)
@@ -45,6 +46,7 @@ class ThreadSafetyTests: XCTestCase {
                 XCTAssertNil(error)
             }
         }
+        debug_cleanUp()
     }
     
     func testCancelHookForClass() {
@@ -56,7 +58,7 @@ class ThreadSafetyTests: XCTestCase {
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in
                 tokens[index].cancelHook()
-//                _ = internalCancelHook(token: tokens[index]) // This will crash
+//                _ = internalCancelHook(token: tokens[index]) // This will crash because of non-thread-safe
             }
         } catch {
             XCTAssertNil(error)
@@ -75,11 +77,12 @@ class ThreadSafetyTests: XCTestCase {
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in
                 tokens[index].cancelHook()
-//                _ = internalCancelHook(token: tokens[index]) // This will not crash
+//                _ = internalCancelHook(token: tokens[index]) // This will not crash because of non-thread-safe
             }
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
     func testCancelHookForHookDeallocAfterToken() {

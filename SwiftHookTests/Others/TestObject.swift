@@ -14,6 +14,10 @@ class SuperObject {
         arg.append(SuperObject.self)
         return arg
     }
+    
+    @objc dynamic func superFuncNoArgs() {
+        
+    }
 }
 
 class TestObject: SuperObject {
@@ -49,10 +53,8 @@ class TestObject: SuperObject {
         closure()
     }
     
-    @objc dynamic func generateView(backgroundColor: UIColor) -> UIView {
-        let view = UIView()
-        view.backgroundColor = backgroundColor
-        return view
+    @objc dynamic func generateNumber(number: Int) -> NSNumber {
+        return NSNumber(value: number)
     }
     
     // signature
@@ -148,6 +150,10 @@ class TestObject: SuperObject {
     
     @objc dynamic class func classMethodExecute(closure: () -> Void) {
         closure()
+    }
+    
+    @objc dynamic class func classGenerateNumber(number: Int) -> NSNumber {
+        return NSNumber(value: number)
     }
     
     // signature

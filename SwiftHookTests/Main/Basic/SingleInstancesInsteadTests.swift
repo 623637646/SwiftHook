@@ -334,16 +334,15 @@ class SingleInstancesInsteadTests: XCTestCase {
     func testChangeReturn() {
         do {
             let object = TestObject()
-            let token = try hookInstead(object: object, selector: #selector(TestObject.generateView(backgroundColor:)), closure: { original, color in
-                XCTAssertEqual(color, UIColor.red)
-                let view = original(UIColor.green)
-                XCTAssertEqual(view.backgroundColor, UIColor.green)
-                let newView = UIView()
-                newView.backgroundColor = UIColor.yellow
-                return newView
-            } as @convention(block) ((UIColor) -> UIView, UIColor) -> UIView)
-            let view = object.generateView(backgroundColor: UIColor.red)
-            XCTAssertEqual(view.backgroundColor, UIColor.yellow)
+            let token = try hookInstead(object: object, selector: #selector(TestObject.generateNumber(number:)), closure: { original, number in
+                XCTAssertEqual(number, 4)
+                let number = original(5)
+                XCTAssertEqual(number.intValue, 5)
+                let newNumber = NSNumber(6)
+                return newNumber
+            } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
+            let number = object.generateNumber(number: 4)
+            XCTAssertEqual(number.intValue, 6)
             token.cancelHook()
         } catch {
             XCTAssertNil(error)

@@ -14,7 +14,7 @@ class HookDeallocAfterDelegateTests: XCTestCase {
     func testSingleClosure() {
         var result = [Int]()
         autoreleasepool {
-            let object =  randomTestObject()
+            let object = randomTestObject()
             _ = hookDeallocAfterByDelegate(object: object, closure: {
                 result.append(1)
             } as @convention(block) () -> Void as AnyObject)
@@ -25,7 +25,7 @@ class HookDeallocAfterDelegateTests: XCTestCase {
     func testMultipleClosure() {
         var result = [Int]()
         autoreleasepool {
-            let object =  randomTestObject()
+            let object = randomTestObject()
             _ = hookDeallocAfterByDelegate(object: object, closure: {
                 result.append(1)
             } as @convention(block) () -> Void as AnyObject)
@@ -39,7 +39,7 @@ class HookDeallocAfterDelegateTests: XCTestCase {
     func testCancellation() {
         var result = [Int]()
         autoreleasepool {
-            let object =  randomTestObject()
+            let object = randomTestObject()
             _ = hookDeallocAfterByDelegate(object: object, closure: {
                 result.append(1)
             } as @convention(block) () -> Void as AnyObject)

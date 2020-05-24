@@ -59,6 +59,7 @@ class SpecialMethodTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
+        debug_cleanUp()
     }
     
     func testDeallocForSingleSwiftObject() {
@@ -87,6 +88,7 @@ class SpecialMethodTests: XCTestCase {
     func testDeallocForAllInstancesOCObject() {
         do {
             var executed = [Int]()
+            var tokens = [Token]()
             try autoreleasepool {
                 let objectBefore = ObjectiveCTestObject()
                 objectBefore.deallocExecution = {
@@ -95,32 +97,38 @@ class SpecialMethodTests: XCTestCase {
                 _ = ObjectiveCTestObject() // This will not trigger hook because it will release immediately. Maybe compiler optimization.
                 
                 // before
-                try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                let token1 = try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
                     executed.append(-1)
                 }
-                try hookDeallocBefore(targetClass: ObjectiveCTestObject.self, closure: {
+                tokens.append(token1)
+                let token2 = try hookDeallocBefore(targetClass: ObjectiveCTestObject.self, closure: {
                     executed.append(-2)
                 })
+                tokens.append(token2)
                 
                 // instead
-                try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                let token3 = try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
                     executed.append(-3)
                     original()
                     executed.append(3)
                     } as @convention(block) (() -> Void) -> Void)
-                try hookDeallocInstead(targetClass: ObjectiveCTestObject.self, closure: { original in
+                tokens.append(token3)
+                let token4 = try hookDeallocInstead(targetClass: ObjectiveCTestObject.self, closure: { original in
                     executed.append(-4)
                     original()
                     executed.append(4)
                     } as @convention(block) (() -> Void) -> Void)
+                tokens.append(token4)
                 
                 // after
-                try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                let token5 = try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
                     executed.append(1)
                 }
-                try hookDeallocAfter(targetClass: ObjectiveCTestObject.self, closure: {
+                tokens.append(token5)
+                let token6 = try hookDeallocAfter(targetClass: ObjectiveCTestObject.self, closure: {
                     executed.append(2)
                 })
+                tokens.append(token6)
                 
                 let objectAfter = ObjectiveCTestObject()
                 objectAfter.deallocExecution = {
@@ -132,6 +140,9 @@ class SpecialMethodTests: XCTestCase {
                 executed.removeAll()
             }
             XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 3, 4, 2, 1, -2, -1, -4, -3, 0, 3, 4, 2, 1])
+            tokens.forEach { (token) in
+                token.cancelHook()
+            }
         } catch {
             XCTAssertNil(error)
         }

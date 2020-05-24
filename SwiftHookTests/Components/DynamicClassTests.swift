@@ -25,7 +25,6 @@ class DynamicClassTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testWrapDynamicClass() {
@@ -48,7 +47,6 @@ class DynamicClassTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testUnwrapNonDynamicClass() {
@@ -80,7 +78,6 @@ class DynamicClassTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
 }

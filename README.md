@@ -2,6 +2,14 @@
 
 This is a framework to hook in Swift and Objective C by iOS runtime and [libffi](https://github.com/libffi/libffi).
 
+# How to install
+
+You can integrate **SwiftHook** with [cocoapods](https://cocoapods.org/). 
+
+```
+pod 'EasySwiftHook'
+```
+
 # How to use it.
 
 For example, this is your class

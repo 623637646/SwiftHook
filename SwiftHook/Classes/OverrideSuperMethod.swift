@@ -111,9 +111,10 @@ private class OverrideMethodContext: Hashable {
         
         // closure & newIMP
         var newIMP: IMP?
-        var closure: UnsafeMutablePointer<ffi_closure>?
-        UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
-            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
+        var closure: UnsafeMutablePointer<ffi_closure>? = withUnsafeMutablePointer(to: &newIMP) { (p) -> UnsafeMutablePointer<ffi_closure>? in
+            p.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) { (p) -> UnsafeMutablePointer<ffi_closure>? in
+                UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, p)))
+            }
         }
         defer {
             if let closure = closure {
@@ -126,12 +127,14 @@ private class OverrideMethodContext: Hashable {
         self.closure = closureNoNil
         self.newIMP = newIMPNoNil
         
-        let status_closure = ffi_prep_closure_loc(
-            self.closure,
-            self.cifPointer,
-            closureCalled,
-            Unmanaged.passUnretained(self).toOpaque(),
-            UnsafeMutableRawPointer(&newIMP))
+        let status_closure = withUnsafeMutablePointer(to: &newIMP) { (p) -> ffi_status in
+            ffi_prep_closure_loc(
+                self.closure,
+                self.cifPointer,
+                closureCalled,
+                Unmanaged.passUnretained(self).toOpaque(),
+                p)
+        }
         guard status_closure == FFI_OK else {
             throw SwiftHookError.ffiError
         }

@@ -170,7 +170,7 @@ class FFITypeContextTests: XCTestCase {
     func testPointerDouble() {
         let block: @convention(block) () -> UnsafePointer<Double> = {
             var d: Double = 0
-            return UnsafePointer<Double>(&d)
+            return withUnsafePointer(to: &d, {$0})
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
             XCTAssertTrue(false)
@@ -350,7 +350,7 @@ class FFITypeContextTests: XCTestCase {
         blocks.append(({0} as @convention(block) () -> Double))
         blocks.append(({
             var d: Double = 0
-            return UnsafePointer<Double>(&d)
+            return withUnsafePointer(to: &d, {$0})
             } as @convention(block) () -> UnsafePointer<Double>))
         blocks.append(({NSObject()} as @convention(block) () -> NSObject))
         blocks.append(({false} as @convention(block) () -> Bool))

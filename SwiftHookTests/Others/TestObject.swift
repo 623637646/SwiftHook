@@ -123,7 +123,7 @@ class TestObject: SuperObject {
         pointerStruct: UnsafePointer<CGRect>
     ) -> UnsafeMutablePointer<@convention(block) () -> Void> {
         var closure = {} as @convention(block) () -> Void
-        return UnsafeMutablePointer(&closure)
+        return withUnsafeMutablePointer(to: &closure, {$0})
     }
     
     // MARK: Class method
@@ -222,7 +222,7 @@ class TestObject: SuperObject {
         pointerStruct: UnsafePointer<CGRect>
     ) -> UnsafeMutablePointer<@convention(block) () -> Void> {
         var closure = {} as @convention(block) () -> Void
-        return UnsafeMutablePointer(&closure)
+        return withUnsafeMutablePointer(to: &closure, {$0})
     }
     
 }

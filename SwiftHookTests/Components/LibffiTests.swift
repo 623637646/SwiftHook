@@ -19,12 +19,14 @@ class LibffiTests: XCTestCase {
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[2] = UnsafeMutablePointer(&ffi_type_sint64)
         argumentTypes[3] = UnsafeMutablePointer(&ffi_type_sint64)
-        let status_cif = ffi_prep_cif(
-            UnsafeMutablePointer(&cif),
-            FFI_DEFAULT_ABI,
-            4,
-            UnsafeMutablePointer(&ffi_type_sint64),
-            argumentTypes.baseAddress)
+        let status_cif = withUnsafeMutablePointer(to: &cif) { (p) -> ffi_status in
+            ffi_prep_cif(
+                p,
+                FFI_DEFAULT_ABI,
+                4,
+                UnsafeMutablePointer(&ffi_type_sint64),
+                argumentTypes.baseAddress)
+        }
         XCTAssertEqual(status_cif, FFI_OK)
         
         var obj = TestObject.init()
@@ -35,16 +37,26 @@ class LibffiTests: XCTestCase {
         var returnValue: Int = 0
         let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 4)
         defer { arguments.deallocate() }
-        arguments[0] = UnsafeMutableRawPointer(&obj)
-        arguments[1] = UnsafeMutableRawPointer(&selector)
-        arguments[2] = UnsafeMutableRawPointer(&arg1)
-        arguments[3] = UnsafeMutableRawPointer(&arg2)
-        
-        ffi_call(UnsafeMutablePointer(&cif),
-                 unsafeBitCast(imp, to: (@convention(c) () -> Void).self),
-                 UnsafeMutableRawPointer(&returnValue),
-                 arguments.baseAddress)
-        
+        arguments[0] = withUnsafeMutableBytes(of: &obj, { (p) -> UnsafeMutableRawPointer? in
+            return p.baseAddress
+        })
+        arguments[1] = withUnsafeMutableBytes(of: &selector, { (p) -> UnsafeMutableRawPointer? in
+            return p.baseAddress
+        })
+        arguments[2] = withUnsafeMutableBytes(of: &arg1, { (p) -> UnsafeMutableRawPointer? in
+            return p.baseAddress
+        })
+        arguments[3] = withUnsafeMutableBytes(of: &arg2, { (p) -> UnsafeMutableRawPointer? in
+            return p.baseAddress
+        })
+        withUnsafeMutablePointer(to: &cif) { (pcif) -> Void in
+            withUnsafeMutableBytes(of: &returnValue, { (pReturnValue) -> Void in
+                ffi_call(pcif,
+                         unsafeBitCast(imp, to: (@convention(c) () -> Void).self),
+                         pReturnValue.baseAddress,
+                         arguments.baseAddress)
+            })
+        }
         XCTAssertEqual(returnValue, arg1 + arg2)
     }
     
@@ -56,18 +68,21 @@ class LibffiTests: XCTestCase {
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[2] = UnsafeMutablePointer(&ffi_type_sint64)
         argumentTypes[3] = UnsafeMutablePointer(&ffi_type_sint64)
-        let status_cif = ffi_prep_cif(
-            UnsafeMutablePointer(&cif),
-            FFI_DEFAULT_ABI,
-            4,
-            UnsafeMutablePointer(&ffi_type_sint64),
-            argumentTypes.baseAddress)
+        let status_cif = withUnsafeMutablePointer(to: &cif) { (p) -> ffi_status in
+            ffi_prep_cif(
+                p,
+                FFI_DEFAULT_ABI,
+                4,
+                UnsafeMutablePointer(&ffi_type_sint64),
+                argumentTypes.baseAddress)
+        }
         XCTAssertEqual(status_cif, FFI_OK)
         
         var newIMP: IMP?
-        var closure: UnsafeMutablePointer<ffi_closure>?
-        UnsafeMutablePointer(&newIMP).withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
-            closure = UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
+        var closure: UnsafeMutablePointer<ffi_closure>? = withUnsafeMutablePointer(to: &newIMP) { (p) -> UnsafeMutablePointer<ffi_closure>? in
+            p.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
+                return  UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
+            }
         }
         
         defer { ffi_closure_free(closure) }
@@ -85,12 +100,18 @@ class LibffiTests: XCTestCase {
         }
         
         var userData: Any?
-        let status_closure = ffi_prep_closure_loc(
-            closure,
-            UnsafeMutablePointer(&cif),
-            closureCalled,
-            UnsafeMutableRawPointer(&userData),
-            UnsafeMutableRawPointer(&newIMP))
+        let status_closure = withUnsafeMutablePointer(to: &cif) { (pcif) -> ffi_status in
+            withUnsafeMutableBytes(of: &userData) { (pUserData) -> ffi_status in
+                withUnsafeMutableBytes(of: &newIMP) { (pNewIMP) -> ffi_status in
+                    ffi_prep_closure_loc(
+                        closure,
+                        pcif,
+                        closureCalled,
+                        pUserData.baseAddress,
+                        pNewIMP.baseAddress)
+                }
+            }
+        }
         XCTAssertEqual(status_closure, FFI_OK)
         
         let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.sumFunc(a:b:)))

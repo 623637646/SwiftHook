@@ -31,15 +31,15 @@ class SignatureTests: XCTestCase {
     
     func testNoDynamicMethod() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -57,15 +57,15 @@ class SignatureTests: XCTestCase {
     
     func testNoArgsNoReturnFunc() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noArgsNoReturnFunc)) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -83,16 +83,16 @@ class SignatureTests: XCTestCase {
     
     func testSimpleSignature() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
             } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
         }
         
@@ -111,15 +111,15 @@ class SignatureTests: XCTestCase {
     
     func testStructSignature() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testStructSignature(point:rect:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _ in } as @convention(block) (CGPoint, CGRect) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -137,15 +137,15 @@ class SignatureTests: XCTestCase {
     
     func testArraySignature() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testArraySignature(arrayAny:arrayInt:arrayStruct:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ([Any], [Int], [CGRect]) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -163,15 +163,15 @@ class SignatureTests: XCTestCase {
     
     func testDictionarySignature() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testDictionarySignature(dictionaryAny:dictionaryInt:dictionaryStruct:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ([String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -189,16 +189,16 @@ class SignatureTests: XCTestCase {
     
     func testClosureSignature() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testClosureSignature(closure1:closure2:closure3:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _ in
             } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> Void as AnyObject) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
         }
         
@@ -217,15 +217,15 @@ class SignatureTests: XCTestCase {
     
     func testNoDynamicMethodForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noDynamicMethod)) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -243,15 +243,15 @@ class SignatureTests: XCTestCase {
     
     func testNoArgsNoReturnFuncForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.noArgsNoReturnFunc)) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -269,16 +269,16 @@ class SignatureTests: XCTestCase {
     
     func testSimpleSignatureForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testSimpleSignature(char:int:swiftInt:short:long:longlong:unsignedChar:unsignedInt:swiftUnsignedInt:unsignedshort:unsignedLong:unsignedLongLong:float:swiftFloat:double:swiftDouble:bool:swiftBool:characterString:object:class:selector:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
             } as @convention(block) ((CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void, CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
         }
         
@@ -297,15 +297,15 @@ class SignatureTests: XCTestCase {
     
     func testStructSignatureForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testStructSignature(point:rect:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ((CGPoint, CGRect) -> Void, CGPoint, CGRect) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -323,15 +323,15 @@ class SignatureTests: XCTestCase {
     
     func testArraySignatureForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testArraySignature(arrayAny:arrayInt:arrayStruct:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _, _ in } as @convention(block) (([Any], [Int], [CGRect]) -> Void, [Any], [Int], [CGRect]) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -349,15 +349,15 @@ class SignatureTests: XCTestCase {
     
     func testDictionarySignatureForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testDictionarySignature(dictionaryAny:dictionaryInt:dictionaryStruct:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _, _ in } as @convention(block) (([String: Any], [String: Int], [String: CGRect]) -> Void, [String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         
@@ -375,11 +375,11 @@ class SignatureTests: XCTestCase {
     
     func testClosureSignatureForInstead() {
         guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testClosureSignature(closure1:closure2:closure3:))) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let methodSignature = Signature.init(method: method) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let closureSignature = Signature.init(closure: {_, _, _, _ in
@@ -387,7 +387,7 @@ class SignatureTests: XCTestCase {
                 return NSObject()
             }
             } as @convention(block) ((() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject, () -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject as AnyObject) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
         }
         

@@ -147,7 +147,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // test hook
                 XCTAssertEqual(result, [])
                 test.execute {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     result.append(2)
                 }
                 XCTAssertEqual(result, [1, 3])

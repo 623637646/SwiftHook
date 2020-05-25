@@ -14,11 +14,11 @@ class FFITypeContextTests: XCTestCase {
     func testVoid() {
         let block: @convention(block) () -> Void = {}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_void))
@@ -27,11 +27,11 @@ class FFITypeContextTests: XCTestCase {
     func testUInt8() {
         let block: @convention(block) () -> UInt8 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_uint8))
@@ -40,11 +40,11 @@ class FFITypeContextTests: XCTestCase {
     func testInt8() {
         let block: @convention(block) () -> Int8 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_sint8))
@@ -53,11 +53,11 @@ class FFITypeContextTests: XCTestCase {
     func testUInt16() {
         let block: @convention(block) () -> UInt16 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_uint16))
@@ -66,11 +66,11 @@ class FFITypeContextTests: XCTestCase {
     func testInt16() {
         let block: @convention(block) () -> Int16 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_sint16))
@@ -79,11 +79,11 @@ class FFITypeContextTests: XCTestCase {
     func testUInt32() {
         let block: @convention(block) () -> UInt32 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_uint32))
@@ -92,11 +92,11 @@ class FFITypeContextTests: XCTestCase {
     func testInt32() {
         let block: @convention(block) () -> Int32 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_sint32))
@@ -105,11 +105,11 @@ class FFITypeContextTests: XCTestCase {
     func testUInt64() {
         let block: @convention(block) () -> UInt64 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_uint64))
@@ -118,11 +118,11 @@ class FFITypeContextTests: XCTestCase {
     func testInt64() {
         let block: @convention(block) () -> Int64 = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_sint64))
@@ -131,11 +131,11 @@ class FFITypeContextTests: XCTestCase {
     func testFloat() {
         let block: @convention(block) () -> Float = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_float))
@@ -144,11 +144,11 @@ class FFITypeContextTests: XCTestCase {
     func testCGFloat() {
         let block: @convention(block) () -> CGFloat = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_double))
@@ -157,11 +157,11 @@ class FFITypeContextTests: XCTestCase {
     func testDouble() {
         let block: @convention(block) () -> Double = {0}
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_double))
@@ -173,11 +173,11 @@ class FFITypeContextTests: XCTestCase {
             return withUnsafePointer(to: &d, {$0})
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_pointer))
@@ -188,11 +188,11 @@ class FFITypeContextTests: XCTestCase {
             return NSObject()
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_pointer))
@@ -203,11 +203,11 @@ class FFITypeContextTests: XCTestCase {
             return false
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_sint8))
@@ -218,11 +218,11 @@ class FFITypeContextTests: XCTestCase {
             return Self.self
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_pointer))
@@ -233,11 +233,11 @@ class FFITypeContextTests: XCTestCase {
             return #function
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_pointer))
@@ -248,11 +248,11 @@ class FFITypeContextTests: XCTestCase {
             return 0
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         XCTAssertEqual(typeContext.ffiType, UnsafeMutablePointer(&ffi_type_pointer))
@@ -263,11 +263,11 @@ class FFITypeContextTests: XCTestCase {
             return CGPoint.zero
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         structTestHelper(signature: [UnsafeMutablePointer(&ffi_type_double),
@@ -280,11 +280,11 @@ class FFITypeContextTests: XCTestCase {
             return CGRect.zero
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         structTestHelper(signature: [
@@ -301,11 +301,11 @@ class FFITypeContextTests: XCTestCase {
             return ComplexityStruct.init()
         }
         guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
-            XCTAssertTrue(false)
+            XCTFail()
             return
         }
         structTestHelper(signature: [
@@ -359,7 +359,7 @@ class FFITypeContextTests: XCTestCase {
         blocks.append(({0} as @convention(block) () -> Any))
         blocks.forEach { (block) in
             guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
             }
             XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) ==
@@ -371,7 +371,7 @@ class FFITypeContextTests: XCTestCase {
         blocks.append(({ComplexityStruct.init()} as @convention(block) () -> ComplexityStruct))
         blocks.forEach { (block) in
             guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
-                XCTAssertTrue(false)
+                XCTFail()
                 return
             }
             XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) !=
@@ -396,7 +396,7 @@ class FFITypeContextTests: XCTestCase {
         for index in 0 ... signature.count - 1 {
             let currentSignature = signature[index]
             guard let currentPointer = bufferPointer[index] else {
-                XCTAssertTrue(false)
+                XCTFail()
                 break
             }
             if let normalSignature = currentSignature as? UnsafeMutablePointer<ffi_type> {
@@ -404,7 +404,7 @@ class FFITypeContextTests: XCTestCase {
             } else if let elementsSignature = currentSignature as? [Any] {
                 structTestHelper(signature: elementsSignature, ffiType: currentPointer.pointee)
             } else {
-                XCTAssertTrue(false)
+                XCTFail()
             }
         }
         XCTAssertNil(bufferPointer[signature.count])

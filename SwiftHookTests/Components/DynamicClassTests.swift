@@ -37,7 +37,7 @@ class DynamicClassTests: XCTestCase {
             
             do {
                 _ = try wrapDynamicClass(object: testObject)
-                XCTAssertTrue(false)
+                XCTFail()
             } catch SwiftHookError.internalError(file: let file, line: let line) {
                 XCTAssertTrue(file.hasSuffix("DynamicClass.swift"))
                 XCTAssertEqual(line, InternalWrapDynamicClass)
@@ -55,7 +55,7 @@ class DynamicClassTests: XCTestCase {
             XCTAssertFalse(try testIsDynamicClass(object: testObject))
             do {
                 try unwrapDynamicClass(object: testObject)
-                XCTAssertTrue(false)
+                XCTFail()
             } catch SwiftHookError.internalError(file: let file, line: let line) {
                 XCTAssertTrue(file.hasSuffix("DynamicClass.swift"))
                 XCTAssertEqual(line, InternalUnwrapNonDynamicClass)
@@ -68,7 +68,7 @@ class DynamicClassTests: XCTestCase {
             XCTAssertFalse(try testIsDynamicClass(object: testObject))
             do {
                 try unwrapDynamicClass(object: testObject)
-                XCTAssertTrue(false)
+                XCTFail()
             } catch SwiftHookError.internalError(file: let file, line: let line) {
                 XCTAssertTrue(file.hasSuffix("DynamicClass.swift"))
                 XCTAssertEqual(line, InternalUnwrapNonDynamicClass)

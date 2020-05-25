@@ -152,7 +152,7 @@ class HookInternalTests: XCTestCase {
                 XCTAssertTrue(internalCancelHook(token: token)!)
             }
             _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.duplicateHookClosure {
         } catch {
             XCTAssertNil(error)
@@ -178,7 +178,7 @@ class HookInternalTests: XCTestCase {
                 XCTAssertTrue(internalCancelHook(token: token)!)
             }
             _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.duplicateHookClosure {
         } catch {
             XCTAssertNil(error)

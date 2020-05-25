@@ -15,7 +15,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookBefore(object: randomTestClass(), selector: randomSelector(), closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.canNotHookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
@@ -23,7 +23,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookAfter(object: randomTestClass(), selector: randomSelector(), closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.canNotHookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
@@ -31,7 +31,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookInstead(object: randomTestClass(), selector: randomSelector(), closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.canNotHookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
@@ -42,7 +42,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookBefore(object: TestObject(), selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -50,7 +50,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookAfter(object: TestObject(), selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -58,7 +58,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookInstead(object: TestObject(), selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -66,7 +66,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookBefore(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -74,7 +74,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookAfter(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -82,7 +82,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
@@ -92,21 +92,21 @@ class ParametersCheckingTests: XCTestCase {
     func testNoRespondSelector() {
         do {
             try hookBefore(targetClass: randomTestClass(), selector: #selector(NSArray.object(at:)), closure: {})
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookClassMethodAfter(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookInstead(object: TestObject(), selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
             XCTAssertNil(error)
@@ -116,21 +116,21 @@ class ParametersCheckingTests: XCTestCase {
     func testMissingSignature() {
         do {
             try hookBefore(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.missingSignature {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookClassMethodAfter(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: 1)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.missingSignature {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.missingSignature {
         } catch {
             XCTAssertNil(error)
@@ -142,7 +142,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
                 return 1
                 } as @convention(block) (Int, Int) -> Int as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
             XCTAssertNil(error)
@@ -150,7 +150,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookAfter(object: TestObject(), selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
                 } as @convention(block) (Int, Double) -> Void as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
             XCTAssertNil(error)
@@ -158,7 +158,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookAfter(object: TestObject(), selector: #selector(TestObject.testStructSignature(point:rect:)), closure: ({_, _ in
                 } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
             XCTAssertNil(error)
@@ -166,7 +166,7 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
                 } as @convention(block) (Int, Int) -> Void as AnyObject)
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature {
         } catch {
             XCTAssertNil(error)

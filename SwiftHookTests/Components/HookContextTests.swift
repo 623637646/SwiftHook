@@ -16,7 +16,7 @@ class HookContextTests: XCTestCase {
     func testNoMethod() {
         do {
             _ = try HookContext.init(targetClass: TestObject.self, selector: #selector(SuperObject.superFuncNoArgs))
-            XCTAssertTrue(false)
+            XCTFail()
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("HookContext.swift"))
             XCTAssertEqual(line, InternalErrorNoMethod)
@@ -91,7 +91,7 @@ class HookContextTests: XCTestCase {
             
             do {
                 try context.append(hookClosure: closure, mode: mode)
-                XCTAssertTrue(false)
+                XCTFail()
             } catch SwiftHookError.duplicateHookClosure {
             } catch {
                 XCTAssertNil(error)
@@ -120,7 +120,7 @@ class HookContextTests: XCTestCase {
             
             do {
                 try context.remove(hookClosure: closure, mode: mode)
-                XCTAssertTrue(false)
+                XCTFail()
             } catch SwiftHookError.internalError(file: let file, line: _) {
                 XCTAssertTrue(file.hasSuffix("HookContext.swift"))
             } catch {

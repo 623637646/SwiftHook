@@ -19,7 +19,7 @@ class ClassMethodInsteadTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
@@ -57,7 +57,7 @@ class ClassMethodInsteadTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
@@ -95,7 +95,7 @@ class ClassMethodInsteadTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
@@ -132,7 +132,7 @@ class ClassMethodInsteadTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodExecute(closure:))
@@ -149,7 +149,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 // test hook
                 XCTAssertEqual(result, [])
                 TestObject.classMethodExecute {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     result.append(2)
                 }
                 XCTAssertEqual(result, [1, 3])
@@ -179,7 +179,7 @@ class ClassMethodInsteadTests: XCTestCase {
             try autoreleasepool {
                 // hook
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodExecute(closure:))
@@ -226,7 +226,7 @@ class ClassMethodInsteadTests: XCTestCase {
             
             try autoreleasepool {
                 guard let targetClass = object_getClass(TestObject.self) else {
-                    XCTAssertTrue(false)
+                    XCTFail()
                     return
                 }
                 let selector = #selector(TestObject.classMethodExecute(closure:))

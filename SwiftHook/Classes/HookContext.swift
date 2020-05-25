@@ -80,7 +80,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         }
         insteadHookArgsBuffer[0] = withUnsafeMutableBytes(of: &lastInstead, { (p) -> UnsafeMutableRawPointer? in
             return p.baseAddress
-        })   
+        })
         insteadHookArgsBuffer[1] = withUnsafeMutableBytes(of: &insteadClosure, { (p) -> UnsafeMutableRawPointer? in
             return p.baseAddress
         })

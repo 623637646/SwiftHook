@@ -11,10 +11,6 @@ import XCTest
 
 class ThreadSafetyTests: XCTestCase {
     
-    override func tearDown() {
-        debug_cleanUp()
-    }
-    
     func testHookClassForSameClasses() {
         DispatchQueue.concurrentPerform(iterations: 1000) {_ in
             do {

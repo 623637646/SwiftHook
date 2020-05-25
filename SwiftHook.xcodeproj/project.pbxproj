@@ -25,7 +25,13 @@
 		2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */; };
 		2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */; };
+		2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D849247D0DDB00E61036 /* AspectsTests.m */; };
+		2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */; };
 		2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */; };
+		2A5A484A247D11FE002A3544 /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */; };
+		2A5A484C247D11FE002A3544 /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
+		2A5A4855247D12FE002A3544 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4854247D12FE002A3544 /* TestObject.m */; };
+		2A5A4857247D13FA002A3544 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4856247D13FA002A3544 /* AspectsTests.m */; };
 		2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */; };
 		2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */; };
 		2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */; };
@@ -46,10 +52,6 @@
 		2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D40246BF784000DB1E7 /* SingleInstancesBeforeTests.swift */; };
 		2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */; };
 		2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */; };
-		2A951D4F246C33E8000DB1E7 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D4E246C33E8000DB1E7 /* AspectsTests.m */; };
-		2A951D56246C34A6000DB1E7 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D55246C34A6000DB1E7 /* TestObject.m */; };
-		2A951D58246C3F00000DB1E7 /* AspectsInsteadHookTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D57246C3F00000DB1E7 /* AspectsInsteadHookTests.m */; };
-		2A951D5B246C4CFC000DB1E7 /* SuperTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D5A246C4CFC000DB1E7 /* SuperTestObject.m */; };
 		2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */; };
 		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
 		2AA5591F2469C81900440E32 /* HookToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA5591E2469C81900440E32 /* HookToken.swift */; };
@@ -60,12 +62,19 @@
 		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
 		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
-		9189855ACA554CFBDAD42B3F /* Pods_AspectsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2329BB3948E080990AE138F /* Pods_AspectsTests.framework */; };
+		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
-		BE68AC67384A7396BA67F4DD /* Pods_abstract_SwiftHook_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */; };
+		E5924C494B4E9DC4E81EE97F /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2A5A484D247D11FE002A3544 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2AB67348245834E30011536D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2AB67350245834E30011536D;
+			remoteInfo = SwiftHook;
+		};
 		2AB6735C245834E30011536D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2AB67348245834E30011536D /* Project object */;
@@ -95,8 +104,17 @@
 		2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFFITypeContext.h; sourceTree = "<group>"; };
 		2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFFITypeContext.m; sourceTree = "<group>"; };
 		2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFITypeContextTests.swift; sourceTree = "<group>"; };
+		2A49D849247D0DDB00E61036 /* AspectsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
+		2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsErrorTests.m; sourceTree = "<group>"; };
 		2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethod.swift; sourceTree = "<group>"; };
 		2A58BF99245C94F2005227F5 /* ComplexityStruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplexityStruct.h; sourceTree = "<group>"; };
+		2A5A4847247D11FE002A3544 /* PerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
+		2A5A484B247D11FE002A3544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A5A4852247D12FD002A3544 /* PerformanceTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PerformanceTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		2A5A4853247D12FE002A3544 /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
+		2A5A4854247D12FE002A3544 /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
+		2A5A4856247D13FA002A3544 /* AspectsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
 		2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesBeforeTests.swift; sourceTree = "<group>"; };
 		2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesInsteadTests.swift; sourceTree = "<group>"; };
@@ -119,14 +137,6 @@
 		2A951D40246BF784000DB1E7 /* SingleInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesBeforeTests.swift; sourceTree = "<group>"; };
 		2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
-		2A951D4C246C33E8000DB1E7 /* AspectsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AspectsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A951D4E246C33E8000DB1E7 /* AspectsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
-		2A951D50246C33E8000DB1E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2A951D54246C34A6000DB1E7 /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
-		2A951D55246C34A6000DB1E7 /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
-		2A951D57246C3F00000DB1E7 /* AspectsInsteadHookTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsInsteadHookTests.m; sourceTree = "<group>"; };
-		2A951D59246C4CFC000DB1E7 /* SuperTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SuperTestObject.h; sourceTree = "<group>"; };
-		2A951D5A246C4CFC000DB1E7 /* SuperTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SuperTestObject.m; sourceTree = "<group>"; };
 		2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicClass.swift; sourceTree = "<group>"; };
 		2A99159B24587BF4007955E7 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
 		2AA5591E2469C81900440E32 /* HookToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookToken.swift; sourceTree = "<group>"; };
@@ -144,19 +154,25 @@
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
+		88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; sourceTree = "<group>"; };
+		88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F5BDFB4D8F29B447F9C8114 /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BAD7DBE2536D5303CFF8B866 /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig"; sourceTree = "<group>"; };
 		C2329BB3948E080990AE138F /* Pods_AspectsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AspectsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4EDF113598DFE359EA93505 /* Pods-abstract-SwiftHook-SwiftHook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.debug.xcconfig"; sourceTree = "<group>"; };
 		EC69A695C0EF37D5B0F9D3A5 /* Pods-abstract-SwiftHook-SwiftHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.release.xcconfig"; sourceTree = "<group>"; };
+		F12DE955891101E38E3AD0CD /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F2BD6E0263F577B92B703B27 /* Pods-AspectsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.debug.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2A951D49246C33E8000DB1E7 /* Frameworks */ = {
+		2A5A4844247D11FE002A3544 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9189855ACA554CFBDAD42B3F /* Pods_AspectsTests.framework in Frameworks */,
+				2A5A484C247D11FE002A3544 /* SwiftHook.framework in Frameworks */,
+				E5924C494B4E9DC4E81EE97F /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB6735B245834E30011536D /* SwiftHook.framework in Frameworks */,
-				BE68AC67384A7396BA67F4DD /* Pods_abstract_SwiftHook_SwiftHookTests.framework in Frameworks */,
+				3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,8 +200,9 @@
 			isa = PBXGroup;
 			children = (
 				4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */,
-				C75C16D78406141DBC27461F /* Pods_abstract_SwiftHook_SwiftHookTests.framework */,
 				C2329BB3948E080990AE138F /* Pods_AspectsTests.framework */,
+				8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */,
+				88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,6 +216,10 @@
 				EC69A695C0EF37D5B0F9D3A5 /* Pods-abstract-SwiftHook-SwiftHookTests.release.xcconfig */,
 				F2BD6E0263F577B92B703B27 /* Pods-AspectsTests.debug.xcconfig */,
 				4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */,
+				F12DE955891101E38E3AD0CD /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.debug.xcconfig */,
+				BAD7DBE2536D5303CFF8B866 /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig */,
+				9F5BDFB4D8F29B447F9C8114 /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig */,
+				88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -235,6 +256,15 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		2A49D847247D0D3800E61036 /* AspectsTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A49D849247D0DDB00E61036 /* AspectsTests.m */,
+				2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */,
+			);
+			path = AspectsTests;
+			sourceTree = "<group>";
+		};
 		2A58BF9A245C94FE005227F5 /* Others */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +277,27 @@
 				2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */,
 			);
 			path = Others;
+			sourceTree = "<group>";
+		};
+		2A5A4848247D11FE002A3544 /* PerformanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */,
+				2A5A4856247D13FA002A3544 /* AspectsTests.m */,
+				2A5A4858247D1405002A3544 /* Models */,
+				2A5A484B247D11FE002A3544 /* Info.plist */,
+				2A5A4852247D12FD002A3544 /* PerformanceTests-Bridging-Header.h */,
+			);
+			path = PerformanceTests;
+			sourceTree = "<group>";
+		};
+		2A5A4858247D1405002A3544 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2A5A4853247D12FE002A3544 /* TestObject.h */,
+				2A5A4854247D12FE002A3544 /* TestObject.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		2A5C8D5224670B1D00812DAD /* Basic */ = {
@@ -289,26 +340,12 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		2A951D4D246C33E8000DB1E7 /* AspectsTests */ = {
-			isa = PBXGroup;
-			children = (
-				2A951D4E246C33E8000DB1E7 /* AspectsTests.m */,
-				2A951D57246C3F00000DB1E7 /* AspectsInsteadHookTests.m */,
-				2A951D50246C33E8000DB1E7 /* Info.plist */,
-				2A951D54246C34A6000DB1E7 /* TestObject.h */,
-				2A951D55246C34A6000DB1E7 /* TestObject.m */,
-				2A951D59246C4CFC000DB1E7 /* SuperTestObject.h */,
-				2A951D5A246C4CFC000DB1E7 /* SuperTestObject.m */,
-			);
-			path = AspectsTests;
-			sourceTree = "<group>";
-		};
 		2AB67347245834E30011536D = {
 			isa = PBXGroup;
 			children = (
 				2AB67353245834E30011536D /* SwiftHook */,
 				2AB6735E245834E30011536D /* SwiftHookTests */,
-				2A951D4D246C33E8000DB1E7 /* AspectsTests */,
+				2A5A4848247D11FE002A3544 /* PerformanceTests */,
 				2AB67352245834E30011536D /* Products */,
 				1EE89A4904AD27FB0A55915F /* Pods */,
 				195E3D73757D4A2E41A6DD63 /* Frameworks */,
@@ -320,7 +357,7 @@
 			children = (
 				2AB67351245834E30011536D /* SwiftHook.framework */,
 				2AB6735A245834E30011536D /* SwiftHookTests.xctest */,
-				2A951D4C246C33E8000DB1E7 /* AspectsTests.xctest */,
+				2A5A4847247D11FE002A3544 /* PerformanceTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -341,6 +378,7 @@
 				2A3B8C0C24742362007E6D65 /* Main */,
 				2A0C85DA2476B5A9003AA9D9 /* Components */,
 				2A58BF9A245C94FE005227F5 /* Others */,
+				2A49D847247D0D3800E61036 /* AspectsTests */,
 				2AB67361245834E30011536D /* Info.plist */,
 				2A7F43C4245835D500A63935 /* SwiftHookTests-Bridging-Header.h */,
 			);
@@ -364,23 +402,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		2A951D4B246C33E8000DB1E7 /* AspectsTests */ = {
+		2A5A4846247D11FE002A3544 /* PerformanceTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2A951D53246C33E8000DB1E7 /* Build configuration list for PBXNativeTarget "AspectsTests" */;
+			buildConfigurationList = 2A5A484F247D11FE002A3544 /* Build configuration list for PBXNativeTarget "PerformanceTests" */;
 			buildPhases = (
-				7E0D994B85F2A507447B3238 /* [CP] Check Pods Manifest.lock */,
-				2A951D48246C33E8000DB1E7 /* Sources */,
-				2A951D49246C33E8000DB1E7 /* Frameworks */,
-				2A951D4A246C33E8000DB1E7 /* Resources */,
-				0F8650970623BA8048017621 /* [CP] Embed Pods Frameworks */,
+				6B90FFE54754CD75A5810F56 /* [CP] Check Pods Manifest.lock */,
+				2A5A4843247D11FE002A3544 /* Sources */,
+				2A5A4844247D11FE002A3544 /* Frameworks */,
+				2A5A4845247D11FE002A3544 /* Resources */,
+				770B7C1A9ED5B58C7A503806 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2A5A484E247D11FE002A3544 /* PBXTargetDependency */,
 			);
-			name = AspectsTests;
-			productName = AspectsTests;
-			productReference = 2A951D4C246C33E8000DB1E7 /* AspectsTests.xctest */;
+			name = PerformanceTests;
+			productName = PerformanceTests;
+			productReference = 2A5A4847247D11FE002A3544 /* PerformanceTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		2AB67350245834E30011536D /* SwiftHook */ = {
@@ -433,8 +472,9 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Yanni;
 				TargetAttributes = {
-					2A951D4B246C33E8000DB1E7 = {
+					2A5A4846247D11FE002A3544 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					2AB67350245834E30011536D = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -461,13 +501,13 @@
 			targets = (
 				2AB67350245834E30011536D /* SwiftHook */,
 				2AB67359245834E30011536D /* SwiftHookTests */,
-				2A951D4B246C33E8000DB1E7 /* AspectsTests */,
+				2A5A4846247D11FE002A3544 /* PerformanceTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2A951D4A246C33E8000DB1E7 /* Resources */ = {
+		2A5A4845247D11FE002A3544 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -491,23 +531,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0F8650970623BA8048017621 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AspectsTests/Pods-AspectsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AspectsTests/Pods-AspectsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AspectsTests/Pods-AspectsTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2A97EDE72459E7A100206397 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -531,18 +554,18 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7E0D994B85F2A507447B3238 /* [CP] Check Pods Manifest.lock */ = {
+		6B90FFE54754CD75A5810F56 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -557,11 +580,28 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AspectsTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		770B7C1A9ED5B58C7A503806 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AEC9B9FF387CCF453FC8A3C0 /* [CP] Check Pods Manifest.lock */ = {
@@ -579,7 +619,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-abstract-SwiftHook-SwiftHookTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -611,14 +651,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2A951D48246C33E8000DB1E7 /* Sources */ = {
+		2A5A4843247D11FE002A3544 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A951D58246C3F00000DB1E7 /* AspectsInsteadHookTests.m in Sources */,
-				2A951D56246C34A6000DB1E7 /* TestObject.m in Sources */,
-				2A951D5B246C4CFC000DB1E7 /* SuperTestObject.m in Sources */,
-				2A951D4F246C33E8000DB1E7 /* AspectsTests.m in Sources */,
+				2A5A4855247D12FE002A3544 /* TestObject.m in Sources */,
+				2A5A4857247D13FA002A3544 /* AspectsTests.m in Sources */,
+				2A5A484A247D11FE002A3544 /* SwiftHookTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +687,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A7F43CC245835D600A63935 /* TestObject.swift in Sources */,
+				2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */,
+				2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */,
 				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
 				2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */,
 				2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */,
@@ -683,6 +724,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2A5A484E247D11FE002A3544 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2AB67350245834E30011536D /* SwiftHook */;
+			targetProxy = 2A5A484D247D11FE002A3544 /* PBXContainerItemProxy */;
+		};
 		2AB6735D245834E30011536D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2AB67350245834E30011536D /* SwiftHook */;
@@ -691,38 +737,45 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		2A951D51246C33E8000DB1E7 /* Debug */ = {
+		2A5A4850247D11FE002A3544 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F2BD6E0263F577B92B703B27 /* Pods-AspectsTests.debug.xcconfig */;
+			baseConfigurationReference = F12DE955891101E38E3AD0CD /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQ7TZ3Q272;
-				INFOPLIST_FILE = AspectsTests/Info.plist;
+				INFOPLIST_FILE = PerformanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.AspectsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		2A951D52246C33E8000DB1E7 /* Release */ = {
+		2A5A4851247D11FE002A3544 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */;
+			baseConfigurationReference = BAD7DBE2536D5303CFF8B866 /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZQ7TZ3Q272;
-				INFOPLIST_FILE = AspectsTests/Info.plist;
+				INFOPLIST_FILE = PerformanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.AspectsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -886,6 +939,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = SwiftHook/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -904,7 +958,7 @@
 		};
 		2AB67369245834E30011536D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */;
+			baseConfigurationReference = 9F5BDFB4D8F29B447F9C8114 /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -927,7 +981,7 @@
 		};
 		2AB6736A245834E30011536D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EC69A695C0EF37D5B0F9D3A5 /* Pods-abstract-SwiftHook-SwiftHookTests.release.xcconfig */;
+			baseConfigurationReference = 88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -950,11 +1004,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2A951D53246C33E8000DB1E7 /* Build configuration list for PBXNativeTarget "AspectsTests" */ = {
+		2A5A484F247D11FE002A3544 /* Build configuration list for PBXNativeTarget "PerformanceTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2A951D51246C33E8000DB1E7 /* Debug */,
-				2A951D52246C33E8000DB1E7 /* Release */,
+				2A5A4850247D11FE002A3544 /* Debug */,
+				2A5A4851247D11FE002A3544 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

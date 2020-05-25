@@ -10,7 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ObjectiveCTestObject : NSObject
+@interface ObjectiveCSuperTestObject : NSObject
+
+- (void)superFunc;
+
+@end
+
+@interface ObjectiveCTestObject : ObjectiveCSuperTestObject
 
 @property(nonatomic, assign) NSInteger number;
 

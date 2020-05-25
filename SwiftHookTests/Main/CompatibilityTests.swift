@@ -12,10 +12,6 @@ import XCTest
 // TODO: Compatibility testing （KVO, swizzling, aspects）
 class CompatibilityTests: XCTestCase {
     
-    override func tearDown() {
-        debug_cleanUp()
-    }
-    
     // MARK: KVO
     func testKVO() {
         var called = false

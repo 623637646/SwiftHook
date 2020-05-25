@@ -134,16 +134,3 @@ func testIsNormalClass(object: AnyObject) throws -> Bool {
         !testIsDynamicClassThenKVO(object: object) &&
         !testIsKVOThenDynamicClass(object: object)
 }
-
-#if DEBUG
-func debug_cleanUp() {
-    debug_cleanUpHookContextPool()
-}
-
-@objcMembers class CleanUpOCBridge: NSObject {
-    class func oc_debug_cleanUp() {
-        debug_cleanUp()
-    }
-}
-
-#endif

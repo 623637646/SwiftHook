@@ -1,5 +1,5 @@
 //
-//  AspectsInsteadHookTests.m
+//  AspectsTests.m
 //  AspectsTests
 //
 //  Created by Yanni Wang on 13/5/20.
@@ -7,15 +7,26 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TestObject.h"
+#import "ObjectiveCTestObject.h"
 #import <objc/runtime.h>
 @import Aspects;
 
-@interface AspectsInsteadHookTests : XCTestCase
+@interface AspectsTests : XCTestCase
 
 @end
 
-@implementation AspectsInsteadHookTests
+@implementation AspectsTests
+
+- (void)testClassMethod
+{
+    NSError *error = nil;
+    [object_getClass(ObjectiveCTestObject.class) aspect_hookSelector:@selector(classNoArgsNoReturnFunc) withOptions:AspectPositionAfter usingBlock:^(){
+        NSLog(@"");
+    } error:&error];
+    XCTAssertNil(error);
+    
+    [ObjectiveCTestObject classNoArgsNoReturnFunc];
+}
 
 - (void)testModifyIntReture {
     [self aspect_hookSelector:@selector(getInteger) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
@@ -36,26 +47,26 @@
         // NSInvocation is not supported on Swfit!
         NSInvocation *invocation = info.originalInvocation;
         // __unsafe_unretained is necessary. otherwise will on EXC_BAD_ACCESS
-        __unsafe_unretained TestObject *testObject;
+        __unsafe_unretained ObjectiveCTestObject *testObject;
         [invocation invoke];
         [invocation getReturnValue:&testObject];
         XCTAssertEqual(testObject.number, 999);
         
-        TestObject *newTestObject = [[TestObject alloc] init];
+        ObjectiveCTestObject *newTestObject = [[ObjectiveCTestObject alloc] init];
         newTestObject.number = 333;
         // objc_setAssociatedObject is necessary. otherwise will on EXC_BAD_ACCESS
         objc_setAssociatedObject(invocation, _cmd, newTestObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [invocation setReturnValue:&newTestObject];
     } error:NULL];
-    TestObject *testObject = [self getTestObject];
+    ObjectiveCTestObject *testObject = [self getTestObject];
     XCTAssertEqual(testObject.number, 333);
 }
 
-#pragma mark - utilities
+#pragma mark - test method
 
-- (TestObject *)getTestObject
+- (ObjectiveCTestObject *)getTestObject
 {
-    TestObject *testObject = [[TestObject alloc] init];
+    ObjectiveCTestObject *testObject = [[ObjectiveCTestObject alloc] init];
     testObject.number = 999;
     return testObject;
 }

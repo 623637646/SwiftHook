@@ -85,6 +85,7 @@ func associatedHasNonClosures(object: AnyObject) -> Bool {
 }
 
 // MARK: This is debug tools.
+
 #if DEBUG
 func debug_associatedClosureCount(object: AnyObject) -> Int {
     let before = associatedGetAllClosures(object: object, mode: .before)

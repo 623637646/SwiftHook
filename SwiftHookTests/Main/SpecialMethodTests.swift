@@ -11,10 +11,6 @@ import XCTest
 
 class SpecialMethodTests: XCTestCase {
     
-    override func tearDown() {
-        debug_cleanUp()
-    }
-    
     func testDeallocForSingleOCObject() {
         do {
             var executed = [Int]()

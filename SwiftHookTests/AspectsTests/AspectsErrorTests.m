@@ -1,30 +1,31 @@
 //
-//  AspectsTests.m
-//  AspectsTests
+//  AspectsErrorTests.m
+//  SwiftHookTests
 //
-//  Created by Yanni Wang on 13/5/20.
+//  Created by Yanni Wang on 26/5/20.
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
-#import "TestObject.h"
-#import <objc/runtime.h>
+#import "ObjectiveCTestObject.h"
 @import Aspects;
 
-@interface AspectsTests : XCTestCase
+// This Testcase should be trigger manually.
+
+@interface AspectsErrorTests : XCTestCase
 
 @end
 
-@implementation AspectsTests
+@implementation AspectsErrorTests
 
 #pragma mark - crashs
 
 /**
  Aspect is not compatible with KVO. Crash on unrecognized selector sent to instance...
  */
-- (void)testCrashWithKVOObject
+- (void)testCrashWithKVOedObject
 {
-    TestObject *object = [[TestObject alloc] init];
+    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
     [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
     [object aspect_hookSelector:@selector(setNumber:) withOptions:AspectPositionAfter usingBlock:^(){
     } error:NULL];
@@ -36,7 +37,7 @@
  */
 - (void)testCrashOnCancellationAspectsAfterKVO
 {
-    TestObject *object = [[TestObject alloc] init];
+    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
     id<AspectToken> token = [object aspect_hookSelector:@selector(setNumber:) withOptions:AspectPositionAfter usingBlock:^(){
     } error:NULL];
     [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
@@ -45,13 +46,13 @@
     [object setNumber:888];
 }
 /**
- This is similar with testCrashWithKVOObject. But crash on EXC_BAD_ACCESS.
+ This is similar with testCrashWithKVOedObject. But crash on EXC_BAD_ACCESS.
  */
 - (void)testHookDeallocCrashAfterKVO
 {
     __block BOOL hooked = NO;
     @autoreleasepool {
-        TestObject *object = [[TestObject alloc] init];
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
         [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
         [object aspect_hookSelector:NSSelectorFromString(@"dealloc") withOptions:AspectPositionBefore usingBlock:^(){
             hooked = YES;
@@ -81,7 +82,7 @@
 
 - (void)testHookFailureAfterKVOCancel
 {
-    TestObject *object = [[TestObject alloc] init];
+    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
     __block BOOL hooked = NO;
     [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
     [object aspect_hookSelector:@selector(noArgsNoReturnFunc) withOptions:AspectPositionAfter usingBlock:^(){
@@ -92,35 +93,25 @@
     XCTAssertTrue(hooked);
 }
 
+/**
+ A method can only be hooked once per class hierarchy
+ */
 - (void)testNotSupportHierarchyHook
 {
     NSError *error = nil;
     
-    [TestObject aspect_hookSelector:@selector(superFunc) withOptions:AspectPositionAfter usingBlock:^(){
+    [ObjectiveCTestObject aspect_hookSelector:@selector(superFunc) withOptions:AspectPositionAfter usingBlock:^(){
         NSLog(@"");
     } error:&error];
     XCTAssertNil(error);
     
-    [SuperTestObject aspect_hookSelector:@selector(superFunc) withOptions:AspectPositionAfter usingBlock:^(){
+    [ObjectiveCSuperTestObject aspect_hookSelector:@selector(superFunc) withOptions:AspectPositionAfter usingBlock:^(){
         NSLog(@"");
     } error:&error];
     XCTAssertNil(error);
     
-    SuperTestObject *object = [[SuperTestObject alloc] init];
+    ObjectiveCSuperTestObject *object = [[ObjectiveCSuperTestObject alloc] init];
     [object superFunc];
-}
-
-#pragma mark - Normal
-
-- (void)testClassMethod
-{
-    NSError *error = nil;
-    [object_getClass(TestObject.class) aspect_hookSelector:@selector(classMethod) withOptions:AspectPositionAfter usingBlock:^(){
-        NSLog(@"");
-    } error:&error];
-    XCTAssertNil(error);
-    
-    [TestObject classMethod];
 }
 
 #pragma mark - KVO

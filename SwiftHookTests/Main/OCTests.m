@@ -17,11 +17,6 @@
 
 @implementation OCTests
 
-- (void)tearDown
-{
-    [CleanUpOCBridge oc_debug_cleanUp];
-}
-
 - (void)testOCAPI1
 {
     ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];

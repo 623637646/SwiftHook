@@ -111,5 +111,3 @@ class SwiftHookTests: XCTestCase {
     }
     
 }
-
-// TODO: performance tests measureBlock

@@ -5,14 +5,19 @@ inhibit_all_warnings!
 abstract_target 'abstract-SwiftHook' do
   
   pod 'libffi-iOS', '~> 3.3-iOS'
-
+  
   target 'SwiftHook' do
   end
   
-  target 'SwiftHookTests' do
+  abstract_target 'abstract-Tests' do
+    pod 'Aspects'
+    
+    target 'SwiftHookTests' do
+    end
+    
+    target 'PerformanceTests' do
+    end
+    
   end
-end
-
-target 'AspectsTests' do
-  pod 'Aspects'
+  
 end

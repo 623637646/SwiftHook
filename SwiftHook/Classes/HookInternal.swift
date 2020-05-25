@@ -130,10 +130,4 @@ func debug_getNormalClassHookContextsCount() -> Int {
     }
     return count
 }
-func debug_getDynamicClassHookContextsCount() -> Int {
-    return hookContextPool.count - debug_getNormalClassHookContextsCount()
-}
-func debug_cleanUpHookContextPool() {
-    hookContextPool.removeAll()
-}
 #endif

@@ -8,6 +8,15 @@
 
 #import "ObjectiveCTestObject.h"
 
+@implementation ObjectiveCSuperTestObject
+
+- (void)superFunc
+{
+    
+}
+
+@end
+
 @implementation ObjectiveCTestObject
 
 - (void)dealloc

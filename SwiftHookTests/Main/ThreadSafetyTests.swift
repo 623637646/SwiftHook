@@ -26,7 +26,7 @@ class ThreadSafetyTests: XCTestCase {
     }
     
     func testHookClassForDifferentClasses() {
-        DispatchQueue.concurrentPerform(iterations: 1000) { index in
+        DispatchQueue.concurrentPerform(iterations: 100) { index in
             do {
                 let targetClass: AnyClass = objc_allocateClassPair(TestObject.self, "ThreadSafetyTests_\(index)", 0)!
                 objc_registerClassPair(targetClass)

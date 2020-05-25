@@ -102,12 +102,11 @@ class SwiftHookTests: XCTestCase {
     }
     
     func testAllInstancesHookBeforeDeallocForNSObject() {
-        _ = try? hookDeallocBefore(targetClass: NSObject.self) {
-            // will print many "released!" because hooked all NSObject.
-//            print("released!")
+        _ = try? hookDeallocBefore(targetClass: UIViewController.self) {
+            print("released!")
         }
         autoreleasepool {
-            _ = NSObject()
+            _ = UIViewController()
         }
     }
     

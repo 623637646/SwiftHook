@@ -150,7 +150,7 @@ autoreleasepool {
 }
 ```
 
-Hook before executing `dealloc` for All NSObject.
+Hook before executing `dealloc` for All UIViewController.
 
 ```swift
 _ = try? hookDeallocBefore(targetClass: UIViewController.self) {

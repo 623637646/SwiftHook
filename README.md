@@ -27,7 +27,9 @@ class TestObject {
 
 ```
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key words `@objc` and `dynamic` are necessary. The class doesn't have to inherit from NSObject**
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key words of methods `@objc` and `dynamic` are necessary**
+
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The class doesn't have to inherit from NSObject. If the class is written by Objective-C, Just hook it without any more effort**
 
 ### Hook before executing a function for a single object
 
@@ -55,6 +57,7 @@ token?.cancelHook() // cancel the hook
 ```
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key word `@convention(block)` is necessary**
 
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook at `before` and `after`. The closure's args have to be `nil` or the same as method. The return type has to be `void`**
 
 ### Hook a single object to override a function
 
@@ -74,6 +77,8 @@ let result = testObject.sumFunc(a: 3, b: 4) // result
 print("hooked result is \(result)") // result = 12
 token?.cancelHook() // cancel the hook
 ```
+
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook with `instead`. The closure's first argument have to be a closure which has the same types with the method. The left args and return type have be the same as the method.**
 
 ### Hook for all instances of a Class
 
@@ -95,6 +100,17 @@ let token = try? hookClassMethodBefore(targetClass: TestObject.self, selector: #
 }
 TestObject.classMethodNoArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
+```
+
+### Hook in Objective-C
+
+```objective-c
+ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+OCToken *token = [SwiftHookOCBridge ocHookAfterObject:object selector:@selector(noArgsNoReturnFunc) error:NULL closure:^{
+    NSLog(@"Hooked!");
+}];
+[object noArgsNoReturnFunc];
+[token cancelHook];
 ```
 
 ### Advanced usage

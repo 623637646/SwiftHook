@@ -27,6 +27,8 @@ class TestObject {
 
 ```
 
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key words `@objc` and `dynamic` are necessary. The class doesn't have to inherit from NSObject**
+
 ### Hook before executing a function for a single object
 
 ```swift
@@ -51,6 +53,8 @@ let token = try? hookAfter(object: testObject, selector: #selector(TestObject.su
 _ = testObject.sumFunc(a: 3, b: 4)
 token?.cancelHook() // cancel the hook
 ```
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key word `@convention(block)` is necessary**
+
 
 ### Hook a single object to override a function
 
@@ -133,12 +137,11 @@ autoreleasepool {
 Hook before executing `dealloc` for All NSObject.
 
 ```swift
-_ = try? hookDeallocBefore(targetClass: NSObject.self) {
-    // will print many "released!" because hooked all NSObject.
+_ = try? hookDeallocBefore(targetClass: UIViewController.self) {
     print("released!")
 }
 autoreleasepool {
-    _ = NSObject()
+    _ = UIViewController()
 }
 ```
 

@@ -10,6 +10,10 @@ import XCTest
 @testable import SwiftHook
 
 class HookInternalTests: XCTestCase {
+    
+    override func tearDown() {
+        debug_cleanUp()
+    }
 
     func testHookClass() {
         let targetClass = TestObject.self
@@ -118,7 +122,6 @@ class HookInternalTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testDuplicateCancellation() {
@@ -138,7 +141,6 @@ class HookInternalTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testDuplicateHookClosure() {
@@ -193,7 +195,6 @@ class HookInternalTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
 }

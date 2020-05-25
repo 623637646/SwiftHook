@@ -12,6 +12,10 @@ import XCTest
 // TODO: Compatibility testing （KVO, swizzling, aspects）
 class CompatibilityTests: XCTestCase {
     
+    override func tearDown() {
+        debug_cleanUp()
+    }
+    
     // MARK: KVO
     func testKVO() {
         var called = false
@@ -68,7 +72,6 @@ class CompatibilityTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testBeforeKVOReverseCancel() {
@@ -108,7 +111,6 @@ class CompatibilityTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testAfterKVO() {

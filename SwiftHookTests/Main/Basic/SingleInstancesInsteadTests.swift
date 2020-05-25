@@ -11,6 +11,10 @@ import XCTest
 
 class SingleInstancesInsteadTests: XCTestCase {
     
+    override func tearDown() {
+        debug_cleanUp()
+    }
+    
     func testCallOriginal() {
         do {
             let test = TestObject()
@@ -46,7 +50,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testOverrideOriginal() {
@@ -84,7 +87,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testChangeArgs() {
@@ -122,7 +124,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testNonCallOriginal() {
@@ -169,7 +170,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testCallOriginalForClosure() {
@@ -217,7 +217,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testHookTwice() {
@@ -272,7 +271,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testHookTwiceWithDifferentMethod() {
@@ -328,7 +326,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testChangeReturn() {
@@ -347,7 +344,6 @@ class SingleInstancesInsteadTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
 }

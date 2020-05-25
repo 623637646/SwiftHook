@@ -10,6 +10,10 @@ import XCTest
 @testable import SwiftHook
 
 class SingleInstancesAfterTests: XCTestCase {
+    
+    override func tearDown() {
+        debug_cleanUp()
+    }
 
     func testNormal() {
         do {
@@ -60,7 +64,6 @@ class SingleInstancesAfterTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testCheckArguments() {
@@ -102,7 +105,6 @@ class SingleInstancesAfterTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
 }

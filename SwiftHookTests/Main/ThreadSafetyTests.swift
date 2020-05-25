@@ -11,6 +11,10 @@ import XCTest
 
 class ThreadSafetyTests: XCTestCase {
     
+    override func tearDown() {
+        debug_cleanUp()
+    }
+    
     func testHookClassForSameClasses() {
         DispatchQueue.concurrentPerform(iterations: 1000) {_ in
             do {
@@ -46,7 +50,6 @@ class ThreadSafetyTests: XCTestCase {
                 XCTAssertNil(error)
             }
         }
-        debug_cleanUp()
     }
     
     func testCancelHookForClass() {
@@ -82,7 +85,6 @@ class ThreadSafetyTests: XCTestCase {
         } catch {
             XCTAssertNil(error)
         }
-        debug_cleanUp()
     }
     
     func testCancelHookForHookDeallocAfterToken() {

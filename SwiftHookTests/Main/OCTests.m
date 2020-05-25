@@ -17,7 +17,17 @@
 
 @implementation OCTests
 
-- (void)testOCAPI
+- (void)testOCAPI1
+{
+    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+    OCToken *token = [SwiftHookOCBridge ocHookAfterObject:object selector:@selector(noArgsNoReturnFunc) error:NULL closure:^{
+        NSLog(@"Hooked!");
+    }];
+    [object noArgsNoReturnFunc];
+    [token cancelHook];
+}
+
+- (void)testOCAPI2
 {
     __block BOOL executed = NO;
     ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];

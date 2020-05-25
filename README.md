@@ -57,7 +57,7 @@ token?.cancelHook() // cancel the hook
 ```
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key word `@convention(block)` is necessary**
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook at `before` and `after`. The closure's args have to be `nil` or the same as method. The return type has to be `void`**
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook at `before` and `after`. The closure's args have to be empty or the same as method. The return type has to be `void`**
 
 ### Hook a single object to override a function
 

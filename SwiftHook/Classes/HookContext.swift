@@ -70,8 +70,8 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         sh_setBlockInvoke(insteadClosure, OpaquePointer(hookContext.blockInvoke.pointee!))
         let selectorString = NSStringFromSelector(argsBuffer[1]!.assumingMemoryBound(to: Selector.self).pointee)
         objc_setAssociatedObject(insteadClosure, &associatedInsteadClosureHandle, lastInstead, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(insteadClosure, &associatedArg0Handle, object, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(insteadClosure, &associatedArg1Handle, selectorString, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(insteadClosure, &associatedArg0Handle, NSValue(pointer: argsBuffer[0]), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(insteadClosure, &associatedArg1Handle, NSValue(pointer: argsBuffer[1]), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
         let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
         var insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
@@ -121,11 +121,14 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         assert(false)
         return
     }
-    unowned(unsafe) var object = (objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as AnyObject?)!
-    guard let selectorString = objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? String
-        else {
-            assert(false)
-            return
+    guard let objectPointer = (objc_getAssociatedObject(dynamicClosure, &associatedArg0Handle) as? NSValue)?.pointerValue else {
+        assert(false)
+        return
+    }
+    unowned(unsafe) var object = UnsafeMutablePointer<AnyObject>(OpaquePointer(objectPointer)).pointee
+    guard let selectorPointer = (objc_getAssociatedObject(dynamicClosure, &associatedArg1Handle) as? NSValue)?.pointerValue else {
+        assert(false)
+        return
     }
     var insteadHookClosures = hookContext.insteadHookClosures
     if isDynamicClass(targetClass: hookContext.targetClass) {
@@ -142,13 +145,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         defer {
             methodArgsBuffer.deallocate()
         }
-        var selector = NSSelectorFromString(selectorString as String)
-        methodArgsBuffer[0] = withUnsafeMutableBytes(of: &object, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
-        })   
-        methodArgsBuffer[1] = withUnsafeMutableBytes(of: &selector, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
-        })
+        methodArgsBuffer[0] = objectPointer
+        methodArgsBuffer[1] = selectorPointer
         if nargs >= 3 {
             for index in 2 ... nargs - 1 {
                 methodArgsBuffer[index] = argsBuffer[index - 1]

@@ -78,7 +78,7 @@ print("hooked result is \(result)") // result = 12
 token?.cancelHook() // cancel the hook
 ```
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook with `instead`. The closure's first argument have to be a closure which has the same types with the method. The left args and return type have be the same as the method.**
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook with `instead`. The closure's first argument has to be a closure which has the same types with the method. The rest args and return type have to be the same as the method.**
 
 ### Hook for all instances of a Class
 

@@ -161,3 +161,9 @@ autoreleasepool {
 }
 ```
 
+# Requirements
+
+- iOS 10.0+ (Unverified for macOS, tvOS, watchOS)
+- Xcode 11+
+- Swift 5.0+
+

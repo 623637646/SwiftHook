@@ -54,9 +54,14 @@
         
         ObjectiveCTestObject *newTestObject = [[ObjectiveCTestObject alloc] init];
         newTestObject.number = 333;
-        // objc_setAssociatedObject is necessary. otherwise will on EXC_BAD_ACCESS
-        objc_setAssociatedObject(invocation, _cmd, newTestObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [invocation setReturnValue:&newTestObject];
+        
+        // solution 1:
+        // objc_setAssociatedObject is necessary. otherwise will on EXC_BAD_ACCESS
+//        objc_setAssociatedObject(invocation, _cmd, newTestObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        // solution 2:
+        [invocation retainArguments];
     } error:NULL];
     ObjectiveCTestObject *testObject = [self getTestObject];
     XCTAssertEqual(testObject.number, 333);

@@ -92,7 +92,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
                 return nil
             }
             try associatedRemoveClosure(object: hookObject, selector: hookContext.selector, hookClosure: hookClosure, mode: token.mode)
-            if associatedHasNonClosures(object: hookObject) {
+            if associatedClosuresIsEmpty(object: hookObject) {
                 try unwrapDynamicClass(object: hookObject)
                 return true
             } else {

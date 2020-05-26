@@ -8,77 +8,117 @@
 
 import Foundation
 
-private var associatedBeforeHandle: UInt8 = 0
-private var associatedInsteadHandle: UInt8 = 0
-private var associatedAfterHandle: UInt8 = 0
+private var associatedContextHandle: UInt8 = 0
 
-private func associatedGetAllClosures(object: AnyObject, mode: HookMode) -> [Selector: [AnyObject]] {
-    switch mode {
-    case .before:
-        return objc_getAssociatedObject(object, &associatedBeforeHandle) as? [Selector: [AnyObject]] ?? [:]
-    case .after:
-        return objc_getAssociatedObject(object, &associatedAfterHandle) as? [Selector: [AnyObject]] ?? [:]
-    case .instead:
-        return objc_getAssociatedObject(object, &associatedInsteadHandle) as? [Selector: [AnyObject]] ?? [:]
-    }
-}
-
-private func associatedSetAllClosures(object: AnyObject, mode: HookMode, allClosures: [Selector: [AnyObject]]) {
-    switch mode {
-    case .before:
-        objc_setAssociatedObject(object, &associatedBeforeHandle, allClosures, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    case .after:
-        objc_setAssociatedObject(object, &associatedAfterHandle, allClosures, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    case .instead:
-        objc_setAssociatedObject(object, &associatedInsteadHandle, allClosures, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
+private class ClosuresContext {
+    var before: [Selector: [AnyObject]] = [:]
+    var after: [Selector: [AnyObject]] = [:]
+    var instead: [Selector: [AnyObject]] = [:]
 }
 
 func associatedGetClosures(object: AnyObject, selector: Selector, mode: HookMode) -> [AnyObject] {
-    return associatedGetAllClosures(object: object, mode: mode)[selector] ?? []
-}
-
-func associatedSetClosures(object: AnyObject, selector: Selector, mode: HookMode, closures: [AnyObject]) {
-    var allClosures = associatedGetAllClosures(object: object, mode: mode)
-    allClosures[selector] = closures
-    associatedSetAllClosures(object: object, mode: mode, allClosures: allClosures)
+    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+        return []
+    }
+    switch mode {
+    case .before:
+        return context.before[selector] ?? []
+    case .after:
+        return context.after[selector] ?? []
+    case .instead:
+        return context.instead[selector] ?? []
+    }
 }
 
 func associatedAppendClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    var closures = associatedGetClosures(object: object, selector: selector, mode: mode)
-    guard !closures.contains(where: {
-        hookClosure  === $0
-    }) else {
-        throw SwiftHookError.duplicateHookClosure
+    var context: ClosuresContext! = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext
+    if context == nil {
+        context = ClosuresContext.init()
+        objc_setAssociatedObject(object, &associatedContextHandle, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
-    closures.append(hookClosure)
-    associatedSetClosures(object: object, selector: selector, mode: mode, closures: closures)
+    switch mode {
+    case .before:
+        var closures = context.before[selector] ?? []
+        guard !closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.duplicateHookClosure
+        }
+        closures.append(hookClosure)
+        context.before[selector] = closures
+    case .after:
+        var closures = context.after[selector] ?? []
+        guard !closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.duplicateHookClosure
+        }
+        closures.append(hookClosure)
+        context.after[selector] = closures
+    case .instead:
+        var closures = context.instead[selector] ?? []
+        guard !closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.duplicateHookClosure
+        }
+        closures.append(hookClosure)
+        context.instead[selector] = closures
+    }
 }
 
 func associatedRemoveClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    var closures = associatedGetClosures(object: object, selector: selector, mode: mode)
-    guard closures.contains(where: {
-        return hookClosure === $0
-    }) else {
+    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    closures.removeAll {
-        hookClosure  === $0
+    switch mode {
+    case .before:
+        var closures = context.before[selector] ?? []
+        guard closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
+        }
+        closures.removeAll {
+            hookClosure  === $0
+        }
+        context.before[selector] = closures
+    case .after:
+        var closures = context.after[selector] ?? []
+        guard closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
+        }
+        closures.removeAll {
+            hookClosure  === $0
+        }
+        context.after[selector] = closures
+    case .instead:
+        var closures = context.instead[selector] ?? []
+        guard closures.contains(where: {
+            hookClosure  === $0
+        }) else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
+        }
+        closures.removeAll {
+            hookClosure  === $0
+        }
+        context.instead[selector] = closures
     }
-    associatedSetClosures(object: object, selector: selector, mode: mode, closures: closures)
 }
 
-func associatedHasNonClosures(object: AnyObject) -> Bool {
-    let before = associatedGetAllClosures(object: object, mode: .before)
-    let instead = associatedGetAllClosures(object: object, mode: .instead)
-    let after = associatedGetAllClosures(object: object, mode: .after)
-    for (_, value) in before where !value.isEmpty {
+func associatedClosuresIsEmpty(object: AnyObject) -> Bool {
+    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+        return true
+    }
+    for (_, value) in context.before where !value.isEmpty {
         return false
     }
-    for (_, value) in instead where !value.isEmpty {
+    for (_, value) in context.instead where !value.isEmpty {
         return false
     }
-    for (_, value) in after where !value.isEmpty {
+    for (_, value) in context.after where !value.isEmpty {
         return false
     }
     return true
@@ -88,17 +128,17 @@ func associatedHasNonClosures(object: AnyObject) -> Bool {
 
 #if DEBUG
 func debug_associatedClosureCount(object: AnyObject) -> Int {
-    let before = associatedGetAllClosures(object: object, mode: .before)
-    let instead = associatedGetAllClosures(object: object, mode: .instead)
-    let after = associatedGetAllClosures(object: object, mode: .after)
+    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+        return 0
+    }
     var count = 0
-    for (_, value) in before where !value.isEmpty {
+    for (_, value) in context.before where !value.isEmpty {
         count += value.count
     }
-    for (_, value) in instead where !value.isEmpty {
+    for (_, value) in context.instead where !value.isEmpty {
         count += value.count
     }
-    for (_, value) in after where !value.isEmpty {
+    for (_, value) in context.after where !value.isEmpty {
         count += value.count
     }
     return count

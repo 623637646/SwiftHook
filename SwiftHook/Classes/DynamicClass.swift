@@ -94,7 +94,13 @@ func unwrapDynamicClass(object: AnyObject) throws {
 }
 
 func isDynamicClass(targetClass: AnyClass) -> Bool {
-    // NSStringFromClass(targetClass).hasPrefix(prefix) // This code performance is very bad.
+    // This code performance is very bad.
+    //    NSStringFromClass(targetClass).hasPrefix(prefix)
+    
+    // This is best performance solution. But Swift has some bugs so can't use it. Refer to: https://stackoverflow.com/q/62027812/9315497
+    //    return (objc_getAssociatedObject(targetClass, &associatedDynamicTagHandle) as? Bool) ?? false
+    
+    // This code performance is bad.
     dynamicClassContextPool.contains { (dynamicClassContext) -> Bool in
         dynamicClassContext.dynamicClass == targetClass
     }

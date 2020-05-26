@@ -94,5 +94,8 @@ func unwrapDynamicClass(object: AnyObject) throws {
 }
 
 func isDynamicClass(targetClass: AnyClass) -> Bool {
-    NSStringFromClass(targetClass).hasPrefix(prefix)
+    // NSStringFromClass(targetClass).hasPrefix(prefix) // This code performance is very bad.
+    dynamicClassContextPool.contains { (dynamicClassContext) -> Bool in
+        dynamicClassContext.dynamicClass == targetClass
+    }
 }

@@ -1,5 +1,5 @@
 PODS:
-  - EasySwiftHook (1.0.2):
+  - EasySwiftHook (1.0.3):
     - libffi-iOS (~> 3.3-iOS)
   - libffi-iOS (3.3-iOS)
 
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EasySwiftHook: 6b5ebbf90d5215e7d76ef9d2532142007860ce62
+  EasySwiftHook: a3c60a70bb976249de9a20feb4032f3de2e3e9bd
   libffi-iOS: 1006a827f3518a5d1164ab4f5b82a1bc150e1d9b
 
 PODFILE CHECKSUM: 99fd24715274c9c5c6b08d040055a44846672b5d

@@ -28,10 +28,8 @@
 		2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D849247D0DDB00E61036 /* AspectsTests.m */; };
 		2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */; };
 		2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */; };
-		2A5A484A247D11FE002A3544 /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */; };
 		2A5A484C247D11FE002A3544 /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
-		2A5A4855247D12FE002A3544 /* TestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4854247D12FE002A3544 /* TestObject.m */; };
-		2A5A4857247D13FA002A3544 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4856247D13FA002A3544 /* AspectsTests.m */; };
+		2A5A485A247D3CE9002A3544 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4859247D3CE9002A3544 /* PerformanceTests.m */; };
 		2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */; };
 		2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */; };
 		2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */; };
@@ -109,12 +107,8 @@
 		2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethod.swift; sourceTree = "<group>"; };
 		2A58BF99245C94F2005227F5 /* ComplexityStruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplexityStruct.h; sourceTree = "<group>"; };
 		2A5A4847247D11FE002A3544 /* PerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
 		2A5A484B247D11FE002A3544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2A5A4852247D12FD002A3544 /* PerformanceTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PerformanceTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		2A5A4853247D12FE002A3544 /* TestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestObject.h; sourceTree = "<group>"; };
-		2A5A4854247D12FE002A3544 /* TestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestObject.m; sourceTree = "<group>"; };
-		2A5A4856247D13FA002A3544 /* AspectsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
+		2A5A4859247D3CE9002A3544 /* PerformanceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformanceTests.m; sourceTree = "<group>"; };
 		2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesBeforeTests.swift; sourceTree = "<group>"; };
 		2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesInsteadTests.swift; sourceTree = "<group>"; };
@@ -282,22 +276,10 @@
 		2A5A4848247D11FE002A3544 /* PerformanceTests */ = {
 			isa = PBXGroup;
 			children = (
-				2A5A4849247D11FE002A3544 /* SwiftHookTests.swift */,
-				2A5A4856247D13FA002A3544 /* AspectsTests.m */,
-				2A5A4858247D1405002A3544 /* Models */,
+				2A5A4859247D3CE9002A3544 /* PerformanceTests.m */,
 				2A5A484B247D11FE002A3544 /* Info.plist */,
-				2A5A4852247D12FD002A3544 /* PerformanceTests-Bridging-Header.h */,
 			);
 			path = PerformanceTests;
-			sourceTree = "<group>";
-		};
-		2A5A4858247D1405002A3544 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				2A5A4853247D12FE002A3544 /* TestObject.h */,
-				2A5A4854247D12FE002A3544 /* TestObject.m */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		2A5C8D5224670B1D00812DAD /* Basic */ = {
@@ -655,9 +637,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A5A4855247D12FE002A3544 /* TestObject.m in Sources */,
-				2A5A4857247D13FA002A3544 /* AspectsTests.m in Sources */,
-				2A5A484A247D11FE002A3544 /* SwiftHookTests.swift in Sources */,
+				2A5A485A247D3CE9002A3544 /* PerformanceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -752,7 +732,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -774,7 +753,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

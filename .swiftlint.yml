@@ -12,3 +12,4 @@ disabled_rules:
   - file_length
   - cyclomatic_complexity
   - xctfail_message
+  - large_tuple

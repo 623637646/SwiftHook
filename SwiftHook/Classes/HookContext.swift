@@ -62,8 +62,8 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     
     // before
     for var item in beforeHookClosures.reversed() {
-        hookArgsBuffer![0] = withUnsafeMutableBytes(of: &item, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        hookArgsBuffer![0] = withUnsafeMutablePointer(to: &item, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
         ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }
@@ -81,11 +81,11 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         defer {
             insteadHookArgsBuffer.deallocate()
         }
-        insteadHookArgsBuffer[0] = withUnsafeMutableBytes(of: &lastInstead, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        insteadHookArgsBuffer[0] = withUnsafeMutablePointer(to: &lastInstead, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
-        insteadHookArgsBuffer[1] = withUnsafeMutableBytes(of: &insteadClosure, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        insteadHookArgsBuffer[1] = withUnsafeMutablePointer(to: &insteadClosure, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
         if nargs >= 3 {
             for index in 2 ... nargs - 1 {
@@ -99,8 +99,8 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     
     // after
     for var item in afterHookClosures.reversed() {
-        hookArgsBuffer![0] = withUnsafeMutableBytes(of: &item, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        hookArgsBuffer![0] = withUnsafeMutablePointer(to: &item, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
         ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }
@@ -124,7 +124,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         assert(false)
         return
     }
-    unowned(unsafe) var object = UnsafeMutablePointer<AnyObject>(OpaquePointer(insteadContext.objectPointer)).pointee
+    unowned(unsafe) let object = UnsafeMutablePointer<AnyObject>(OpaquePointer(insteadContext.objectPointer)).pointee
     var insteadHookClosures = hookContext.insteadHookClosures
     if isDynamicClass(targetClass: hookContext.targetClass) {
         insteadHookClosures += associatedGetClosures(object: object, selector: hookContext.selector).instead
@@ -161,8 +161,8 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
             hookArgsBuffer.deallocate()
         }
         insteadContext.lastInsteadClosure = previousHookClosure
-        hookArgsBuffer[0] = withUnsafeMutableBytes(of: &previousHookClosure, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        hookArgsBuffer[0] = withUnsafeMutablePointer(to: &previousHookClosure, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
         hookArgsBuffer[1] = argsBuffer[0]
         if nargs >= 3 {

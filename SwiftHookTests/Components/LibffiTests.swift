@@ -37,17 +37,17 @@ class LibffiTests: XCTestCase {
         var returnValue: Int = 0
         let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 4)
         defer { arguments.deallocate() }
-        arguments[0] = withUnsafeMutableBytes(of: &obj, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        arguments[0] = withUnsafeMutablePointer(to: &obj, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
-        arguments[1] = withUnsafeMutableBytes(of: &selector, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        arguments[1] = withUnsafeMutablePointer(to: &selector, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
-        arguments[2] = withUnsafeMutableBytes(of: &arg1, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        arguments[2] = withUnsafeMutablePointer(to: &arg1, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
-        arguments[3] = withUnsafeMutableBytes(of: &arg2, { (p) -> UnsafeMutableRawPointer? in
-            return p.baseAddress
+        arguments[3] = withUnsafeMutablePointer(to: &arg2, { (p) -> UnsafeMutableRawPointer in
+            return UnsafeMutableRawPointer(p)
         })
         withUnsafeMutablePointer(to: &cif) { (pcif) -> Void in
             withUnsafeMutableBytes(of: &returnValue, { (pReturnValue) -> Void in

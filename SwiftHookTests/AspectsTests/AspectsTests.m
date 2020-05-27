@@ -42,6 +42,63 @@
     XCTAssertEqual(integer, 333);
 }
 
+- (void)testModifyStringReture {
+    [self aspect_hookSelector:@selector(getString) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        NSInvocation *invocation = info.originalInvocation;
+        NSString *string;
+        [invocation invoke];
+        [invocation getReturnValue:&string];
+        XCTAssertEqual(string, @"zzz");
+        NSString *newString = @"kkk";
+        [invocation setReturnValue:&newString];
+    } error:NULL];
+    NSString *string = [self getString];
+    XCTAssertEqual(string, @"kkk");
+}
+
+- (void)testModifyNumberReture {
+    [self aspect_hookSelector:@selector(getNumber) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        NSInvocation *invocation = info.originalInvocation;
+        NSNumber *number;
+        [invocation invoke];
+        [invocation getReturnValue:&number];
+        XCTAssertEqual(number, @8);
+        NSNumber *newNumber = @16;
+        [invocation setReturnValue:&newNumber];
+    } error:NULL];
+    NSNumber *number = [self getNumber];
+    XCTAssertEqual(number, @16);
+}
+
+- (void)testModifyNSValueReture {
+    [self aspect_hookSelector:@selector(getValue) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        NSInvocation *invocation = info.originalInvocation;
+        __unsafe_unretained NSValue *value;
+        [invocation invoke];
+        [invocation getReturnValue:&value];
+        XCTAssertTrue([value isEqualToValue:[NSValue valueWithCGPoint:CGPointMake(11, 22)]]);
+        NSValue *newValue = [NSValue valueWithCGRect:CGRectMake(1, 2, 3, 4)];
+        [invocation setReturnValue:&newValue];
+    } error:NULL];
+    NSValue *value = [self getValue];
+    XCTAssertTrue([value isEqualToValue:[NSValue valueWithCGRect:CGRectMake(1, 2, 3, 4)]]);
+}
+
+- (void)testModifyRequestReture {
+    [self aspect_hookSelector:@selector(getRequest) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
+        NSInvocation *invocation = info.originalInvocation;
+        __unsafe_unretained NSURLRequest *request;
+        [invocation invoke];
+        [invocation getReturnValue:&request];
+        XCTAssertEqual(request.URL.absoluteString, @"https://www.google.com");
+        NSURLRequest *newRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.facebook.com"]];
+        [invocation setReturnValue:&newRequest];
+        [invocation retainArguments];
+    } error:NULL];
+    NSURLRequest *request = [self getRequest];
+    XCTAssertEqual(request.URL.absoluteString, @"https://www.facebook.com");
+}
+
 - (void)testModifyObjectReture {
     [self aspect_hookSelector:@selector(getTestObject) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info){
         // NSInvocation is not supported on Swfit!
@@ -79,6 +136,26 @@
 - (NSInteger)getInteger
 {
     return 999;
+}
+
+- (NSString *)getString
+{
+    return @"zzz";
+}
+
+- (NSNumber *)getNumber
+{
+    return @8;
+}
+
+- (NSValue *)getValue
+{
+    return [NSValue valueWithCGPoint:CGPointMake(11, 22)];
+}
+
+- (NSURLRequest *)getRequest
+{
+    return [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.google.com"]];
 }
 
 @end

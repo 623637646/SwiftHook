@@ -9,7 +9,6 @@
 import XCTest
 @testable import SwiftHook
 
-// TODO: some complicated test cases
 class SwiftHookTests: XCTestCase {
     
     // MARK: Basic usage
@@ -30,7 +29,7 @@ class SwiftHookTests: XCTestCase {
             // get the arguments of the function
             print("arg1 is \(a)") // arg1 is 3
             print("arg1 is \(b)") // arg1 is 4
-        } as @convention(block) (Int, Int) -> Void)
+            } as @convention(block) (Int, Int) -> Void)
         _ = testObject.sumFunc(a: 3, b: 4)
         token?.cancelHook() // cancel the hook
     }
@@ -46,7 +45,7 @@ class SwiftHookTests: XCTestCase {
             let result = original(a, b)
             print("original result is \(result)") // result = 7
             return 9
-        } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
+            } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
         let result = testObject.sumFunc(a: 3, b: 4) // result
         print("hooked result is \(result)") // result = 9
         token?.cancelHook() // cancel the hook
@@ -107,6 +106,110 @@ class SwiftHookTests: XCTestCase {
         }
         autoreleasepool {
             _ = UIViewController()
+        }
+    }
+    
+    // MARK: Complicated test cases
+    
+    class Request: NSObject {
+        @objc dynamic func generateRequest(url: URL) -> NSURLRequest {
+            return NSURLRequest.init(url: url)
+        }
+    }
+    
+    func testComplicated() {
+        do {
+            var deallocOrder = [Int]()
+            try autoreleasepool {
+                let targetClass = Request.self
+                let object = Request()
+                let selector = #selector(Request.generateRequest(url:))
+                var order = [Int]()
+                let urlGoogle = "https://www.shopee.com"
+                let urlFacebook = "https://www.facebook.com"
+                let urlApple = "https://www.apple.com"
+                let urlAmazon = "https://www.amazon.com"
+                let urlShopee = "https://www.shopee.com"
+                
+                try hookBefore(targetClass: targetClass, selector: selector, closure: { url in
+                    order.append(2)
+                    XCTAssertEqual(url.absoluteString, urlFacebook)
+                    } as @convention(block) (URL) -> Void)
+                
+                try hookAfter(targetClass: targetClass, selector: selector, closure: { url in
+                    order.append(5)
+                    XCTAssertEqual(url.absoluteString, urlFacebook)
+                    } as @convention(block) (URL) -> Void)
+                
+                try hookInstead(targetClass: targetClass, selector: selector, closure: {original, url in
+                    order.append(3)
+                    XCTAssertEqual(url.absoluteString, urlFacebook)
+                    let request = original(URL.init(string: urlApple)!)
+                    XCTAssertEqual(request.url?.absoluteString, urlApple)
+                    let newRequest = NSURLRequest.init(url: URL.init(string: urlAmazon)!)
+                    order.append(4)
+                    return newRequest
+                    } as @convention(block) ((URL) -> NSURLRequest, URL) -> NSURLRequest)
+                
+                try hookBefore(object: object, selector: selector, closure: { url in
+                    order.append(0)
+                    XCTAssertEqual(url.absoluteString, urlGoogle)
+                    } as @convention(block) (URL) -> Void)
+                
+                try hookAfter(object: object, selector: selector, closure: { url in
+                    order.append(7)
+                    XCTAssertEqual(url.absoluteString, urlGoogle)
+                    } as @convention(block) (URL) -> Void)
+                
+                try hookInstead(object: object, selector: selector, closure: {original, url in
+                    order.append(1)
+                    XCTAssertEqual(url.absoluteString, urlGoogle)
+                    let request = original(URL.init(string: urlFacebook)!)
+                    XCTAssertEqual(request.url?.absoluteString, urlAmazon)
+                    let newRequest = NSURLRequest.init(url: URL.init(string: urlShopee)!)
+                    order.append(6)
+                    return newRequest
+                    } as @convention(block) ((URL) -> NSURLRequest, URL) -> NSURLRequest)
+                
+                try hookDeallocBefore(targetClass: Request.self, closure: {
+                    deallocOrder.append(2)
+                })
+                
+                try hookDeallocAfter(targetClass: Request.self, closure: {
+                    deallocOrder.append(6)
+                })
+                
+                try hookDeallocInstead(targetClass: Request.self, closure: { (original) in
+                    deallocOrder.append(3)
+                    original()
+                    deallocOrder.append(5)
+                })
+                
+                try hookDeallocBefore(object: object, closure: {
+                    deallocOrder.append(0)
+                })
+                
+                try hookDeallocAfter(object: object, closure: {
+                    deallocOrder.append(8)
+                })
+                
+                try hookDeallocAfterByTail(object: object, closure: {
+                    deallocOrder.append(4)
+                })
+                
+                try hookDeallocInstead(object: object) { (original) in
+                    deallocOrder.append(1)
+                    original()
+                    deallocOrder.append(7)
+                }
+                
+                let request = object.generateRequest(url: URL.init(string: urlGoogle)!)
+                XCTAssertEqual(request.url?.absoluteString, urlShopee)
+                XCTAssertEqual(order, [0, 1, 2, 3, 4, 5, 6, 7])
+            }
+            XCTAssertEqual(deallocOrder, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+        } catch {
+            XCTAssertNil(error)
         }
     }
     

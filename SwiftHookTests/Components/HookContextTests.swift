@@ -11,7 +11,7 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
-    let InternalErrorNoMethod = 231
+    let InternalErrorNoMethod = 226
     
     func testNoMethod() {
         do {

@@ -16,18 +16,11 @@ private class ClosuresContext {
     var instead: [Selector: [AnyObject]] = [:]
 }
 
-func associatedGetClosures(object: AnyObject, selector: Selector, mode: HookMode) -> [AnyObject] {
+func associatedGetClosures(object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
-        return []
+        return ([], [], [])
     }
-    switch mode {
-    case .before:
-        return context.before[selector] ?? []
-    case .after:
-        return context.after[selector] ?? []
-    case .instead:
-        return context.instead[selector] ?? []
-    }
+    return (context.before[selector] ?? [], context.after[selector] ?? [], context.instead[selector] ?? [])
 }
 
 func associatedAppendClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {

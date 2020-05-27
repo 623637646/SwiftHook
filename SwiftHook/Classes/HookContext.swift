@@ -36,18 +36,13 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     
     let isDynamic = isDynamicClass(targetClass: hookContext.targetClass)
     var beforeHookClosures = hookContext.beforeHookClosures
-    if isDynamic {
-        beforeHookClosures += associatedGetClosures(object: object, selector: hookContext.selector, mode: .before)
-    }
-    
     var insteadHookClosures = hookContext.insteadHookClosures
-    if isDynamic {
-        insteadHookClosures += associatedGetClosures(object: object, selector: hookContext.selector, mode: .instead)
-    }
-    
     var afterHookClosures = hookContext.afterHookClosures
     if isDynamic {
-        afterHookClosures += associatedGetClosures(object: object, selector: hookContext.selector, mode: .after)
+        let (before, after, instead) = associatedGetClosures(object: object, selector: hookContext.selector)
+        beforeHookClosures += before
+        insteadHookClosures += instead
+        afterHookClosures += after
     }
     
     // preparation for before and after
@@ -132,7 +127,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
     unowned(unsafe) var object = UnsafeMutablePointer<AnyObject>(OpaquePointer(insteadContext.objectPointer)).pointee
     var insteadHookClosures = hookContext.insteadHookClosures
     if isDynamicClass(targetClass: hookContext.targetClass) {
-        insteadHookClosures += associatedGetClosures(object: object, selector: hookContext.selector, mode: .instead)
+        insteadHookClosures += associatedGetClosures(object: object, selector: hookContext.selector).instead
     }
     guard let firstHookClosureInList = insteadHookClosures.first else {
         assert(false)

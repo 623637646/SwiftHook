@@ -42,6 +42,9 @@
                   Identifier = "AspectsErrorTests">
                </Test>
                <Test
+                  Identifier = "AspectsSwiftTests">
+               </Test>
+               <Test
                   Identifier = "MemoryTests">
                </Test>
             </SkippedTests>

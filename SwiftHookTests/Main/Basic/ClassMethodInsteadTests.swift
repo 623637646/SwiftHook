@@ -282,10 +282,14 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTAssertEqual(number.intValue, 5)
                 let newNumber = NSNumber(6)
                 return newNumber
-            } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
+                } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
             let number = TestObject.classGenerateNumber(number: 4)
             XCTAssertEqual(number.intValue, 6)
-            token.cancelHook()
+            guard let hookToken = token as? HookToken else {
+                XCTFail()
+                return
+            }
+            XCTAssertTrue(internalCancelHook(token: hookToken)!)
         } catch {
             XCTAssertNil(error)
         }

@@ -52,6 +52,7 @@
 		2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */; };
 		2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */; };
 		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
+		2AA23CB8247E6ED3003776FC /* AspectsSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */; };
 		2AA5591F2469C81900440E32 /* HookToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA5591E2469C81900440E32 /* HookToken.swift */; };
 		2AB6735B245834E30011536D /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
 		2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB6735F245834E30011536D /* SwiftHookTests.swift */; };
@@ -133,6 +134,7 @@
 		2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicClass.swift; sourceTree = "<group>"; };
 		2A99159B24587BF4007955E7 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
+		2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectsSwiftTests.swift; sourceTree = "<group>"; };
 		2AA5591E2469C81900440E32 /* HookToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookToken.swift; sourceTree = "<group>"; };
 		2AB67351245834E30011536D /* SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB67354245834E30011536D /* SwiftHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook.h; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 			children = (
 				2A49D849247D0DDB00E61036 /* AspectsTests.m */,
 				2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */,
+				2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */,
 			);
 			path = AspectsTests;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */,
 				2A728721246E76F7002D63A1 /* ThreadSafetyTests.swift in Sources */,
 				2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */,
+				2AA23CB8247E6ED3003776FC /* AspectsSwiftTests.swift in Sources */,
 				2A8BB5092474458700942DDC /* ParametersCheckingTests.swift in Sources */,
 				2A2F212424758C7D0032A64D /* HookContextTests.swift in Sources */,
 				2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */,

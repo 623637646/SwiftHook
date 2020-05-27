@@ -27,7 +27,11 @@ class ThreadSafetyTests: XCTestCase {
                 let targetClass: AnyClass = objc_allocateClassPair(TestObject.self, "ThreadSafetyTests_\(index)", 0)!
                 objc_registerClassPair(targetClass)
                 let token = try hookAfter(targetClass: targetClass, selector: #selector(TestObject.noArgsNoReturnFunc)) {}
-                token.cancelHook()
+                guard let hookToken = token as? HookToken else {
+                    XCTFail()
+                    return
+                }
+                XCTAssertTrue(internalCancelHook(token: hookToken)!)
                 objc_disposeClassPair(targetClass)
             } catch {
                 XCTAssertNil(error)

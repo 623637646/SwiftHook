@@ -92,31 +92,50 @@ func internalCancelHook(token: HookToken) -> Bool? {
                 return nil
             }
             try associatedRemoveClosure(object: hookObject, selector: hookContext.selector, hookClosure: hookClosure, mode: token.mode)
-            if associatedClosuresIsEmpty(object: hookObject) {
-                try unwrapDynamicClass(object: hookObject)
-                return true
-            } else {
+            guard object_getClass(hookObject) == hookContext.targetClass else {
+                // Maybe observe by KVO after hook by SwiftHook.
                 return false
             }
+            guard let isIMPChanged = isIMPChanged(hookContext: hookContext) else {
+                throw SwiftHookError.internalError(file: #file, line: #line)
+            }
+            guard !isIMPChanged else {
+                return false
+            }
+            guard associatedClosuresIsEmpty(object: hookObject) else {
+                return false
+            }
+            try unwrapDynamicClass(object: hookObject)
+            return true
         } else {
             try hookContext.remove(hookClosure: hookClosure, mode: token.mode)
-            guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: hookContext.targetClass, selector: hookContext.selector) else {
-                assert(false)
-                return nil
+            guard let isIMPChanged = isIMPChanged(hookContext: hookContext) else {
+                throw SwiftHookError.internalError(file: #file, line: #line)
             }
-            guard hookContext.method == currentMethod &&
-                method_getImplementation(currentMethod) == hookContext.methodNewIMPPointer.pointee else {
-                    return false
-            }
-            if hookContext.isHoolClosurePoolEmpty() {
-                hookContextPool.remove(hookContext)
-                return true
-            } else {
+            guard !isIMPChanged else {
                 return false
             }
+            guard hookContext.isHoolClosurePoolEmpty() else {
+                return false
+            }
+            hookContextPool.remove(hookContext)
+            return true
         }
-    } catch {}
+    } catch {
+        assert(false)
+    }
     return nil
+}
+
+/**
+ Is IMP changed. return nil if has some error
+ */
+private func isIMPChanged(hookContext: HookContext) -> Bool? {
+    guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: hookContext.targetClass, selector: hookContext.selector) else {
+        return nil
+    }
+    return hookContext.method != currentMethod ||
+        method_getImplementation(currentMethod) != hookContext.methodNewIMPPointer.pointee
 }
 
 // MARK: This is debug tools.

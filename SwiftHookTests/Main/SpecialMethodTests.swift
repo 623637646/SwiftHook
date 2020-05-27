@@ -139,8 +139,16 @@ class SpecialMethodTests: XCTestCase {
                 executed.removeAll()
             }
             XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 3, 4, 2, 1, -2, -1, -4, -3, 0, 3, 4, 2, 1])
-            tokens.forEach { (token) in
-                token.cancelHook()
+            for (index, token) in tokens.enumerated() {
+                guard let hookToken = token as? HookToken else {
+                    XCTFail()
+                    return
+                }
+                if index == tokens.count - 1 {
+                    XCTAssertTrue(internalCancelHook(token: hookToken)!)
+                } else {
+                    XCTAssertFalse(internalCancelHook(token: hookToken)!)
+                }
             }
         } catch {
             XCTAssertNil(error)

@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ObjectiveCTestObject.h"
+#import <objc/runtime.h>
 @import Aspects;
 
 // This Testcase should be trigger manually.
@@ -91,6 +92,24 @@
     // crash (string's class is NSTaggedPointerString)
     [[[NSString alloc] initWithFormat:@"11"] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
+}
+
+/**
+ Crash: -[ObjectiveCTestObject setNumber:]: unrecognized selector sent to instance 0x7fc5c9824cb0
+ */
+- (void)testClassMethodUnknownbeHavior
+{
+    id<AspectToken> token = [object_getClass(ObjectiveCTestObject.class) aspect_hookSelector:@selector(classNoArgsNoReturnFunc) withOptions:AspectPositionBefore usingBlock:^(){
+        NSLog(@"");
+    } error:NULL];
+    [ObjectiveCTestObject classNoArgsNoReturnFunc];
+    NSLog(@"%@", token);
+//    [token remove]; // Remove hook can avoid crash.
+    
+    [ObjectiveCTestObject aspect_hookSelector:@selector(setNumber:) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        NSLog(@"");
+    } error:NULL];
+    [[ObjectiveCTestObject alloc] init].number = 9;
 }
 
 #pragma mark - Unexpected

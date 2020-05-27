@@ -163,6 +163,8 @@ autoreleasepool {
 
 # [Performance](Documents/PERFORMANCE.md)
 
+Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects).
+
 * Hook with Befre mode for all instances, SwiftHook is **15 times** faster than Aspects.
 * Hook with Instead mode for all instances, SwiftHook is **3.5 times** faster than Aspects.
 * Hook with After mode for single instances, SwiftHook is **4.5 times** faster than Aspects.

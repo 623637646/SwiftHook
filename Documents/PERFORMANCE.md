@@ -26,43 +26,43 @@ Run Tests Project with release mode (Because Swift is very slow then Objective-C
 
 # Conclusion
 
-* Hook with Befre mode for all instances, SwiftHook is **16.28** times faster than Aspects.
-* Hook with Instead mode for all instances, SwiftHook is **3.48** times faster than Aspects.
-* Hook with After mode for single instances, SwiftHook is **3.21** times faster than Aspects.
-* Hook with Instead mode for single instances, SwiftHook is **1.66** times faster than Aspects.
+* Hook with Befre mode for all instances, SwiftHook is **15 times** faster than Aspects.
+* Hook with Instead mode for all instances, SwiftHook is **3.5 times** faster than Aspects.
+* Hook with After mode for single instances, SwiftHook is **4.5 times** faster than Aspects.
+* Hook with Instead mode for single instances, SwiftHook is **1.9 times** faster than Aspects.
 
 detail:
 
 ```
 Case: Hook with Befre mode for all instances
 100000 times running
-Cost 0.000260s for non-hook
-Cost 0.654195s for Aspects
-Cost 0.040192s for SwiftHook
-SwiftHook is 16.28 times faster than Aspects (Hook with Befre mode for all instances)
-SwiftHook takes 154.59 times longer than Non-Hook
+Cost 0.000249s for non-hook
+Cost 0.596514s for Aspects
+Cost 0.039603s for SwiftHook
+SwiftHook is 15.06 times faster than Aspects (Hook with Befre mode for all instances)
+SwiftHook takes 159.03 times longer than Non-Hook
 
 Case: Hook with Instead mode for all instances
 100000 times running
-Cost 0.000317s for non-hook
-Cost 0.612004s for Aspects
-Cost 0.176032s for SwiftHook
+Cost 0.000296s for non-hook
+Cost 0.605576s for Aspects
+Cost 0.173970s for SwiftHook
 SwiftHook is 3.48 times faster than Aspects (Hook with Instead mode for all instances)
-SwiftHook takes 555.35 times longer than Non-Hook
+SwiftHook takes 587.74 times longer than Non-Hook
 
 Case: Hook with After mode for single instances
 100000 times running
-Cost 0.000298s for non-hook
-Cost 0.613204s for Aspects
-Cost 0.191130s for SwiftHook
-SwiftHook is 3.21 times faster than Aspects (Hook with After mode for single instances)
-SwiftHook takes 641.33 times longer than Non-Hook
+Cost 0.000272s for non-hook
+Cost 0.594498s for Aspects
+Cost 0.130522s for SwiftHook
+SwiftHook is 4.55 times faster than Aspects (Hook with After mode for single instances)
+SwiftHook takes 480.01 times longer than Non-Hook
 
 Case: Hook with Instead mode for single instances
 100000 times running
-Cost 0.000353s for non-hook
-Cost 0.589614s for Aspects
-Cost 0.355242s for SwiftHook
-SwiftHook is 1.66 times faster than Aspects (Hook with Instead mode for single instances)
-SwiftHook takes 1006.41 times longer than Non-Hook
+Cost 0.000267s for non-hook
+Cost 0.592294s for Aspects
+Cost 0.316831s for SwiftHook
+SwiftHook is 1.87 times faster than Aspects (Hook with Instead mode for single instances)
+SwiftHook takes 1186.50 times longer than Non-Hook
 ```

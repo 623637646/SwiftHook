@@ -392,4 +392,46 @@ class CompatibilityTests: XCTestCase {
         }
     }
     
+    // TODO: If add this test cases. It will influence others.
+//    func testAfterAspectsReverseCancelForAllInstances() {
+//        do {
+//            let object = ObjectiveCTestObject()
+//            var expectation = [Int]()
+//            
+//            let tokenAspects = try ObjectiveCTestObject.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
+//                expectation.append(3)
+//                aspect.originalInvocation()?.invoke()
+//                expectation.append(4)
+//                } as @convention(block) (AspectInfo) -> Void)
+//            let token = try hookInstead(targetClass: ObjectiveCTestObject.self, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+//                expectation.append(1)
+//                original(number)
+//                expectation.append(2)
+//                } as @convention(block) ((Int) -> Void, Int) -> Void)
+//            XCTAssertEqual(expectation, [])
+//            
+//            object.number = 9
+//            XCTAssertEqual(expectation, [1, 3, 4, 2])
+//            XCTAssertEqual(object.number, 9)
+//            
+//            expectation = []
+//            guard let hookToken = token as? HookToken else {
+//                XCTFail()
+//                return
+//            }
+//            XCTAssertTrue(internalCancelHook(token: hookToken)!)
+//            object.number = 11
+//            XCTAssertEqual(expectation, [3, 4])
+//            XCTAssertEqual(object.number, 11)
+//            
+//            expectation = []
+//            XCTAssertTrue(tokenAspects.remove())
+//            object.number = 10
+//            XCTAssertEqual(expectation, [])
+//            XCTAssertEqual(object.number, 10)
+//        } catch {
+//            XCTAssertNil(error)
+//        }
+//    }
+    
 }

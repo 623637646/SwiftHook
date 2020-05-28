@@ -240,7 +240,6 @@
 		2A3B8C0C24742362007E6D65 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A5C8D5224670B1D00812DAD /* Basic */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
@@ -360,6 +359,7 @@
 		2AB6735E245834E30011536D /* SwiftHookTests */ = {
 			isa = PBXGroup;
 			children = (
+				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
 				2A3B8C0C24742362007E6D65 /* Main */,
 				2A0C85DA2476B5A9003AA9D9 /* Components */,
 				2A58BF9A245C94FE005227F5 /* Others */,

@@ -28,7 +28,7 @@ class SwiftHookTests: XCTestCase {
         let token = try? hookAfter(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { a, b in
             // get the arguments of the function
             print("arg1 is \(a)") // arg1 is 3
-            print("arg1 is \(b)") // arg1 is 4
+            print("arg2 is \(b)") // arg2 is 4
             } as @convention(block) (Int, Int) -> Void)
         _ = testObject.sumFunc(a: 3, b: 4)
         token?.cancelHook() // cancel the hook
@@ -39,7 +39,7 @@ class SwiftHookTests: XCTestCase {
         let token = try? hookInstead(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
             // get the arguments of the function
             print("arg1 is \(a)") // arg1 is 3
-            print("arg1 is \(b)") // arg1 is 4
+            print("arg2 is \(b)") // arg2 is 4
             
             // run original function
             let result = original(a, b)

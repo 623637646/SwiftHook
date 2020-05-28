@@ -60,6 +60,7 @@
     [token remove];
     [object setNumber:888];
 }
+// TODO: study this
 /**
  Crash on EXC_BAD_ACCESS.
  */
@@ -75,6 +76,8 @@
     }
     XCTAssertTrue(hooked);
 }
+
+// TODO: study this. Maybe related to: https://stackoverflow.com/a/62068020/9315497
 /**
  Crash on EXC_BAD_ACCESS
  This crash happens on SwiftHook too!!!
@@ -94,6 +97,7 @@
     } error:NULL];
 }
 
+// TODO: study this
 /**
  Crash: -[ObjectiveCTestObject setNumber:]: unrecognized selector sent to instance 0x7fc5c9824cb0
  */

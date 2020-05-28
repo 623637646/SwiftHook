@@ -26,10 +26,10 @@ Run Tests Project with release mode (Because Swift is very slow then Objective-C
 
 # Conclusion
 
-* Hook with Befre mode for all instances, SwiftHook is **15 times** faster than Aspects.
+* Hook with Before and After mode for all instances, SwiftHook is **15 times** faster than Aspects.
 * Hook with Instead mode for all instances, SwiftHook is **3.5 times** faster than Aspects.
-* Hook with After mode for single instances, SwiftHook is **4.5 times** faster than Aspects.
-* Hook with Instead mode for single instances, SwiftHook is **1.9 times** faster than Aspects.
+* Hook with Before and After mode for specified instances, SwiftHook is **4.5 times** faster than Aspects.
+* Hook with Instead mode for specified instances, SwiftHook is **1.9 times** faster than Aspects.
 
 detail:
 

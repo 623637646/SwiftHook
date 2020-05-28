@@ -30,7 +30,7 @@ class MyObject {
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The class doesn't have to inherit from NSObject. If the class is written by Objective-C, Just hook it without any more effort**
 
-##### Perform the hook closure before executing specified instance's method.
+1. Perform the hook closure before executing specified instance's method.
 
 ```swift
 let object = MyObject()
@@ -42,7 +42,7 @@ object.noArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
 ```
 
-##### Perform the hook closure after executing specified instance's method. And get the parameters.
+2. Perform the hook closure after executing specified instance's method. And get the parameters.
 
 ```swift
 let object = MyObject()
@@ -58,7 +58,7 @@ token?.cancelHook() // cancel the hook
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook at `before` and `after`. The closure's args have to be empty or the same as method. The return type has to be `void`**
 
-##### Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
+3. Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
 
 ```swift
 let object = MyObject()
@@ -79,7 +79,7 @@ token?.cancelHook() // cancel the hook
 
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook with `instead`. The closure's first argument has to be a closure which has the same types with the method. The rest args and return type have to be the same as the method.**
 
-##### Perform the hook closure before executing the method of all instances of the class.
+4. Perform the hook closure before executing the method of all instances of the class.
 
 ```swift
 let token = try? hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.noArgsNoReturnFunc)) {
@@ -90,7 +90,7 @@ MyObject().noArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
 ```
 
-##### Perform the hook closure before executing the class method.
+5. Perform the hook closure before executing the class method.
 
 ```swift
 let token = try? hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.classMethodNoArgsNoReturnFunc)) {
@@ -101,7 +101,7 @@ MyObject.classMethodNoArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
 ```
 
-##### Hook in Objective-C
+6. Hook in Objective-C
 
 ```objective-c
 ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
@@ -124,7 +124,7 @@ class MyNSObject: NSObject {
 }
 ```
 
-##### Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
+1. Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
 
 ```swift
 let object = MyNSObject()
@@ -133,7 +133,7 @@ _ = try? hookDeallocBefore(object: object) {
 }
 ```
 
-##### Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
+2. Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
 
 ```swift
 let object = MyObject()
@@ -142,7 +142,7 @@ _ = try? hookDeallocAfterByTail(object: object) {
 }
 ```
 
-##### Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
+3. Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
 
 ```swift
 autoreleasepool {
@@ -155,7 +155,7 @@ autoreleasepool {
 }
 ```
 
-##### Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
+4. Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
 
 ```swift
 _ = try? hookDeallocBefore(targetClass: UIViewController.self) {

@@ -37,25 +37,25 @@ class AspectsSwiftTests: XCTestCase {
     // Aspects doesn't support Swift in this case.
     func testModifyObjectReture() {
         do {
-            try self.aspect_hook(#selector(AspectsSwiftTests.getTestObject), with: .positionInstead, usingBlock: { aspectInfo in
+            try self.aspect_hook(#selector(AspectsSwiftTests.getRequest), with: .positionInstead, usingBlock: { aspectInfo in
                 let invocation = aspectInfo.originalInvocation()!
                 invocation.invoke()
-                unowned var result: ObjectiveCTestObject?
+                
+                unowned var result: NSURLRequest?
                 withUnsafeMutablePointer(to: &result) { (p) -> Void in
                     invocation.getReturnValue(UnsafeMutableRawPointer(p))
                 }
-                XCTAssertEqual(result!.number, 999)
+                XCTAssertEqual(result?.url?.absoluteString, "https://www.shopee.com")
                 
-                var new = ObjectiveCTestObject()
-                new.number = 333
+                var new = NSURLRequest(url: URL(string: "https://www.google.com")!)
                 withUnsafeMutablePointer(to: &new) { (p) -> Void in
                     invocation.setReturnValue(UnsafeMutableRawPointer(p))
                     invocation.retainArguments()
                 }
                 } as @convention(block) (AspectInfo) -> Void)
             
-            let result = self.getTestObject()
-            XCTAssertEqual(result.number, 333)
+            let result = self.getRequest()
+            XCTAssertEqual(result.url?.absoluteString, "https://www.google.com")
         } catch {
             XCTAssertNil(error)
         }
@@ -63,10 +63,8 @@ class AspectsSwiftTests: XCTestCase {
     
     // MARK: utilities
     
-    @objc dynamic func getTestObject() -> ObjectiveCTestObject {
-        let object = ObjectiveCTestObject()
-        object.number = 999
-        return object
+    @objc dynamic func getRequest() -> NSURLRequest {
+        return NSURLRequest(url: URL(string: "https://www.shopee.com")!)
     }
     
     @objc dynamic func getInt() -> Int {

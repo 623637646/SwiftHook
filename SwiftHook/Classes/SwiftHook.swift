@@ -7,11 +7,18 @@
 //
 
 public enum SwiftHookError: Error {
+    
+    public enum Unsupport {
+        case pureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
+        case KVOedObject // Unsupport to hook KVO'ed Object
+        case specifiedInstanceRetain // Unsupport to hook "retian" for specified instance (Can hook this mehtod for all instances).
+        case specifiedInstanceRelease // Unsupport to hook "release" for specified instance (Can hook this mehtod for all instances).
+    }
+    
+    case unsupport(value: Unsupport)
     case noRespondSelector
     case missingSignature // Please check if there is keyword @convention(block) for the clousre
     case incompatibleClosureSignature
-    case unsupportHookPureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
-    case unsupportHookKVOedObject // Unsupport to hook KVO'ed Object
     case canNotHookClassWithObjectAPI // Please use "hookClassMethod" instead.
     case duplicateHookClosure // This closure already hooked with one mode.
     case ffiError
@@ -37,13 +44,7 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: @escaping
  */
 @discardableResult
 public func hookBefore(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
-    guard !(object is AnyClass) else {
-        throw SwiftHookError.canNotHookClassWithObjectAPI
-    }
-    guard let baseClass = object_getClass(object) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    try parametersCheck(targetClass: baseClass, selector: selector, mode: .before, closure: closure as AnyObject)
+    try parametersCheck(object: object, selector: selector, mode: .before, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try internalHook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -62,13 +63,7 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: @escaping 
  */
 @discardableResult
 public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
-    guard !(object is AnyClass) else {
-        throw SwiftHookError.canNotHookClassWithObjectAPI
-    }
-    guard let baseClass = object_getClass(object) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    try parametersCheck(targetClass: baseClass, selector: selector, mode: .after, closure: closure as AnyObject)
+    try parametersCheck(object: object, selector: selector, mode: .after, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try internalHook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -79,13 +74,7 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throw
  */
 @discardableResult
 public func hookInstead(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
-    guard !(object is AnyClass) else {
-        throw SwiftHookError.canNotHookClassWithObjectAPI
-    }
-    guard let baseClass = object_getClass(object) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    try parametersCheck(targetClass: baseClass, selector: selector, mode: .instead, closure: closure as AnyObject)
+    try parametersCheck(object: object, selector: selector, mode: .instead, closure: closure as AnyObject)
     return try swiftHookSerialQueue.sync {
         try internalHook(object: object, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
     }
@@ -278,14 +267,30 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
 
 // MARK: private
 
+private func parametersCheck(object: AnyObject, selector: Selector, mode: HookMode, closure: AnyObject) throws {
+    guard !(object is AnyClass) else {
+        throw SwiftHookError.canNotHookClassWithObjectAPI
+    }
+    guard let baseClass = object_getClass(object) else {
+        throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    guard selector != NSSelectorFromString("retain") else {
+        throw SwiftHookError.unsupport(value: .specifiedInstanceRetain)
+    }
+    guard selector != NSSelectorFromString("release") else {
+        throw SwiftHookError.unsupport(value: .specifiedInstanceRelease)
+    }
+    try parametersCheck(targetClass: baseClass, selector: selector, mode: mode, closure: closure)
+}
+
 private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
     if selector == deallocSelector {
         guard targetClass is NSObject.Type else {
-            throw SwiftHookError.unsupportHookPureSwiftObjectDealloc
+            throw SwiftHookError.unsupport(value: .pureSwiftObjectDealloc)
         }
     }
     guard !NSStringFromClass(targetClass).hasPrefix(KVOPrefix) else {
-        throw SwiftHookError.unsupportHookKVOedObject
+        throw SwiftHookError.unsupport(value: .KVOedObject)
     }
     guard let method = class_getInstanceMethod(targetClass, selector) else {
         throw SwiftHookError.noRespondSelector

@@ -43,7 +43,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -51,7 +52,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookAfter(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -59,7 +61,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -67,7 +70,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -75,7 +79,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookAfter(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -83,7 +88,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupportHookPureSwiftObjectDealloc {
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .pureSwiftObjectDealloc)
         } catch {
             XCTAssertNil(error)
         }
@@ -168,6 +174,32 @@ class ParametersCheckingTests: XCTestCase {
                 } as @convention(block) (Int, Int) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testRetainForSpecifiedInstance() {
+        do {
+            let object = ObjectiveCTestObject()
+            try hookBefore(object: object, selector: NSSelectorFromString("retain")) {
+            }
+            XCTFail()
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .specifiedInstanceRetain)
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testReleaseForSpecifiedInstance() {
+        do {
+            let object = ObjectiveCTestObject()
+            try hookBefore(object: object, selector: NSSelectorFromString("release")) {
+            }
+            XCTFail()
+        } catch SwiftHookError.unsupport(value: let value) {
+            XCTAssertEqual(value, .specifiedInstanceRelease)
         } catch {
             XCTAssertNil(error)
         }

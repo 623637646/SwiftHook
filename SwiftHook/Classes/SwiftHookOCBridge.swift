@@ -18,6 +18,7 @@ import UIKit
     }
 }
 
+// TODO: Update API. Change this to NSObject category.
 @objcMembers public class SwiftHookOCBridge: NSObject {
     
     // MARK: Hook specified instance

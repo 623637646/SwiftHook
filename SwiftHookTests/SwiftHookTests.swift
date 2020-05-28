@@ -134,6 +134,23 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    func testRetainAndRelease() {
+        let tokenRetain = try? hookBefore(targetClass: MyNSObject.self, selector: NSSelectorFromString("retain")) {
+            print("retain!")
+        }
+        
+        let tokenRelease = try? hookAfter(targetClass: MyNSObject.self, selector: NSSelectorFromString("release")) {
+            print("release!")
+        }
+        autoreleasepool {
+            let object = MyNSObject()
+            let object2 = object
+            _ = object2
+        }
+        tokenRetain?.cancelHook()
+        tokenRelease?.cancelHook()
+    }
+    
     // MARK: Complicated test cases
     
     class Request: NSObject {

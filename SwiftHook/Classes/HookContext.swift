@@ -32,13 +32,13 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
     }
     let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
     let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: Int(cif.pointee.nargs))
-    unowned(unsafe) let object = argsBuffer[0]!.assumingMemoryBound(to: AnyObject.self).pointee
     
     let isDynamic = isDynamicClass(targetClass: hookContext.targetClass)
     var beforeHookClosures = hookContext.beforeHookClosures
     var insteadHookClosures = hookContext.insteadHookClosures
     var afterHookClosures = hookContext.afterHookClosures
     if isDynamic {
+        unowned(unsafe) let object = argsBuffer[0]!.assumingMemoryBound(to: AnyObject.self).pointee
         let (before, after, instead) = associatedGetClosures(object: object, selector: hookContext.selector)
         beforeHookClosures += before
         insteadHookClosures += instead
@@ -124,9 +124,9 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
         assert(false)
         return
     }
-    unowned(unsafe) let object = UnsafeMutablePointer<AnyObject>(OpaquePointer(insteadContext.objectPointer)).pointee
     var insteadHookClosures = hookContext.insteadHookClosures
     if isDynamicClass(targetClass: hookContext.targetClass) {
+        unowned(unsafe) let object = UnsafeMutablePointer<AnyObject>(OpaquePointer(insteadContext.objectPointer)).pointee
         insteadHookClosures += associatedGetClosures(object: object, selector: hookContext.selector).instead
     }
     guard let firstHookClosureInList = insteadHookClosures.first else {

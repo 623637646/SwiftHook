@@ -18,7 +18,7 @@ struct HookToken: Token {
     weak var hookClosure: AnyObject?
     let mode: HookMode
     
-    weak var hookObject: AnyObject? // This is only for single instance hook
+    weak var hookObject: AnyObject? // This is only for specified instance hook
     
     init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
         self.hookContext = hookContext
@@ -26,7 +26,7 @@ struct HookToken: Token {
         self.mode = mode
     }
     
-    public func cancelHook() {
+    func cancelHook() {
         swiftHookSerialQueue.sync {
             _ = internalCancelHook(token: self)
         }

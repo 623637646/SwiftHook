@@ -57,7 +57,7 @@ private class DynamicClassContext: Hashable {
 }
 
 /**
- Wrap dynamic class to object for single hook. Return new class
+ Wrap dynamic class to object for specified instance hook. Return new class
  */
 func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard let baseClass = object_getClass(object) else {

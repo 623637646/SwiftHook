@@ -35,7 +35,7 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
     guard let baseClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    // create dynamic class for single hook
+    // create dynamic class for specified instance hook
     let dynamicClass: AnyClass = isDynamicClass(targetClass: baseClass) ? baseClass : try wrapDynamicClass(object: object)
     // hook
     if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {

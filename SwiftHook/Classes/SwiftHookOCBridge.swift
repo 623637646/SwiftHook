@@ -20,7 +20,7 @@ import UIKit
 
 @objcMembers public class SwiftHookOCBridge: NSObject {
     
-    // MARK: Hook single instance
+    // MARK: Hook specified instance
     
     @discardableResult
     class public func ocHookBefore(object: AnyObject, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
@@ -101,7 +101,7 @@ import UIKit
         OCToken(token: try hookClassMethodInstead(targetClass: targetClass, selector: selector, closure: closure))
     }
 
-    // MARK: Hook single dealloc
+    // MARK: Hook specified instance dealloc
 
     @discardableResult
     class public func ocHookDeallocBefore(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> OCToken {

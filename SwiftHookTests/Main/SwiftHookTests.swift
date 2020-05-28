@@ -13,6 +13,7 @@ class SwiftHookTests: XCTestCase {
     
     // MARK: Basic usage
     
+    // Perform the hook closure before executing specified instance's method.
     func testSingleHookBefore() {
         let testObject = TestObject()
         let token = try? hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
@@ -23,6 +24,7 @@ class SwiftHookTests: XCTestCase {
         token?.cancelHook() // cancel the hook
     }
     
+    // Perform the hook closure after executing specified instance's method. And get the parameters.
     func testSingleHookAfterWithArguments() {
         let testObject = TestObject()
         let token = try? hookAfter(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { a, b in
@@ -34,6 +36,7 @@ class SwiftHookTests: XCTestCase {
         token?.cancelHook() // cancel the hook
     }
     
+    // Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
     func testSingleHookInstead() {
         let testObject = TestObject()
         let token = try? hookInstead(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
@@ -42,7 +45,7 @@ class SwiftHookTests: XCTestCase {
             print("arg2 is \(b)") // arg2 is 4
             
             // run original function
-            let result = original(a, b)
+            let result = original(a, b) // Or change the parameters: let result = original(-1, -2)
             print("original result is \(result)") // result = 7
             return 9
             } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
@@ -51,6 +54,7 @@ class SwiftHookTests: XCTestCase {
         token?.cancelHook() // cancel the hook
     }
     
+    // Perform the hook closure before executing the method of all instances of the class.
     func testAllInstances() {
         let token = try? hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc)) {
             // run your code
@@ -60,6 +64,7 @@ class SwiftHookTests: XCTestCase {
         token?.cancelHook() // cancel the hook
     }
     
+    // Perform the hook closure before executing the class method.
     func testClassMethod() {
         let token = try? hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc)) {
             // run your code
@@ -71,15 +76,23 @@ class SwiftHookTests: XCTestCase {
     
     // MARK: Advanced usage
     
+    class MyNSObject: NSObject {
+        deinit {
+            print("deinit executed")
+        }
+    }
+    
+    // Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
     func testSingleHookBeforeDeallocForNSObject() {
         autoreleasepool {
-            let object = NSObject()
+            let object = MyNSObject()
             _ = try? hookDeallocBefore(object: object) {
                 print("released!")
             }
         }
     }
     
+    // Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
     func testSingleHookAfterDeallocForAnyObject() {
         autoreleasepool {
             let object = TestObject()
@@ -89,9 +102,10 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    // Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
     func testSingleHookInsteadDeallocForNSObject() {
         autoreleasepool {
-            let object = NSObject()
+            let object = MyNSObject()
             _ = try? hookDeallocInstead(object: object) { original in
                 print("before release!")
                 original() // have to call original "dealloc" to avoid memory leak!!!
@@ -100,6 +114,7 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    // Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
     func testAllInstancesHookBeforeDeallocForNSObject() {
         _ = try? hookDeallocBefore(targetClass: UIViewController.self) {
             print("released!")

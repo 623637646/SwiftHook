@@ -21,7 +21,15 @@
 #pragma mark - crashs
 
 /**
- Aspect is not compatible with KVO. Crash on unrecognized selector sent to instance...
+ Crash: -[ObjectiveCTestObject aspects__setNumber:]: unrecognized selector sent to instance 0x7ffe53e20da0
+ Reason:
+ 1. After KVO. The object's class will be set to a dynamic class named NSKVONotifying_ObjectiveCTestObject. This class override the setNumber: method.
+ 2. Aspect hook the same method. If the [object class] is different with object_getClass(object). Will hook WITHOUT creating a dynamic class (See Aspects.m:357).
+ 3. Aspect add new method named aspects__setNumber. Swizzle aspects__setNumber and original setNumber. (And some other swizzling like forwardInvocation:)
+ Now the logic is:
+ [object setNumber:99] -> Aspects block -> [object aspects__setNumber:99] -> KVO's logic -> call original with selector(_cmd) -> The final IMP of ObjectiveCTestObject
+ This bug already has a Pull Request: https://github.com/steipete/Aspects/pull/115
+ The article (Chinese): https://juejin.im/post/5ddf9025e51d456b345adf26
  */
 - (void)testCrashWithKVOedObject
 {
@@ -33,7 +41,13 @@
 }
 
 /**
- Aspect is not compatible with KVO. Hook aspects first, Then KVO, Then cancel aspects hook. call the method. crash.
+ Crash: Assertion failure in void aspect_cleanupHookedClassAndSelector(NSObject *__strong, SEL)()
+ Reason:
+ 1. Hook with Aspects. The object's class (isa) is changed to ObjectiveCTestObject_Aspects_
+ 2. After KVO. The isa is changed to NSKVONotifying_ObjectiveCTestObject_Aspects_
+ 3. Remove Aspects. Aspects wants to change the isa from ObjectiveCTestObject_Aspects_ to ObjectiveCTestObject. But actually the isa is changed from NSKVONotifying_ObjectiveCTestObject_Aspects_ to NSKVONotifying_ObjectiveCTestObject
+ But there is no class named NSKVONotifying_ObjectiveCTestObject. So crash.
+ The article (Chinese): https://juejin.im/post/5ddf9025e51d456b345adf26
  */
 - (void)testCrashOnCancellationAspectsAfterKVO
 {
@@ -46,7 +60,7 @@
     [object setNumber:888];
 }
 /**
- This is similar with testCrashWithKVOedObject. But crash on EXC_BAD_ACCESS.
+ Crash on EXC_BAD_ACCESS.
  */
 - (void)testHookDeallocCrashAfterKVO
 {
@@ -62,13 +76,14 @@
 }
 /**
  Crash on EXC_BAD_ACCESS
+ This crash happens on SwiftHook too!!!
  */
 - (void)testCrashWithString
 {
     // normal (string's class is __NSCFConstantString)
     [[[NSString alloc] initWithFormat:@""] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
-
+    
     // normal (string's class is __NSCFConstantString)
     [[[NSString alloc] init] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];

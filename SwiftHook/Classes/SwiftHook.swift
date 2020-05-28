@@ -10,6 +10,17 @@ public enum SwiftHookError: Error {
     
     public enum Unsupport {
         case pureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
+        /*
+         TODO: Support hook KVO'ed Object.
+         
+         Cases:
+         1. Observe one object by KVO.
+         2. Hook this object by SwiftHook
+         3. Cancel KVO
+         4. Make sure SwiftHook works fine.
+         
+         Latest idea. Set the object a new subclass. The subclass copy superclass's extra-bytes to avoid KVO crash.
+         */
         case KVOedObject // Unsupport to hook KVO'ed Object
         case specifiedInstanceRetain // Unsupport to hook "retian" for specified instance (Can hook this mehtod for all instances).
         case specifiedInstanceRelease // Unsupport to hook "release" for specified instance (Can hook this mehtod for all instances).

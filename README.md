@@ -10,7 +10,7 @@ You can integrate **SwiftHook** with [cocoapods](https://cocoapods.org/).
 pod 'EasySwiftHook'
 ```
 
-# How to use it.
+# [How to use](SwiftHookTests/SwiftHookTests.swift)
 
 For example, this is your class
 

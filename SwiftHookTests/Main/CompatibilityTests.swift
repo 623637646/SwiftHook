@@ -258,6 +258,12 @@ class CompatibilityTests: XCTestCase {
     
     func testBeforeAspectsReverseCancel() {
         do {
+            // TODO: Why? It's wrong with this hook.
+//            let aaa = try ObjectiveCTestObject.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
+//                aspect.originalInvocation()?.invoke()
+//                } as @convention(block) (AspectInfo) -> Void)
+//            aaa.remove()
+            
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             

@@ -11,35 +11,45 @@ import XCTest
 
 class SwiftHookTests: XCTestCase {
     
+    class MyObject {
+        @objc dynamic func noArgsNoReturnFunc() {
+        }
+        @objc dynamic func sumFunc(a: Int, b: Int) -> Int {
+            return a + b
+        }
+        @objc dynamic class func classMethodNoArgsNoReturnFunc() {
+        }
+    }
+    
     // MARK: Basic usage
     
     // Perform the hook closure before executing specified instance's method.
     func testSingleHookBefore() {
-        let testObject = TestObject()
-        let token = try? hookBefore(object: testObject, selector: #selector(TestObject.noArgsNoReturnFunc)) {
+        let object = MyObject()
+        let token = try? hookBefore(object: object, selector: #selector(MyObject.noArgsNoReturnFunc)) {
             // run your code
             print("hooked!")
         }
-        testObject.noArgsNoReturnFunc()
+        object.noArgsNoReturnFunc()
         token?.cancelHook() // cancel the hook
     }
     
     // Perform the hook closure after executing specified instance's method. And get the parameters.
     func testSingleHookAfterWithArguments() {
-        let testObject = TestObject()
-        let token = try? hookAfter(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { a, b in
+        let object = MyObject()
+        let token = try? hookAfter(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { a, b in
             // get the arguments of the function
             print("arg1 is \(a)") // arg1 is 3
             print("arg2 is \(b)") // arg2 is 4
             } as @convention(block) (Int, Int) -> Void)
-        _ = testObject.sumFunc(a: 3, b: 4)
+        _ = object.sumFunc(a: 3, b: 4)
         token?.cancelHook() // cancel the hook
     }
     
     // Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
     func testSingleHookInstead() {
-        let testObject = TestObject()
-        let token = try? hookInstead(object: testObject, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
+        let object = MyObject()
+        let token = try? hookInstead(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { original, a, b in
             // get the arguments of the function
             print("arg1 is \(a)") // arg1 is 3
             print("arg2 is \(b)") // arg2 is 4
@@ -49,28 +59,28 @@ class SwiftHookTests: XCTestCase {
             print("original result is \(result)") // result = 7
             return 9
             } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
-        let result = testObject.sumFunc(a: 3, b: 4) // result
+        let result = object.sumFunc(a: 3, b: 4) // result
         print("hooked result is \(result)") // result = 9
         token?.cancelHook() // cancel the hook
     }
     
     // Perform the hook closure before executing the method of all instances of the class.
     func testAllInstances() {
-        let token = try? hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc)) {
+        let token = try? hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.noArgsNoReturnFunc)) {
             // run your code
             print("hooked!")
         }
-        TestObject().noArgsNoReturnFunc()
+        MyObject().noArgsNoReturnFunc()
         token?.cancelHook() // cancel the hook
     }
     
     // Perform the hook closure before executing the class method.
     func testClassMethod() {
-        let token = try? hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc)) {
+        let token = try? hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.classMethodNoArgsNoReturnFunc)) {
             // run your code
             print("hooked!")
         }
-        TestObject.classMethodNoArgsNoReturnFunc()
+        MyObject.classMethodNoArgsNoReturnFunc()
         token?.cancelHook() // cancel the hook
     }
     
@@ -95,7 +105,7 @@ class SwiftHookTests: XCTestCase {
     // Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
     func testSingleHookAfterDeallocForAnyObject() {
         autoreleasepool {
-            let object = TestObject()
+            let object = MyObject()
             _ = try? hookDeallocAfterByTail(object: object) {
                 print("released!")
             }

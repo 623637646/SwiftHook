@@ -188,6 +188,13 @@ Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects
 
 BTW, **Respect to Aspects!**
 
+# How it works?
+
+1. What is [libffi](https://github.com/libffi/libffi).? 
+    1. Call C function at runtime.
+    2. Create closure (IMP) at runtime.
+2. [SwiftHook’s logic](https://docs.google.com/drawings/d/13JHfInydNK-2CKLfVb63H2lRMJ3mF5rF6d4wkw7EPSs/edit?usp=sharing).
+
 # Requirements
 
 - iOS 10.0+ (Unverified for macOS, tvOS, watchOS)

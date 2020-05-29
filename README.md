@@ -1,6 +1,8 @@
 # What is this?
 
-This is a framework to hook methods in Swift and Objective C by iOS runtime and [libffi](https://github.com/libffi/libffi).
+A safe, easy, powerful and efficient hook framework for Swift.
+
+It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 
 # How to install
 

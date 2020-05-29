@@ -177,6 +177,17 @@ Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects
 * Hook with Before and After mode for specified instances, SwiftHook is **4.5 times** faster than Aspects.
 * Hook with Instead mode for specified instances, SwiftHook is **1.9 times** faster than Aspects.
 
+# We already have [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
+
+1. Aspects has some bugs. [Click here for test code](SwiftHookTests/AspectsTests/AspectsErrorTests.m).
+2. Aspects doesn’t support Swift with instead mode in some cases. [Click here for test code](SwiftHookTests/AspectsTests/AspectsSwiftTests.swift).
+3. Aspects’s API is not friendly for Swift.
+4. Aspects doesn’t support Swift object which is not based on NSObject.
+5. Aspects is based on *message forward*. This performance is not good.
+6. Aspects are no longer maintained. Author said: “**STRICTLY DO NOT RECOMMEND TO USE Aspects IN PRODUCTION CODE**”
+
+BTW, **Respect to Aspects!**
+
 # Requirements
 
 - iOS 10.0+ (Unverified for macOS, tvOS, watchOS)

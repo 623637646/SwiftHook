@@ -1,6 +1,6 @@
 # What is this?
 
-A safe, easy, powerful and efficient hook framework for Swift.
+A safe, easy, powerful and efficient hook framework for iOS (Support Swift and Objective-C).
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A0306022477BC3600DF86C6 /* SwiftHookOCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306012477BC3500DF86C6 /* SwiftHookOCBridge.swift */; };
+		2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */; };
 		2A0306042477BC4700DF86C6 /* OCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306032477BC4700DF86C6 /* OCTests.m */; };
 		2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */; };
 		2A0BE1B12468241C00B30BE3 /* ClassMethodAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */; };
@@ -84,7 +84,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2A0306012477BC3500DF86C6 /* SwiftHookOCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHookOCBridge.swift; sourceTree = "<group>"; };
+		2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
 		2A0306032477BC4700DF86C6 /* OCTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTests.m; sourceTree = "<group>"; };
 		2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodBeforeTests.swift; sourceTree = "<group>"; };
 		2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodAfterTests.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				2A728727246EC1AB002D63A1 /* SwiftHook.swift */,
-				2A0306012477BC3500DF86C6 /* SwiftHookOCBridge.swift */,
+				2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */,
 				2AA5591E2469C81900440E32 /* HookToken.swift */,
 				2A65FB4A246800F800535203 /* HookInternal.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
@@ -651,7 +651,7 @@
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
 				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
-				2A0306022477BC3600DF86C6 /* SwiftHookOCBridge.swift in Sources */,
+				2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */,
 				2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */,
 				2AA5591F2469C81900440E32 /* HookToken.swift in Sources */,
 				2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */,

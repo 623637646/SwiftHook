@@ -37,7 +37,7 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [SwiftHookOCBridge ocHookBeforeTargetClass:TestObject.class selector:@selector(emptyMethod) error:NULL closure:^{
+    OCToken *swiftHookToken = [TestObject sh_hookBeforeSelector:@selector(emptyMethod) error:NULL closure:^{
     }];
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
@@ -55,7 +55,7 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [SwiftHookOCBridge ocHookInsteadWithTargetClass:TestObject.class selector:@selector(emptyMethod) closure:^(void(^original)(void)){
+    OCToken *swiftHookToken = [TestObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(void)){
         original();
     } error:NULL];
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
@@ -73,7 +73,7 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [SwiftHookOCBridge ocHookAfterObject:testObject selector:@selector(emptyMethod) error:NULL closure:^{
+    OCToken *swiftHookToken = [testObject sh_hookAfterSelector:@selector(emptyMethod) error:NULL closure:^{
     }];
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
@@ -91,7 +91,7 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [SwiftHookOCBridge ocHookInsteadWithObject:testObject selector:@selector(emptyMethod) closure:^(void(^original)(void)){
+    OCToken *swiftHookToken = [testObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(void)){
         original();
     } error:NULL];
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];

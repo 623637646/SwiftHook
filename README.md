@@ -12,7 +12,7 @@ You can integrate **SwiftHook** with [cocoapods](https://cocoapods.org/).
 pod 'EasySwiftHook'
 ```
 
-# [How to use](SwiftHookTests/SwiftHookTests.swift)
+# How to use
 
 For example, this is your class
 
@@ -103,79 +103,27 @@ MyObject.classMethodNoArgsNoReturnFunc()
 token?.cancelHook() // cancel the hook
 ```
 
-6. Hook in Objective-C
+6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
 
 ```objective-c
 ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-OCToken *token = [SwiftHookOCBridge ocHookAfterObject:object selector:@selector(noArgsNoReturnFunc) error:NULL closure:^{
-    NSLog(@"Hooked!");
+OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:NULL closure:^{
+    NSLog(@"hooked");
 }];
 [object noArgsNoReturnFunc];
 [token cancelHook];
 ```
 
-### Advanced usage
-
-For example, this is your class
-
-```swift
-class MyNSObject: NSObject {
-    deinit {
-        print("deinit executed")
-    }
-}
-```
-
-1. Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
-
-```swift
-let object = MyNSObject()
-_ = try? hookDeallocBefore(object: object) {
-    print("released!")
-}
-```
-
-2. Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
-
-```swift
-let object = MyObject()
-_ = try? hookDeallocAfterByTail(object: object) {
-    print("released!")
-}
-```
-
-3. Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
-
-```swift
-autoreleasepool {
-    let object = NSObject()
-    _ = try? hookDeallocInstead(object: object) { original in
-        print("before release!")
-        original() // have to call original "dealloc" to avoid memory leak!!!
-        print("released!")
-    }
-}
-```
-
-4. Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
-
-```swift
-_ = try? hookDeallocBefore(targetClass: UIViewController.self) {
-    print("released!")
-}
-autoreleasepool {
-    _ = UIViewController()
-}
-```
+7. [Advanced usage](SwiftHookTests/SwiftHookTests.swift#L87)
 
 # [Performance](Documents/PERFORMANCE.md)
 
 Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects).
 
-* Hook with Before and After mode for all instances, SwiftHook is **15 times** faster than Aspects.
-* Hook with Instead mode for all instances, SwiftHook is **3.5 times** faster than Aspects.
-* Hook with Before and After mode for specified instances, SwiftHook is **4.5 times** faster than Aspects.
-* Hook with Instead mode for specified instances, SwiftHook is **1.9 times** faster than Aspects.
+* Hook with Before and After mode for all instances, SwiftHook is **13 - 17 times** faster than Aspects.
+* Hook with Instead mode for all instances, SwiftHook is **3 - 5 times** faster than Aspects.
+* Hook with Before and After mode for specified instances, SwiftHook is **4 - 5 times** faster than Aspects.
+* Hook with Instead mode for specified instances, SwiftHook is **2 - 4 times** faster than Aspects.
 
 # We already have [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
 

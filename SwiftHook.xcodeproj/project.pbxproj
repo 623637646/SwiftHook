@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */; };
-		2A0306042477BC4700DF86C6 /* OCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306032477BC4700DF86C6 /* OCTests.m */; };
+		2A0306042477BC4700DF86C6 /* SwiftHookOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A0306032477BC4700DF86C6 /* SwiftHookOCTests.m */; };
 		2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */; };
 		2A0BE1B12468241C00B30BE3 /* ClassMethodAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */; };
 		2A0BE1B3246824B800B30BE3 /* ClassMethodInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BE1B2246824B800B30BE3 /* ClassMethodInsteadTests.swift */; };
@@ -85,7 +85,7 @@
 
 /* Begin PBXFileReference section */
 		2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
-		2A0306032477BC4700DF86C6 /* OCTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCTests.m; sourceTree = "<group>"; };
+		2A0306032477BC4700DF86C6 /* SwiftHookOCTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftHookOCTests.m; sourceTree = "<group>"; };
 		2A0BE1AE2468210800B30BE3 /* ClassMethodBeforeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodBeforeTests.swift; sourceTree = "<group>"; };
 		2A0BE1B02468241C00B30BE3 /* ClassMethodAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodAfterTests.swift; sourceTree = "<group>"; };
 		2A0BE1B2246824B800B30BE3 /* ClassMethodInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassMethodInsteadTests.swift; sourceTree = "<group>"; };
@@ -246,7 +246,6 @@
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
 				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
 				2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */,
-				2A0306032477BC4700DF86C6 /* OCTests.m */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -360,6 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
+				2A0306032477BC4700DF86C6 /* SwiftHookOCTests.m */,
 				2A3B8C0C24742362007E6D65 /* Main */,
 				2A0C85DA2476B5A9003AA9D9 /* Components */,
 				2A58BF9A245C94FE005227F5 /* Others */,
@@ -686,7 +686,7 @@
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,
 				2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */,
-				2A0306042477BC4700DF86C6 /* OCTests.m in Sources */,
+				2A0306042477BC4700DF86C6 /* SwiftHookOCTests.m in Sources */,
 				2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */,
 				2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */,
 				2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */,

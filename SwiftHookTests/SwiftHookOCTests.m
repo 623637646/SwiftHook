@@ -11,11 +11,11 @@
 @import SwiftHook;
 #import <SwiftHookTests-Swift.h>
 
-@interface OCTests : XCTestCase
+@interface SwiftHookOCTests : XCTestCase
 
 @end
 
-@implementation OCTests
+@implementation SwiftHookOCTests
 
 // Perform the hook closure before executing specified instance's method.
 - (void)testSingleHookBefore

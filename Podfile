@@ -1,16 +1,15 @@
 platform :ios, '10.0'
 use_frameworks!
-inhibit_all_warnings!
 
 abstract_target 'abstract-SwiftHook' do
   
-  pod 'libffi-iOS', '~> 3.3-iOS'
+  pod 'libffi-iOS', '~> 3.3.1-iOS'
   
   target 'SwiftHook' do
   end
   
   abstract_target 'abstract-Tests' do
-    pod 'Aspects'
+    pod 'Aspects', :inhibit_warnings => true
     
     target 'SwiftHookTests' do
     end

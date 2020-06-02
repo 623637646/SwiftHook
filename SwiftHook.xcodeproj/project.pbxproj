@@ -51,6 +51,8 @@
 		2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */; };
 		2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */; };
 		2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */; };
+		2A96867B2485FA47004A2DD7 /* CifContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867A2485FA47004A2DD7 /* CifContext.swift */; };
+		2A96867D2485FDBE004A2DD7 /* ClosureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */; };
 		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
 		2AA23CB8247E6ED3003776FC /* AspectsSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */; };
 		2AA5591F2469C81900440E32 /* HookToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA5591E2469C81900440E32 /* HookToken.swift */; };
@@ -133,6 +135,8 @@
 		2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicClass.swift; sourceTree = "<group>"; };
+		2A96867A2485FA47004A2DD7 /* CifContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CifContext.swift; sourceTree = "<group>"; };
+		2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureContext.swift; sourceTree = "<group>"; };
 		2A99159B24587BF4007955E7 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
 		2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectsSwiftTests.swift; sourceTree = "<group>"; };
 		2AA5591E2469C81900440E32 /* HookToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookToken.swift; sourceTree = "<group>"; };
@@ -307,6 +311,8 @@
 				2AA5591E2469C81900440E32 /* HookToken.swift */,
 				2A65FB4A246800F800535203 /* HookInternal.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
+				2A96867A2485FA47004A2DD7 /* CifContext.swift */,
+				2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */,
 				2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */,
 				2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */,
 				2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */,
@@ -649,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
+				2A96867D2485FDBE004A2DD7 /* ClosureContext.swift in Sources */,
 				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
 				2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */,
@@ -661,6 +668,7 @@
 				2A7F43C02458359E00A63935 /* HookContext.swift in Sources */,
 				2A65762F2472BA9A00FE57CE /* AssociatedHookClosure.swift in Sources */,
 				2A701513246413CE00B81219 /* Utilities.swift in Sources */,
+				2A96867B2485FA47004A2DD7 /* CifContext.swift in Sources */,
 				2A1134EC24713D30008555F9 /* HookDeallocAfterDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

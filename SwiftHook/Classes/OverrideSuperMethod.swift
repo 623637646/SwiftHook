@@ -8,10 +8,10 @@
 
 import Foundation
 
-private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
-                           ret: UnsafeMutableRawPointer?,
-                           args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
-                           userdata: UnsafeMutableRawPointer?) {
+private func overrideMethodCalled(cif: UnsafeMutablePointer<ffi_cif>?,
+                                  ret: UnsafeMutableRawPointer?,
+                                  args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
+                                  userdata: UnsafeMutableRawPointer?) {
     guard let userdata = userdata else {
         assert(false)
         return
@@ -25,7 +25,7 @@ private func closureCalled(cif: UnsafeMutablePointer<ffi_cif>?,
         assert(false)
         return
     }
-    ffi_call(overrideMethodContext.cifPointer, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
+    ffi_call(overrideMethodContext.methodCifContext.cif, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
 }
 
 private var overrideMethodContextPool = Set<OverrideMethodContext>()
@@ -34,16 +34,9 @@ private class OverrideMethodContext: Hashable {
     
     fileprivate let targetClass: AnyClass
     fileprivate let selector: Selector
-    private let superMethod: Method
     
-    private let methodSignature: Signature
-    
-    private let newIMP: IMP
-    private let argumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    fileprivate let cifPointer: UnsafeMutablePointer<ffi_cif>
-    private let closure: UnsafeMutablePointer<ffi_closure>
-    
-    private let typeContexts: [SHFFITypeContext]
+    fileprivate let methodCifContext: CifContext
+    fileprivate var methodClosureContext: ClosureContext!
     
     init(targetClass: AnyClass, selector: Selector) throws {
         self.targetClass = targetClass
@@ -60,100 +53,22 @@ private class OverrideMethodContext: Hashable {
             // Tests: OverrideSuperMethodTests: testCanNotGetMethod
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        self.superMethod = superMethod
         
         // Signature
-        guard let methodSignature = Signature(method: self.superMethod) else {
+        guard let methodSignature = Signature(method: superMethod) else {
             throw SwiftHookError.missingSignature
         }
-        self.methodSignature = methodSignature
         
-        // argumentTypes,
-        self.argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
-        var deallocateHelperArgumentTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.argumentTypes
-        defer {
-            deallocateHelperArgumentTypes?.deallocate()
-        }
-        var typeContexts = [SHFFITypeContext]()
-        for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            typeContexts.append(typeContext)
-            self.argumentTypes[index] = typeContext.ffiType
-        }
+        // CifContext
+        self.methodCifContext = try CifContext.init(signature: methodSignature)
         
-        // returnTypes
-        guard let returnTypeContext = SHFFITypeContext(typeEncoding: methodSignature.returnType) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        typeContexts.append(returnTypeContext)
-        let returnFFIType = returnTypeContext.ffiType
-        
-        // typeContexts
-        self.typeContexts = typeContexts
-        
-        // cif
-        self.cifPointer = UnsafeMutablePointer.allocate(capacity: 1)
-        var deallocateHelperCifPointer: UnsafeMutablePointer? = self.cifPointer
-        defer {
-            deallocateHelperCifPointer?.deallocate()
-        }
-        let status_cif = ffi_prep_cif(
-            self.cifPointer,
-            FFI_DEFAULT_ABI,
-            UInt32(methodSignature.argumentTypes.count),
-            returnFFIType,
-            self.argumentTypes.baseAddress)
-        guard status_cif == FFI_OK else {
-            throw SwiftHookError.ffiError
-        }
-        
-        // closure & newIMP
-        var newIMP: IMP?
-        var closure: UnsafeMutablePointer<ffi_closure>? = withUnsafeMutablePointer(to: &newIMP) { (p) -> UnsafeMutablePointer<ffi_closure>? in
-            p.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) { (p) -> UnsafeMutablePointer<ffi_closure>? in
-                UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, p)))
-            }
-        }
-        defer {
-            if let closure = closure {
-                ffi_closure_free(closure)
-            }
-        }
-        guard let closureNoNil = closure, let newIMPNoNil = newIMP else {
-            throw SwiftHookError.ffiError
-        }
-        self.closure = closureNoNil
-        self.newIMP = newIMPNoNil
-        
-        let status_closure = withUnsafeMutablePointer(to: &newIMP) { (p) -> ffi_status in
-            ffi_prep_closure_loc(
-                self.closure,
-                self.cifPointer,
-                closureCalled,
-                Unmanaged.passUnretained(self).toOpaque(),
-                p)
-        }
-        guard status_closure == FFI_OK else {
-            throw SwiftHookError.ffiError
-        }
+        // ClosureContext
+        self.methodClosureContext = try ClosureContext.init(cif: self.methodCifContext.cif, fun: overrideMethodCalled, userData: Unmanaged.passUnretained(self).toOpaque())
         
         // add Method
-        guard class_addMethod(self.targetClass, self.selector, self.newIMP, method_getTypeEncoding(self.superMethod)) else {
+        guard class_addMethod(self.targetClass, self.selector, self.methodClosureContext.targetIMP, method_getTypeEncoding(superMethod)) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        
-        // clean deallocate helpers, refer to: https://stackoverflow.com/a/61976157/9315497
-        deallocateHelperArgumentTypes = nil
-        deallocateHelperCifPointer = nil
-        closure = nil
-    }
-    
-    deinit {
-        self.argumentTypes.deallocate()
-        self.cifPointer.deallocate()
-        ffi_closure_free(self.closure)
     }
     
     // MARK: Hashable

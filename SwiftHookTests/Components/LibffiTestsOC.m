@@ -48,7 +48,7 @@ void closureRerewrite(ffi_cif *cif, void *ret, void **args, void *userdata) {
 
     IMP newIMP;
     ffi_closure *closure = ffi_closure_alloc(sizeof(ffi_closure), (void *)&newIMP);
-    ffi_prep_closure_loc(closure, &cif, closureRerewrite, NULL, &newIMP);
+    ffi_prep_closure_loc(closure, &cif, closureRerewrite, NULL, newIMP);
 
     Method method = class_getInstanceMethod([ObjectiveCTestObject class], @selector(sumFuncWithA:b:));
     IMP originalIMP = method_setImplementation(method, newIMP);
@@ -75,7 +75,7 @@ static void closureCallOriginal(ffi_cif *cif, void *ret, void **args, void *user
 
     IMP newIMP;
     ffi_closure *closure = ffi_closure_alloc(sizeof(ffi_closure), (void *)&newIMP);
-    ffi_prep_closure_loc(closure, &cif, closureCallOriginal, originalIMP, &newIMP);
+    ffi_prep_closure_loc(closure, &cif, closureCallOriginal, originalIMP, newIMP);
    
     method_setImplementation(method, newIMP);
 

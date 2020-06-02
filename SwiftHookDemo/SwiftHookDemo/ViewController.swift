@@ -10,4 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     // Hooking code is in AppDelegate.swift
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .red
+    }
 }

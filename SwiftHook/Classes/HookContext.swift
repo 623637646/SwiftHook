@@ -51,7 +51,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         hookArgsBuffer?.deallocate()
     }
     if !beforeHookClosures.isEmpty || !afterHookClosures.isEmpty {
-        let nargs = Int(hookContext.hookCif.pointee.nargs)
+        let nargs = Int(hookContext.beforeAfterCifContext.cif.pointee.nargs)
         hookArgsBuffer = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         if nargs >= 2 {
             for index in 1 ... nargs - 1 {
@@ -65,18 +65,18 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         hookArgsBuffer![0] = withUnsafeMutablePointer(to: &item, { (p) -> UnsafeMutableRawPointer in
             return UnsafeMutableRawPointer(p)
         })
-        ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
+        ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }
     
     // instead
     if var lastInstead = insteadHookClosures.last {
         // preparation for instead
         var insteadClosure: (@convention(block) () -> Void) = {}
-        sh_setBlockInvoke(insteadClosure, OpaquePointer(hookContext.blockInvoke.pointee!))
+        sh_setBlockInvoke(insteadClosure, hookContext.insteadClosureContext.targetIMP)
         let insteadContext = InsteadContext.init(objectPointer: argsBuffer[0]!, selectorPointer: argsBuffer[1]!, lastInsteadClosure: lastInstead)
         objc_setAssociatedObject(insteadClosure, &associatedInsteadContextHandle, insteadContext, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
-        let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
+        let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
         var insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             insteadHookArgsBuffer.deallocate()
@@ -92,9 +92,9 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
                 insteadHookArgsBuffer[index] = argsBuffer[index]
             }
         }
-        ffi_call(hookContext.insteadHookCif, unsafeBitCast(sh_blockInvoke(lastInstead), to: (@convention(c) () -> Void).self), ret, insteadHookArgsBuffer.baseAddress)
+        ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(lastInstead), to: (@convention(c) () -> Void).self), ret, insteadHookArgsBuffer.baseAddress)
     } else {
-        ffi_call(hookContext.methodCif, unsafeBitCast(hookContext.methodIMP, to: (@convention(c) () -> Void).self), ret, args)
+        ffi_call(hookContext.methodCifContext.cif, unsafeBitCast(hookContext.methodOriginalIMP, to: (@convention(c) () -> Void).self), ret, args)
     }
     
     // after
@@ -102,14 +102,11 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
         hookArgsBuffer![0] = withUnsafeMutablePointer(to: &item, { (p) -> UnsafeMutableRawPointer in
             return UnsafeMutableRawPointer(p)
         })
-        ffi_call(hookContext.hookCif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
+        ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(item), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer!.baseAddress)
     }
 }
 
-private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?,
-                                              ret: UnsafeMutableRawPointer?,
-                                              args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?,
-                                              userdata: UnsafeMutableRawPointer?) {
+private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
     guard let userdata = userdata, let cif = cif else {
         assert(false)
         return
@@ -135,7 +132,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
     }
     if insteadContext.lastInsteadClosure === firstHookClosureInList {
         // call original method
-        let nargs = Int(hookContext.methodCif.pointee.nargs)
+        let nargs = Int(hookContext.methodCifContext.cif.pointee.nargs)
         var methodArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             methodArgsBuffer.deallocate()
@@ -147,7 +144,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
                 methodArgsBuffer[index] = argsBuffer[index - 1]
             }
         }
-        ffi_call(hookContext.methodCif, unsafeBitCast(hookContext.methodIMP, to: (@convention(c) () -> Void).self), ret, methodArgsBuffer.baseAddress)
+        ffi_call(hookContext.methodCifContext.cif, unsafeBitCast(hookContext.methodOriginalIMP, to: (@convention(c) () -> Void).self), ret, methodArgsBuffer.baseAddress)
     } else {
         // call next instead hook closure
         guard let lastIndex = insteadHookClosures.lastIndex(where: {$0 === insteadContext.lastInsteadClosure}) else {
@@ -155,7 +152,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
             return
         }
         var previousHookClosure = insteadHookClosures[lastIndex - 1]
-        let nargs = Int(hookContext.insteadHookCif.pointee.nargs)
+        let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
         var hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
         defer {
             hookArgsBuffer.deallocate()
@@ -170,7 +167,7 @@ private func insteadHookClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>
                 hookArgsBuffer[index] = argsBuffer[index - 1]
             }
         }
-        ffi_call(hookContext.insteadHookCif, unsafeBitCast(sh_blockInvoke(previousHookClosure), to: (@convention(c) () -> Void).self), ret, hookArgsBuffer.baseAddress)
+        ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(previousHookClosure), to: (@convention(c) () -> Void).self), ret, hookArgsBuffer.baseAddress)
     }
 }
 
@@ -180,7 +177,6 @@ class HookContext {
     let targetClass: AnyClass
     let selector: Selector
     let method: Method
-    private var typeContexts = Set<SHFFITypeContext>()
     
     // hook closure pools
     fileprivate var beforeHookClosures = [AnyObject]()
@@ -188,37 +184,18 @@ class HookContext {
     fileprivate var afterHookClosures = [AnyObject]()
     
     // original
-    fileprivate let methodIMP: IMP
-    private let methodArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    private let methodReturnType: UnsafeMutablePointer<ffi_type>
-    fileprivate let methodCif: UnsafeMutablePointer<ffi_cif>
-    private let methodFFIClosure: UnsafeMutablePointer<ffi_closure>
-    let methodNewIMPPointer: UnsafeMutablePointer<IMP> = UnsafeMutablePointer.allocate(capacity: 1)
+    fileprivate let methodCifContext: CifContext
+    var methodClosureContext: ClosureContext!
+    fileprivate let methodOriginalIMP: IMP
     
     // Before & after
-    private let hookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    private let hookReturnType: UnsafeMutablePointer<ffi_type>
-    fileprivate let hookCif: UnsafeMutablePointer<ffi_cif>
+    fileprivate let beforeAfterCifContext: CifContext
     
     // Instead
-    private let insteadHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
-    private let insteadHookReturnType: UnsafeMutablePointer<ffi_type>
-    fileprivate let insteadHookCif: UnsafeMutablePointer<ffi_cif>
-    private let insteadHookFFIClosure: UnsafeMutablePointer<ffi_closure>
-    fileprivate let blockInvoke = UnsafeMutablePointer<UnsafeMutableRawPointer?>.allocate(capacity: 1)
+    fileprivate let insteadCifContext: CifContext
+    var insteadClosureContext: ClosureContext!
     
     init(targetClass: AnyClass, selector: Selector) throws {
-        
-        // deallocate helper
-        var deallocateHelperMethodNewIMPPointer: UnsafeMutablePointer<IMP>? = self.methodNewIMPPointer
-        defer {
-            deallocateHelperMethodNewIMPPointer?.deallocate()
-        }
-        var deallocateHelperBlockInvoke: UnsafeMutablePointer<UnsafeMutableRawPointer?>? = self.blockInvoke
-        defer {
-            deallocateHelperBlockInvoke?.deallocate()
-        }
-        
         // basic
         self.targetClass = targetClass
         self.selector = selector
@@ -231,177 +208,39 @@ class HookContext {
         guard let methodSignature = Signature(method: self.method) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        self.methodIMP = method_getImplementation(self.method)
-        self.methodArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: methodSignature.argumentTypes.count)
-        var deallocateHelperMethodArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.methodArgTypes
-        defer {
-            deallocateHelperMethodArgTypes?.deallocate()
-        }
-        for (index, argumentType) in methodSignature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            self.typeContexts.insert(typeContext)
-            self.methodArgTypes[index] = typeContext.ffiType
-        }
-        guard let methodReturnTypeContext = SHFFITypeContext(typeEncoding: methodSignature.returnType) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        self.typeContexts.insert(methodReturnTypeContext)
-        self.methodReturnType = methodReturnTypeContext.ffiType
-        self.methodCif = UnsafeMutablePointer.allocate(capacity: 1)
-        var deallocateHelperMethodCif: UnsafeMutablePointer? = self.methodCif
-        defer {
-            deallocateHelperMethodCif?.deallocate()
-        }
-        guard (ffi_prep_cif(
-            self.methodCif,
-            FFI_DEFAULT_ABI,
-            UInt32(methodSignature.argumentTypes.count),
-            self.methodReturnType,
-            self.methodArgTypes.baseAddress)) == FFI_OK else {
-                throw SwiftHookError.ffiError
-        }
-        self.methodFFIClosure = ffi_closure_alloc(
-            MemoryLayout<ffi_closure>.stride,
-            self.methodNewIMPPointer.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1, {$0})).assumingMemoryBound(to: ffi_closure.self)
-        var deallocateHelperMethodFFIClosure: UnsafeMutablePointer<ffi_closure>? = self.methodFFIClosure
-        defer {
-            if let deallocateHelperMethodFFIClosure = deallocateHelperMethodFFIClosure {
-                ffi_closure_free(deallocateHelperMethodFFIClosure)
-            }
-        }
+        self.methodOriginalIMP = method_getImplementation(self.method)
+        self.methodCifContext = try CifContext.init(signature: methodSignature)
         
         // Before & after
-        let hookSignature = Signature(argumentTypes: {
+        let beforeAfterSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
             types.insert("@?", at: 0)
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
-        self.hookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: hookSignature.argumentTypes.count)
-        var deallocateHelperHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.hookArgTypes
-        defer {
-            deallocateHelperHookArgTypes?.deallocate()
-        }
-        for (index, argumentType) in hookSignature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            self.typeContexts.insert(typeContext)
-            self.hookArgTypes[index] = typeContext.ffiType
-        }
-        guard let hookClosureReturnTypeContext = SHFFITypeContext(typeEncoding: hookSignature.returnType) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        self.typeContexts.insert(hookClosureReturnTypeContext)
-        self.hookReturnType = hookClosureReturnTypeContext.ffiType
-        self.hookCif = UnsafeMutablePointer.allocate(capacity: 1)
-        var deallocateHelperHookCif: UnsafeMutablePointer? = self.hookCif
-        defer {
-            deallocateHelperHookCif?.deallocate()
-        }
-        guard (ffi_prep_cif(
-            self.hookCif,
-            FFI_DEFAULT_ABI,
-            UInt32(hookSignature.argumentTypes.count),
-            self.hookReturnType,
-            self.hookArgTypes.baseAddress)) == FFI_OK else {
-                throw SwiftHookError.ffiError
-        }
+        self.beforeAfterCifContext = try CifContext.init(signature: beforeAfterSignature)
         
         // Instead
-        let insteadHookSignature = Signature(argumentTypes: {
+        let insteadSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
             types.insert("@?", at: 0)
             types.insert("@?", at: 1)
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
-        self.insteadHookArgTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: insteadHookSignature.argumentTypes.count)
-        var deallocateHelperInsteadHookArgTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>? = self.insteadHookArgTypes
-        defer {
-            deallocateHelperInsteadHookArgTypes?.deallocate()
-        }
-        for (index, argumentType) in insteadHookSignature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            self.typeContexts.insert(typeContext)
-            self.insteadHookArgTypes[index] = typeContext.ffiType
-        }
-        guard let insteadHookClosureReturnTypeContext = SHFFITypeContext(typeEncoding: insteadHookSignature.returnType) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        self.typeContexts.insert(insteadHookClosureReturnTypeContext)
-        self.insteadHookReturnType = insteadHookClosureReturnTypeContext.ffiType
-        self.insteadHookCif = UnsafeMutablePointer.allocate(capacity: 1)
-        var deallocateHelperInsteadHookCif: UnsafeMutablePointer? = self.insteadHookCif
-        defer {
-            deallocateHelperInsteadHookCif?.deallocate()
-        }
-        guard (ffi_prep_cif(
-            self.insteadHookCif,
-            FFI_DEFAULT_ABI,
-            UInt32(insteadHookSignature.argumentTypes.count),
-            self.insteadHookReturnType,
-            self.insteadHookArgTypes.baseAddress)) == FFI_OK else {
-                throw SwiftHookError.ffiError
-        }
-        self.insteadHookFFIClosure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, UnsafeMutablePointer(blockInvoke)).assumingMemoryBound(to: ffi_closure.self)
-        var deallocateHelperInsteadHookFFIClosure: UnsafeMutablePointer<ffi_closure>? = self.insteadHookFFIClosure
-        defer {
-            if let deallocateHelperInsteadHookFFIClosure = deallocateHelperInsteadHookFFIClosure {
-                ffi_closure_free(deallocateHelperInsteadHookFFIClosure)
-            }
-        }
+        self.insteadCifContext = try CifContext.init(signature: insteadSignature)
         
         // Prep closure
-        guard ffi_prep_closure_loc(
-            self.methodFFIClosure,
-            self.methodCif,
-            methodCalledFunction,
-            Unmanaged.passUnretained(self).toOpaque(),
-            self.methodNewIMPPointer) == FFI_OK else {
-                throw SwiftHookError.ffiError
-        }
-        guard ffi_prep_closure_loc(
-            self.insteadHookFFIClosure,
-            self.hookCif,
-            insteadHookClosureCalledFunction,
-            Unmanaged.passUnretained(self).toOpaque(),
-            UnsafeMutablePointer(blockInvoke)) == FFI_OK else {
-                throw SwiftHookError.ffiError
-        }
+        self.methodClosureContext = try ClosureContext.init(cif: self.methodCifContext.cif, fun: methodCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
+        
+        self.insteadClosureContext = try ClosureContext.init(cif: self.insteadCifContext.cif, fun: insteadClosureCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
         
         // swizzling
-        method_setImplementation(self.method, self.methodNewIMPPointer.pointee)
-        
-        // clean deallocate helpers, refer to: https://stackoverflow.com/a/61976157/9315497
-        deallocateHelperMethodNewIMPPointer = nil
-        deallocateHelperBlockInvoke = nil
-        deallocateHelperMethodArgTypes = nil
-        deallocateHelperMethodCif = nil
-        deallocateHelperMethodFFIClosure = nil
-        deallocateHelperHookArgTypes = nil
-        deallocateHelperHookCif = nil
-        deallocateHelperInsteadHookArgTypes = nil
-        deallocateHelperInsteadHookCif = nil
-        deallocateHelperInsteadHookFFIClosure = nil
+        method_setImplementation(self.method, self.methodClosureContext.targetIMP)
     }
     
     deinit {
-        method_setImplementation(self.method, self.methodIMP)
-        self.blockInvoke.deallocate()
-        ffi_closure_free(self.insteadHookFFIClosure)
-        ffi_closure_free(self.methodFFIClosure)
-        self.insteadHookCif.deallocate()
-        self.insteadHookArgTypes.deallocate()
-        self.hookCif.deallocate()
-        self.hookArgTypes.deallocate()
-        self.methodNewIMPPointer.deallocate()
-        self.methodCif.deallocate()
-        self.methodArgTypes.deallocate()
+        method_setImplementation(self.method, self.methodOriginalIMP)
     }
     
     func append(hookClosure: AnyObject, mode: HookMode) throws {

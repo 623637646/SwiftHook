@@ -35,8 +35,8 @@ class OverrideOCObject: OverrideSuperOCObject {
 
 class OverrideSuperMethodTests: XCTestCase {
     
-    let InternalExistingMethod = 55
-    let InternalErrorCanNotGetMethod = 61
+    let InternalExistingMethod = 48
+    let InternalErrorCanNotGetMethod = 54
     
     // MARK: Wrong cases
     

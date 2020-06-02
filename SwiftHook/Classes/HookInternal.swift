@@ -135,7 +135,7 @@ private func isIMPChanged(hookContext: HookContext) -> Bool? {
         return nil
     }
     return hookContext.method != currentMethod ||
-        method_getImplementation(currentMethod) != hookContext.methodNewIMPPointer.pointee
+        method_getImplementation(currentMethod) != hookContext.methodClosureContext.targetIMP
 }
 
 // MARK: This is debug tools.

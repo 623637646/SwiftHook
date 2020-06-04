@@ -60,9 +60,10 @@
     [token remove];
     [object setNumber:888];
 }
-// TODO: study this
 /**
  Crash on EXC_BAD_ACCESS.
+ Maybe the reason is:
+ NSInvocation's selector is "aspects__dealloc". This is not compatible with KVO.
  */
 - (void)testHookDeallocCrashAfterKVO
 {
@@ -77,29 +78,37 @@
     XCTAssertTrue(hooked);
 }
 
-// TODO: study this. Maybe related to: https://stackoverflow.com/a/62068020/9315497
 /**
  Crash on EXC_BAD_ACCESS
  This crash happens on SwiftHook too!!!
+ This is related to: https://stackoverflow.com/a/62068020/9315497
+ Actually "NSTaggedPointerString" is not objects. "__NSCFString" is objects. Sometimes "__NSCFConstantString" is object sometimes not.
  */
 - (void)testCrashWithString
 {
+    // normal (string's class is __NSCFString)
+    [[[NSString alloc] initWithFormat:@"123312312312312312312312312312131231"] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
+    } error:NULL];
+    
     // normal (string's class is __NSCFConstantString)
     [[[NSString alloc] initWithFormat:@""] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
-    
-    // normal (string's class is __NSCFConstantString)
-    [[[NSString alloc] init] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
+
+    // crash (string's class is __NSCFConstantString)
+    [@"" aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
-    
+
     // crash (string's class is NSTaggedPointerString)
     [[[NSString alloc] initWithFormat:@"11"] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
 }
 
-// TODO: study this
 /**
  Crash: -[ObjectiveCTestObject setNumber:]: unrecognized selector sent to instance 0x7fc5c9824cb0
+ Reason: In Aspects.m:434
+ 1. After hooking "object_getClass(ObjectiveCTestObject.class) classNoArgsNoReturnFunc". swizzledClasses contained "ObjectiveCTestObject" (It's a NSString set).
+ 2. When hook with "ObjectiveCTestObject setNumber:", Will skip "aspect_swizzleForwardInvocation" because "ObjectiveCTestObject" already hooked (This is wrong. Actually last class is meta-class, this class is normal class. They have the same class name).
+ 3. It will crash without did "aspect_swizzleForwardInvocation".
  */
 - (void)testClassMethodUnknownbeHavior
 {

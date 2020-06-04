@@ -256,53 +256,52 @@ class CompatibilityTests: XCTestCase {
         }
     }
     
-    // This test case shows Aspects isn't compatible with others.
-    func testAfterAspects() {
-//        do {
-//            let object = ObjectiveCTestObject()
-//            var expectation = [Int]()
-//
-//            let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
-//                expectation.append(3)
-//                aspect.originalInvocation()?.invoke()
-//                expectation.append(4)
-//                } as @convention(block) (AspectInfo) -> Void)
-//            XCTAssertTrue(try testIsNormalClass(object: object))
-//            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
-//                expectation.append(1)
-//                original(number)
-//                expectation.append(2)
-//                } as @convention(block) ((Int) -> Void, Int) -> Void)
-//            XCTAssertTrue(try testIsDynamicClass(object: object))
-//            XCTAssertEqual(expectation, [])
-//
-//            object.number = 9
-//            XCTAssertEqual(expectation, [1, 3, 4, 2])
-//            XCTAssertEqual(object.number, 9)
-//
-//            expectation = []
-//            XCTAssertTrue(tokenAspects.remove())
-//            XCTAssertTrue(try testIsDynamicClass(object: object))
-//            object.number = 10
-//            XCTAssertEqual(expectation, [1, 2])
-//            XCTAssertEqual(object.number, 10)
-//
-//            expectation = []
-//            guard let hookToken = token as? HookToken else {
-//                XCTFail()
-//                return
-//            }
-//            XCTAssertTrue(internalCancelHook(token: hookToken)!)
-//            XCTAssertTrue(try testIsNormalClass(object: object))
-//            object.number = 11
-//            XCTAssertEqual(expectation, [])
-//            XCTAssertEqual(object.number, 11)
-//        } catch {
-//            XCTAssertNil(error)
-//        }
+    func testBeforeAspectsReverseCancel() {
+        do {
+            let object = ObjectiveCTestObject()
+            var expectation = [Int]()
+            
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+                expectation.append(1)
+                original(number)
+                expectation.append(2)
+                } as @convention(block) ((Int) -> Void, Int) -> Void)
+            XCTAssertTrue(try testIsDynamicClass(object: object))
+            let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
+                expectation.append(3)
+                aspect.originalInvocation()?.invoke()
+                expectation.append(4)
+                } as @convention(block) (AspectInfo) -> Void)
+            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertEqual(expectation, [])
+            
+            object.number = 9
+            XCTAssertEqual(expectation, [3, 1, 2, 4])
+            XCTAssertEqual(object.number, 9)
+            
+            expectation = []
+            guard let hookToken = token as? HookToken else {
+                XCTFail()
+                return
+            }
+            XCTAssertFalse(internalCancelHook(token: hookToken)!)
+            XCTAssertTrue(try testIsDynamicClass(object: object))
+            object.number = 11
+            XCTAssertEqual(expectation, [3, 4])
+            XCTAssertEqual(object.number, 11)
+            
+            expectation = []
+            XCTAssertTrue(tokenAspects.remove())
+            XCTAssertTrue(try testIsDynamicClass(object: object))
+            object.number = 10
+            XCTAssertEqual(expectation, [])
+            XCTAssertEqual(object.number, 10)
+        } catch {
+            XCTAssertNil(error)
+        }
     }
     
-    func testAfterAspectsReverseCancel() {
+    func testAfterAspects() {
         do {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
@@ -347,46 +346,50 @@ class CompatibilityTests: XCTestCase {
         }
     }
     
-    // TODO: If add this test cases. It will influence others.
-//    func testAfterAspectsReverseCancelForAllInstances() {
+    // This test case shows Aspects isn't compatible with others in this case. For more information: AspectsErrorTests: testCrashOnCancellationAspectsAfterKVO
+    func testAfterAspectsReverseCancel() {
 //        do {
 //            let object = ObjectiveCTestObject()
 //            var expectation = [Int]()
-//            
-//            let tokenAspects = try ObjectiveCTestObject.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
+//
+//            let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
 //                expectation.append(3)
 //                aspect.originalInvocation()?.invoke()
 //                expectation.append(4)
 //                } as @convention(block) (AspectInfo) -> Void)
-//            let token = try hookInstead(targetClass: ObjectiveCTestObject.self, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+//            XCTAssertTrue(try testIsNormalClass(object: object))
+//            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
 //                expectation.append(1)
 //                original(number)
 //                expectation.append(2)
 //                } as @convention(block) ((Int) -> Void, Int) -> Void)
+//            XCTAssertTrue(try testIsDynamicClass(object: object))
 //            XCTAssertEqual(expectation, [])
-//            
+//
 //            object.number = 9
 //            XCTAssertEqual(expectation, [1, 3, 4, 2])
 //            XCTAssertEqual(object.number, 9)
-//            
+//
+//            expectation = []
+//            XCTAssertTrue(tokenAspects.remove())
+//            XCTAssertTrue(try testIsDynamicClass(object: object))
+//            object.number = 10
+//            XCTAssertEqual(expectation, [1, 2])
+//            XCTAssertEqual(object.number, 10)
+//
 //            expectation = []
 //            guard let hookToken = token as? HookToken else {
 //                XCTFail()
 //                return
 //            }
 //            XCTAssertTrue(internalCancelHook(token: hookToken)!)
+//            XCTAssertTrue(try testIsNormalClass(object: object))
 //            object.number = 11
-//            XCTAssertEqual(expectation, [3, 4])
-//            XCTAssertEqual(object.number, 11)
-//            
-//            expectation = []
-//            XCTAssertTrue(tokenAspects.remove())
-//            object.number = 10
 //            XCTAssertEqual(expectation, [])
-//            XCTAssertEqual(object.number, 10)
+//            XCTAssertEqual(object.number, 11)
 //        } catch {
 //            XCTAssertNil(error)
 //        }
-//    }
+    }
     
 }

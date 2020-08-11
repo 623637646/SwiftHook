@@ -205,4 +205,47 @@ class ParametersCheckingTests: XCTestCase {
         }
     }
     
+    func testHookInsteadOriginalClosureParametersWrong() {
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
+                let result = original(a, b)
+                return Int(result)
+                } as @convention(block) ((Int, Int) -> Double, Int, Int) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, _, b in
+                let result = original(NSObject.init(), b)
+                return Int(result)
+                } as @convention(block) ((NSObject, Int) -> Int, Int, Int) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
+                let result = original(a, b, 100)
+                return Int(result)
+                } as @convention(block) ((Int, Int, Int) -> Int, Int, Int) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, _ in
+                let result = original(a)
+                return Int(result)
+                } as @convention(block) ((Int) -> Int, Int, Int) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
+    
 }

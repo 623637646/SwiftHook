@@ -181,22 +181,19 @@ class SHMethodSignatureTests: XCTestCase {
                     XCTFail()
                     return
             }
-            
-            let argumentTypesExpect: [String] = ["@?", "@?", "@?"]
-            let returnTypesExpect: String = "@?"
-            
-            XCTAssertEqual(signatureMethod.argumentTypes, argumentTypesMethodPrefix + argumentTypesExpect)
-            XCTAssertEqual(signatureMethod.returnType, returnTypesExpect)
-            XCTAssertEqual(signatureClosure.argumentTypes, argumentTypesClosurePrefix + argumentTypesExpect)
-            XCTAssertEqual(signatureClosure.returnType, returnTypesExpect)
+                        
+            XCTAssertEqual(signatureMethod.argumentTypes, argumentTypesMethodPrefix + ["@?", "@?", "@?"])
+            XCTAssertEqual(signatureMethod.returnType, "@?")
+            XCTAssertEqual(signatureClosure.argumentTypes, argumentTypesClosurePrefix + ["@?<v@?>", "@?<q@?q@>", "@?<@@?q@>"])
+            XCTAssertEqual(signatureClosure.returnType, "@?<@@?q@>")
             XCTAssertTrue(isSHMethodSignatureMatch(signature: signatureMethod, methodSignatureFromClosure: signatureClosure))
         }
     
     // MARK: utilities
     
     func isSHMethodSignatureMatch(signature: SHMethodSignature, methodSignatureFromClosure: SHMethodSignature) -> Bool {
-        guard signature.returnType == methodSignatureFromClosure.returnType else {
-            return false
+        guard methodSignatureFromClosure.returnType.range(of: self.regex(prefix: signature.returnType), options: .regularExpression) != nil else {
+                return false
         }
         let selfBusinessArgumentTypes = { () -> [String] in
             var argumentTypes = signature.argumentTypes
@@ -209,7 +206,21 @@ class SHMethodSignatureTests: XCTestCase {
             argumentTypes.removeFirst()
             return argumentTypes
         }()
-        return selfBusinessArgumentTypes == otherBusinessArgumentTypes
+        
+        return otherBusinessArgumentTypes.elementsEqual(selfBusinessArgumentTypes) { (left, right) -> Bool in
+            return left.range(of: self.regex(prefix: right), options: .regularExpression) != nil
+        }
+    }
+    
+    func regex(prefix: String) -> String {
+        let partialRegex = prefix.map({
+            var character = String($0)
+            if character.range(of: "^\\W$", options: .regularExpression) != nil {
+                character = "\\" + character
+            }
+            return character
+        }).joined()
+        return "^\(partialRegex)(\\<.+\\>)?$"
     }
     
 }

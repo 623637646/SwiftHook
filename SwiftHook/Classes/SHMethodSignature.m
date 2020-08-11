@@ -39,6 +39,16 @@
     return [[self alloc] initWithMethodSignature: methodSignature];
 }
 
++ (nullable SHMethodSignature *)signatureWithString:(NSString *)string
+{
+    const char *types = [string UTF8String];
+    NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:types];
+    if (!methodSignature) {
+        return nil;
+    }
+    return [[self alloc] initWithMethodSignature:methodSignature];
+}
+
 - (instancetype)initWithMethodSignature:(NSMethodSignature *)methodSignature
 {
     self = [super init];
@@ -69,7 +79,7 @@ static NSRegularExpression *regex;
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        regex = [NSRegularExpression regularExpressionWithPattern:@"\\\".+\\\"|\\<.+\\>" options:NSRegularExpressionCaseInsensitive error:NULL];
+        regex = [NSRegularExpression regularExpressionWithPattern:@"\\\".+?\\\"" options:NSRegularExpressionCaseInsensitive error:NULL];
     });
     NSMutableString *result = [[NSMutableString alloc] initWithString:type];
     [regex replaceMatchesInString:result options:0 range:NSMakeRange(0, result.length) withTemplate:@""];

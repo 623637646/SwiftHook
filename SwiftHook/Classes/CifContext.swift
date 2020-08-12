@@ -21,13 +21,13 @@ class CifContext {
             deallocateHelperArgTypes?.deallocate()
         }
         for (index, argumentType) in signature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType) else {
+            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType.name) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             self.typeContexts.insert(typeContext)
             self.argTypes[index] = typeContext.ffiType
         }
-        guard let returnType = SHFFITypeContext(typeEncoding: signature.returnType) else {
+        guard let returnType = SHFFITypeContext(typeEncoding: signature.returnType.name) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.typeContexts.insert(returnType)

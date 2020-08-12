@@ -215,7 +215,7 @@ class HookContext {
         let beforeAfterSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
-            types.insert("@?", at: 0)
+            types.insert(.closureTypeValue, at: 0)
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
         self.beforeAfterCifContext = try CifContext.init(signature: beforeAfterSignature)
@@ -224,8 +224,8 @@ class HookContext {
         let insteadSignature = Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.removeFirst(2)
-            types.insert("@?", at: 0)
-            types.insert("@?", at: 1)
+            types.insert(.closureTypeValue, at: 0)
+            types.insert(.closureTypeValue, at: 1)
             return types
         }(), returnType: methodSignature.returnType, signatureType: .closure)
         self.insteadCifContext = try CifContext.init(signature: insteadSignature)

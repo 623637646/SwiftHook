@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable SHMethodSignature *)signatureWithBlock:(id)block;
 
++ (nullable SHMethodSignature *)signatureWithString:(NSString *)string;
+
 @property (readonly) NSArray<NSString *> *argumentTypes;
 
 @property (readonly) NSString *returnType;

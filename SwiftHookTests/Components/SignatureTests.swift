@@ -213,6 +213,32 @@ class SignatureTests: XCTestCase {
         XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
+    func testPointer() {
+        guard let method = class_getInstanceMethod(TestObject.self, #selector(TestObject.testPointerSignature(pointerInt:pointerChar:pointerObj:pointerStruct:))) else {
+            XCTFail()
+            return
+        }
+        guard let methodSignature = Signature.init(method: method) else {
+            XCTFail()
+            return
+        }
+        guard let closureSignature = Signature.init(closure: {_, _, _, _ in
+            } as @convention(block) (UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> Void as AnyObject) else {
+                XCTFail()
+                return
+        }
+        
+        let argumentTypesExpect: [String] = ["r^q", "r*", "r^@", "r^{CGRect={CGPoint=dd}{CGSize=dd}}"]
+        
+        XCTAssertEqual(methodSignature.argumentTypes, argumentTypesMethodPrefix + argumentTypesExpect)
+        XCTAssertEqual(methodSignature.returnType, "^" + blockSignature)
+        XCTAssertEqual(closureSignature.argumentTypes, argumentTypesClosurePrefix + argumentTypesExpect)
+        XCTAssertEqual(closureSignature.returnType, voidSignature)
+        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
+        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
+        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
+    }
+    
     // MARK: instead
     
     func testNoDynamicMethodForInstead() {
@@ -393,6 +419,34 @@ class SignatureTests: XCTestCase {
         
         let argumentTypesExpect: [String] = [blockSignature, blockSignature, blockSignature]
         let returnTypesExpect: String = blockSignature
+        
+        XCTAssertEqual(methodSignature.argumentTypes, argumentTypesMethodPrefix + argumentTypesExpect)
+        XCTAssertEqual(methodSignature.returnType, returnTypesExpect)
+        XCTAssertEqual(closureSignature.argumentTypes, argumentTypesClosurePrefixForInstead + argumentTypesExpect)
+        XCTAssertEqual(closureSignature.returnType, returnTypesExpect)
+        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
+        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
+        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
+    }
+    
+    func testPointerForInstead() {
+        guard let method = class_getClassMethod(TestObject.self, #selector(TestObject.classMethodTestPointerSignature(pointerInt:pointerChar:pointerObj:pointerStruct:))) else {
+            XCTFail()
+            return
+        }
+        guard let methodSignature = Signature.init(method: method) else {
+            XCTFail()
+            return
+        }
+        guard let closureSignature = Signature.init(closure: {_, _, _, _, _ in
+            return UnsafeMutablePointer<@convention(block) () -> Void>.init(nil)!
+            } as @convention(block) ((UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void>, UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void> as AnyObject) else {
+                XCTFail()
+                return
+        }
+        
+        let argumentTypesExpect: [String] = ["r^q", "r*", "r^@", "r^{CGRect={CGPoint=dd}{CGSize=dd}}"]
+        let returnTypesExpect: String = "^@?"
         
         XCTAssertEqual(methodSignature.argumentTypes, argumentTypesMethodPrefix + argumentTypesExpect)
         XCTAssertEqual(methodSignature.returnType, returnTypesExpect)

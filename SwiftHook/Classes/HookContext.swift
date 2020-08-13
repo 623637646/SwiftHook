@@ -217,7 +217,7 @@ class HookContext {
             types.removeFirst(2)
             types.insert(.closureTypeValue, at: 0)
             return types
-        }(), returnType: methodSignature.returnType, signatureType: .closure)
+        }(), returnType: .voidTypeValue, signatureType: .closure)
         self.beforeAfterCifContext = try CifContext.init(signature: beforeAfterSignature)
         
         // Instead

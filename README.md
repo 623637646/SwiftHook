@@ -14,107 +14,135 @@ pod 'EasySwiftHook'
 
 # How to use
 
-For example, this is your class
+### 1. Call the hook closure **before** executing **specified instance**’s method.
+
+```swift
+class MyObject { // The class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
+    @objc dynamic func sayHello() { // The key words of methods `@objc` and `dynamic` are necessary.
+        print("Hello!")
+    }
+}
+
+do {
+    let object = MyObject()
+    let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
+        print("You will say hello, right?")
+    }
+    object.sayHello()
+    token.cancelHook() // cancel the hook
+} catch {
+    XCTFail()
+}
+```
+
+### 2. Call the hook closure **after** executing **specified instance**'s method. And get the parameters.
 
 ```swift
 class MyObject {
-    @objc dynamic func noArgsNoReturnFunc() {
-    }
-    @objc dynamic func sumFunc(a: Int, b: Int) -> Int {
-        return a + b
-    }
-    @objc dynamic class func classMethodNoArgsNoReturnFunc() {
+    @objc dynamic func sayHi(name: String) {
+        print("Hi! \(name)")
     }
 }
-```
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key words of methods `@objc` and `dynamic` are necessary**
-
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The class doesn't have to inherit from NSObject. If the class is written by Objective-C, Just hook it without any more effort**
-
-1. Perform the hook closure before executing specified instance's method.
-
-```swift
-let object = MyObject()
-let token = try? hookBefore(object: object, selector: #selector(MyObject.noArgsNoReturnFunc)) {
-    // run your code
-    print("hooked!")
+do {
+    let object = MyObject()
+    
+    // 1. The first parameter mush be AnyObject or NSObject or YOUR CLASS (In this case. It has to inherits from NSObject, otherwise will build error with "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'").
+    // 2. The second parameter mush be Selector.
+    // 3. The rest of the parameters are the same as the method.
+    // 4. The return type mush be Void if you hook with `before` and `after` mode.
+    // 5. The key word `@convention(block)` is necessary
+    let hookClosure = { object, selector, name in
+        print("Nice to see you \(name)")
+        print("The object is: \(object)")
+        print("The selector is: \(selector)")
+    } as @convention(block) (AnyObject, Selector, String) -> Void
+    let token = try hookAfter(object: object, selector: #selector(MyObject.sayHi), closure: hookClosure)
+    
+    object.sayHi(name: "Yanni")
+    token.cancelHook()
+} catch {
+    XCTFail()
 }
-object.noArgsNoReturnFunc()
-token?.cancelHook() // cancel the hook
 ```
 
-2. Perform the hook closure after executing specified instance's method. And get the parameters.
+### 3. Totally override the mehtod for **specified instance**.
 
 ```swift
-let object = MyObject()
-let token = try? hookAfter(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { a, b in
-    // get the arguments of the function
-    print("arg1 is \(a)") // arg1 is 3
-    print("arg2 is \(b)") // arg2 is 4
-    } as @convention(block) (Int, Int) -> Void)
-_ = object.sumFunc(a: 3, b: 4)
-token?.cancelHook() // cancel the hook
-```
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **The key word `@convention(block)` is necessary**
-
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook at `before` and `after`. The closure's args have to be empty or the same as method. The return type has to be `void`**
-
-3. Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
-
-```swift
-let object = MyObject()
-let token = try? hookInstead(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { original, a, b in
-    // get the arguments of the function
-    print("arg1 is \(a)") // arg1 is 3
-    print("arg2 is \(b)") // arg2 is 4
-
-    // run original function
-    let result = original(a, b) // Or change the parameters: let result = original(-1, -2)
-    print("original result is \(result)") // result = 7
-    return 9
-    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
-let result = object.sumFunc(a: 3, b: 4) // result
-print("hooked result is \(result)") // result = 9
-token?.cancelHook() // cancel the hook
-```
-
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) **For hook with `instead`. The closure's first argument has to be a closure which has the same types with the method. The rest args and return type have to be the same as the method.**
-
-4. Perform the hook closure before executing the method of all instances of the class.
-
-```swift
-let token = try? hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.noArgsNoReturnFunc)) {
-    // run your code
-    print("hooked!")
+class MyObject {
+    @objc dynamic func sum(left: Int, right: Int) -> Int {
+        return left + right
+    }
 }
-MyObject().noArgsNoReturnFunc()
-token?.cancelHook() // cancel the hook
+
+do {
+    let object = MyObject()
+    
+    // 1. The first parameter mush be an closure. This closure means original method. The parameters of it are the same as "How to use: Case 2". The return type of it must be the same as original method's.
+    // 2. The rest of the parameters are the same as "How to use: Case 2".
+    // 3. The return type mush be the same as original method's.
+    let hookClosure = {original, object, selector, left, right in
+        let result = original(object, selector, left, right)
+        // You can call original with the different parameters:
+        // let result = original(object, selector, 12, 27).
+        // You also can change the object and selector if you want. Don't even call the original method if needed.
+        print("\(left) + \(right) equals \(result)")
+        return left * right
+    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
+    let token = try hookInstead(object: object, selector: #selector(MyObject.sum(left:right:)), closure: hookClosure)
+    let left = 3
+    let right = 4
+    let result = object.sum(left: left, right: right)
+    print("\(left) * \(right) equals \(result)")
+    token.cancelHook()
+} catch {
+    XCTFail()
+}
 ```
 
-5. Perform the hook closure before executing the class method.
+### 4. Call the hook closure **before** executing the method of **all instances of the class**.
 
 ```swift
-let token = try? hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.classMethodNoArgsNoReturnFunc)) {
-    // run your code
-    print("hooked!")
+class MyObject {
+    @objc dynamic func sayHello() {
+        print("Hello!")
+    }
 }
-MyObject.classMethodNoArgsNoReturnFunc()
-token?.cancelHook() // cancel the hook
+
+do {
+    let token = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
+        print("You will say hello, right?")
+    }
+    MyObject().sayHello()
+    token.cancelHook()
+} catch {
+    XCTFail()
+}
 ```
 
-6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
+### 5. Call the hook closure **before** executing the **class method**.
 
-```objective-c
-ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:NULL closure:^{
-    NSLog(@"hooked");
-}];
-[object noArgsNoReturnFunc];
-[token cancelHook];
+```swift
+class MyObject {
+    @objc dynamic class func sayHello() {
+        print("Hello!")
+    }
+}
+
+do {
+    let token = try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
+        print("You will say hello, right?")
+    }
+    MyObject.sayHello()
+    token.cancelHook()
+} catch {
+    XCTFail()
+}
 ```
 
-7. [Advanced usage](SwiftHookTests/SwiftHookTests.swift#L87)
+### 6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
+
+### 7. [Hook dealloc](SwiftHookTests/SwiftHookTests.swift#L87)
 
 # [Performance](Documents/PERFORMANCE.md)
 
@@ -148,4 +176,3 @@ BTW, **Respect to Aspects!**
 - iOS 10.0+ (Unverified for macOS, tvOS, watchOS)
 - Xcode 11+
 - Swift 5.0+
-

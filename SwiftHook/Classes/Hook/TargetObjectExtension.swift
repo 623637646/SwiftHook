@@ -16,14 +16,14 @@ private class ClosuresContext {
     var instead: [Selector: [AnyObject]] = [:]
 }
 
-func associatedGetClosures(object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
+func getHookClosures(object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         return ([], [], [])
     }
     return (context.before[selector] ?? [], context.after[selector] ?? [], context.instead[selector] ?? [])
 }
 
-func associatedAppendClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
+func appendHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
     var context: ClosuresContext! = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext
     if context == nil {
         context = ClosuresContext.init()
@@ -60,7 +60,7 @@ func associatedAppendClosure(object: AnyObject, selector: Selector, hookClosure:
     }
 }
 
-func associatedRemoveClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
+func removeHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
@@ -101,7 +101,7 @@ func associatedRemoveClosure(object: AnyObject, selector: Selector, hookClosure:
     }
 }
 
-func associatedClosuresIsEmpty(object: AnyObject) -> Bool {
+func isHookClosuresEmpty(object: AnyObject) -> Bool {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         return true
     }
@@ -120,7 +120,7 @@ func associatedClosuresIsEmpty(object: AnyObject) -> Bool {
 // MARK: This is debug tools.
 
 #if DEBUG
-func debug_associatedClosureCount(object: AnyObject) -> Int {
+func debug_hookClosureCount(object: AnyObject) -> Int {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         return 0
     }

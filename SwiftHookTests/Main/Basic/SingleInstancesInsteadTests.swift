@@ -21,11 +21,11 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // hook
                 let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a, b)
+                let closure = { original, o, s, a, b in
+                    let result = original(o, s, a, b)
                     XCTAssertEqual(result, a + b)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook
@@ -56,11 +56,11 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // hook
                 let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a, b)
+                let closure = { original, o, s, a, b in
+                    let result = original(o, s, a, b)
                     XCTAssertEqual(result, a + b)
                     return a * b
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook
@@ -91,11 +91,11 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // hook
                 let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a * 2, b * 2)
+                let closure = { original, o, s, a, b in
+                    let result = original(o, s, a * 2, b * 2)
                     XCTAssertEqual(result, a * 2 + b * 2)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook
@@ -126,11 +126,11 @@ class SingleInstancesInsteadTests: XCTestCase {
                 let selector = #selector(TestObject.execute(closure:))
                 typealias ExecuteType = () -> Void
                 let mode: HookMode = .instead
-                let closure = { original, arg in
+                let closure = { original, o, s, arg in
                     XCTAssertEqual(result, [])
                     result.append(1)
                     result.append(3)
-                    } as @convention(block) ((ExecuteType) -> Void, ExecuteType) -> Void
+                    } as @convention(block) ((AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook
@@ -170,12 +170,12 @@ class SingleInstancesInsteadTests: XCTestCase {
                 let selector = #selector(TestObject.execute(closure:))
                 typealias ExecuteType = () -> Void
                 let mode: HookMode = .instead
-                let closure = { original, arg in
+                let closure = { original, o, s, arg in
                     XCTAssertEqual(result, [])
                     result.append(1)
-                    original(arg)
+                    original(o, s, arg)
                     result.append(3)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook
@@ -216,18 +216,18 @@ class SingleInstancesInsteadTests: XCTestCase {
                 let mode: HookMode = .instead
                 
                 // first hook
-                let token1 = try internalHook(object: test, selector: selector, mode: mode, hookClosure: { original, arg in
+                let token1 = try internalHook(object: test, selector: selector, mode: mode, hookClosure: { original, o, s, arg in
                     result.append(1)
-                    original(arg)
+                    original(o, s, arg)
                     result.append(2)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void as AnyObject)
                 
                 // second hook
-                let token2 = try internalHook(object: test, selector: selector, mode: mode, hookClosure: { original, arg in
+                let token2 = try internalHook(object: test, selector: selector, mode: mode, hookClosure: { original, o, s, arg in
                     result.append(3)
-                    original(arg)
+                    original(o, s, arg)
                     result.append(4)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void as AnyObject)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -266,18 +266,18 @@ class SingleInstancesInsteadTests: XCTestCase {
                 let mode: HookMode = .instead
                 
                 // first hook
-                let token1 = try internalHook(object: test, selector: #selector(TestObject.execute(closure:)), mode: mode, hookClosure: { original, arg in
+                let token1 = try internalHook(object: test, selector: #selector(TestObject.execute(closure:)), mode: mode, hookClosure: { original, o, s, arg in
                     result.append(1)
-                    original(arg)
+                    original(o, s, arg)
                     result.append(2)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void as AnyObject)
                 
                 // second hook
-                let token2 = try internalHook(object: test, selector: #selector(TestObject.sumFunc(a:b:)), mode: mode, hookClosure: { original, a, b in
-                    let result = original(a, b)
+                let token2 = try internalHook(object: test, selector: #selector(TestObject.sumFunc(a:b:)), mode: mode, hookClosure: { original, o, s, a, b in
+                    let result = original(o, s, a, b)
                     XCTAssertEqual(result, a + b)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int as AnyObject)
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int as AnyObject)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -311,13 +311,13 @@ class SingleInstancesInsteadTests: XCTestCase {
     func testChangeReturn() {
         do {
             let object = TestObject()
-            let token = try hookInstead(object: object, selector: #selector(TestObject.generateNumber(number:)), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(TestObject.generateNumber(number:)), closure: { original, o, s, number in
                 XCTAssertEqual(number, 4)
-                let number = original(5)
+                let number = original(o, s, 5)
                 XCTAssertEqual(number.intValue, 5)
                 let newNumber = NSNumber(6)
                 return newNumber
-                } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
+                } as @convention(block) ((AnyObject, Selector, Int) -> NSNumber, AnyObject, Selector, Int) -> NSNumber)
             let number = object.generateNumber(number: 4)
             XCTAssertEqual(number.intValue, 6)
             guard let hookToken = token as? HookToken else {

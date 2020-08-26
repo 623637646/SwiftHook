@@ -66,11 +66,11 @@ class AllInstancesAfterTests: XCTestCase {
                 let targetClass = TestObject.self
                 let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .after
-                let closure = { a, b in
+                let closure = {obj, selector, a, b in
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)
                     executed = true
-                    } as @convention(block) (Int, Int) -> Void
+                    } as @convention(block) (AnyObject, Selector, Int, Int) -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 

@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - Token
+
 @objcMembers public class OCToken: NSObject {
     private let token: Token
     fileprivate init(token: Token) {
@@ -18,9 +20,11 @@ import UIKit
     }
 }
 
+// TODO: 转换NSError
+
 public extension NSObject {
     
-    // MARK: Hook specified instance
+    // MARK: - Hook specified instance
     
     @discardableResult
     @objc func sh_hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
@@ -47,7 +51,7 @@ public extension NSObject {
         OCToken(token: try hookInstead(object: self, selector: selector, closure: closure))
     }
 
-    // MARK: Hook all instances
+    // MARK: - Hook all instances
 
     @discardableResult
     @objc class func sh_hookBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
@@ -74,7 +78,7 @@ public extension NSObject {
         OCToken(token: try hookInstead(targetClass: self, selector: selector, closure: closure))
     }
 
-    // MARK: Hook class methods
+    // MARK: - Hook class methods
 
     @discardableResult
     @objc class func sh_hookClassMethodBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
@@ -101,7 +105,7 @@ public extension NSObject {
         OCToken(token: try hookClassMethodInstead(targetClass: self, selector: selector, closure: closure))
     }
 
-    // MARK: Hook specified instance dealloc
+    // MARK: - Hook specified instance dealloc
 
     @discardableResult
     @objc func sh_hookDeallocBefore(closure: @escaping @convention(block) () -> Void) throws -> OCToken {
@@ -123,7 +127,7 @@ public extension NSObject {
         OCToken(token: try hookDeallocInstead(object: self, closure: closure))
     }
 
-    // MARK: Hook all instances dealloc
+    // MARK: - Hook all instances dealloc
 
     @discardableResult
     @objc class func sh_hookDeallocBefore(closure: @escaping @convention(block) () -> Void) throws -> OCToken {

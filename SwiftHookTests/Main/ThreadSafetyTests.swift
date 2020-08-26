@@ -43,8 +43,8 @@ class ThreadSafetyTests: XCTestCase {
         DispatchQueue.concurrentPerform(iterations: 1000) { _ in
             do {
                 _ = try autoreleasepool {
-                    try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _ in
-                        } as @convention(block) (() -> Void) -> Void)
+                    try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _, _, _ in
+                        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
                 }
             } catch {
                 XCTAssertNil(error)
@@ -56,8 +56,8 @@ class ThreadSafetyTests: XCTestCase {
         do {
             var tokens = [HookToken]()
             for _ in 0 ... 1000 {
-                tokens.append(try internalHook(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _ in
-                    } as @convention(block) (() -> Void) -> Void as AnyObject))
+                tokens.append(try internalHook(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _, _, _ in
+                    } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in
                 tokens[index].cancelHook()
@@ -75,8 +75,8 @@ class ThreadSafetyTests: XCTestCase {
             for _ in 0 ... 1000 {
                 let object = randomTestObject()
                 objects.append(object)
-                tokens.append(try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _ in
-                    } as @convention(block) (() -> Void) -> Void as AnyObject))
+                tokens.append(try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: {_, _, _ in
+                    } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
             }
             DispatchQueue.concurrentPerform(iterations: 1000) { index in
                 tokens[index].cancelHook()

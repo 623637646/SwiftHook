@@ -54,9 +54,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testNoArgsNoReturnFunc() {
@@ -84,9 +81,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testSimpleSignature() {
@@ -116,9 +110,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testStructSignature() {
@@ -146,9 +137,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testArraySignature() {
@@ -176,9 +164,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testDictionarySignature() {
@@ -206,9 +191,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testClosureSignature() {
@@ -236,9 +218,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, voidSignature)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testPointer() {
@@ -266,9 +245,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, voidSignature)
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     // MARK: instead
@@ -298,9 +274,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testNoArgsNoReturnFuncForInstead() {
@@ -328,9 +301,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testSimpleSignatureForInstead() {
@@ -360,9 +330,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testStructSignatureForInstead() {
@@ -390,9 +357,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testArraySignatureForInstead() {
@@ -420,9 +384,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testDictionarySignatureForInstead() {
@@ -450,9 +411,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testClosureSignatureForInstead() {
@@ -484,9 +442,6 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
     
     func testPointerForInstead() {
@@ -516,8 +471,5 @@ class SignatureTests: XCTestCase {
             return value.name
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.name, returnTypesExpect)
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .before))
-        XCTAssertThrowsError(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .after))
-        XCTAssertNoThrow(try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: .instead))
     }
 }

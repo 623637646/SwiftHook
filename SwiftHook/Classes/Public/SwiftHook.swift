@@ -6,6 +6,15 @@
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
+// MARK: - Constant
+
+// queue
+private let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
+
+// default selectors
+let deallocSelector = NSSelectorFromString("dealloc")
+
+// MARK: - Error
 public enum SwiftHookError: Error {
     
     public enum Unsupport {
@@ -22,8 +31,7 @@ public enum SwiftHookError: Error {
          Latest idea. Set the object a new subclass. The subclass copy superclass's extra-bytes to avoid KVO crash.
          */
         case KVOedObject // Unsupport to hook KVO'ed Object
-        case specifiedInstanceRetain // Unsupport to hook "retian" for specified instance (Can hook this mehtod for all instances).
-        case specifiedInstanceRelease // Unsupport to hook "release" for specified instance (Can hook this mehtod for all instances).
+        case blacklist // Unsupport to hook current method
     }
     
     case unsupport(value: Unsupport)
@@ -36,11 +44,33 @@ public enum SwiftHookError: Error {
     case internalError(file: String, line: Int)
 }
 
-let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
-let deallocSelector = NSSelectorFromString("dealloc")
-private let KVOPrefix = "NSKVONotifying_"
+// MARK: - Token
+public protocol Token {
+    func cancelHook()
+}
 
-// MARK: Hook specified instance
+struct HookToken: Token {
+    
+    weak var hookContext: HookContext?
+    weak var hookClosure: AnyObject?
+    let mode: HookMode
+    
+    weak var hookObject: AnyObject? // This is only for specified instance hook
+    
+    init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
+        self.hookContext = hookContext
+        self.hookClosure = hookClosure
+        self.mode = mode
+    }
+    
+    func cancelHook() {
+        swiftHookSerialQueue.sync {
+            _ = internalCancelHook(token: self)
+        }
+    }
+}
+
+// MARK: - Hook specified instance
 
 /**
  Perform the hook closure before executing specified instance's method.
@@ -91,7 +121,7 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
     }
 }
 
-// MARK: Hook all instances
+// MARK: - Hook all instances
 
 /**
  Perform the hook closure before executing the method of all instances of the class.
@@ -142,7 +172,7 @@ public func hookInstead(targetClass: AnyClass, selector: Selector, closure: Any)
     }
 }
 
-// MARK: Hook class methods
+// MARK: - Hook class methods
 
 /**
 Perform the hook closure before executing the class method.
@@ -202,7 +232,7 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
     }
 }
 
-// MARK: Hook specified instance dealloc
+// MARK: - Hook specified instance dealloc
 
 /**
  Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
@@ -244,7 +274,7 @@ public func hookDeallocInstead(object: NSObject, closure: @escaping @convention(
     }
 }
 
-// MARK: Hook all instances dealloc
+// MARK: - Hook all instances dealloc
 
 /**
 Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
@@ -274,42 +304,4 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
     try swiftHookSerialQueue.sync {
         try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
-}
-
-// MARK: private
-
-private func parametersCheck(object: AnyObject, selector: Selector, mode: HookMode, closure: AnyObject) throws {
-    guard !(object is AnyClass) else {
-        throw SwiftHookError.canNotHookClassWithObjectAPI
-    }
-    guard let baseClass = object_getClass(object) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    guard selector != NSSelectorFromString("retain") else {
-        throw SwiftHookError.unsupport(value: .specifiedInstanceRetain)
-    }
-    guard selector != NSSelectorFromString("release") else {
-        throw SwiftHookError.unsupport(value: .specifiedInstanceRelease)
-    }
-    try parametersCheck(targetClass: baseClass, selector: selector, mode: mode, closure: closure)
-}
-
-private func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, closure: AnyObject) throws {
-    if selector == deallocSelector {
-        guard targetClass is NSObject.Type else {
-            throw SwiftHookError.unsupport(value: .pureSwiftObjectDealloc)
-        }
-    }
-    guard !NSStringFromClass(targetClass).hasPrefix(KVOPrefix) else {
-        throw SwiftHookError.unsupport(value: .KVOedObject)
-    }
-    guard let method = class_getInstanceMethod(targetClass, selector) else {
-        throw SwiftHookError.noRespondSelector
-    }
-    
-    guard let methodSignature = Signature(method: method),
-        let closureSignature = Signature(closure: closure) else {
-            throw SwiftHookError.missingSignature
-    }
-    try Signature.canHookClosureSignatureWorksByMethodSignature(closureSignature: closureSignature, methodSignature: methodSignature, mode: mode)
 }

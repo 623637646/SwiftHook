@@ -41,4 +41,9 @@
     
 }
 
+- (NSString *)getSelfNumberPlusCMD
+{
+    return [NSString stringWithFormat:@"%@+%@", @(self.number), NSStringFromSelector(_cmd)];
+}
+
 @end

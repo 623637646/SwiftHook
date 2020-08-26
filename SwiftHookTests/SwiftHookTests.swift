@@ -11,80 +11,138 @@ import XCTest
 
 class SwiftHookTests: XCTestCase {
     
-    class MyObject {
-        @objc dynamic func noArgsNoReturnFunc() {
+    // MARK: - 1. Call the hook closure before executing specified instance’s method.
+    func test_Specified_Instance_With_Before_Mode() {
+        
+        class MyObject { // The class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
+            @objc dynamic func sayHello() { // The key words of methods `@objc` and `dynamic` are necessary.
+                print("Hello!")
+            }
         }
-        @objc dynamic func sumFunc(a: Int, b: Int) -> Int {
-            return a + b
+        
+        do {
+            let object = MyObject()
+            let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
+                print("You will say hello, right?")
+            }
+            object.sayHello()
+            token.cancelHook() // cancel the hook
+        } catch {
+            XCTFail()
         }
-        @objc dynamic class func classMethodNoArgsNoReturnFunc() {
-        }
+        
     }
     
-    // MARK: Basic usage
-    
-    // Perform the hook closure before executing specified instance's method.
-    func testSingleHookBefore() {
-        let object = MyObject()
-        let token = try? hookBefore(object: object, selector: #selector(MyObject.noArgsNoReturnFunc)) {
-            // run your code
-            print("hooked!")
+    // MARK: - 2. Call the hook closure after executing specified instance's method. And get the parameters.
+    func test_Specified_Instance_With_After_Mode_Get_Parameters() {
+        
+        class MyObject {
+            @objc dynamic func sayHi(name: String) {
+                print("Hi! \(name)")
+            }
         }
-        object.noArgsNoReturnFunc()
-        token?.cancelHook() // cancel the hook
-    }
-    
-    // Perform the hook closure after executing specified instance's method. And get the parameters.
-    func testSingleHookAfterWithArguments() {
-        let object = MyObject()
-        let token = try? hookAfter(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { a, b in
-            // get the arguments of the function
-            print("arg1 is \(a)") // arg1 is 3
-            print("arg2 is \(b)") // arg2 is 4
-            } as @convention(block) (Int, Int) -> Void)
-        _ = object.sumFunc(a: 3, b: 4)
-        token?.cancelHook() // cancel the hook
-    }
-    
-    // Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
-    func testSingleHookInstead() {
-        let object = MyObject()
-        let token = try? hookInstead(object: object, selector: #selector(MyObject.sumFunc(a:b:)), closure: { original, a, b in
-            // get the arguments of the function
-            print("arg1 is \(a)") // arg1 is 3
-            print("arg2 is \(b)") // arg2 is 4
+        
+        do {
+            let object = MyObject()
             
-            // run original function
-            let result = original(a, b) // Or change the parameters: let result = original(-1, -2)
-            print("original result is \(result)") // result = 7
-            return 9
-            } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int)
-        let result = object.sumFunc(a: 3, b: 4) // result
-        print("hooked result is \(result)") // result = 9
-        token?.cancelHook() // cancel the hook
-    }
-    
-    // Perform the hook closure before executing the method of all instances of the class.
-    func testAllInstances() {
-        let token = try? hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.noArgsNoReturnFunc)) {
-            // run your code
-            print("hooked!")
+            // 1. The first parameter mush be AnyObject or NSObject or YOUR CLASS (In this case. It has to inherits from NSObject, otherwise will build error with "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'").
+            // 2. The second parameter mush be Selector.
+            // 3. The rest of the parameters are the same as the method.
+            // 4. The return type mush be Void if you hook with `before` and `after` mode.
+            // 5. The key word `@convention(block)` is necessary
+            let hookClosure = { object, selector, name in
+                print("Nice to see you \(name)")
+                print("The object is: \(object)")
+                print("The selector is: \(selector)")
+            } as @convention(block) (AnyObject, Selector, String) -> Void
+            let token = try hookAfter(object: object, selector: #selector(MyObject.sayHi), closure: hookClosure)
+            
+            object.sayHi(name: "Yanni")
+            token.cancelHook()
+        } catch {
+            XCTFail()
         }
-        MyObject().noArgsNoReturnFunc()
-        token?.cancelHook() // cancel the hook
+        
     }
     
-    // Perform the hook closure before executing the class method.
-    func testClassMethod() {
-        let token = try? hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.classMethodNoArgsNoReturnFunc)) {
-            // run your code
-            print("hooked!")
+    // MARK: - 3. Totally override the mehtod for specified instance.
+    func test_Specified_Instance_With_Instead_Mode() {
+        
+        class MyObject {
+            @objc dynamic func sum(left: Int, right: Int) -> Int {
+                return left + right
+            }
         }
-        MyObject.classMethodNoArgsNoReturnFunc()
-        token?.cancelHook() // cancel the hook
+        
+        do {
+            let object = MyObject()
+            
+            // 1. The first parameter mush be an closure. This closure means original method. The parameters of it are the same as "How to use: Case 2". The return type of it must be the same as original method's.
+            // 2. The rest of the parameters are the same as "How to use: Case 2".
+            // 3. The return type mush be the same as original method's.
+            let hookClosure = {original, object, selector, left, right in
+                let result = original(object, selector, left, right)
+                // You can call original with the different parameters:
+                // let result = original(object, selector, 12, 27).
+                // You also can change the object and selector if you want. Don't even call the original method if needed.
+                print("\(left) + \(right) equals \(result)")
+                return left * right
+            } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
+            let token = try hookInstead(object: object, selector: #selector(MyObject.sum(left:right:)), closure: hookClosure)
+            let left = 3
+            let right = 4
+            let result = object.sum(left: left, right: right)
+            print("\(left) * \(right) equals \(result)")
+            token.cancelHook()
+        } catch {
+            XCTFail()
+        }
+        
     }
     
-    // MARK: Advanced usage
+    // MARK: - 4. Call the hook closure before executing the method of all instances of the class.
+    func test_All_Instances_With_Before_Mode() {
+        
+        class MyObject {
+            @objc dynamic func sayHello() {
+                print("Hello!")
+            }
+        }
+        
+        do {
+            let token = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
+                print("You will say hello, right?")
+            }
+            MyObject().sayHello()
+            token.cancelHook()
+        } catch {
+            XCTFail()
+        }
+        
+    }
+    
+    // MARK: - 5. Call the hook closure before executing the class method.
+    func test_Class_With_After_Mode() {
+        
+        class MyObject {
+            @objc dynamic class func sayHello() {
+                print("Hello!")
+            }
+        }
+        
+        do {
+            let token = try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
+                print("You will say hello, right?")
+            }
+            MyObject.sayHello()
+            token.cancelHook()
+        } catch {
+            XCTFail()
+        }
+        
+    }
+    
+    // MARK: - Hook dealloc
     
     class MyNSObject: NSObject {
         deinit {
@@ -92,74 +150,81 @@ class SwiftHookTests: XCTestCase {
         }
     }
     
+    class MyPureSwiftObject {
+        deinit {
+            print("deinit executed")
+        }
+    }
+    
     // Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
-    func testSingleHookBeforeDeallocForNSObject() {
-        autoreleasepool {
-            let object = MyNSObject()
-            _ = try? hookDeallocBefore(object: object) {
-                print("released!")
+    func test_Specified_Instance_Dealloc_With_Before_Mode() {
+        do {
+            try autoreleasepool {
+                let object = MyNSObject()
+                _ = try hookDeallocBefore(object: object) {
+                    print("released!")
+                }
             }
+        } catch {
+            XCTFail()
         }
     }
     
     // Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
-    func testSingleHookAfterDeallocForAnyObject() {
-        autoreleasepool {
-            let object = MyObject()
-            _ = try? hookDeallocAfterByTail(object: object) {
-                print("released!")
+    func test_Specified_Instance_Dealloc_With_After_Tail_Mode() {
+        do {
+            try autoreleasepool {
+                let object = MyPureSwiftObject()
+                _ = try hookDeallocAfterByTail(object: object) {
+                    print("released!")
+                }
             }
+        } catch {
+            XCTFail()
         }
     }
     
     // Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
-    func testSingleHookInsteadDeallocForNSObject() {
-        autoreleasepool {
-            let object = MyNSObject()
-            _ = try? hookDeallocInstead(object: object) { original in
-                print("before release!")
-                original() // have to call original "dealloc" to avoid memory leak!!!
-                print("released!")
+    func test_Specified_Instance_Dealloc_With_Instead_Mode() {
+        do {
+            try autoreleasepool {
+                let object = MyNSObject()
+                _ = try hookDeallocInstead(object: object) { original in
+                    print("before release!")
+                    original() // have to call original "dealloc" to avoid memory leak!!!
+                    print("released!")
+                }
             }
+        } catch {
+            XCTFail()
         }
     }
     
     // Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
-    func testAllInstancesHookBeforeDeallocForNSObject() {
-        _ = try? hookDeallocBefore(targetClass: UIViewController.self) {
-            print("released!")
-        }
-        autoreleasepool {
-            _ = UIViewController()
+    func test_All_Instances_Dealloc_With_Before_Mode() {
+        do {
+            let token = try hookDeallocBefore(targetClass: UIViewController.self) {
+                print("released!")
+            }
+            autoreleasepool {
+                _ = UIViewController()
+            }
+            token.cancelHook()
+        } catch {
+            XCTFail()
         }
     }
     
-    func testRetainAndRelease() {
-        let tokenRetain = try? hookBefore(targetClass: MyNSObject.self, selector: NSSelectorFromString("retain")) {
-            print("retain!")
-        }
-        
-        let tokenRelease = try? hookAfter(targetClass: MyNSObject.self, selector: NSSelectorFromString("release")) {
-            print("release!")
-        }
-        autoreleasepool {
-            let object = MyNSObject()
-            let object2 = object
-            _ = object2
-        }
-        tokenRetain?.cancelHook()
-        tokenRelease?.cancelHook()
-    }
-    
-    // MARK: Complicated test cases
-    
-    class Request: NSObject {
-        @objc dynamic func generateRequest(url: URL) -> NSURLRequest {
-            return NSURLRequest.init(url: url)
-        }
-    }
+    // MARK: - Complicated test cases
     
     func testComplicated() {
+        
+        class Request: NSObject {
+            @objc dynamic func generateRequest(url: URL) -> NSURLRequest {
+                return NSURLRequest.init(url: url)
+            }
+        }
+        
         do {
             var deallocOrder = [Int]()
             try autoreleasepool {
@@ -167,51 +232,51 @@ class SwiftHookTests: XCTestCase {
                 let object = Request()
                 let selector = #selector(Request.generateRequest(url:))
                 var order = [Int]()
-                let urlGoogle = "https://www.shopee.com"
+                let urlGoogle = "https://www.google.com"
                 let urlFacebook = "https://www.facebook.com"
                 let urlApple = "https://www.apple.com"
                 let urlAmazon = "https://www.amazon.com"
                 let urlShopee = "https://www.shopee.com"
                 
-                try hookBefore(targetClass: targetClass, selector: selector, closure: { url in
+                try hookBefore(targetClass: targetClass, selector: selector, closure: {_, _, url in
                     order.append(2)
-                    XCTAssertEqual(url.absoluteString, urlFacebook)
-                    } as @convention(block) (URL) -> Void)
+                    XCTAssertEqual(url.absoluteString, urlApple)
+                    } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookAfter(targetClass: targetClass, selector: selector, closure: { url in
+                try hookAfter(targetClass: targetClass, selector: selector, closure: {_, _, url in
                     order.append(5)
-                    XCTAssertEqual(url.absoluteString, urlFacebook)
-                    } as @convention(block) (URL) -> Void)
+                    XCTAssertEqual(url.absoluteString, urlApple)
+                    } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookInstead(targetClass: targetClass, selector: selector, closure: {original, url in
+                try hookInstead(targetClass: targetClass, selector: selector, closure: {original, o, s, url in
                     order.append(3)
                     XCTAssertEqual(url.absoluteString, urlFacebook)
-                    let request = original(URL.init(string: urlApple)!)
+                    let request = original(o, s, URL.init(string: urlApple)!)
                     XCTAssertEqual(request.url?.absoluteString, urlApple)
                     let newRequest = NSURLRequest.init(url: URL.init(string: urlAmazon)!)
                     order.append(4)
                     return newRequest
-                    } as @convention(block) ((URL) -> NSURLRequest, URL) -> NSURLRequest)
+                    } as @convention(block) ((AnyObject, Selector, URL) -> NSURLRequest, AnyObject, Selector, URL) -> NSURLRequest)
                 
-                try hookBefore(object: object, selector: selector, closure: { url in
+                try hookBefore(object: object, selector: selector, closure: {_, _, url in
                     order.append(0)
-                    XCTAssertEqual(url.absoluteString, urlGoogle)
-                    } as @convention(block) (URL) -> Void)
+                    XCTAssertEqual(url.absoluteString, urlFacebook)
+                    } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookAfter(object: object, selector: selector, closure: { url in
+                try hookAfter(object: object, selector: selector, closure: {_, _, url in
                     order.append(7)
-                    XCTAssertEqual(url.absoluteString, urlGoogle)
-                    } as @convention(block) (URL) -> Void)
+                    XCTAssertEqual(url.absoluteString, urlFacebook)
+                    } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookInstead(object: object, selector: selector, closure: {original, url in
+                try hookInstead(object: object, selector: selector, closure: {original, o, s, url in
                     order.append(1)
                     XCTAssertEqual(url.absoluteString, urlGoogle)
-                    let request = original(URL.init(string: urlFacebook)!)
+                    let request = original(o, s, URL.init(string: urlFacebook)!)
                     XCTAssertEqual(request.url?.absoluteString, urlAmazon)
                     let newRequest = NSURLRequest.init(url: URL.init(string: urlShopee)!)
                     order.append(6)
                     return newRequest
-                    } as @convention(block) ((URL) -> NSURLRequest, URL) -> NSURLRequest)
+                    } as @convention(block) ((AnyObject, Selector, URL) -> NSURLRequest, AnyObject, Selector, URL) -> NSURLRequest)
                 
                 try hookDeallocBefore(targetClass: Request.self, closure: {
                     deallocOrder.append(2)
@@ -247,12 +312,14 @@ class SwiftHookTests: XCTestCase {
                 
                 let request = object.generateRequest(url: URL.init(string: urlGoogle)!)
                 XCTAssertEqual(request.url?.absoluteString, urlShopee)
-                XCTAssertEqual(order, [0, 1, 2, 3, 4, 5, 6, 7])
+                XCTAssertEqual(order, [1, 0, 3, 2, 5, 4, 7, 6])
             }
-            XCTAssertEqual(deallocOrder, [0, 1, 2, 3, 4, 5, 6, 7, 8])
+            XCTAssertEqual(deallocOrder, [1, 0, 3, 2, 4, 6, 5, 8, 7])
         } catch {
             XCTAssertNil(error)
         }
     }
     
 }
+
+// TODO: 测试用例。 循环hook。随机生成参数，记录结果

@@ -55,7 +55,7 @@ class SpecialMethodTests: XCTestCase {
                 
                 XCTAssertEqual(executed, [])
             }
-            XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 5, 3, 4, 2, 1])
+            XCTAssertEqual(executed, [-4, -3, -2, -1, 0, 5, 2, 1, 3, 4])
         } catch {
             XCTAssertNil(error)
         }
@@ -135,10 +135,10 @@ class SpecialMethodTests: XCTestCase {
                 }
                 _ = ObjectiveCTestObject() // This will trigger hook immediately.
                 
-                XCTAssertEqual(executed, [-2, -1, -4, -3, 3, 4, 2, 1])
+                XCTAssertEqual(executed, [-4, -3, -2, -1, 2, 1, 3, 4])
                 executed.removeAll()
             }
-            XCTAssertEqual(executed, [-2, -1, -4, -3, 0, 3, 4, 2, 1, -2, -1, -4, -3, 0, 3, 4, 2, 1])
+            XCTAssertEqual(executed, [-4, -3, -2, -1, 0, 2, 1, 3, 4, -4, -3, -2, -1, 0, 2, 1, 3, 4])
             for (index, token) in tokens.enumerated() {
                 guard let hookToken = token as? HookToken else {
                     XCTFail()

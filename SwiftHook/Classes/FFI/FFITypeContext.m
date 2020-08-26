@@ -1,27 +1,27 @@
 //
-//  SHFFITypeContext.m
+//  FFITypeContext.m
 //  SwiftHook
 //
 //  Created by Yanni Wang on 1/5/20.
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
-#import "SHFFITypeContext.h"
+#import "FFITypeContext.h"
 
-@interface SHFFITypeContext()
+@interface FFITypeContext()
 
 @property (nonatomic, assign, readwrite) ffi_type *ffiType;
 @property (nonatomic, strong) NSPointerArray *mallocArray;
 
 @end
 
-@implementation SHFFITypeContext
+@implementation FFITypeContext
 
 + (nullable instancetype)contextWithTypeEncodingString:(NSString *)typeEncoding;
 {
-    __block SHFFITypeContext *context = [[self alloc] initWithTypeEncoding:typeEncoding.UTF8String];
+    __block FFITypeContext *context = [[self alloc] initWithTypeEncoding:typeEncoding.UTF8String];
     // Return default static instance when the typeEncoding is non-struct to save memory.
-    [[self defaultContext] enumerateObjectsUsingBlock:^(SHFFITypeContext * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self defaultContext] enumerateObjectsUsingBlock:^(FFITypeContext * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (context.ffiType == obj.ffiType) {
             context = obj;
             *stop = YES;
@@ -30,69 +30,69 @@
     return context;
 }
 
-+ (NSArray<SHFFITypeContext *> *)defaultContext
++ (NSArray<FFITypeContext *> *)defaultContext
 {
-    static NSArray<SHFFITypeContext *> *defaultContext = nil;
+    static NSArray<FFITypeContext *> *defaultContext = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         defaultContext = @[
             ^{
-                SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                FFITypeContext *context = [[FFITypeContext alloc] init];
                 context.ffiType = &ffi_type_void;
                 return context;
             }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_uint8;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_sint8;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_uint16;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_sint16;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_uint32;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_sint32;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_uint64;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_sint64;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_float;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_double;
                  return context;
              }(),
              ^{
-                 SHFFITypeContext *context = [[SHFFITypeContext alloc] init];
+                 FFITypeContext *context = [[FFITypeContext alloc] init];
                  context.ffiType = &ffi_type_pointer;
                  return context;
              }(),

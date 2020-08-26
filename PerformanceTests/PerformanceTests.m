@@ -10,6 +10,8 @@
 @import Aspects;
 @import SwiftHook;
 
+// TODO: 测试hook的耗时
+
 NSInteger measureCount = 100000;
 
 @interface TestObject : NSObject

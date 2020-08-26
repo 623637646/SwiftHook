@@ -305,3 +305,6 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
         try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
+
+
+// TODO: compile error when pod being static frameworks.

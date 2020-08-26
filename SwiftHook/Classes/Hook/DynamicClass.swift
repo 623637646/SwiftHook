@@ -19,7 +19,7 @@ private class DynamicClassContext: Hashable {
     
     fileprivate init(baseClass: AnyClass) throws {
         self.baseClass = baseClass
-        let dynamicClassName = prefix + "\(baseClass)"
+        let dynamicClassName = prefix + "\(ObjectIdentifier(baseClass).hashValue)"
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }

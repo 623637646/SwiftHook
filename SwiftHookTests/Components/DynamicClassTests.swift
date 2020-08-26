@@ -80,4 +80,30 @@ class DynamicClassTests: XCTestCase {
         }
     }
     
+    func test_Duplicated_Dynamic_Class_Name1() {
+        class MyObject {
+            @objc dynamic func sayHello() {
+            }
+        }
+        do {
+            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.sayHello)) {
+            }
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func test_Duplicated_Dynamic_Class_Name2() {
+        class MyObject {
+            @objc dynamic func sayHello() {
+            }
+        }
+        do {
+            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.sayHello)) {
+            }
+        } catch {
+            XCTFail()
+        }
+    }
+    
 }

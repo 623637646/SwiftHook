@@ -63,7 +63,7 @@ func testIsDynamicClass(object: AnyObject) throws -> Bool {
     guard class_getSuperclass(isaClass) == typeClass else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard className == "SwiftHook_\(typeClass)" else {
+    guard className == "SwiftHook_\(ObjectIdentifier(typeClass).hashValue)" else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     return true

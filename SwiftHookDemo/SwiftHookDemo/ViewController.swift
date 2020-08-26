@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     // Hooking code is in AppDelegate.swift
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "I am the title"
         self.view.backgroundColor = .red
     }
 }

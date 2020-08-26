@@ -16,15 +16,17 @@
 		2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */; };
 		2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A172A5324756B18001FD825 /* HookInternalTests.swift */; };
 		2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */; };
+		2A22A75A24E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A22A75924E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift */; };
 		2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */; };
 		2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */; };
 		2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */; };
 		2A2F212424758C7D0032A64D /* HookContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2F212324758C7D0032A64D /* HookContextTests.swift */; };
 		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
-		2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */; };
+		2A3A4A6E245C090100FE1EFC /* FFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */; };
 		2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */; };
+		2A4559AC24F570D8003817C1 /* InsteadHookClosureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4559AB24F570D8003817C1 /* InsteadHookClosureExtension.swift */; };
 		2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D849247D0DDB00E61036 /* AspectsTests.m */; };
 		2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */; };
 		2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */; };
@@ -34,7 +36,7 @@
 		2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */; };
 		2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */; };
 		2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5D24670DC800812DAD /* MemoryTests.swift */; };
-		2A65762F2472BA9A00FE57CE /* AssociatedHookClosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */; };
+		2A65762F2472BA9A00FE57CE /* TargetObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65762E2472BA9A00FE57CE /* TargetObjectExtension.swift */; };
 		2A65FB4B246800F800535203 /* HookInternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65FB4A246800F800535203 /* HookInternal.swift */; };
 		2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */; };
 		2A701513246413CE00B81219 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A701512246413CE00B81219 /* Utilities.swift */; };
@@ -51,14 +53,14 @@
 		2A951D43246BF796000DB1E7 /* SingleInstancesAfterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */; };
 		2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */; };
 		2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */; };
-		2A96867B2485FA47004A2DD7 /* CifContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867A2485FA47004A2DD7 /* CifContext.swift */; };
-		2A96867D2485FDBE004A2DD7 /* ClosureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */; };
+		2A96867B2485FA47004A2DD7 /* FFICIFContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867A2485FA47004A2DD7 /* FFICIFContext.swift */; };
+		2A96867D2485FDBE004A2DD7 /* FFIClosureContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A96867C2485FDBE004A2DD7 /* FFIClosureContext.swift */; };
 		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
 		2AA23CB8247E6ED3003776FC /* AspectsSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */; };
-		2AA5591F2469C81900440E32 /* HookToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA5591E2469C81900440E32 /* HookToken.swift */; };
 		2AB6735B245834E30011536D /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
 		2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB6735F245834E30011536D /* SwiftHookTests.swift */; };
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */; };
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
 		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
@@ -95,6 +97,7 @@
 		2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookDeallocAfterDelegateTests.swift; sourceTree = "<group>"; };
 		2A172A5324756B18001FD825 /* HookInternalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookInternalTests.swift; sourceTree = "<group>"; };
 		2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethodTests.swift; sourceTree = "<group>"; };
+		2A22A75924E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodObjectAndSelectorTest.swift; sourceTree = "<group>"; };
 		2A27449E246D8B7E00AE6A9A /* ObjectiveCUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveCUtilities.h; sourceTree = "<group>"; };
 		2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCUtilities.m; sourceTree = "<group>"; };
 		2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUtilities.swift; sourceTree = "<group>"; };
@@ -102,9 +105,10 @@
 		2A2F212324758C7D0032A64D /* HookContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextTests.swift; sourceTree = "<group>"; };
 		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
 		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
-		2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFFITypeContext.h; sourceTree = "<group>"; };
-		2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFFITypeContext.m; sourceTree = "<group>"; };
+		2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFITypeContext.h; sourceTree = "<group>"; };
+		2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFITypeContext.m; sourceTree = "<group>"; };
 		2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFITypeContextTests.swift; sourceTree = "<group>"; };
+		2A4559AB24F570D8003817C1 /* InsteadHookClosureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsteadHookClosureExtension.swift; sourceTree = "<group>"; };
 		2A49D849247D0DDB00E61036 /* AspectsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
 		2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsErrorTests.m; sourceTree = "<group>"; };
 		2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethod.swift; sourceTree = "<group>"; };
@@ -116,7 +120,7 @@
 		2A5C8D5924670C9400812DAD /* AllInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A5C8D5B24670CA500812DAD /* AllInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A5C8D5D24670DC800812DAD /* MemoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryTests.swift; sourceTree = "<group>"; };
-		2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedHookClosure.swift; sourceTree = "<group>"; };
+		2A65762E2472BA9A00FE57CE /* TargetObjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetObjectExtension.swift; sourceTree = "<group>"; };
 		2A65FB4A246800F800535203 /* HookInternal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookInternal.swift; sourceTree = "<group>"; };
 		2A7015102463F57200B81219 /* SHMethodSignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHMethodSignatureTests.swift; sourceTree = "<group>"; };
 		2A701512246413CE00B81219 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -135,17 +139,17 @@
 		2A951D42246BF796000DB1E7 /* SingleInstancesAfterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesAfterTests.swift; sourceTree = "<group>"; };
 		2A951D44246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInstancesInsteadTests.swift; sourceTree = "<group>"; };
 		2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicClass.swift; sourceTree = "<group>"; };
-		2A96867A2485FA47004A2DD7 /* CifContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CifContext.swift; sourceTree = "<group>"; };
-		2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureContext.swift; sourceTree = "<group>"; };
+		2A96867A2485FA47004A2DD7 /* FFICIFContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFICIFContext.swift; sourceTree = "<group>"; };
+		2A96867C2485FDBE004A2DD7 /* FFIClosureContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFIClosureContext.swift; sourceTree = "<group>"; };
 		2A99159B24587BF4007955E7 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
 		2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectsSwiftTests.swift; sourceTree = "<group>"; };
-		2AA5591E2469C81900440E32 /* HookToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookToken.swift; sourceTree = "<group>"; };
 		2AB67351245834E30011536D /* SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB67354245834E30011536D /* SwiftHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook.h; sourceTree = "<group>"; };
 		2AB67355245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AB6735A245834E30011536D /* SwiftHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AB6735F245834E30011536D /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersCheck.swift; sourceTree = "<group>"; };
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		2AD183C924650AE500B8EC51 /* BlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockUtilities.h; sourceTree = "<group>"; };
 		2AD183CA24650AE500B8EC51 /* BlockUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlockUtilities.m; sourceTree = "<group>"; };
@@ -245,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				2A5C8D5224670B1D00812DAD /* Basic */,
+				2A22A75924E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
@@ -306,25 +311,12 @@
 		2A7F43BD2458359E00A63935 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2A728727246EC1AB002D63A1 /* SwiftHook.swift */,
-				2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */,
-				2AA5591E2469C81900440E32 /* HookToken.swift */,
-				2A65FB4A246800F800535203 /* HookInternal.swift */,
-				2A7F43BE2458359E00A63935 /* HookContext.swift */,
-				2A96867A2485FA47004A2DD7 /* CifContext.swift */,
-				2A96867C2485FDBE004A2DD7 /* ClosureContext.swift */,
-				2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */,
-				2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */,
-				2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */,
-				2AC10C7F245872F200ED6815 /* Signature.swift */,
-				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
-				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
-				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
-				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
-				2A701512246413CE00B81219 /* Utilities.swift */,
-				2A65762E2472BA9A00FE57CE /* AssociatedHookClosure.swift */,
-				2AD183C924650AE500B8EC51 /* BlockUtilities.h */,
-				2AD183CA24650AE500B8EC51 /* BlockUtilities.m */,
+				2ACB400824EAA76B0098B59D /* Public */,
+				2ACB400B24EAA8AF0098B59D /* Pamameter */,
+				2ACB400D24EAA9170098B59D /* Hook */,
+				2ACB400C24EAA90A0098B59D /* Signature */,
+				2ACB400924EAA7840098B59D /* FFI */,
+				2ACB400E24EAA9330098B59D /* Utilities */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -376,6 +368,68 @@
 			path = SwiftHookTests;
 			sourceTree = "<group>";
 		};
+		2ACB400824EAA76B0098B59D /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				2A728727246EC1AB002D63A1 /* SwiftHook.swift */,
+				2A0306012477BC3500DF86C6 /* NSObjectExtension.swift */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		2ACB400924EAA7840098B59D /* FFI */ = {
+			isa = PBXGroup;
+			children = (
+				2A96867C2485FDBE004A2DD7 /* FFIClosureContext.swift */,
+				2A96867A2485FA47004A2DD7 /* FFICIFContext.swift */,
+				2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */,
+				2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */,
+			);
+			path = FFI;
+			sourceTree = "<group>";
+		};
+		2ACB400B24EAA8AF0098B59D /* Pamameter */ = {
+			isa = PBXGroup;
+			children = (
+				2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */,
+			);
+			path = Pamameter;
+			sourceTree = "<group>";
+		};
+		2ACB400C24EAA90A0098B59D /* Signature */ = {
+			isa = PBXGroup;
+			children = (
+				2AC10C7F245872F200ED6815 /* Signature.swift */,
+				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
+				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
+			);
+			path = Signature;
+			sourceTree = "<group>";
+		};
+		2ACB400D24EAA9170098B59D /* Hook */ = {
+			isa = PBXGroup;
+			children = (
+				2A65FB4A246800F800535203 /* HookInternal.swift */,
+				2A7F43BE2458359E00A63935 /* HookContext.swift */,
+				2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */,
+				2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */,
+				2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */,
+				2A65762E2472BA9A00FE57CE /* TargetObjectExtension.swift */,
+				2A4559AB24F570D8003817C1 /* InsteadHookClosureExtension.swift */,
+			);
+			path = Hook;
+			sourceTree = "<group>";
+		};
+		2ACB400E24EAA9330098B59D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2A701512246413CE00B81219 /* Utilities.swift */,
+				2AD183C924650AE500B8EC51 /* BlockUtilities.h */,
+				2AD183CA24650AE500B8EC51 /* BlockUtilities.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -386,7 +440,7 @@
 				2AB67362245834E30011536D /* SwiftHook.h in Headers */,
 				2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */,
 				2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */,
-				2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */,
+				2A3A4A6E245C090100FE1EFC /* FFITypeContext.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,20 +709,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
-				2A96867D2485FDBE004A2DD7 /* ClosureContext.swift in Sources */,
-				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
+				2A96867D2485FDBE004A2DD7 /* FFIClosureContext.swift in Sources */,
+				2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
 				2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */,
 				2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */,
-				2AA5591F2469C81900440E32 /* HookToken.swift in Sources */,
+				2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */,
 				2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */,
+				2A4559AC24F570D8003817C1 /* InsteadHookClosureExtension.swift in Sources */,
 				2AC10C80245872F200ED6815 /* Signature.swift in Sources */,
 				2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */,
 				2A728728246EC1AB002D63A1 /* SwiftHook.swift in Sources */,
 				2A7F43C02458359E00A63935 /* HookContext.swift in Sources */,
-				2A65762F2472BA9A00FE57CE /* AssociatedHookClosure.swift in Sources */,
+				2A65762F2472BA9A00FE57CE /* TargetObjectExtension.swift in Sources */,
 				2A701513246413CE00B81219 /* Utilities.swift in Sources */,
-				2A96867B2485FA47004A2DD7 /* CifContext.swift in Sources */,
+				2A96867B2485FA47004A2DD7 /* FFICIFContext.swift in Sources */,
 				2A1134EC24713D30008555F9 /* HookDeallocAfterDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -687,6 +742,7 @@
 				2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */,
 				2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */,
 				2A0BE1AF2468210800B30BE3 /* ClassMethodBeforeTests.swift in Sources */,
+				2A22A75A24E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift in Sources */,
 				2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */,
 				2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,

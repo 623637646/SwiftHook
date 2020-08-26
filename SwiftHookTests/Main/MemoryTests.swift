@@ -133,6 +133,12 @@ class MemoryTests: XCTestCase {
                 singleInstancesInsteadTests.testHookTwiceWithDifferentMethod()
                 singleInstancesInsteadTests.testChangeReturn()
                 
+                let methodObjectAndSelectorTest = MethodObjectAndSelectorTest()
+                methodObjectAndSelectorTest.test_AllInstances_Instead()
+                methodObjectAndSelectorTest.test_AllInstances_Instead_Changed()
+                methodObjectAndSelectorTest.test_Class_Instead()
+                methodObjectAndSelectorTest.test_Single_Before()
+                methodObjectAndSelectorTest.test_Single_Instead_Changed()
             }
         }
     }

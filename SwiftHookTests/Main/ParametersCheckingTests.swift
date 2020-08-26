@@ -9,6 +9,12 @@
 import XCTest
 @testable import SwiftHook
 
+private let retainSelector = NSSelectorFromString("retain")
+private let releaseSelector = NSSelectorFromString("release")
+private let autoreleaseSelector = NSSelectorFromString("autorelease")
+private let blacklistSelectors = [retainSelector, releaseSelector, autoreleaseSelector]
+
+// TODO: 移除了很多 SignatureTests 里的 testcase，检查是否需要更全面的 ParametersCheckingTests？
 class ParametersCheckingTests: XCTestCase {
     
     func testCanNotHookClassWithObjectAPI() {
@@ -179,29 +185,28 @@ class ParametersCheckingTests: XCTestCase {
         }
     }
     
-    func testRetainForSpecifiedInstance() {
-        do {
-            let object = ObjectiveCTestObject()
-            try hookBefore(object: object, selector: NSSelectorFromString("retain")) {
+    func testBlacklist() {
+        for selector in blacklistSelectors {
+            do {
+                let object = ObjectiveCTestObject()
+                try hookBefore(object: object, selector: selector) {
+                }
+                XCTFail()
+            } catch SwiftHookError.unsupport(value: let value) {
+                XCTAssertEqual(value, .blacklist)
+            } catch {
+                XCTAssertNil(error)
             }
-            XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .specifiedInstanceRetain)
-        } catch {
-            XCTAssertNil(error)
-        }
-    }
-    
-    func testReleaseForSpecifiedInstance() {
-        do {
-            let object = ObjectiveCTestObject()
-            try hookBefore(object: object, selector: NSSelectorFromString("release")) {
+            
+            do {
+                try hookBefore(targetClass: ObjectiveCTestObject.self, selector: selector) {
+                }
+                XCTFail()
+            } catch SwiftHookError.unsupport(value: let value) {
+                XCTAssertEqual(value, .blacklist)
+            } catch {
+                XCTAssertNil(error)
             }
-            XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .specifiedInstanceRelease)
-        } catch {
-            XCTAssertNil(error)
         }
     }
     
@@ -248,4 +253,42 @@ class ParametersCheckingTests: XCTestCase {
         }
     }
     
+    func test_Hook_Dealloc_With_Object_And_Selector() {
+        do {
+            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, o, s in
+                original(o, s)
+                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookAfter(object: ObjectiveCTestObject(), selector: deallocSelector, closure: { original, o, s in
+                original(o, s)
+                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, o, s in
+                original(o, s)
+                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+        do {
+            try hookInstead(object: ObjectiveCTestObject(), selector: deallocSelector, closure: { original, o, s in
+                original(o, s)
+                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch {
+            XCTAssertNil(error)
+        }
+    }
 }

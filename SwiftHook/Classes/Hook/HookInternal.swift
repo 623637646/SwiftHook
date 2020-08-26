@@ -16,7 +16,7 @@ enum HookMode {
 
 private var hookContextPool = Set<HookContext>()
 
-func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
+private func getHookContext(targetClass: AnyClass, selector: Selector) throws -> HookContext {
     if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
         try overrideSuperMethod(targetClass: targetClass, selector: selector)
     }
@@ -27,6 +27,11 @@ func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hoo
         hookContext = try HookContext.init(targetClass: targetClass, selector: selector)
         hookContextPool.insert(hookContext)
     }
+    return hookContext
+}
+
+func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
+    let hookContext = try getHookContext(targetClass: targetClass, selector: selector)
     try hookContext.append(hookClosure: hookClosure, mode: mode)
     return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
 }
@@ -36,22 +41,13 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     // create dynamic class for specified instance hook
-    let dynamicClass: AnyClass = isDynamicClass(targetClass: baseClass) ? baseClass : try wrapDynamicClass(object: object)
+    let targetClass: AnyClass = isDynamicClass(targetClass: baseClass) ? baseClass : try wrapDynamicClass(object: object)
     // hook
-    if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {
-        try overrideSuperMethod(targetClass: dynamicClass, selector: selector)
-    }
-    var hookContext: HookContext! = hookContextPool.first(where: { (element) -> Bool in
-        element.targetClass == dynamicClass && element.selector == selector
-    })
-    if hookContext == nil {
-        hookContext = try HookContext.init(targetClass: dynamicClass, selector: selector)
-        hookContextPool.insert(hookContext)
-    }
+    let hookContext = try getHookContext(targetClass: targetClass, selector: selector)
     var token = HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
     token.hookObject = object
     // set hook closure
-    try associatedAppendClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
+    try appendHookClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
     // Hook dealloc
     _ = hookDeallocAfterByDelegate(object: object, closure: {
         _ = internalCancelHook(token: token)
@@ -91,7 +87,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
             guard let hookObject = token.hookObject else {
                 return nil
             }
-            try associatedRemoveClosure(object: hookObject, selector: hookContext.selector, hookClosure: hookClosure, mode: token.mode)
+            try removeHookClosure(object: hookObject, selector: hookContext.selector, hookClosure: hookClosure, mode: token.mode)
             guard object_getClass(hookObject) == hookContext.targetClass else {
                 // Maybe observe by KVO after hook by SwiftHook.
                 return false
@@ -102,7 +98,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
             guard !isIMPChanged else {
                 return false
             }
-            guard associatedClosuresIsEmpty(object: hookObject) else {
+            guard isHookClosuresEmpty(object: hookObject) else {
                 return false
             }
             try unwrapDynamicClass(object: hookObject)

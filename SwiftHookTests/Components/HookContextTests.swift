@@ -11,7 +11,7 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
-    let InternalErrorNoMethod = 203
+    let InternalErrorNoMethod = 201
     
     func testNoMethod() {
         do {
@@ -41,18 +41,18 @@ class HookContextTests: XCTestCase {
                 } as @convention(block) () -> Void as AnyObject, mode: .before)
             XCTAssertFalse(context.isHoolClosurePoolEmpty())
             
-            try context.append(hookClosure: { original, execute in
+            try context.append(hookClosure: { original, o, s, execute in
                 result.append(-3)
-                original(execute)
+                original(o, s, execute)
                 result.append(3)
-                } as @convention(block) (@escaping (() -> Void) -> Void, () -> Void) -> Void as AnyObject, mode: .instead)
+                } as @convention(block) (@escaping (AnyObject, Selector, () -> Void) -> Void, AnyObject, Selector, () -> Void) -> Void as AnyObject, mode: .instead)
             XCTAssertFalse(context.isHoolClosurePoolEmpty())
             
-            try context.append(hookClosure: { original, execute in
+            try context.append(hookClosure: { original, o, s, execute in
                 result.append(-4)
-                original(execute)
+                original(o, s, execute)
                 result.append(4)
-                } as @convention(block) (@escaping (() -> Void) -> Void, () -> Void) -> Void as AnyObject, mode: .instead)
+                } as @convention(block) (@escaping (AnyObject, Selector, () -> Void) -> Void, AnyObject, Selector, () -> Void) -> Void as AnyObject, mode: .instead)
             XCTAssertFalse(context.isHoolClosurePoolEmpty())
             
             try context.append(hookClosure: {
@@ -70,7 +70,7 @@ class HookContextTests: XCTestCase {
             object.execute {
                 result.append(0)
             }
-            XCTAssertEqual(result, [-2, -1, -4, -3, 0, 3, 4, 2, 1])
+            XCTAssertEqual(result, [-4, -3, -2, -1, 0, 2, 1, 3, 4])
         } catch {
             XCTAssertNil(error)
         }

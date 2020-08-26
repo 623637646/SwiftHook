@@ -36,11 +36,11 @@ class CompatibilityTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
@@ -79,11 +79,11 @@ class CompatibilityTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
@@ -126,11 +126,11 @@ class CompatibilityTests: XCTestCase {
                 expectation.append(3)
             }
             XCTAssertTrue(try testIsKVO(object: object))
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsKVOThenDynamicClass(object: object))
             XCTAssertEqual(expectation, [])
             
@@ -172,11 +172,11 @@ class CompatibilityTests: XCTestCase {
                 expectation.append(3)
             }
             XCTAssertTrue(try testIsKVO(object: object))
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsKVOThenDynamicClass(object: object))
             XCTAssertEqual(expectation, [])
             
@@ -216,11 +216,11 @@ class CompatibilityTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)
@@ -261,11 +261,11 @@ class CompatibilityTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o,s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)
@@ -312,11 +312,11 @@ class CompatibilityTests: XCTestCase {
                 expectation.append(4)
                 } as @convention(block) (AspectInfo) -> Void)
             XCTAssertTrue(try testIsNormalClass(object: object))
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             XCTAssertEqual(expectation, [])
             

@@ -31,14 +31,19 @@ NSInteger measureCount = 100000;
 - (void)testHookBeforeForAllInstance {
     TestObject *testObject = [[TestObject alloc] init];
     NSTimeInterval nonHookTime = [self executionTimeWithObject:testObject];
+    NSError *error = nil;
     
     id<AspectToken> aspectsToken = [TestObject aspect_hookSelector:@selector(emptyMethod) withOptions:(AspectPositionBefore) usingBlock:^(id<AspectInfo> params){
-    } error:NULL];
+    } error:&error];
+    XCTAssertNil(error);
+
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [TestObject sh_hookBeforeSelector:@selector(emptyMethod) error:NULL closure:^{
+    OCToken *swiftHookToken = [TestObject sh_hookBeforeSelector:@selector(emptyMethod) error:&error closure:^{
     }];
+    XCTAssertNil(error);
+
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
     
@@ -48,16 +53,21 @@ NSInteger measureCount = 100000;
 - (void)testHookInsteadForAllInstance {
     TestObject *testObject = [[TestObject alloc] init];
     NSTimeInterval nonHookTime = [self executionTimeWithObject:testObject];
+    NSError *error = nil;
     
     id<AspectToken> aspectsToken = [TestObject aspect_hookSelector:@selector(emptyMethod) withOptions:(AspectPositionInstead) usingBlock:^(id<AspectInfo> params){
         [[params originalInvocation] invoke];
-    } error:NULL];
+    } error:&error];
+    XCTAssertNil(error);
+
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [TestObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(void)){
-        original();
-    } error:NULL];
+    OCToken *swiftHookToken = [TestObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
+        original(object, selector);
+    } error:&error];
+    XCTAssertNil(error);
+
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
     
@@ -67,14 +77,19 @@ NSInteger measureCount = 100000;
 - (void)testHookAfterForSingleInstance {
     TestObject *testObject = [[TestObject alloc] init];
     NSTimeInterval nonHookTime = [self executionTimeWithObject:testObject];
+    NSError *error = nil;
     
     id<AspectToken> aspectsToken = [testObject aspect_hookSelector:@selector(emptyMethod) withOptions:(AspectPositionAfter) usingBlock:^(id<AspectInfo> params){
-    } error:NULL];
+    } error:&error];
+    XCTAssertNil(error);
+
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [testObject sh_hookAfterSelector:@selector(emptyMethod) error:NULL closure:^{
+    OCToken *swiftHookToken = [testObject sh_hookAfterSelector:@selector(emptyMethod) error:&error closure:^{
     }];
+    XCTAssertNil(error);
+
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
     
@@ -84,16 +99,21 @@ NSInteger measureCount = 100000;
 - (void)testHookInsteadForSingleInstance {
     TestObject *testObject = [[TestObject alloc] init];
     NSTimeInterval nonHookTime = [self executionTimeWithObject:testObject];
+    NSError *error = nil;
     
     id<AspectToken> aspectsToken = [testObject aspect_hookSelector:@selector(emptyMethod) withOptions:(AspectPositionInstead) usingBlock:^(id<AspectInfo> params){
         [[params originalInvocation] invoke];
-    } error:NULL];
+    } error:&error];
+    XCTAssertNil(error);
+
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [testObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(void)){
-        original();
-    } error:NULL];
+    OCToken *swiftHookToken = [testObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
+        original(object, selector);
+    } error:&error];
+    XCTAssertNil(error);
+    
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
     [swiftHookToken cancelHook];
     

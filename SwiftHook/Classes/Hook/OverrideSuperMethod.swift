@@ -35,8 +35,8 @@ private class OverrideMethodContext: Hashable {
     fileprivate let targetClass: AnyClass
     fileprivate let selector: Selector
     
-    fileprivate let methodCifContext: CifContext
-    fileprivate var methodClosureContext: ClosureContext!
+    fileprivate let methodCifContext: FFICIFContext
+    fileprivate var methodClosureContext: FFIClosureContext!
     
     init(targetClass: AnyClass, selector: Selector) throws {
         self.targetClass = targetClass
@@ -59,11 +59,11 @@ private class OverrideMethodContext: Hashable {
             throw SwiftHookError.missingSignature
         }
         
-        // CifContext
-        self.methodCifContext = try CifContext.init(signature: methodSignature)
+        // FFICIFContext
+        self.methodCifContext = try FFICIFContext.init(signature: methodSignature)
         
-        // ClosureContext
-        self.methodClosureContext = try ClosureContext.init(cif: self.methodCifContext.cif, fun: overrideMethodCalled, userData: Unmanaged.passUnretained(self).toOpaque())
+        // FFIClosureContext
+        self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, fun: overrideMethodCalled, userData: Unmanaged.passUnretained(self).toOpaque())
         
         // add Method
         guard class_addMethod(self.targetClass, self.selector, self.methodClosureContext.targetIMP, method_getTypeEncoding(superMethod)) else {

@@ -1,5 +1,5 @@
 //
-//  ClosureContext.swift
+//  FFIClosureContext.swift
 //  SwiftHook
 //
 //  Created by Yanni Wang on 2/6/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ClosureContext {
+class FFIClosureContext {
     private let ffiClosure: UnsafeMutablePointer<ffi_closure>
     let targetIMP: IMP
     

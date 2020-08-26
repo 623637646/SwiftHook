@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)classNoArgsNoReturnFunc;
 
+- (NSString *)getSelfNumberPlusCMD;
+
 @end
 
 NS_ASSUME_NONNULL_END

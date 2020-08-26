@@ -1,5 +1,5 @@
 //
-//  CifContext.swift
+//  FFICIFContext.swift
 //  SwiftHook
 //
 //  Created by Yanni Wang on 2/6/20.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-class CifContext {
+class FFICIFContext {
     private let argTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let returnType: UnsafeMutablePointer<ffi_type>
-    private var typeContexts = Set<SHFFITypeContext>()
+    private var typeContexts = Set<FFITypeContext>()
     let cif: UnsafeMutablePointer<ffi_cif>
     
     init(signature: Signature) throws {
@@ -21,13 +21,13 @@ class CifContext {
             deallocateHelperArgTypes?.deallocate()
         }
         for (index, argumentType) in signature.argumentTypes.enumerated() {
-            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType.name) else {
+            guard let typeContext = FFITypeContext(typeEncoding: argumentType.name) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             self.typeContexts.insert(typeContext)
             self.argTypes[index] = typeContext.ffiType
         }
-        guard let returnType = SHFFITypeContext(typeEncoding: signature.returnType.name) else {
+        guard let returnType = FFITypeContext(typeEncoding: signature.returnType.name) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.typeContexts.insert(returnType)

@@ -101,11 +101,11 @@ class AspectsSwiftTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
+            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(number)
+                original(o, s, number)
                 expectation.append(2)
-                } as @convention(block) ((Int) -> Void, Int) -> Void)
+                } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)

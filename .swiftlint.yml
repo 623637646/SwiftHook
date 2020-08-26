@@ -13,3 +13,4 @@ disabled_rules:
   - cyclomatic_complexity
   - xctfail_message
   - large_tuple
+  - nesting

@@ -19,7 +19,7 @@ private class DynamicClassContext: Hashable {
     
     fileprivate init(baseClass: AnyClass) throws {
         self.baseClass = baseClass
-        let dynamicClassName = prefix + "\(baseClass)"
+        let dynamicClassName = prefix + "\(ObjectIdentifier(baseClass).hashValue)"
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
@@ -93,6 +93,7 @@ func unwrapDynamicClass(object: AnyObject) throws {
     object_setClass(object, context.baseClass)
 }
 
+// TODO: 用第一个方法
 func isDynamicClass(targetClass: AnyClass) -> Bool {
     // This code performance is very bad.
     //    NSStringFromClass(targetClass).hasPrefix(prefix)

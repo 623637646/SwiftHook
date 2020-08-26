@@ -71,11 +71,11 @@ class SingleInstancesAfterTests: XCTestCase {
                 // hook
                 let selector = #selector(TestObject.sumFunc(a:b:))
                 let mode: HookMode = .after
-                let closure = { a, b in
+                let closure = {_, _, a, b in
                     XCTAssertEqual(argumentA, a)
                     XCTAssertEqual(argumentB, b)
                     executed = true
-                    } as @convention(block) (Int, Int) -> Void
+                    } as @convention(block) (AnyObject, Selector, Int, Int) -> Void
                 let token = try internalHook(object: test, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 
                 // test hook

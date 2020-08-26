@@ -24,11 +24,11 @@ class ClassMethodInsteadTests: XCTestCase {
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a, b)
+                let closure = { original, object, selector, a, b in
+                    let result = original(object, selector, a, b)
                     XCTAssertEqual(result, a + b)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
@@ -62,11 +62,11 @@ class ClassMethodInsteadTests: XCTestCase {
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a, b)
+                let closure = { original, object, selector, a, b in
+                    let result = original(object, selector, a, b)
                     XCTAssertEqual(result, a + b)
                     return a * b
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
@@ -100,11 +100,11 @@ class ClassMethodInsteadTests: XCTestCase {
                 }
                 let selector = #selector(TestObject.classMethodSumFunc(a:b:))
                 let mode: HookMode = .instead
-                let closure = { original, a, b in
-                    let result = original(a * 2, b * 2)
+                let closure = { original, object, selector, a, b in
+                    let result = original(object, selector, a * 2, b * 2)
                     XCTAssertEqual(result, a * 2 + b * 2)
                     return result
-                    } as @convention(block) ((Int, Int) -> Int, Int, Int) -> Int
+                    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
@@ -138,11 +138,11 @@ class ClassMethodInsteadTests: XCTestCase {
                 let selector = #selector(TestObject.classMethodExecute(closure:))
                 typealias ExecuteType = () -> Void
                 let mode: HookMode = .instead
-                let closure = { original, arg in
+                let closure = { original, object, selector, arg in
                     XCTAssertEqual(result, [])
                     result.append(1)
                     result.append(3)
-                    } as @convention(block) ((ExecuteType) -> Void, ExecuteType) -> Void
+                    } as @convention(block) ((AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
@@ -185,12 +185,12 @@ class ClassMethodInsteadTests: XCTestCase {
                 let selector = #selector(TestObject.classMethodExecute(closure:))
                 typealias ExecuteType = () -> Void
                 let mode: HookMode = .instead
-                let closure = { original, arg in
+                let closure = { original, object, selector, arg in
                     XCTAssertEqual(result, [])
                     result.append(1)
-                    original(arg)
+                    original(object, selector, arg)
                     result.append(3)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
@@ -234,19 +234,19 @@ class ClassMethodInsteadTests: XCTestCase {
                 let mode: HookMode = .instead
                 
                 // first hook
-                let token1 = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, arg in
+                let token1 = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, object, selector, arg in
                     result.append(1)
-                    original(arg)
+                    original(object, selector, arg)
                     result.append(2)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
                 // second hook
-                let token2 = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, arg in
+                let token2 = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: { original, object, selector, arg in
                     result.append(3)
-                    original(arg)
+                    original(object, selector, arg)
                     result.append(4)
-                    } as @convention(block) (@escaping (ExecuteType) -> Void, ExecuteType) -> Void as AnyObject)
+                    } as @convention(block) (@escaping (AnyObject, Selector, ExecuteType) -> Void, AnyObject, Selector, ExecuteType) -> Void as AnyObject)
                 XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
                 
                 // test hook
@@ -276,13 +276,13 @@ class ClassMethodInsteadTests: XCTestCase {
     
     func testChangeReturn() {
         do {
-            let token = try hookClassMethodInstead(targetClass: TestObject.self, selector: #selector(TestObject.classGenerateNumber(number:)), closure: { original, number in
+            let token = try hookClassMethodInstead(targetClass: TestObject.self, selector: #selector(TestObject.classGenerateNumber(number:)), closure: { original, o, s, number in
                 XCTAssertEqual(number, 4)
-                let number = original(5)
+                let number = original(o, s, 5)
                 XCTAssertEqual(number.intValue, 5)
                 let newNumber = NSNumber(6)
                 return newNumber
-                } as @convention(block) ((Int) -> NSNumber, Int) -> NSNumber)
+                } as @convention(block) ((AnyObject, Selector, Int) -> NSNumber, AnyObject, Selector, Int) -> NSNumber)
             let number = TestObject.classGenerateNumber(number: 4)
             XCTAssertEqual(number.intValue, 6)
             guard let hookToken = token as? HookToken else {

@@ -14,7 +14,7 @@ pod 'EasySwiftHook'
 
 # How to use
 
-### 1. Call the hook closure **before** executing **specified instance**’s method.
+1. Call the hook closure **before** executing **specified instance**’s method.
 
 ```swift
 class MyObject { // The class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
@@ -35,7 +35,7 @@ do {
 }
 ```
 
-### 2. Call the hook closure **after** executing **specified instance**'s method. And get the parameters.
+2. Call the hook closure **after** executing **specified instance**'s method. And get the parameters.
 
 ```swift
 class MyObject {
@@ -66,7 +66,7 @@ do {
 }
 ```
 
-### 3. Totally override the mehtod for **specified instance**.
+3. Totally override the mehtod for **specified instance**.
 
 ```swift
 class MyObject {
@@ -100,7 +100,7 @@ do {
 }
 ```
 
-### 4. Call the hook closure **before** executing the method of **all instances of the class**.
+4. Call the hook closure **before** executing the method of **all instances of the class**.
 
 ```swift
 class MyObject {
@@ -120,7 +120,7 @@ do {
 }
 ```
 
-### 5. Call the hook closure **before** executing the **class method**.
+5. Call the hook closure **before** executing the **class method**.
 
 ```swift
 class MyObject {
@@ -140,9 +140,9 @@ do {
 }
 ```
 
-### 6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
+6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
 
-### 7. [Hook dealloc](SwiftHookTests/SwiftHookTests.swift#L87)
+7. [Hook dealloc](SwiftHookTests/SwiftHookTests.swift#L87)
 
 # [Performance](Documents/PERFORMANCE.md)
 

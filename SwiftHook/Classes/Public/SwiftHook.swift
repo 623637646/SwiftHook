@@ -306,5 +306,4 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
     }
 }
 
-
 // TODO: compile error when pod being static frameworks.

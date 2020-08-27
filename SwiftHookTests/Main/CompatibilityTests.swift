@@ -263,7 +263,7 @@ class CompatibilityTests: XCTestCase {
             
             let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
-                original(o,s, number)
+                original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
             XCTAssertTrue(try testIsDynamicClass(object: object))

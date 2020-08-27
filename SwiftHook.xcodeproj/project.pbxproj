@@ -65,6 +65,7 @@
 		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
 		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
+		2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */; };
 		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		E5924C494B4E9DC4E81EE97F /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */; };
@@ -154,6 +155,7 @@
 		2AD183C924650AE500B8EC51 /* BlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockUtilities.h; sourceTree = "<group>"; };
 		2AD183CA24650AE500B8EC51 /* BlockUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlockUtilities.m; sourceTree = "<group>"; };
 		2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityTests.swift; sourceTree = "<group>"; };
+		2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTests.swift; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
 				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
 				2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */,
+				2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -732,6 +735,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */,
 				2A7F43CC245835D600A63935 /* TestObject.swift in Sources */,
 				2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */,
 				2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */,

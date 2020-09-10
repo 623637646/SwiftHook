@@ -90,6 +90,10 @@ class TestObject: SuperObject {
         
     }
     
+    @objc dynamic func testPoint(point: CGPoint) {
+        
+    }
+    
     @objc dynamic func testArraySignature(
         arrayAny: [Any],
         arrayInt: [Int],

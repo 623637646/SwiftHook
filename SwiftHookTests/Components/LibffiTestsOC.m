@@ -35,6 +35,33 @@
     XCTAssertEqual(retValue, [testObject sumFuncWithA:arg1 b:arg2]);
 }
 
+- (void)test_FFICall_Struct {
+    ffi_type tm_type;
+    ffi_type *tm_type_elements[3];
+    int i;
+    
+    tm_type.size = tm_type.alignment = 0;
+    tm_type.type = FFI_TYPE_STRUCT;
+    tm_type.elements = &tm_type_elements;
+    
+    tm_type_elements[0] = &ffi_type_double;
+    tm_type_elements[1] = &ffi_type_double;
+    tm_type_elements[2] = NULL;
+    
+    
+    ffi_cif cif;
+    ffi_type *argumentTypes[] = {&ffi_type_pointer, &ffi_type_pointer, &tm_type};
+    ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 3, &ffi_type_void, argumentTypes);
+    
+    ObjectiveCTestObject *testObject = [[ObjectiveCTestObject alloc] init];
+    SEL selector = @selector(testPoint:);
+    CGPoint arg1 = {11,22};
+    void *arguments[] = {&testObject, &selector, &arg1};
+    
+    IMP imp = [testObject methodForSelector:selector];
+    ffi_call(&cif, imp, NULL, arguments);
+}
+
 void closureRerewrite(ffi_cif *cif, void *ret, void **args, void *userdata) {
     NSInteger bar = *((NSInteger *)args[2]);
     NSInteger baz = *((NSInteger *)args[3]);

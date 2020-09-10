@@ -191,7 +191,8 @@ class HookContext {
 
     // Instead
     fileprivate let insteadCifContext: FFICIFContext
-    var insteadClosureContext: FFIClosureContext!
+    fileprivate let insteadClosureCifContext: FFICIFContext
+    fileprivate var insteadClosureContext: FFIClosureContext!
 
     init(targetClass: AnyClass, selector: Selector) throws {
         // basic
@@ -212,26 +213,30 @@ class HookContext {
         self.methodCifContext = try FFICIFContext.init(signature: methodSignature)
         
         // Before & after
-        let beforeAfterSignature = Signature(argumentTypes: {
+        self.beforeAfterCifContext = try FFICIFContext.init(signature: Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.insert(.closureTypeValue, at: 0)
             return types
-        }(), returnType: .voidTypeValue, signatureType: .closure)
-        self.beforeAfterCifContext = try FFICIFContext.init(signature: beforeAfterSignature)
+        }(), returnType: .voidTypeValue, signatureType: .closure))
         
         // Instead
-        let insteadSignature = Signature(argumentTypes: {
+        self.insteadCifContext = try FFICIFContext.init(signature: Signature(argumentTypes: {
             var types = methodSignature.argumentTypes
             types.insert(.closureTypeValue, at: 0)
             types.insert(.closureTypeValue, at: 1)
             return types
-        }(), returnType: methodSignature.returnType, signatureType: .closure)
-        self.insteadCifContext = try FFICIFContext.init(signature: insteadSignature)
+        }(), returnType: methodSignature.returnType, signatureType: .closure))
+        
+        self.insteadClosureCifContext = try FFICIFContext.init(signature: Signature(argumentTypes: {
+            var types = methodSignature.argumentTypes
+            types.insert(.closureTypeValue, at: 0)
+            return types
+        }(), returnType: methodSignature.returnType, signatureType: .closure))
         
         // Prep closure
         self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, fun: methodCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
         
-        self.insteadClosureContext = try FFIClosureContext.init(cif: self.insteadCifContext.cif, fun: insteadClosureCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
+        self.insteadClosureContext = try FFIClosureContext.init(cif: self.insteadClosureCifContext.cif, fun: insteadClosureCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
         
         // swizzling
         method_setImplementation(self.method, self.methodClosureContext.targetIMP)

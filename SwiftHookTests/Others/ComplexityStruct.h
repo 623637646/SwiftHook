@@ -19,6 +19,7 @@ struct ComplexityStruct {
         struct {
             void *p;
             struct {
+                float c;
             } s;
         } s;
     } s;

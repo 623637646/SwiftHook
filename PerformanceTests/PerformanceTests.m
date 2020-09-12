@@ -48,6 +48,7 @@ NSInteger measureCount = 100000;
     [swiftHookToken cancelHook];
     
     [self log:@"Hook with Befre mode for all instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
+    XCTAssert(aspectsTime / swiftHookTime > 13 && aspectsTime / swiftHookTime < 17);
 }
 
 - (void)testHookInsteadForAllInstance {
@@ -72,6 +73,7 @@ NSInteger measureCount = 100000;
     [swiftHookToken cancelHook];
     
     [self log:@"Hook with Instead mode for all instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
+    XCTAssert(aspectsTime / swiftHookTime > 3 && aspectsTime / swiftHookTime < 5);
 }
 
 - (void)testHookAfterForSingleInstance {
@@ -94,6 +96,7 @@ NSInteger measureCount = 100000;
     [swiftHookToken cancelHook];
     
     [self log:@"Hook with After mode for single instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
+    XCTAssert(aspectsTime / swiftHookTime > 3 && aspectsTime / swiftHookTime < 5);
 }
 
 - (void)testHookInsteadForSingleInstance {
@@ -118,6 +121,7 @@ NSInteger measureCount = 100000;
     [swiftHookToken cancelHook];
     
     [self log:@"Hook with Instead mode for single instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
+    XCTAssert(aspectsTime / swiftHookTime > 2 && aspectsTime / swiftHookTime < 4);
 }
 
 #pragma mark - utilities

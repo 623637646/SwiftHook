@@ -46,4 +46,9 @@
     return [NSString stringWithFormat:@"%@+%@", @(self.number), NSStringFromSelector(_cmd)];
 }
 
+- (void)testPoint:(CGPoint)point
+{
+    
+}
+
 @end

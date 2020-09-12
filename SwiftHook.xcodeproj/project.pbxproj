@@ -30,6 +30,7 @@
 		2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D849247D0DDB00E61036 /* AspectsTests.m */; };
 		2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */; };
 		2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */; };
+		2A562936250A8A1D00426C2F /* StructTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A562935250A8A1D00426C2F /* StructTests.swift */; };
 		2A5A484C247D11FE002A3544 /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
 		2A5A485A247D3CE9002A3544 /* PerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5A4859247D3CE9002A3544 /* PerformanceTests.m */; };
 		2A5C8D5824670C6E00812DAD /* AllInstancesBeforeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C8D5724670C6E00812DAD /* AllInstancesBeforeTests.swift */; };
@@ -113,6 +114,7 @@
 		2A49D849247D0DDB00E61036 /* AspectsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
 		2A49D84C247D0F7A00E61036 /* AspectsErrorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AspectsErrorTests.m; sourceTree = "<group>"; };
 		2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideSuperMethod.swift; sourceTree = "<group>"; };
+		2A562935250A8A1D00426C2F /* StructTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructTests.swift; sourceTree = "<group>"; };
 		2A58BF99245C94F2005227F5 /* ComplexityStruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplexityStruct.h; sourceTree = "<group>"; };
 		2A5A4847247D11FE002A3544 /* PerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A5A484B247D11FE002A3544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
 				2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */,
 				2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */,
+				2A562935250A8A1D00426C2F /* StructTests.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -759,6 +762,7 @@
 				2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */,
 				2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */,
 				2A0BE1B3246824B800B30BE3 /* ClassMethodInsteadTests.swift in Sources */,
+				2A562936250A8A1D00426C2F /* StructTests.swift in Sources */,
 				2A8FBD4A246ED53300037E7E /* SpecialMethodTests.swift in Sources */,
 				2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */,
 				2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */,

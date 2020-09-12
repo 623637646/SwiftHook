@@ -252,6 +252,8 @@
         return NULL;
     }
     [self.mallocArray addPointer:structType];
+    structType->size = 0;
+    structType->alignment = 0;
     structType->type = FFI_TYPE_STRUCT;
     structType->elements = elements;
     return structType;

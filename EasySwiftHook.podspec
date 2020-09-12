@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "EasySwiftHook"
-  spec.version      = "2.0.0"
+  spec.version      = "2.0.1"
   spec.summary      = "Hook in Swift and Objective C by iOS runtime and libffi."
 
   # This description is used to generate tags and improve search results.

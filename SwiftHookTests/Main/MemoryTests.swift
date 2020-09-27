@@ -139,6 +139,11 @@ class MemoryTests: XCTestCase {
                 methodObjectAndSelectorTest.test_Class_Instead()
                 methodObjectAndSelectorTest.test_Single_Before()
                 methodObjectAndSelectorTest.test_Single_Instead_Changed()
+                
+                let structTest = StructTests()
+                structTest.test_CGPoint_UIEvent()
+                structTest.test_ComplexityStruct()
+                structTest.test_BigStruct()
             }
         }
     }

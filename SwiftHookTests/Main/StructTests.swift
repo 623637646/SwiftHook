@@ -93,4 +93,53 @@ class StructTests: XCTestCase {
         }
     }
     
+    func test_BigStruct() throws {
+        class MyObject {
+            @objc dynamic func doublePoint(theStruct: BigStruct) -> BigStruct {
+                var theStruct = theStruct
+                theStruct.frame1 = CGRect.init(x: theStruct.frame1.origin.x * 2,
+                                               y: theStruct.frame1.origin.y * 2,
+                                               width: theStruct.frame1.size.width * 2,
+                                               height: theStruct.frame1.size.height * 2)
+                return theStruct
+            }
+        }
+        
+        do {
+            try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
+                XCTAssertEqual(s.frame1, CGRect.init(x: 1, y: 2, width: 3, height: 4))
+                } as @convention(block)(AnyObject, Selector, BigStruct) -> Void)
+            
+            try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {original, object, selector, s in
+                XCTAssertEqual(s.frame1, CGRect.init(x: 1, y: 2, width: 3, height: 4))
+                var result = original(object, selector, s)
+                XCTAssertEqual(result.frame1, CGRect.init(x: 2, y: 4, width: 6, height: 8))
+                result.frame1 = CGRect.init(x: result.frame1.origin.x * 2,
+                                            y: result.frame1.origin.y * 2,
+                                            width: result.frame1.size.width * 2,
+                                            height: result.frame1.size.height * 2)
+                return result
+                } as @convention(block)((AnyObject, Selector, BigStruct) -> BigStruct, AnyObject, Selector, BigStruct) -> BigStruct)
+        } catch {
+            XCTFail()
+        }
+        
+        let s = BigStruct.init(frame1: CGRect.init(x: 1, y: 2, width: 3, height: 4),
+                               frame2: CGRect.zero,
+                               frame3: CGRect.zero,
+                               frame4: CGRect.zero,
+                               frame5: CGRect.zero,
+                               frame6: CGRect.zero,
+                               frame7: CGRect.zero,
+                               frame8: CGRect.zero,
+                               frame9: CGRect.zero,
+                               frame10: CGRect.zero,
+                               frame11: CGRect.zero,
+                               frame12: CGRect.zero)
+        
+        let result = MyObject.init().doublePoint(theStruct: s)
+        
+        XCTAssertEqual(result.frame1, CGRect.init(x: 4, y: 8, width: 12, height: 16))
+    }
+    
 }

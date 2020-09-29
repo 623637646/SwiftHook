@@ -20,6 +20,7 @@
 		2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */; };
 		2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */; };
 		2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */; };
+		2A28021B2522DC02004F3291 /* VariableCaptureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A28021A2522DC02004F3291 /* VariableCaptureTests.swift */; };
 		2A2F212424758C7D0032A64D /* HookContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2F212324758C7D0032A64D /* HookContextTests.swift */; };
 		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
@@ -104,6 +105,7 @@
 		2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjectiveCUtilities.m; sourceTree = "<group>"; };
 		2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUtilities.swift; sourceTree = "<group>"; };
 		2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicClassTests.swift; sourceTree = "<group>"; };
+		2A28021A2522DC02004F3291 /* VariableCaptureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableCaptureTests.swift; sourceTree = "<group>"; };
 		2A2F212324758C7D0032A64D /* HookContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextTests.swift; sourceTree = "<group>"; };
 		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
 		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */,
 				2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */,
 				2A562935250A8A1D00426C2F /* StructTests.swift */,
+				2A28021A2522DC02004F3291 /* VariableCaptureTests.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */,
 				2A49D84D247D0F7A00E61036 /* AspectsErrorTests.m in Sources */,
 				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
+				2A28021B2522DC02004F3291 /* VariableCaptureTests.swift in Sources */,
 				2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */,
 				2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */,
 				2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */,

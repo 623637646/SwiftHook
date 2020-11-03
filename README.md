@@ -176,3 +176,7 @@ BTW, **Respect to Aspects!**
 - iOS 10.0+ (Unverified for macOS, tvOS, watchOS)
 - Xcode 11+
 - Swift 5.0+
+
+# Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/623637646/SwiftHook.svg)](https://starchart.cc/623637646/SwiftHook)

@@ -13,7 +13,7 @@ class LibffiTests: XCTestCase {
     
     func testLibffiCall() {
         var cif: ffi_cif = ffi_cif()
-        var argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
+        let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
         defer { argumentTypes.deallocate() }
         argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
@@ -62,7 +62,7 @@ class LibffiTests: XCTestCase {
     
     func testLibffiClosure() {
         var cif: ffi_cif = ffi_cif()
-        var argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
+        let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
         defer { argumentTypes.deallocate() }
         argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
         argumentTypes[1] = UnsafeMutablePointer(&ffi_type_pointer)
@@ -79,7 +79,7 @@ class LibffiTests: XCTestCase {
         XCTAssertEqual(status_cif, FFI_OK)
         
         var newIMP: IMP!
-        var closure: UnsafeMutablePointer<ffi_closure>? = withUnsafeMutablePointer(to: &newIMP) { (p) -> UnsafeMutablePointer<ffi_closure>? in
+        let closure: UnsafeMutablePointer<ffi_closure>? = withUnsafeMutablePointer(to: &newIMP) { (p) -> UnsafeMutablePointer<ffi_closure>? in
             p.withMemoryRebound(to: UnsafeMutableRawPointer?.self, capacity: 1) {
                 return  UnsafeMutablePointer<ffi_closure>(OpaquePointer(ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, $0)))
             }
@@ -214,7 +214,7 @@ class LibffiTests: XCTestCase {
         XCTAssertEqual(status_cif, FFI_OK)
         
         var newIMP: UnsafeMutableRawPointer?
-        var closure = withUnsafeMutablePointer(to: &newIMP) { (newIMPPointer) -> UnsafeMutablePointer<ffi_closure>? in
+        let closure = withUnsafeMutablePointer(to: &newIMP) { (newIMPPointer) -> UnsafeMutablePointer<ffi_closure>? in
             return ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, newIMPPointer)?.assumingMemoryBound(to: ffi_closure.self)
         }
         

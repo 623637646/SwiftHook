@@ -3,7 +3,7 @@ use_frameworks!
 
 abstract_target 'abstract-SwiftHook' do
   
-  pod 'libffi-iOS', '~> 3.3.1-iOS'
+  pod 'libffi-iOS', '~> 3.3.2-iOS'
   
   target 'SwiftHook' do
   end

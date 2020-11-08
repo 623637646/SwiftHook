@@ -1,10 +1,10 @@
 PODS:
   - Aspects (1.4.1)
-  - libffi-iOS (3.3.1-iOS)
+  - libffi-iOS (3.3.2-iOS)
 
 DEPENDENCIES:
   - Aspects
-  - libffi-iOS (~> 3.3.1-iOS)
+  - libffi-iOS (~> 3.3.2-iOS)
 
 SPEC REPOS:
   trunk:
@@ -13,8 +13,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
-  libffi-iOS: 2bc32e3a43d20893312ed7015324766a65ca28a3
+  libffi-iOS: 643eca519a63d38cdf59a65f92a0f69d3e60ea4b
 
-PODFILE CHECKSUM: ad4274bccb543d6aec098749975a157e7794cdc0
+PODFILE CHECKSUM: 9959a0e6423b4d09a7be018b84c56aec53c2a156
 
 COCOAPODS: 1.9.1

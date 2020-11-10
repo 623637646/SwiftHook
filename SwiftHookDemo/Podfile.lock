@@ -1,13 +1,13 @@
 PODS:
   - EasySwiftHook (2.0.2):
-    - libffi-iOS (~> 3.3.2-iOS)
-  - libffi-iOS (3.3.2-iOS)
+    - libffi-iOS (~> 3.3.3-iOS)
+  - libffi-iOS (3.3.3-iOS)
 
 DEPENDENCIES:
   - EasySwiftHook (from `../`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - libffi-iOS
 
 EXTERNAL SOURCES:
@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EasySwiftHook: b0cd2698cc724da637f1cef13d018caef3f91c20
-  libffi-iOS: 643eca519a63d38cdf59a65f92a0f69d3e60ea4b
+  EasySwiftHook: 6e80f42df805998ab8a1b7ef8fdeb06717f73e21
+  libffi-iOS: 09ffcd51939f869b3764f896cb097db210325815
 
-PODFILE CHECKSUM: 54c7cc669efe69a8c4234ebf1ae6f0d3acf619d2
+PODFILE CHECKSUM: fedd2766112ed9d3fe85d07949ee14da40f266a5
 
 COCOAPODS: 1.9.1

@@ -1,6 +1,8 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 platform :ios, '10.0'
 
 target 'SwiftHookDemo' do
-  use_frameworks!  
+#  use_frameworks!
   pod 'EasySwiftHook', :path=>'../'
 end

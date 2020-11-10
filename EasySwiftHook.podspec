@@ -134,8 +134,8 @@ Pod::Spec.new do |spec|
   # spec.requires_arc = true
 
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  spec.dependency 'libffi-iOS', '~> 3.3.2-iOS'
+  spec.dependency 'libffi-iOS', '~> 3.3.3-iOS'
   # The libffi-iOS's public header is not formal. Have to add this to avoid build error.
-  spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(inherited) ${PODS_ROOT}/Headers/Public/libffi-iOS ${PODS_CONFIGURATION_BUILD_DIR}/libffi-iOS/libffi_iOS.framework/Headers" }
+  spec.pod_target_xcconfig = { "HEADER_SEARCH_PATHS" => "$(inherited) ${PODS_ROOT}/Headers/Public/libffi-iOS ${PODS_CONFIGURATION_BUILD_DIR}/libffi-iOS/libffi_iOS.framework/Headers" }
 
 end

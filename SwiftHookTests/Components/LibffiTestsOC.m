@@ -38,11 +38,10 @@
 - (void)test_FFICall_Struct {
     ffi_type tm_type;
     ffi_type *tm_type_elements[3];
-    int i;
     
     tm_type.size = tm_type.alignment = 0;
     tm_type.type = FFI_TYPE_STRUCT;
-    tm_type.elements = &tm_type_elements;
+    tm_type.elements = (ffi_type **)&tm_type_elements;
     
     tm_type_elements[0] = &ffi_type_double;
     tm_type_elements[1] = &ffi_type_double;

@@ -1,9 +1,11 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 platform :ios, '10.0'
 use_frameworks!
 
 abstract_target 'abstract-SwiftHook' do
   
-  pod 'libffi-iOS', '~> 3.3.2-iOS'
+  pod 'libffi-iOS', '~> 3.3.3-iOS'
   
   target 'SwiftHook' do
   end

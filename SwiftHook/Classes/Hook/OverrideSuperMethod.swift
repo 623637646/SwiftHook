@@ -55,7 +55,7 @@ private class OverrideMethodContext: Hashable {
         }
         
         // Signature
-        guard let methodSignature = Signature(method: superMethod) else {
+        guard let methodSignature = try Signature(method: superMethod) else {
             throw SwiftHookError.missingSignature
         }
         

@@ -13,11 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SHMethodSignature : NSObject
 
-+ (nullable SHMethodSignature *)signatureWithMethod:(Method)method;
-
-+ (nullable SHMethodSignature *)signatureWithBlock:(id)block;
-
-+ (nullable SHMethodSignature *)signatureWithString:(NSString *)string;
++ (nullable SHMethodSignature *)signatureWithObjCTypes:(const char *)types;
 
 @property (readonly) NSArray<NSString *> *argumentTypes;
 

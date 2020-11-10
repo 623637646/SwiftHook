@@ -47,8 +47,8 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
         throw SwiftHookError.noRespondSelector
     }
     
-    guard let methodSignature = Signature(method: method),
-        let closureSignature = Signature(closure: closure) else {
+    guard let methodSignature = try Signature(method: method),
+        let closureSignature = try Signature(closure: closure) else {
             throw SwiftHookError.missingSignature
     }
     
@@ -91,7 +91,7 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
         guard originalClosureType == .closureTypeValue else {
             throw SwiftHookError.incompatibleClosureSignature
         }
-        guard let originalClosureSignature = originalClosureType.internalClosureSignature else {
+        guard let originalClosureSignature = try originalClosureType.internalClosureSignature() else {
             throw SwiftHookError.incompatibleClosureSignature
         }
         closureArgumentTypes.removeFirst()

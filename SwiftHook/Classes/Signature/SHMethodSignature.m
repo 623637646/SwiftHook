@@ -17,31 +17,8 @@
 
 @implementation SHMethodSignature
 
-+ (nullable SHMethodSignature *)signatureWithMethod:(Method)method
++ (nullable SHMethodSignature *)signatureWithObjCTypes:(const char *)types
 {
-    const char *types = method_getTypeEncoding(method);
-    NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:types];
-    if (!methodSignature) {
-        return nil;
-    }
-    return [[self alloc] initWithMethodSignature:methodSignature];
-}
-
-+ (nullable SHMethodSignature *)signatureWithBlock:(id)block
-{
-    if (![block isKindOfClass:NSClassFromString(@"NSBlock")]) {
-        return nil;
-    }
-    NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:sh_blockSignature(block)];
-    if (!methodSignature) {
-        return nil;
-    }
-    return [[self alloc] initWithMethodSignature: methodSignature];
-}
-
-+ (nullable SHMethodSignature *)signatureWithString:(NSString *)string
-{
-    const char *types = [string UTF8String];
     NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:types];
     if (!methodSignature) {
         return nil;
@@ -75,6 +52,7 @@
 }
 
 static NSRegularExpression *regex;
+// We need to remove the unused char like from "@?<@"NSNumber"@?@:q>" to "@?<@@?@:q>". Because we can get "NSNumber" from block. But can't get this from method. When do the metching. "NSNumber" is not helpful.
 - (NSString *)ignoreUnusedChar:(NSString *)type
 {
     static dispatch_once_t onceToken;

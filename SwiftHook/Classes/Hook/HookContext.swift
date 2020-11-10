@@ -206,7 +206,7 @@ class HookContext {
         self.isHookingDealloc = selector == deallocSelector
         
         // original
-        guard let methodSignature = Signature(method: self.method) else {
+        guard let methodSignature = try Signature(method: self.method) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.methodOriginalIMP = method_getImplementation(self.method)

@@ -384,7 +384,7 @@ class FFITypeContextTests: XCTestCase {
     // MARK: utilities
     
     func getReturnTypeEncoding(block: Any) -> String? {
-        let methodSignature = SHMethodSignature.init(block: block)
+        let methodSignature = SHMethodSignature.init(objCTypes: sh_blockSignature(block)!)
         return methodSignature?.returnType
     }
     

@@ -23,10 +23,18 @@ class SignatureTests: XCTestCase {
     // MARK: before & after
     
     func testInvalidClosure() {
-        XCTAssertNil(Signature.init(closure: 1 as AnyObject))
-        XCTAssertNil(Signature.init(closure: {} as AnyObject))
-        XCTAssertNil(Signature.init(closure: NSObject()))
-        XCTAssertNil(Signature.init(closure: CGPoint.zero as AnyObject))
+        do {
+            var check = try Signature.init(closure: 1 as AnyObject)
+            XCTAssertNil(check)
+            check = try Signature.init(closure: {} as AnyObject)
+            XCTAssertNil(check)
+            check = try Signature.init(closure: NSObject())
+            XCTAssertNil(check)
+            check = try Signature.init(closure: CGPoint.zero as AnyObject)
+            XCTAssertNil(check)
+        } catch {
+            XCTFail()
+        }
     }
     
     func testNoDynamicMethod() {
@@ -34,11 +42,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -61,11 +69,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {} as @convention(block) () -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -88,11 +96,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
             } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
                 XCTFail()
                 return
@@ -117,11 +125,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _ in } as @convention(block) (CGPoint, CGRect) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _ in } as @convention(block) (CGPoint, CGRect) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -144,11 +152,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ([Any], [Int], [CGRect]) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _, _ in } as @convention(block) ([Any], [Int], [CGRect]) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -171,11 +179,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ([String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _, _ in } as @convention(block) ([String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -198,11 +206,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _ in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _ in
             } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> Void as AnyObject) else {
                 XCTFail()
                 return
@@ -225,11 +233,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _ in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _ in
             } as @convention(block) (UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> Void as AnyObject) else {
                 XCTFail()
                 return
@@ -254,11 +262,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -281,11 +289,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_ in } as @convention(block) (() -> Void) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -308,11 +316,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
             } as @convention(block) ((CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void, CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
                 XCTFail()
                 return
@@ -337,11 +345,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _ in } as @convention(block) ((CGPoint, CGRect) -> Void, CGPoint, CGRect) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _, _ in } as @convention(block) ((CGPoint, CGRect) -> Void, CGPoint, CGRect) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -364,11 +372,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _ in } as @convention(block) (([Any], [Int], [CGRect]) -> Void, [Any], [Int], [CGRect]) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _ in } as @convention(block) (([Any], [Int], [CGRect]) -> Void, [Any], [Int], [CGRect]) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -391,11 +399,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _ in } as @convention(block) (([String: Any], [String: Int], [String: CGRect]) -> Void, [String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _ in } as @convention(block) (([String: Any], [String: Int], [String: CGRect]) -> Void, [String: Any], [String: Int], [String: CGRect]) -> Void as AnyObject) else {
             XCTFail()
             return
         }
@@ -418,11 +426,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _ in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _ in
             return {_, _ in
                 return NSObject()
             }
@@ -449,11 +457,11 @@ class SignatureTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let methodSignature = Signature.init(method: method) else {
+        guard let methodSignature = try? Signature.init(method: method) else {
             XCTFail()
             return
         }
-        guard let closureSignature = Signature.init(closure: {_, _, _, _, _ in
+        guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _ in
             return UnsafeMutablePointer<@convention(block) () -> Void>.init(nil)!
             } as @convention(block) ((UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void>, UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void> as AnyObject) else {
                 XCTFail()

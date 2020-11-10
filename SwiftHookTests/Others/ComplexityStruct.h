@@ -40,4 +40,14 @@ struct BigStruct {
     CGRect frame12;
 };
 
+struct EmptyStruct {
+    
+};
+
+struct InternalEmptyStruct {
+    int i;
+    struct {
+    } s;
+};
+
 #endif /* ComplexityStruct_h */

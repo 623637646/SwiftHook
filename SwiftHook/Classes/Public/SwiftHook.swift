@@ -40,6 +40,7 @@ public enum SwiftHookError: Error {
     case incompatibleClosureSignature
     case canNotHookClassWithObjectAPI // Please use "hookClassMethod" instead.
     case duplicateHookClosure // This closure already hooked with one mode.
+    case emptyStruct // The struct is empty, Please check the parameters or return type of the method
     case ffiError
     case internalError(file: String, line: Int)
 }

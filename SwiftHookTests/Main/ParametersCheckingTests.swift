@@ -291,4 +291,93 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
+    func test_Empty_Struct() {
+        class MyObject {
+            @objc dynamic func myMethod1() -> EmptyStruct {
+                return EmptyStruct.init()
+            }
+            
+            @objc dynamic func myMethod2(s: EmptyStruct) {
+                
+            }
+            
+            @objc dynamic func myMethod3(s: EmptyStruct) -> EmptyStruct {
+                return EmptyStruct.init()
+            }
+            
+            @objc dynamic func myMethod4() -> InternalEmptyStruct {
+                return InternalEmptyStruct.init()
+            }
+            
+            @objc dynamic func myMethod5(s: InternalEmptyStruct) {
+                
+            }
+            
+            @objc dynamic func myMethod6(s: InternalEmptyStruct) -> InternalEmptyStruct {
+                return InternalEmptyStruct.init()
+            }
+        }
+        
+        do {
+            try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod1), closure: { _, _, _ in
+                return EmptyStruct.init()
+            } as @convention(block) ((NSObject, Selector) -> EmptyStruct, NSObject, Selector) -> EmptyStruct)
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+        do {
+            try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod2), closure: {
+                
+            })
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+        do {
+            try hookAfter(object: MyObject(), selector: #selector(MyObject.myMethod3), closure: {
+                
+            })
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+        do {
+            try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod4), closure: { _, _, _ in
+                return InternalEmptyStruct.init()
+            } as @convention(block) ((NSObject, Selector) -> InternalEmptyStruct, NSObject, Selector) -> InternalEmptyStruct)
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+        do {
+            try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod5), closure: {
+                
+            })
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+        do {
+            try hookAfter(object: MyObject(), selector: #selector(MyObject.myMethod6), closure: {
+                
+            })
+            XCTFail()
+        } catch SwiftHookError.emptyStruct {
+        } catch {
+            XCTFail()
+        }
+        
+    }
 }

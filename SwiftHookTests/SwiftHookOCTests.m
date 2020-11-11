@@ -146,4 +146,110 @@
     }
 }
 
+// MARK: Others
+
+- (void)test_Error
+{
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
+            NSLog(@"hooked");
+        }];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 0);
+        [token cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:NSSelectorFromString(@"retain") error:&error closure:^{
+            NSLog(@"hooked");
+        }];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 0);
+        [token cancelHook];
+    }
+    
+    {
+        NSObject *object = [[NSObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
+            NSLog(@"hooked");
+        }];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 2);
+        [token cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:[[NSObject alloc] init] error:&error];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 3);
+        [token cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:^(BOOL b){
+            NSLog(@"hooked");
+        } error:&error];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 4);
+        [token cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        void (^hookClosure)(void)  = ^{
+            NSLog(@"hooked");
+        };
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:hookClosure error:&error];
+        XCTAssertNil(error);
+        
+        OCToken *token2 = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:hookClosure error:&error];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 6);
+        
+        [token cancelHook];
+        [token2 cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(setEmptyStruct:) closure:^(BOOL b){
+            NSLog(@"hooked");
+        } error:&error];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 7);
+        [token cancelHook];
+    }
+    
+    {
+        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+        NSError *error = nil;
+        OCToken *token = [object sh_hookBeforeSelector:@selector(getEmptyStruct) closure:^(BOOL b){
+            NSLog(@"hooked");
+        } error:&error];
+        XCTAssertNotNil(error);
+        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+        XCTAssertEqual(error.code, 7);
+        [token cancelHook];
+    }
+}
+
 @end

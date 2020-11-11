@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "ComplexityStruct.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getSelfNumberPlusCMD;
 
 - (void)testPoint:(CGPoint)point;
+
+- (void)setEmptyStruct:(InternalEmptyStruct)emptyStruct;
+
+- (InternalEmptyStruct)getEmptyStruct;
 
 @end
 

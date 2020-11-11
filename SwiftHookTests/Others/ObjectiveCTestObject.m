@@ -51,4 +51,14 @@
     
 }
 
+- (void)setEmptyStruct:(InternalEmptyStruct)emptyStruct
+{
+    
+}
+
+- (InternalEmptyStruct)getEmptyStruct
+{
+    return (InternalEmptyStruct){};
+}
+
 @end

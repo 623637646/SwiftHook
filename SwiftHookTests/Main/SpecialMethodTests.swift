@@ -155,4 +155,32 @@ class SpecialMethodTests: XCTestCase {
         }
     }
     
+    func test_Dealloc_And_Capture() {
+        do {
+            var i = 0
+            var token1: Token?
+            var token2: Token?
+            try autoreleasepool {
+                let object = ObjectiveCTestObject()
+                
+                token1 = try hookDeallocBefore(targetClass: ObjectiveCTestObject.self) { [weak object] in
+                    XCTAssertEqual(i, 1)
+                    XCTAssertNil(object)
+                    i += 1
+                }
+                
+                token2 = try hookDeallocBefore(object: object) {[weak object] in
+                    XCTAssertEqual(i, 0)
+                    XCTAssertNil(object)
+                    i += 1
+                }
+            }
+            token1!.cancelHook()
+            token2!.cancelHook()
+            XCTAssertEqual(i, 2)
+        } catch {
+            XCTFail()
+        }
+    }
+    
 }

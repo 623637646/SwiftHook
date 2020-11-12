@@ -17,7 +17,6 @@ private let blacklistSelectors = [retainSelector, releaseSelector, autoreleaseSe
 
 // MARK: private
 
-// TODO: test case: hook before dealloc, strong retain object!
 func parametersCheck(object: AnyObject, selector: Selector, mode: HookMode, closure: AnyObject) throws {
     guard !(object is AnyClass) else {
         throw SwiftHookError.hookClassWithObjectAPI

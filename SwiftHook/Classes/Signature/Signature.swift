@@ -11,7 +11,8 @@ import Foundation
 struct Signature {
     
     struct TypeValue: Equatable {
-        let name: String
+        
+        let code: String
         private let internalValue: String?
         
         static let closureTypeValue = (try? TypeValue.init(string: "@?"))!
@@ -19,18 +20,18 @@ struct Signature {
         static let selectorTypeValue = (try? TypeValue.init(string: ":"))!
         static let voidTypeValue = (try? TypeValue.init(string: "v"))!
         
-        init?(string: String) throws {
+        init(string: String) throws {
             guard let nameRange = string.range(of: "^[^\\<]+", options: .regularExpression) else {
-                return nil
+                throw SwiftHookError.internalError(file: #file, line: #line)
             }
             // convert "@?<@@?@:q>" to "@?"
-            var name = String.init(string[nameRange])
+            var code = String.init(string[nameRange])
             // Remove "const". Refer to: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
             // TODO: test others cases for this.
-            if name.first == "r" {
-                name.removeFirst()
+            if code.first == "r" {
+                code.removeFirst()
             }
-            self.name = name
+            self.code = code
             if let closureSignatureRange = string.range(of: "(?<=\\<).+(?=\\>)", options: .regularExpression) {
                 self.internalValue = String.init(string[closureSignatureRange])
             } else {
@@ -39,7 +40,7 @@ struct Signature {
         }
         
         static func == (lhs: Self, rhs: Self) -> Bool {
-            return lhs.name == rhs.name
+            return lhs.code == rhs.code
         }
         
         func internalClosureSignature() throws -> Signature? {
@@ -72,21 +73,17 @@ struct Signature {
         self.signatureType = signatureType
     }
     
-    private init?(methodSignature: SHMethodSignature, signatureType: SignatureType) throws {
+    private init(methodSignature: SHMethodSignature, signatureType: SignatureType) throws {
         var argumentTypeValues = [TypeValue]()
         for argumentType in methodSignature.argumentTypes {
-            guard let typeValue = try TypeValue.init(string: argumentType) else {
-                return nil
-            }
+            let typeValue = try TypeValue.init(string: argumentType)
             argumentTypeValues.append(typeValue)
         }
-        guard let returnTypeValue = try TypeValue.init(string: methodSignature.returnType) else {
-            return nil
-        }
+        let returnTypeValue = try TypeValue.init(string: methodSignature.returnType)
         self.init(argumentTypes: argumentTypeValues, returnType: returnTypeValue, signatureType: signatureType)
     }
     
-    init?(method: Method) throws {
+    init(method: Method) throws {
         guard let objCTypes = method_getTypeEncoding(method) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
@@ -97,9 +94,9 @@ struct Signature {
         try self.init(methodSignature: methodSignature, signatureType: .method)
     }
     
-    init?(closure: AnyObject) throws {
+    init(closure: AnyObject) throws {
         guard closure.isKind(of: NSClassFromString("NSBlock")!) else {
-            return nil
+            throw SwiftHookError.wrongTypeForHookClosure
         }
         guard let objCTypes = sh_blockSignature(closure) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
@@ -116,5 +113,11 @@ struct Signature {
         guard !objCTypesString.contains("=}") else {
             throw SwiftHookError.emptyStruct
         }
+    }
+}
+
+extension Array where Element == Signature.TypeValue {
+    func toSignatureString() -> String {
+        self.map {$0.code}.joined()
     }
 }

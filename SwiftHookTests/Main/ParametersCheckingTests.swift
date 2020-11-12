@@ -14,7 +14,6 @@ private let releaseSelector = NSSelectorFromString("release")
 private let autoreleaseSelector = NSSelectorFromString("autorelease")
 private let blacklistSelectors = [retainSelector, releaseSelector, autoreleaseSelector]
 
-// TODO: 移除了很多 SignatureTests 里的 testcase，检查是否需要更全面的 ParametersCheckingTests？
 class ParametersCheckingTests: XCTestCase {
     
     func testCanNotHookClassWithObjectAPI() {
@@ -22,7 +21,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(object: randomTestClass(), selector: randomSelector(), closure: {
             })
             XCTFail()
-        } catch SwiftHookError.canNotHookClassWithObjectAPI {
+        } catch SwiftHookError.hookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
         }
@@ -30,7 +29,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookAfter(object: randomTestClass(), selector: randomSelector(), closure: {
             })
             XCTFail()
-        } catch SwiftHookError.canNotHookClassWithObjectAPI {
+        } catch SwiftHookError.hookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
         }
@@ -38,7 +37,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(object: randomTestClass(), selector: randomSelector(), closure: {
             })
             XCTFail()
-        } catch SwiftHookError.canNotHookClassWithObjectAPI {
+        } catch SwiftHookError.hookClassWithObjectAPI {
         } catch {
             XCTAssertNil(error)
         }
@@ -49,8 +48,8 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
+            
         } catch {
             XCTAssertNil(error)
         }
@@ -58,8 +57,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookAfter(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
         }
@@ -67,8 +65,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(object: TestObject(), selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
         }
@@ -76,8 +73,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookBefore(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
         }
@@ -85,8 +81,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookAfter(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
         }
@@ -94,8 +89,7 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: {
             })
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .pureSwiftObjectDealloc)
+        } catch SwiftHookError.pureSwiftObjectDealloc {
         } catch {
             XCTAssertNil(error)
         }
@@ -129,21 +123,21 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookBefore(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
             XCTFail()
-        } catch SwiftHookError.missingSignature {
+        } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookClassMethodAfter(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: 1)
             XCTFail()
-        } catch SwiftHookError.missingSignature {
+        } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
             XCTFail()
-        } catch SwiftHookError.missingSignature {
+        } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
             XCTAssertNil(error)
         }
@@ -153,33 +147,37 @@ class ParametersCheckingTests: XCTestCase {
         do {
             try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
                 return 1
-                } as @convention(block) (Int, Int) -> Int as AnyObject)
+            } as @convention(block) (Int, Int) -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookAfter(object: TestObject(), selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
-                } as @convention(block) (Int, Double) -> Void as AnyObject)
+            } as @convention(block) (Int, Double) -> Void as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookAfter(object: TestObject(), selector: #selector(TestObject.testStructSignature(point:rect:)), closure: ({_, _ in
-                } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
+            } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `{CGPoint=dd}d`. But the method parameters type is `@:{CGPoint=dd}{CGRect={CGPoint=dd}{CGSize=dd}}`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
         do {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
-                } as @convention(block) (Int, Int) -> Void as AnyObject)
+            } as @convention(block) (Int, Int) -> Void as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The number of hook closure parameters should be equal to the number of method parameters + 1 (The first parameter is the `original` closure. The rest is the same as method's). The hook closure parameters number is 2. The method parameters number is 4.")
         } catch {
             XCTAssertNil(error)
         }
@@ -192,8 +190,7 @@ class ParametersCheckingTests: XCTestCase {
                 try hookBefore(object: object, selector: selector) {
                 }
                 XCTFail()
-            } catch SwiftHookError.unsupport(value: let value) {
-                XCTAssertEqual(value, .blacklist)
+            } catch SwiftHookError.blacklist {
             } catch {
                 XCTAssertNil(error)
             }
@@ -202,22 +199,22 @@ class ParametersCheckingTests: XCTestCase {
                 try hookBefore(targetClass: ObjectiveCTestObject.self, selector: selector) {
                 }
                 XCTFail()
-            } catch SwiftHookError.unsupport(value: let value) {
-                XCTAssertEqual(value, .blacklist)
+            } catch SwiftHookError.blacklist {
             } catch {
                 XCTAssertNil(error)
             }
         }
     }
     
-    func testHookInsteadOriginalClosureParametersWrong() {
+    func test_Hook_Instead_Original_Closure() {
         do {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
                 let result = original(a, b)
                 return Int(result)
-                } as @convention(block) ((Int, Int) -> Double, Int, Int) -> Int as AnyObject)
+            } as @convention(block) ((Int, Int) -> Double, Int, Int) -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The number of hook closure parameters should be equal to the number of method parameters + 1 (The first parameter is the `original` closure. The rest is the same as method's). The hook closure parameters number is 3. The method parameters number is 4.")
         } catch {
             XCTAssertNil(error)
         }
@@ -225,9 +222,10 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, _, b in
                 let result = original(NSObject.init(), b)
                 return Int(result)
-                } as @convention(block) ((NSObject, Int) -> Int, Int, Int) -> Int as AnyObject)
+            } as @convention(block) ((NSObject, Int) -> Int, Int, Int) -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The number of hook closure parameters should be equal to the number of method parameters + 1 (The first parameter is the `original` closure. The rest is the same as method's). The hook closure parameters number is 3. The method parameters number is 4.")
         } catch {
             XCTAssertNil(error)
         }
@@ -235,9 +233,10 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
                 let result = original(a, b, 100)
                 return Int(result)
-                } as @convention(block) ((Int, Int, Int) -> Int, Int, Int) -> Int as AnyObject)
+            } as @convention(block) ((Int, Int, Int) -> Int, Int, Int) -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The number of hook closure parameters should be equal to the number of method parameters + 1 (The first parameter is the `original` closure. The rest is the same as method's). The hook closure parameters number is 3. The method parameters number is 4.")
         } catch {
             XCTAssertNil(error)
         }
@@ -245,48 +244,137 @@ class ParametersCheckingTests: XCTestCase {
             try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, _ in
                 let result = original(a)
                 return Int(result)
-                } as @convention(block) ((Int) -> Int, Int, Int) -> Int as AnyObject)
+            } as @convention(block) ((Int) -> Int, Int, Int) -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The number of hook closure parameters should be equal to the number of method parameters + 1 (The first parameter is the `original` closure. The rest is the same as method's). The hook closure parameters number is 3. The method parameters number is 4.")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+                let result = original(o, s, a, b)
+                return Int(result)
+            } as @convention(block) ((AnyObject, Selector, Int, Int) -> Double, AnyObject, Selector, Int, Int) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The return type of the original closure (the hook closure's first parameter) should be the same as method's return type. But the return type of the original closure is `d`, The return type of the method is `q`. Thay are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+                let result = original(o, s, a, b)
+                return Double(result)
+            } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Double as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The return type of the hook closure should be the same as method's return type. But the return type of the hook closure is `d`, The return type of the method is `q`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+                let result = original(o, s, a, Int(b))
+                return Int(result)
+            } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Double) -> Int as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The parameters type of the hook closure without firt one (The first parameter is the `original` closure) must be the same as the method's. But now the parameters type of the hook closure without firt one is `@:qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
     }
     
-    func test_Hook_Dealloc_With_Object_And_Selector() {
+    func test_Hook_Dealloc() {
         do {
-            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, o, s in
-                original(o, s)
-                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: {
+                return 1
+            } as @convention(block) () -> Int as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
+        
         do {
-            try hookAfter(object: ObjectiveCTestObject(), selector: deallocSelector, closure: { original, o, s in
-                original(o, s)
-                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+                
+            } as @convention(block) (String) -> Void as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `@`. For more about Type Encodings: https://nshipster.com/type-encodings/")
         } catch {
             XCTAssertNil(error)
         }
+        
         do {
             try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, o, s in
                 original(o, s)
-                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The number of hook closure parameters should be 1 (The parameter is the `original` closure). But now it's 3.")
         } catch {
             XCTAssertNil(error)
         }
+        
         do {
-            try hookInstead(object: ObjectiveCTestObject(), selector: deallocSelector, closure: { original, o, s in
-                original(o, s)
-                } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+                
+            } as @convention(block) (AnyObject) -> Void as AnyObject)
             XCTFail()
-        } catch SwiftHookError.incompatibleClosureSignature {
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `@`. By right it should be \"@?\". For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                _ = original()
+            } as @convention(block) (() -> CGPoint) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the original closure (the hook closure's first parameter) should be `v`. But the return type of the original closure is `{CGPoint=dd}`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                original(1, 1.1)
+            } as @convention(block) ((Int, Double) -> Void) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The parameters of the original closure (the hook closure's first parameter) must be empty. The original closure parameters type is `qd`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                original()
+                return "lol"
+            } as @convention(block) (() -> Void) -> String as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the hook closure should be `v`. But the return type of the hook closure is `@`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, _ in
+                original()
+            } as @convention(block) (() -> Void, URL) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The number of hook closure parameters should be 1 (The parameter is the `original` closure). But now it's 2.")
         } catch {
             XCTAssertNil(error)
         }

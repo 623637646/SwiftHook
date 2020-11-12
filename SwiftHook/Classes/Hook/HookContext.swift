@@ -9,8 +9,6 @@
 import Foundation
 import libffi_iOS
 
-// TODO: put methodCalledFunction and insteadClosureCalledFunction in a independent file.
-
 private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
     
     // Parameters
@@ -206,9 +204,7 @@ class HookContext {
         self.isHookingDealloc = selector == deallocSelector
         
         // original
-        guard let methodSignature = try Signature(method: self.method) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
+        let methodSignature = try Signature(method: self.method)
         self.methodOriginalIMP = method_getImplementation(self.method)
         self.methodCifContext = try FFICIFContext.init(signature: methodSignature)
         

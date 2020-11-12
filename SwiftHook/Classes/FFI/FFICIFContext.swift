@@ -21,13 +21,13 @@ class FFICIFContext {
             deallocateHelperArgTypes?.deallocate()
         }
         for (index, argumentType) in signature.argumentTypes.enumerated() {
-            guard let typeContext = FFITypeContext(typeEncoding: argumentType.name) else {
+            guard let typeContext = FFITypeContext(typeEncoding: argumentType.code) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             self.typeContexts.insert(typeContext)
             self.argTypes[index] = typeContext.ffiType
         }
-        guard let returnType = FFITypeContext(typeEncoding: signature.returnType.name) else {
+        guard let returnType = FFITypeContext(typeEncoding: signature.returnType.code) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.typeContexts.insert(returnType)

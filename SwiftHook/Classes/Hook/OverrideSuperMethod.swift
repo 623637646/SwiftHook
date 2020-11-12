@@ -55,9 +55,7 @@ private class OverrideMethodContext: Hashable {
         }
         
         // Signature
-        guard let methodSignature = try Signature(method: superMethod) else {
-            throw SwiftHookError.missingSignature
-        }
+        let methodSignature = try Signature(method: superMethod)
         
         // FFICIFContext
         self.methodCifContext = try FFICIFContext.init(signature: methodSignature)

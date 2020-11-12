@@ -156,8 +156,7 @@ class CompatibilityTests: XCTestCase {
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .KVOedObject)
+        } catch SwiftHookError.KVOedObject {
         } catch {
             XCTAssertNil(error)
         }
@@ -202,8 +201,7 @@ class CompatibilityTests: XCTestCase {
             XCTAssertEqual(expectation, [3])
             XCTAssertEqual(object.number, 10)
             XCTFail()
-        } catch SwiftHookError.unsupport(value: let value) {
-            XCTAssertEqual(value, .KVOedObject)
+        } catch SwiftHookError.KVOedObject {
         } catch {
             XCTAssertNil(error)
         }

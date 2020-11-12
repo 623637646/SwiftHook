@@ -17,32 +17,38 @@ let deallocSelector = NSSelectorFromString("dealloc")
 // MARK: - Error
 public enum SwiftHookError: Error {
     
-    public enum Unsupport {
-        case pureSwiftObjectDealloc // Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method
-        /*
-         // TODO: Support hook KVO'ed Object.
-         
-         Cases:
-         1. Observe one object by KVO.
-         2. Hook this object by SwiftHook
-         3. Cancel KVO
-         4. Make sure SwiftHook works fine.
-         
-         Latest idea. Set the object a new subclass. The subclass copy superclass's extra-bytes to avoid KVO crash.
-         */
-        case KVOedObject // Unsupport to hook KVO'ed Object
-        case blacklist // Unsupport to hook current method
-    }
+    case hookClassWithObjectAPI // Can't hook class with object hooking API. Please use "hookClassMethod" instead.
     
-    case unsupport(value: Unsupport)
-    case noRespondSelector
-    case missingSignature // Please check if there is keyword @convention(block) for the clousre
-    case incompatibleClosureSignature
-    case canNotHookClassWithObjectAPI // Please use "hookClassMethod" instead.
-    case duplicateHookClosure // This closure already hooked with one mode.
-    case emptyStruct // The struct is empty, Please check the parameters or return type of the method
-    case ffiError
-    case internalError(file: String, line: Int)
+    case blacklist // Unsupport to hook current method. Search "blacklistSelectors" to see all methods unsupport.
+
+    case pureSwiftObjectDealloc // Technologically can't hook dealloc method for pure Swift Object with swizzling. Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method.
+
+    /*
+     // TODO: Support hook KVO'ed Object.
+     
+     Cases:
+     1. Observe one object by KVO.
+     2. Hook this object by SwiftHook
+     3. Cancel KVO
+     4. Make sure SwiftHook works fine.
+     
+     Latest idea. Set the object a new subclass. The subclass copy superclass's extra-bytes to avoid KVO crash.
+     */
+    case KVOedObject // Unsupport to hook KVO'ed Object
+
+    case noRespondSelector // Can't find the method by the selector from the class.
+
+    case emptyStruct // The struct of the method's args or return value is empty, This case can't be compatible  with libffi. Please check the parameters or return type of the method.
+
+    case wrongTypeForHookClosure // Please check the hook clousre. Is it a standard closure? Does it have keyword @convention(block)?
+
+    case incompatibleClosureSignature(description: String) // Please check the hook closure if it match to the method.
+
+    case duplicateHookClosure // This closure has been hooked with current mode already.
+
+    case ffiError // The error from FFI. Please raise aa issue: https://github.com/623637646/SwiftHook/issues/new
+    
+    case internalError(file: String, line: Int) // Please raise aa issue: https://github.com/623637646/SwiftHook/issues/new
 }
 
 // MARK: - Token
@@ -306,5 +312,3 @@ public func hookDeallocInstead(targetClass: NSObject.Type, closure: @escaping @c
         try internalHook(targetClass: targetClass, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }
 }
-
-// TODO: compile error when pod being static frameworks.

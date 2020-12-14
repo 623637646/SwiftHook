@@ -49,11 +49,12 @@
         [invocation invoke];
         [invocation getReturnValue:&string];
         XCTAssertEqual(string, @"zzz");
-        NSString *newString = @"kkk";
+        NSString *newString = [[NSMutableString alloc] initWithString:@"kkk"];
         [invocation setReturnValue:&newString];
+        [invocation retainArguments];
     } error:NULL];
     NSString *string = [self getString];
-    XCTAssertEqual(string, @"kkk");
+    XCTAssertEqualObjects(string, @"kkk");
 }
 
 - (void)testModifyNumberReture {
@@ -63,11 +64,12 @@
         [invocation invoke];
         [invocation getReturnValue:&number];
         XCTAssertEqual(number, @8);
-        NSNumber *newNumber = @16;
+        NSNumber *newNumber = [[NSNumber alloc] initWithDouble:0.3];
         [invocation setReturnValue:&newNumber];
+        [invocation retainArguments];
     } error:NULL];
     NSNumber *number = [self getNumber];
-    XCTAssertEqual(number, @16);
+    XCTAssertEqualObjects(number, @0.3);
 }
 
 - (void)testModifyNSValueReture {
@@ -79,6 +81,7 @@
         XCTAssertTrue([value isEqualToValue:[NSValue valueWithCGPoint:CGPointMake(11, 22)]]);
         NSValue *newValue = [NSValue valueWithCGRect:CGRectMake(1, 2, 3, 4)];
         [invocation setReturnValue:&newValue];
+        [invocation retainArguments];
     } error:NULL];
     NSValue *value = [self getValue];
     XCTAssertTrue([value isEqualToValue:[NSValue valueWithCGRect:CGRectMake(1, 2, 3, 4)]]);

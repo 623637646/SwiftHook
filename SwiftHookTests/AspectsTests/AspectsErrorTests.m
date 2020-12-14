@@ -161,11 +161,26 @@
     [object superFunc];
 }
 
+- (void)testCMDIsWrong
+{
+    NSError *error = nil;
+    [self aspect_hookSelector:@selector(checkCMD) withOptions:AspectPositionAfter usingBlock:^(){
+    } error:&error];
+    XCTAssertNil(error);
+    [self checkCMD];
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     NSLog(@"observeValueForKeyPath: %@", change);
+}
+
+#pragma mark - others
+- (void)checkCMD
+{
+    XCTAssertEqualObjects(NSStringFromSelector(_cmd), @"checkCMD");
 }
 
 @end

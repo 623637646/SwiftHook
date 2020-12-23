@@ -115,7 +115,7 @@ class TestObject: SuperObject {
         closure2: (Int, AnyObject) -> Int,
         closure3: (Int, AnyObject) -> AnyObject
     ) -> (Int, AnyObject) -> AnyObject {
-        return { i, obj in
+        return { _, _ in
             return NSObject()
         }
     }
@@ -214,7 +214,7 @@ class TestObject: SuperObject {
         closure2: (Int, AnyObject) -> Int,
         closure3: (Int, AnyObject) -> AnyObject
     ) -> (Int, AnyObject) -> AnyObject {
-        return { i, obj in
+        return { _, _ in
             return NSObject()
         }
     }

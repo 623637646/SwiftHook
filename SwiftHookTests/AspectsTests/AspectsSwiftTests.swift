@@ -91,12 +91,12 @@ class AspectsSwiftTests: XCTestCase {
      */
     func testBeforeAspectsReverseCancel() {
         do {
-            //--------- This test case is wrong with this code. If we comment this code. The test case works fine.
+            // --------- This test case is wrong with this code. If we comment this code. The test case works fine.
             let token0 = try ObjectiveCTestObject.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 aspect.originalInvocation()?.invoke()
                 } as @convention(block) (AspectInfo) -> Void)
             token0.remove()
-            //---------
+            // ---------
             
             let object = ObjectiveCTestObject()
             var expectation = [Int]()

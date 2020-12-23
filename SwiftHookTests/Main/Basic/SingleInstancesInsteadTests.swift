@@ -126,7 +126,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 let selector = #selector(TestObject.execute(closure:))
                 typealias ExecuteType = () -> Void
                 let mode: HookMode = .instead
-                let closure = { original, o, s, arg in
+                let closure = { _, _, _, _ in
                     XCTAssertEqual(result, [])
                     result.append(1)
                     result.append(3)

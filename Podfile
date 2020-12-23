@@ -6,6 +6,7 @@ use_frameworks!
 abstract_target 'abstract-SwiftHook' do
   
   pod 'libffi-iOS', '~> 3.3.3-iOS'
+  pod 'SwiftLint'
   
   target 'SwiftHook' do
   end

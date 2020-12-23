@@ -14,3 +14,4 @@ disabled_rules:
   - xctfail_message
   - large_tuple
   - nesting
+  - inclusive_language

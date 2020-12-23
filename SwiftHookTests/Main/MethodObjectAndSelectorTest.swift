@@ -47,7 +47,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookBefore(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -92,7 +92,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookAfter(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -141,7 +141,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = { original, sel, obj in
+            let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
             try hookInstead(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -255,7 +255,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookClassMethodBefore(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -299,7 +299,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookClassMethodAfter(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -347,7 +347,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             // hook
             let targetClass = TestObject.self
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
-            let closure = { original, sel, obj in
+            let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
             try hookClassMethodInstead(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
@@ -392,7 +392,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
         do {
             // hook
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookBefore(object: TestObject(), selector: selector, closure: closure)
             XCTFail()
@@ -435,7 +435,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
         do {
             // hook
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = {sel, obj in
+            let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
             try hookAfter(object: TestObject(), selector: selector, closure: closure)
             XCTFail()
@@ -482,7 +482,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
         do {
             // hook
             let selector = #selector(TestObject.noArgsNoReturnFunc)
-            let closure = { original, sel, obj in
+            let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
             try hookInstead(object: TestObject(), selector: selector, closure: closure)
             XCTFail()

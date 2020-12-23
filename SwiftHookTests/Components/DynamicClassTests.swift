@@ -11,8 +11,8 @@ import XCTest
 
 class DynamicClassTests: XCTestCase {
     
-    let InternalWrapDynamicClass = 67
-    let InternalUnwrapNonDynamicClass = 85
+    let InternalWrapDynamicClass = 68
+    let InternalUnwrapNonDynamicClass = 86
     
     func testNormal() {
         do {

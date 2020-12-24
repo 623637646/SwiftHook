@@ -37,9 +37,9 @@ private class DynamicClassContext: Hashable {
             try overrideSuperMethod(targetClass: dynamicClass, selector: selector)
         }
         getClassHookContext = try HookContext.init(targetClass: dynamicClass, selector: selector)
-        try getClassHookContext.append(hookClosure: {_ in
+        try getClassHookContext.append(hookClosure: {_, _, _ in
             return baseClass
-            } as @convention(block) (() -> AnyClass) -> AnyClass as AnyObject, mode: .instead)
+        } as @convention(block) ((AnyObject, Selector) -> AnyClass, AnyObject, Selector) -> AnyClass as AnyObject, mode: .instead)
         self.dynamicClass = dynamicClass
         deallocateHelper = nil
     }

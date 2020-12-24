@@ -208,4 +208,150 @@ class OrderTests: XCTestCase {
         }
     }
     
+    func test_all_instances_method_and_specified_instance_method() throws {
+        class MyObject {
+            @objc dynamic func myMethod() {
+                
+            }
+        }
+        
+        var order = [Int]()
+        
+        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+            order.append(8)
+        }
+        
+        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+            order.append(7)
+        }
+        
+        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(6)
+            original(obj, sel)
+            order.append(11)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(5)
+            original(obj, sel)
+            order.append(12)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+            order.append(10)
+        }
+        
+        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+            order.append(9)
+        }
+        
+        let object = MyObject.init()
+        
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(4)
+        }
+        
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(3)
+        }
+        
+        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(2)
+            original(obj, sel)
+            order.append(15)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(1)
+            original(obj, sel)
+            order.append(16)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        try hookAfter(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(14)
+        }
+        
+        try hookAfter(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(13)
+        }
+        
+        object.myMethod()
+        
+        XCTAssertEqual(order, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+    }
+    
+    func test_all_instances_method_and_specified_instance_method_dynamic_class() throws {
+        class MyObject {
+            @objc dynamic func myMethod() {
+
+            }
+        }
+
+        var order = [Int]()
+
+        let object = MyObject.init()
+
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(6)
+        }
+
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(5)
+        }
+
+        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(2)
+            original(obj, sel)
+            order.append(15)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+
+        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(1)
+            original(obj, sel)
+            order.append(16)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+
+        try hookAfter(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(10)
+        }
+
+        try hookAfter(object: object, selector: #selector(MyObject.myMethod)) {
+            order.append(9)
+        }
+        
+        let theClass: AnyClass = object_getClass(object)!
+        
+        try hookBefore(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+            order.append(8)
+        }
+
+        try hookBefore(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+            order.append(7)
+        }
+
+        try hookInstead(targetClass: theClass, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(4)
+            original(obj, sel)
+            order.append(13)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+
+        try hookInstead(targetClass: theClass, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+            order.append(3)
+            original(obj, sel)
+            order.append(14)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+
+        try hookAfter(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+            order.append(12)
+        }
+
+        try hookAfter(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+            order.append(11)
+        }
+
+        object.myMethod()
+
+        XCTAssertEqual(order, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+    }
+    
 }

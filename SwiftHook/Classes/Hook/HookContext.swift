@@ -24,8 +24,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: Unsa
     if hookContext.isTargetClassDynamic {
         let objectPointer = argsBuffer[0]!
         unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
-        let (_, _, insread) = getHookClosures(object: object, selector: hookContext.selector)
-        insteadHookClosures += insread
+        insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
     }
     
     // instead
@@ -68,7 +67,6 @@ private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, r
     
     // Get instead hook closures.
     var insteadHookClosures = hookContext.insteadHookClosures
-    // TODO: 如果instead 更换了obj，那么后续流程怎么算？ 这里合理么？例如object 从 NSURL 换层了 NSArray，hookContext.isTargetClassDynamic获取的就还是NSURL的子类。
     if hookContext.isTargetClassDynamic {
         let objectPointer = hookContext.isHookingDealloc ? insteadContext.objectPointer : argsBuffer[1]!
         unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee

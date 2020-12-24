@@ -557,4 +557,28 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertNil(error)
         }
     }
+    
+    func test_change_object() throws {
+        class MyObject {
+            @objc dynamic func myMethod() {
+                
+            }
+        }
+        
+        let obj = MyObject.init()
+        var array = [Int]()
+        try hookBefore(object: obj, selector: #selector(MyObject.myMethod)) {
+            array.append(2)
+        }
+        try hookInstead(object: obj, selector: #selector(MyObject.myMethod), closure: {original, _, sel in
+            array.append(1)
+            original(NSURLRequest.init(), sel)
+            array.append(4)
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        try hookAfter(object: obj, selector: #selector(MyObject.myMethod), closure: {
+            array.append(3)
+        })
+        obj.myMethod()
+        XCTAssertEqual(array, [1, 4])
+    }
 }

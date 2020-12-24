@@ -93,7 +93,6 @@ private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, r
         callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: hookContext, ret: ret, argsBuffer: methodArgsBuffer)
     } else {
         // call next instead hook closure
-        // TODO: 这里会不会有线程安全问题？ 例如cancel了有个instead hook，但是这里正在遍历此数组
         guard let lastIndex = insteadHookClosures.lastIndex(where: {$0 === insteadContext.currentHookClosure}) else {
             assert(false)
             return

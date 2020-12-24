@@ -73,7 +73,6 @@ private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, r
         insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
     }
     
-    // TODO: 去掉 insteadHookClosures.first == nil 是否可行？
     // "insteadHookClosures.first == nil" is for object changing. If user change the object (First parameter). The "insteadHookClosures.first" may be nil.
     if insteadHookClosures.first == nil ||
         insteadContext.currentHookClosure === insteadHookClosures.first {

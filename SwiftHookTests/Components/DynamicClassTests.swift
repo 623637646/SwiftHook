@@ -17,11 +17,11 @@ class DynamicClassTests: XCTestCase {
     func testNormal() {
         do {
             let testObject = TestObject()
-            XCTAssertFalse(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .normal)
             _ = try wrapDynamicClass(object: testObject)
-            XCTAssertTrue(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .dynamic)
             try unwrapDynamicClass(object: testObject)
-            XCTAssertFalse(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .normal)
         } catch {
             XCTAssertNil(error)
         }
@@ -30,10 +30,10 @@ class DynamicClassTests: XCTestCase {
     func testWrapDynamicClass() {
         do {
             let testObject = TestObject()
-            XCTAssertFalse(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .normal)
             
             _ = try wrapDynamicClass(object: testObject)
-            XCTAssertTrue(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .dynamic)
             
             do {
                 _ = try wrapDynamicClass(object: testObject)
@@ -52,7 +52,7 @@ class DynamicClassTests: XCTestCase {
     func testUnwrapNonDynamicClass() {
         do {
             let testObject = TestObject()
-            XCTAssertFalse(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .normal)
             do {
                 try unwrapDynamicClass(object: testObject)
                 XCTFail()
@@ -63,9 +63,9 @@ class DynamicClassTests: XCTestCase {
                 XCTAssertNil(error)
             }
             _ = try wrapDynamicClass(object: testObject)
-            XCTAssertTrue(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .dynamic)
             try unwrapDynamicClass(object: testObject)
-            XCTAssertFalse(try testIsDynamicClass(object: testObject))
+            XCTAssertTrue(try testGetObjectType(object: testObject) == .normal)
             do {
                 try unwrapDynamicClass(object: testObject)
                 XCTFail()

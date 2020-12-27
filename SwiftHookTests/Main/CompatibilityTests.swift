@@ -41,11 +41,11 @@ class CompatibilityTests: XCTestCase {
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
             }
-            XCTAssertTrue(try testIsDynamicClassThenKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamicAndKVOed)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -54,7 +54,7 @@ class CompatibilityTests: XCTestCase {
             
             expectation = []
             kvo.invalidate()
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 10
             XCTAssertEqual(expectation, [1, 2])
             XCTAssertEqual(object.number, 10)
@@ -65,7 +65,7 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertTrue(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             object.number = 11
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
@@ -84,11 +84,11 @@ class CompatibilityTests: XCTestCase {
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
             }
-            XCTAssertTrue(try testIsDynamicClassThenKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamicAndKVOed)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -101,14 +101,14 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertFalse(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsDynamicClassThenKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamicAndKVOed)
             object.number = 10
             XCTAssertEqual(expectation, [3])
             XCTAssertEqual(object.number, 10)
             
             expectation = []
             kvo.invalidate()
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 11
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
@@ -125,13 +125,13 @@ class CompatibilityTests: XCTestCase {
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
             }
-            XCTAssertTrue(try testIsKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOed)
             let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsKVOThenDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOedAndDynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -144,14 +144,14 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertTrue(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOed)
             object.number = 10
             XCTAssertEqual(expectation, [3])
             XCTAssertEqual(object.number, 10)
             
             expectation = []
             kvo.invalidate()
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             object.number = 11
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
@@ -170,13 +170,13 @@ class CompatibilityTests: XCTestCase {
             let kvo = object.observe(\.number) { (_, _) in
                 expectation.append(3)
             }
-            XCTAssertTrue(try testIsKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOed)
             let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsKVOThenDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOedAndDynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -185,7 +185,7 @@ class CompatibilityTests: XCTestCase {
             
             expectation = []
             kvo.invalidate()
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             object.number = 11
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
@@ -196,7 +196,7 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertTrue(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsKVO(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .KVOed)
             object.number = 10
             XCTAssertEqual(expectation, [3])
             XCTAssertEqual(object.number, 10)
@@ -219,13 +219,13 @@ class CompatibilityTests: XCTestCase {
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)
                 aspect.originalInvocation()?.invoke()
                 expectation.append(4)
                 } as @convention(block) (AspectInfo) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -234,7 +234,7 @@ class CompatibilityTests: XCTestCase {
             
             expectation = []
             XCTAssertTrue(tokenAspects.remove())
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 10
             XCTAssertEqual(expectation, [1, 2])
             XCTAssertEqual(object.number, 10)
@@ -245,7 +245,7 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertTrue(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             object.number = 11
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 11)
@@ -264,13 +264,13 @@ class CompatibilityTests: XCTestCase {
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)
                 aspect.originalInvocation()?.invoke()
                 expectation.append(4)
                 } as @convention(block) (AspectInfo) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -283,14 +283,14 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertFalse(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 11
             XCTAssertEqual(expectation, [3, 4])
             XCTAssertEqual(object.number, 11)
             
             expectation = []
             XCTAssertTrue(tokenAspects.remove())
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 10
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 10)
@@ -309,13 +309,13 @@ class CompatibilityTests: XCTestCase {
                 aspect.originalInvocation()?.invoke()
                 expectation.append(4)
                 } as @convention(block) (AspectInfo) -> Void)
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .others)
             let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -328,14 +328,14 @@ class CompatibilityTests: XCTestCase {
                 return
             }
             XCTAssertTrue(internalCancelHook(token: hookToken)!)
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .others)
             object.number = 11
             XCTAssertEqual(expectation, [3, 4])
             XCTAssertEqual(object.number, 11)
             
             expectation = []
             XCTAssertTrue(tokenAspects.remove())
-            XCTAssertTrue(try testIsNormalClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             object.number = 10
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 10)
@@ -355,13 +355,13 @@ class CompatibilityTests: XCTestCase {
 //                aspect.originalInvocation()?.invoke()
 //                expectation.append(4)
 //                } as @convention(block) (AspectInfo) -> Void)
-//            XCTAssertTrue(try testIsNormalClass(object: object))
+//            XCTAssertTrue(try testGetObjectType(object: object) == .)
 //            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, number in
 //                expectation.append(1)
 //                original(number)
 //                expectation.append(2)
 //                } as @convention(block) ((Int) -> Void, Int) -> Void)
-//            XCTAssertTrue(try testIsDynamicClass(object: object))
+//            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
 //            XCTAssertEqual(expectation, [])
 //
 //            object.number = 9
@@ -370,7 +370,7 @@ class CompatibilityTests: XCTestCase {
 //
 //            expectation = []
 //            XCTAssertTrue(tokenAspects.remove())
-//            XCTAssertTrue(try testIsDynamicClass(object: object))
+//            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
 //            object.number = 10
 //            XCTAssertEqual(expectation, [1, 2])
 //            XCTAssertEqual(object.number, 10)
@@ -381,7 +381,7 @@ class CompatibilityTests: XCTestCase {
 //                return
 //            }
 //            XCTAssertTrue(internalCancelHook(token: hookToken)!)
-//            XCTAssertTrue(try testIsNormalClass(object: object))
+//            XCTAssertTrue(try testGetObjectType(object: object) == .)
 //            object.number = 11
 //            XCTAssertEqual(expectation, [])
 //            XCTAssertEqual(object.number, 11)

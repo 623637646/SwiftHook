@@ -106,13 +106,13 @@ class AspectsSwiftTests: XCTestCase {
                 original(o, s, number)
                 expectation.append(2)
                 } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             let tokenAspects = try object.aspect_hook(#selector(setter: ObjectiveCTestObject.number), with: .positionInstead, usingBlock: { aspect in
                 expectation.append(3)
                 aspect.originalInvocation()?.invoke()
                 expectation.append(4)
                 } as @convention(block) (AspectInfo) -> Void)
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             XCTAssertEqual(expectation, [])
             
             object.number = 9
@@ -121,14 +121,14 @@ class AspectsSwiftTests: XCTestCase {
             
             expectation = []
             token.cancelHook()
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 11
             XCTAssertEqual(expectation, [3, 4])
             XCTAssertEqual(object.number, 11)
             
             expectation = []
             XCTAssertTrue(tokenAspects.remove())
-            XCTAssertTrue(try testIsDynamicClass(object: object))
+            XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 10
             XCTAssertEqual(expectation, [])
             XCTAssertEqual(object.number, 10)

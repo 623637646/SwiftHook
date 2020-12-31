@@ -43,6 +43,14 @@ struct Signature {
         
         static func == (lhs: Self, rhs: Self) -> Bool {
             let result = lhs.code == rhs.code
+            
+            /* This code is to fix a system issue.
+             The BOOL's signature is "B" normally. But on 32-bit device. BOOL's signature is "c" https://stackoverflow.com/a/26621855/9315497
+             It's fine if both closure and method's signature are "c" for BOOL.
+             But there is a bug between Swift and 32 bit device. https://stackoverflow.com/q/65519942/9315497
+             The signature of BOOL in a swift closure is "B" on 32-bit device! This is different from "c" in method.
+             So here will be wrong.
+             */
             if is32BitDevice, result == false {
                 if (lhs.code == "c" && rhs.code == "B") || (lhs.code == "B" && rhs.code == "c") {
                     return true

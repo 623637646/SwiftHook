@@ -39,8 +39,16 @@ struct Signature {
             }
         }
         
+        private static let is32BitDevice = Int.bitWidth == Int32.bitWidth
+        
         static func == (lhs: Self, rhs: Self) -> Bool {
-            return lhs.code == rhs.code
+            let result = lhs.code == rhs.code
+            if is32BitDevice, result == false {
+                if (lhs.code == "c" && rhs.code == "B") || (lhs.code == "B" && rhs.code == "c") {
+                    return true
+                }
+            }
+            return result
         }
         
         func internalClosureSignature() throws -> Signature? {

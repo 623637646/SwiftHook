@@ -25,13 +25,7 @@ struct Signature {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             // convert "@?<@@?@:q>" to "@?"
-            var code = String.init(string[nameRange])
-            // Remove "const". Refer to: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
-            // TODO: test others cases for this.
-            if code.first == "r" {
-                code.removeFirst()
-            }
-            self.code = code
+            self.code = String.init(string[nameRange])
             if let closureSignatureRange = string.range(of: "(?<=\\<).+(?=\\>)", options: .regularExpression) {
                 self.internalValue = String.init(string[closureSignatureRange])
             } else {

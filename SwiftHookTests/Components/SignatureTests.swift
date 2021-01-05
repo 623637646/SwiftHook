@@ -98,12 +98,12 @@ class SignatureTests: XCTestCase {
             return
         }
         guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
-            } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) (CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
+            XCTFail()
+            return
         }
         
-        let argumentTypesExpect: [String] = ["c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "*", objectSignature, "#", selectoreSignature]
+        let argumentTypesExpect: [String] = ["c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "r*", objectSignature, "#", selectoreSignature]
         let returnTypesExpect: String = voidSignature
         
         // If test error here, and you get [objectSignature, selectoreSignature, "c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "c", "c", "r*", objectSignature, "#", selectoreSignature]. please make sure the testing device is iPhone, not Mac.
@@ -208,9 +208,9 @@ class SignatureTests: XCTestCase {
             return
         }
         guard let closureSignature = try? Signature.init(closure: {_, _, _ in
-            } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> Void as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) (() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> Void as AnyObject) else {
+            XCTFail()
+            return
         }
         
         let argumentTypesExpect: [String] = [blockSignature, blockSignature, blockSignature]
@@ -235,12 +235,12 @@ class SignatureTests: XCTestCase {
             return
         }
         guard let closureSignature = try? Signature.init(closure: {_, _, _, _ in
-            } as @convention(block) (UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> Void as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) (UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> Void as AnyObject) else {
+            XCTFail()
+            return
         }
         
-        let argumentTypesExpect: [String] = ["^q", "*", "^@", "^{CGRect={CGPoint=dd}{CGSize=dd}}"]
+        let argumentTypesExpect: [String] = ["r^q", "r*", "r^@", "r^{CGRect={CGPoint=dd}{CGSize=dd}}"]
         
         XCTAssertEqual(methodSignature.argumentTypes.map({ (value) -> String in
             return value.code
@@ -318,12 +318,12 @@ class SignatureTests: XCTestCase {
             return
         }
         guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _  in
-            } as @convention(block) ((CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void, CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) ((CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void, CChar, CInt, Int, CShort, CLong, CLongLong, CUnsignedChar, CUnsignedInt, UInt, CUnsignedShort, CUnsignedLong, CUnsignedLongLong, CFloat, Float, CDouble, Double, CBool, Bool, UnsafePointer<CChar>, AnyObject, AnyClass, Selector) -> Void as AnyObject) else {
+            XCTFail()
+            return
         }
         
-        let argumentTypesExpect: [String] = ["c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "*", objectSignature, "#", selectoreSignature]
+        let argumentTypesExpect: [String] = ["c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "B", "B", "r*", objectSignature, "#", selectoreSignature]
         let returnTypesExpect: String = voidSignature
         
         // If test error here, and you get [objectSignature, selectoreSignature, "c", "i", "q", "s", "q", "q", "C", "I", "Q", "S", "Q", "Q", "f", "f", "d", "d", "c", "c", "r*", objectSignature, "#", selectoreSignature]. please make sure the testing device is iPhone, not Mac.
@@ -431,9 +431,9 @@ class SignatureTests: XCTestCase {
             return {_, _ in
                 return NSObject()
             }
-            } as @convention(block) ((() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject, () -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) ((() -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject, () -> Void, (Int, AnyObject) -> Int, (Int, AnyObject) -> AnyObject) -> (Int, AnyObject) -> AnyObject as AnyObject) else {
+            XCTFail()
+            return
         }
         
         let argumentTypesExpect: [String] = [blockSignature, blockSignature, blockSignature]
@@ -460,12 +460,12 @@ class SignatureTests: XCTestCase {
         }
         guard let closureSignature = try? Signature.init(closure: {_, _, _, _, _ in
             return UnsafeMutablePointer<@convention(block) () -> Void>.init(nil)!
-            } as @convention(block) ((UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void>, UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void> as AnyObject) else {
-                XCTFail()
-                return
+        } as @convention(block) ((UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void>, UnsafePointer<Int>, UnsafePointer<CChar>, UnsafePointer<AnyObject>, UnsafePointer<CGRect>) -> UnsafeMutablePointer<@convention(block) () -> Void> as AnyObject) else {
+            XCTFail()
+            return
         }
         
-        let argumentTypesExpect: [String] = ["^q", "*", "^@", "^{CGRect={CGPoint=dd}{CGSize=dd}}"]
+        let argumentTypesExpect: [String] = ["r^q", "r*", "r^@", "r^{CGRect={CGPoint=dd}{CGSize=dd}}"]
         let returnTypesExpect: String = "^@?"
         
         XCTAssertEqual(methodSignature.argumentTypes.map({ (value) -> String in
@@ -475,6 +475,58 @@ class SignatureTests: XCTestCase {
         XCTAssertEqual(closureSignature.argumentTypes.map({ (value) -> String in
             return value.code
         }), argumentTypesClosurePrefixForInstead + argumentTypesExpect)
+        XCTAssertEqual(closureSignature.returnType.code, returnTypesExpect)
+    }
+    
+    func test_normal_cases() throws {
+        class MyObject {
+            @objc dynamic func myMethod(int: CInt,
+                                        float: Float,
+                                        floatPointer: UnsafePointer<CFloat>,
+                                        char: CChar,
+                                        charPointer: UnsafePointer<CChar>,
+                                        bool: Bool,
+                                        voidPointer1: OpaquePointer,
+                                        voidPointer2: UnsafeRawPointer,
+                                        voidPointer3: UnsafeMutableRawPointer,
+                                        NSObjectPointer: UnsafePointer<NSObject>,
+                                        NSObject: NSObject,
+                                        NSObjectArray: [NSObject],
+                                        NSErrorPointerPointer: UnsafePointer<UnsafePointer<NSError>>,
+                                        intArray: [CInt],
+                                        floatArray: [CFloat],
+                                        struct: CGPoint
+            ) {}
+        }
+        let methodSignature = try Signature.init(method: class_getInstanceMethod(MyObject.self, #selector(MyObject.myMethod(int:float:floatPointer:char:charPointer:bool:voidPointer1:voidPointer2:voidPointer3:NSObjectPointer:NSObject:NSObjectArray:NSErrorPointerPointer:intArray:floatArray:struct:)))!)
+        let closureSignature = try Signature.init(closure: { _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ in } as @convention(block) (CInt, CFloat, UnsafePointer<CFloat>, CChar, UnsafePointer<CChar>, CBool, OpaquePointer, UnsafeRawPointer, UnsafeMutableRawPointer, UnsafePointer<NSObject>, NSObject, [NSObject], UnsafePointer<UnsafePointer<NSError>>, [CInt], [CFloat], CGPoint) -> Void as AnyObject)
+        
+        let argumentTypesExpect: [String] = ["i", "f", "r^f", "c", "r*", "B", "^v", "^v", "^v", "r^@", "@", "@", "r^^@", "@", "@", "{CGPoint=dd}"]
+        let returnTypesExpect: String = "v"
+        
+        XCTAssertEqual(methodSignature.argumentTypes.map({$0.code}), argumentTypesMethodPrefix + argumentTypesExpect)
+        XCTAssertEqual(methodSignature.returnType.code, returnTypesExpect)
+        XCTAssertEqual(closureSignature.argumentTypes.map({$0.code}), argumentTypesClosurePrefix + argumentTypesExpect)
+        XCTAssertEqual(closureSignature.returnType.code, returnTypesExpect)
+    }
+    
+    func test_const() throws {
+        class MyObject {
+            @objc dynamic func myMethod(p: UnsafePointer<CGRect>) -> UnsafePointer<CGRect>? {
+                return nil
+            }
+        }
+        let methodSignature = try Signature.init(method: class_getInstanceMethod(MyObject.self, #selector(MyObject.myMethod(p:)))!)
+        let closureSignature = try Signature.init(closure: {_ in
+            return nil
+        } as @convention(block) (UnsafePointer<CGRect>) -> UnsafePointer<CGRect>? as AnyObject)
+        
+        let argumentTypesExpect: [String] = ["r^{CGRect={CGPoint=dd}{CGSize=dd}}"]
+        let returnTypesExpect: String = "r^{CGRect={CGPoint=dd}{CGSize=dd}}"
+        
+        XCTAssertEqual(methodSignature.argumentTypes.map({$0.code}), argumentTypesMethodPrefix + argumentTypesExpect)
+        XCTAssertEqual(methodSignature.returnType.code, returnTypesExpect)
+        XCTAssertEqual(closureSignature.argumentTypes.map({$0.code}), argumentTypesClosurePrefix + argumentTypesExpect)
         XCTAssertEqual(closureSignature.returnType.code, returnTypesExpect)
     }
 }

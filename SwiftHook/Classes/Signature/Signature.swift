@@ -20,37 +20,37 @@ struct Signature {
         static let selectorTypeValue = (try? TypeValue.init(string: ":"))!
         static let voidTypeValue = (try? TypeValue.init(string: "v"))!
         
+        private static let is32BitDevice = Int.bitWidth == Int32.bitWidth
+        
         init(string: String) throws {
             guard let nameRange = string.range(of: "^[^\\<]+", options: .regularExpression) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             // convert "@?<@@?@:q>" to "@?"
-            self.code = String.init(string[nameRange])
+            var code = String.init(string[nameRange])
+            
+            if Signature.TypeValue.is32BitDevice && code == "B" {
+                /* This code is to fix a system issue.
+                 The BOOL's signature is "B" normally. But on 32-bit device. BOOL's signature is "c" https://stackoverflow.com/a/26621855/9315497
+                 It's fine if both closure and method's signature are "c" for BOOL.
+                 But there is a bug between Swift and 32 bit device. https://stackoverflow.com/q/65519942/9315497
+                 The signature of BOOL in a swift closure is "B" on 32-bit device! This is different from "c" in method.
+                 So here will be wrong.
+                 Note: Only "B" will be converted to "c". "r^B", "{MyStruct=B}" and so on are not.
+                 */
+                code = "c"
+            }
+            self.code = code
+            
             if let closureSignatureRange = string.range(of: "(?<=\\<).+(?=\\>)", options: .regularExpression) {
                 self.internalValue = String.init(string[closureSignatureRange])
             } else {
                 self.internalValue = nil
             }
         }
-        
-        private static let is32BitDevice = Int.bitWidth == Int32.bitWidth
-        
+                
         static func == (lhs: Self, rhs: Self) -> Bool {
-            let result = lhs.code == rhs.code
-            
-            /* This code is to fix a system issue.
-             The BOOL's signature is "B" normally. But on 32-bit device. BOOL's signature is "c" https://stackoverflow.com/a/26621855/9315497
-             It's fine if both closure and method's signature are "c" for BOOL.
-             But there is a bug between Swift and 32 bit device. https://stackoverflow.com/q/65519942/9315497
-             The signature of BOOL in a swift closure is "B" on 32-bit device! This is different from "c" in method.
-             So here will be wrong.
-             */
-            if is32BitDevice, result == false {
-                if (lhs.code == "c" && rhs.code == "B") || (lhs.code == "B" && rhs.code == "c") {
-                    return true
-                }
-            }
-            return result
+            return lhs.code == rhs.code
         }
         
         func internalClosureSignature() throws -> Signature? {

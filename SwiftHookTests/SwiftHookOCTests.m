@@ -175,6 +175,7 @@
         XCTAssertEqual(error.code, 3);
         XCTAssertEqualObjects(error.localizedDescription, @"Unsupport to hook KVO'ed Object");
         [token cancelHook];
+        [object removeObserver:self forKeyPath:@"number"];
     }
     
     {

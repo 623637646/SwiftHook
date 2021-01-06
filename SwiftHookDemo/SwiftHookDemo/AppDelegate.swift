@@ -29,7 +29,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } as @convention(block) (UIViewController, Selector, Bool) -> Void)
         } catch {}
         
+        self.testCode()
+        
         return true
+    }
+    
+    // MARK: Test Code. -
+    
+    func testCode() {
+        try! hookAfter(object: self, selector: #selector(AppDelegate.test), closure: {_, _, b, b2, s in
+            print("")
+        } as @convention(block) (NSObject, Selector, UnsafePointer<Bool>?, Bool, MyStruct) -> Void)
+        
+        self.test(bool: nil, b2:true, b3: MyStruct.init(b: true))
+    }
+     
+    @objc dynamic func test(bool: UnsafePointer<Bool>?, b2: Bool, b3: MyStruct) {
+        print("")
     }
 
 }

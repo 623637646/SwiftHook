@@ -69,6 +69,8 @@
 		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
 		2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */; };
 		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
+		5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */; };
+		5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		E5924C494B4E9DC4E81EE97F /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */; };
 /* End PBXBuildFile section */
@@ -164,6 +166,8 @@
 		42BDED007564588C455336A9 /* Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHookTests/Pods-abstract-SwiftHook-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
+		5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapperTests.swift; sourceTree = "<group>"; };
+		5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapper.swift; sourceTree = "<group>"; };
 		88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; sourceTree = "<group>"; };
 		88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +244,7 @@
 				2A172A5324756B18001FD825 /* HookInternalTests.swift */,
 				2A2F212324758C7D0032A64D /* HookContextTests.swift */,
 				2A2744A3246DA37F00AE6A9A /* DynamicClassTests.swift */,
+				5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */,
 				2A1811CB2461A23000B5F18F /* OverrideSuperMethodTests.swift */,
 				2A1134ED2471450E008555F9 /* HookDeallocAfterDelegateTests.swift */,
 				2A99159B24587BF4007955E7 /* SignatureTests.swift */,
@@ -421,6 +426,7 @@
 				2A65FB4A246800F800535203 /* HookInternal.swift */,
 				2A7F43BE2458359E00A63935 /* HookContext.swift */,
 				2A951D5E246C5F63000DB1E7 /* DynamicClass.swift */,
+				5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */,
 				2A5363932460762F008B8A94 /* OverrideSuperMethod.swift */,
 				2A1134EB24713D30008555F9 /* HookDeallocAfterDelegate.swift */,
 				2A65762E2472BA9A00FE57CE /* TargetObjectExtension.swift */,
@@ -719,6 +725,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
+				5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */,
 				2A96867D2485FDBE004A2DD7 /* FFIClosureContext.swift in Sources */,
 				2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
@@ -762,6 +769,7 @@
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,
 				2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */,
+				5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */,
 				2A0306042477BC4700DF86C6 /* SwiftHookOCTests.m in Sources */,
 				2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */,
 				2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */,

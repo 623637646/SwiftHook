@@ -15,43 +15,44 @@ class HookInternalTests: XCTestCase {
         let targetClass = TestObject.self
         let selector = #selector(SuperObject.superFunc(arg:))
         do {
+            let count = debug_getNormalClassHookContextsCount()
             let token1 = try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: {
                 } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 1)
             
             let token2 = try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: {
                 } as @convention(block) () -> Void as AnyObject)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 1)
             
             let token3 = try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: {original, o, s, arg in
                 return original(o, s, arg)
                 } as @convention(block) ((AnyObject, Selector, [AnyClass]) -> [AnyClass], AnyObject, Selector, [AnyClass]) -> [AnyClass] as AnyObject)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 1)
             
             let token4 = try internalHook(targetClass: SuperObject.self, selector: selector, mode: .instead, hookClosure: {original, o, s, arg in
                 return original(o, s, arg)
                 } as @convention(block) ((AnyObject, Selector, [AnyClass]) -> [AnyClass], AnyObject, Selector, [AnyClass]) -> [AnyClass] as AnyObject)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 2)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 2)
             
             let token5 = try internalHook(targetClass: targetClass, selector: #selector(TestObject.noDynamicMethod), mode: .instead, hookClosure: {original, o, s, arg in
                 return original(o, s, arg)
                 } as @convention(block) ((AnyObject, Selector, [AnyClass]) -> [AnyClass], AnyObject, Selector, [AnyClass]) -> [AnyClass] as AnyObject)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 3)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 3)
             
-            XCTAssertFalse(internalCancelHook(token: token1)!)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 3)
+            XCTAssertFalse(try internalCancelHook(token: token1)!)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 3)
             
-            XCTAssertFalse(internalCancelHook(token: token2)!)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 3)
+            XCTAssertFalse(try internalCancelHook(token: token2)!)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 3)
             
-            XCTAssertTrue(internalCancelHook(token: token3)!)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 2)
+            XCTAssertTrue(try internalCancelHook(token: token3)!)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 2)
             
-            XCTAssertTrue(internalCancelHook(token: token4)!)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+            XCTAssertTrue(try internalCancelHook(token: token4)!)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count + 1)
             
-            XCTAssertTrue(internalCancelHook(token: token5)!)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)
+            XCTAssertTrue(try internalCancelHook(token: token5)!)
+            XCTAssertEqual(debug_getNormalClassHookContextsCount(), count)
         } catch {
             XCTAssertNil(error)
         }
@@ -92,23 +93,23 @@ class HookInternalTests: XCTestCase {
             XCTAssertEqual(debug_hookClosureCount(object: object), 4)
             XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             
-            XCTAssertFalse(internalCancelHook(token: token1)!)
+            XCTAssertFalse(try internalCancelHook(token: token1)!)
             XCTAssertEqual(debug_hookClosureCount(object: object), 3)
             XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             
-            XCTAssertFalse(internalCancelHook(token: token2)!)
+            XCTAssertFalse(try internalCancelHook(token: token2)!)
             XCTAssertEqual(debug_hookClosureCount(object: object), 2)
             XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             
-            XCTAssertFalse(internalCancelHook(token: token3)!)
+            XCTAssertFalse(try internalCancelHook(token: token3)!)
             XCTAssertEqual(debug_hookClosureCount(object: object), 1)
             XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             
-            XCTAssertTrue(internalCancelHook(token: token4)!)
+            XCTAssertTrue(try internalCancelHook(token: token4)!)
             XCTAssertEqual(debug_hookClosureCount(object: superObject), 0)
             XCTAssertTrue(try testGetObjectType(object: superObject) == .normal)
             
-            XCTAssertTrue(internalCancelHook(token: token5)!)
+            XCTAssertTrue(try internalCancelHook(token: token5)!)
             XCTAssertEqual(debug_hookClosureCount(object: object), 0)
             XCTAssertTrue(try testGetObjectType(object: object) == .normal)
         } catch {
@@ -120,16 +121,16 @@ class HookInternalTests: XCTestCase {
         do {
             let token1 = try internalHook(targetClass: TestObject.self, selector: #selector(SuperObject.superFunc(arg:)), mode: .before, hookClosure: {
                 } as @convention(block) () -> Void as AnyObject)
-            XCTAssertTrue(internalCancelHook(token: token1)!)
-            XCTAssertNil(internalCancelHook(token: token1))
-            XCTAssertNil(internalCancelHook(token: token1))
+            XCTAssertTrue(try internalCancelHook(token: token1)!)
+            XCTAssertNil(try internalCancelHook(token: token1))
+            XCTAssertNil(try internalCancelHook(token: token1))
             
             let object = TestObject()
             let token2 = try internalHook(object: object, selector: #selector(SuperObject.superFunc(arg:)), mode: .after, hookClosure: {
                 } as @convention(block) () -> Void as AnyObject)
-            XCTAssertTrue(internalCancelHook(token: token2)!)
-            XCTAssertNil(internalCancelHook(token: token2))
-            XCTAssertNil(internalCancelHook(token: token2))
+            XCTAssertTrue(try internalCancelHook(token: token2)!)
+            XCTAssertNil(try internalCancelHook(token: token2))
+            XCTAssertNil(try internalCancelHook(token: token2))
         } catch {
             XCTAssertNil(error)
         }
@@ -141,7 +142,7 @@ class HookInternalTests: XCTestCase {
             }
             let token = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             defer {
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             _ = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             XCTFail()
@@ -155,8 +156,8 @@ class HookInternalTests: XCTestCase {
             }
             let token1 = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             let token2 = try internalHook(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
-            XCTAssertFalse(internalCancelHook(token: token1)!)
-            XCTAssertTrue(internalCancelHook(token: token2)!)
+            XCTAssertFalse(try internalCancelHook(token: token1)!)
+            XCTAssertTrue(try internalCancelHook(token: token2)!)
         } catch {
             XCTAssertNil(error)
         }
@@ -167,7 +168,7 @@ class HookInternalTests: XCTestCase {
             }
             let token = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             defer {
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             _ = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             XCTFail()
@@ -182,8 +183,8 @@ class HookInternalTests: XCTestCase {
             }
             let token1 = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .before, hookClosure: closure as AnyObject)
             let token2 = try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: .after, hookClosure: closure as AnyObject)
-            XCTAssertFalse(internalCancelHook(token: token1)!)
-            XCTAssertTrue(internalCancelHook(token: token2)!)
+            XCTAssertFalse(try internalCancelHook(token: token1)!)
+            XCTAssertTrue(try internalCancelHook(token: token2)!)
         } catch {
             XCTAssertNil(error)
         }

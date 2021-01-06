@@ -51,7 +51,7 @@ class SpecialMethodTests: XCTestCase {
                 try hookDeallocAfterByTail(object: object, closure: {
                     executed.append(5)
                 })
-                XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
+                XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
                 
                 XCTAssertEqual(executed, [])
             }
@@ -145,9 +145,9 @@ class SpecialMethodTests: XCTestCase {
                     return
                 }
                 if index == tokens.count - 1 {
-                    XCTAssertTrue(internalCancelHook(token: hookToken)!)
+                    XCTAssertTrue(try internalCancelHook(token: hookToken)!)
                 } else {
-                    XCTAssertFalse(internalCancelHook(token: hookToken)!)
+                    XCTAssertFalse(try internalCancelHook(token: hookToken)!)
                 }
             }
         } catch {

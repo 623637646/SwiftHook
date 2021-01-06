@@ -21,7 +21,7 @@ private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: Unsa
     
     // Get instead hook closures.
     var insteadHookClosures = hookContext.insteadHookClosures
-    if hookContext.isTargetClassDynamic {
+    if hookContext.isSpecifiedInstance {
         let objectPointer = argsBuffer[0]!
         unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
         insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
@@ -67,7 +67,7 @@ private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, r
     
     // Get instead hook closures.
     var insteadHookClosures = hookContext.insteadHookClosures
-    if hookContext.isTargetClassDynamic {
+    if hookContext.isSpecifiedInstance {
         let objectPointer = hookContext.isHookingDealloc ? insteadContext.objectPointer : argsBuffer[1]!
         unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
         insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
@@ -118,7 +118,7 @@ private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookCon
     // Get before and after hook closures.
     var beforeHookClosures = hookContext.beforeHookClosures
     var afterHookClosures = hookContext.afterHookClosures
-    if hookContext.isTargetClassDynamic {
+    if hookContext.isSpecifiedInstance {
         let objectPointer = argsBuffer[0]!
         unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
         let (before, after, _) = getHookClosures(object: object, selector: hookContext.selector)
@@ -167,7 +167,7 @@ class HookContext {
     let targetClass: AnyClass
     let selector: Selector
     let method: Method
-    let isTargetClassDynamic: Bool
+    let isSpecifiedInstance: Bool
     let isHookingDealloc: Bool
     
     // hook closure pools
@@ -188,15 +188,16 @@ class HookContext {
     fileprivate let insteadClosureCifContext: FFICIFContext
     fileprivate var insteadClosureContext: FFIClosureContext!
 
-    init(targetClass: AnyClass, selector: Selector) throws {
+    init(targetClass: AnyClass, selector: Selector, isSpecifiedInstance: Bool) throws {
         // basic
         self.targetClass = targetClass
         self.selector = selector
+        self.isSpecifiedInstance = isSpecifiedInstance
+
         guard let method = getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.method = method
-        self.isTargetClassDynamic = isDynamicClass(targetClass: targetClass)
         self.isHookingDealloc = selector == deallocSelector
         
         // original
@@ -314,7 +315,7 @@ extension HookContext: Hashable {
 
 private var hookContextPool = Set<HookContext>()
 
-func getHookContext(targetClass: AnyClass, selector: Selector) throws -> HookContext {
+func getHookContext(targetClass: AnyClass, selector: Selector, isSpecifiedInstance: Bool) throws -> HookContext {
     if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
         try overrideSuperMethod(targetClass: targetClass, selector: selector)
     }
@@ -322,7 +323,7 @@ func getHookContext(targetClass: AnyClass, selector: Selector) throws -> HookCon
         element.targetClass == targetClass && element.selector == selector
     })
     if hookContext == nil {
-        hookContext = try HookContext.init(targetClass: targetClass, selector: selector)
+        hookContext = try HookContext.init(targetClass: targetClass, selector: selector, isSpecifiedInstance: isSpecifiedInstance)
         hookContextPool.insert(hookContext)
     }
     return hookContext
@@ -336,20 +337,16 @@ func removeHookContext(hookContext: HookContext) {
 #if DEBUG
 func debug_getNormalClassHookContextsCount() -> Int {
     var count = 0
-    for item in hookContextPool {
-        if !isDynamicClass(targetClass: item.targetClass) {
-            count += 1
-        }
+    for item in hookContextPool where !item.isSpecifiedInstance {
+        count += 1
     }
     return count
 }
 
 func debug_getinstancewHookContextsCount() -> Int {
     var count = 0
-    for item in hookContextPool {
-        if isDynamicClass(targetClass: item.targetClass) {
-            count += 1
-        }
+    for item in hookContextPool where item.isSpecifiedInstance {
+        count += 1
     }
     return count
 }

@@ -44,7 +44,7 @@ class SingleInstancesBeforeTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: hookedTestObject) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -85,7 +85,7 @@ class SingleInstancesBeforeTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel

@@ -34,7 +34,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -69,7 +69,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -104,7 +104,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -144,7 +144,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // cancel
                 
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -189,7 +189,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 // cancel
                 
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -238,9 +238,9 @@ class SingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertFalse(internalCancelHook(token: token1)!)
+                XCTAssertFalse(try internalCancelHook(token: token1)!)
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token2)!)
+                XCTAssertTrue(try internalCancelHook(token: token2)!)
                 result.removeAll()
             }
             
@@ -290,9 +290,9 @@ class SingleInstancesInsteadTests: XCTestCase {
                 
                 // cancel
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertFalse(internalCancelHook(token: token1)!)
+                XCTAssertFalse(try internalCancelHook(token: token1)!)
                 XCTAssertTrue(try testGetObjectType(object: test) == .dynamic)
-                XCTAssertTrue(internalCancelHook(token: token2)!)
+                XCTAssertTrue(try internalCancelHook(token: token2)!)
                 result.removeAll()
             }
             
@@ -324,7 +324,7 @@ class SingleInstancesInsteadTests: XCTestCase {
                 XCTFail()
                 return
             }
-            XCTAssertTrue(internalCancelHook(token: hookToken)!)
+            XCTAssertTrue(try internalCancelHook(token: hookToken)!)
         } catch {
             XCTAssertNil(error)
         }

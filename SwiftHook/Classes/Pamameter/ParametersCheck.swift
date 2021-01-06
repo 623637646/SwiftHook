@@ -8,8 +8,6 @@
 
 import Foundation
 
-private let KVOPrefix = "NSKVONotifying_"
-
 private let retainSelector = NSSelectorFromString("retain")
 private let releaseSelector = NSSelectorFromString("release")
 private let autoreleaseSelector = NSSelectorFromString("autorelease")
@@ -36,9 +34,6 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
         guard targetClass is NSObject.Type else {
             throw SwiftHookError.pureSwiftObjectDealloc
         }
-    }
-    guard !NSStringFromClass(targetClass).hasPrefix(KVOPrefix) else {
-        throw SwiftHookError.KVOedObject
     }
     
     guard let method = class_getInstanceMethod(targetClass, selector) else {

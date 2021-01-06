@@ -31,7 +31,7 @@ class ThreadSafetyTests: XCTestCase {
                     XCTFail()
                     return
                 }
-                XCTAssertTrue(internalCancelHook(token: hookToken)!)
+                XCTAssertTrue(try internalCancelHook(token: hookToken)!)
                 objc_disposeClassPair(targetClass)
             } catch {
                 XCTAssertNil(error)
@@ -44,7 +44,7 @@ class ThreadSafetyTests: XCTestCase {
             do {
                 _ = try autoreleasepool {
                     try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _, _, _ in
-                        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+                    } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
                 }
             } catch {
                 XCTAssertNil(error)
@@ -52,66 +52,54 @@ class ThreadSafetyTests: XCTestCase {
         }
     }
     
-    func testCancelHookForClass() {
-        do {
-            var tokens = [HookToken]()
-            for _ in 0 ... 1000 {
-                tokens.append(try internalHook(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _, _, _ in
-                    } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
-            }
-            DispatchQueue.concurrentPerform(iterations: 1000) { index in
-                tokens[index].cancelHook()
-//                _ = internalCancelHook(token: tokens[index]) // This will crash because of non-thread-safe
-            }
-        } catch {
-            XCTAssertNil(error)
+    func testCancelHookForClass() throws {
+        var tokens = [HookToken]()
+        for _ in 0 ... 1000 {
+            tokens.append(try internalHook(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: { _, _, _ in
+            } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
+        }
+        DispatchQueue.concurrentPerform(iterations: 1000) { index in
+            tokens[index].cancelHook()
+            //                _ = try internalCancelHook(token: tokens[index]) // This will crash because of non-thread-safe
         }
     }
     
-    func testCancelHookForObject() {
-        do {
-            var tokens = [HookToken]()
-            var objects = [AnyObject]()
-            for _ in 0 ... 1000 {
-                let object = randomTestObject()
-                objects.append(object)
-                tokens.append(try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: {_, _, _ in
-                    } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
-            }
-            DispatchQueue.concurrentPerform(iterations: 1000) { index in
-                tokens[index].cancelHook()
-//                _ = internalCancelHook(token: tokens[index]) // This will not crash because of non-thread-safe
-            }
-        } catch {
-            XCTAssertNil(error)
+    func testCancelHookForObject() throws {
+        var tokens = [HookToken]()
+        var objects = [AnyObject]()
+        for _ in 0 ... 1000 {
+            let object = randomTestObject()
+            objects.append(object)
+            tokens.append(try internalHook(object: object, selector: #selector(TestObject.noArgsNoReturnFunc), mode: randomMode(), hookClosure: {_, _, _ in
+            } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
+        }
+        DispatchQueue.concurrentPerform(iterations: 1000) { index in
+            tokens[index].cancelHook()
+            //                _ = try internalCancelHook(token: tokens[index]) // This will not crash because of non-thread-safe
         }
     }
     
-    func testCancelHookForHookDeallocAfterToken() {
-        do {
-            var tokens = [Token]()
-            var objects = [AnyObject]()
-            for _ in 0 ... 1000 {
-                let object = randomTestObject()
-                objects.append(object)
-                tokens.append(try hookDeallocAfterByTail(object: object, closure: {
-                }))
-            }
-            DispatchQueue.concurrentPerform(iterations: 1000) { index in
-                tokens[index].cancelHook()
-            }
-        } catch {
-            XCTAssertNil(error)
+    func testCancelHookForHookDeallocAfterToken() throws {
+        var tokens = [Token]()
+        var objects = [AnyObject]()
+        for _ in 0 ... 1000 {
+            let object = randomTestObject()
+            objects.append(object)
+            tokens.append(try hookDeallocAfterByTail(object: object, closure: {
+            }))
+        }
+        DispatchQueue.concurrentPerform(iterations: 1000) { index in
+            tokens[index].cancelHook()
         }
     }
     
     // This test case shows Swift is not thread safety.
     func testSwiftNotThreadSafety() {
-//        var object = TestObject()
-//        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
-//            object = TestObject()
-//        }
-//        _ = object
+        //        var object = TestObject()
+        //        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
+        //            object = TestObject()
+        //        }
+        //        _ = object
     }
     
 }

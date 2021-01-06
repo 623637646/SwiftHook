@@ -23,19 +23,6 @@ public enum SwiftHookError: Error {
 
     case pureSwiftObjectDealloc // Technologically can't hook dealloc method for pure Swift Object with swizzling. Please use "hookDeallocAfterByTail" to hook pure swift object's dealloc method.
 
-    /*
-     // TODO: Support hook KVO'ed Object.
-     
-     Cases:
-     1. Observe one object by KVO.
-     2. Hook this object by SwiftHook
-     3. Cancel KVO
-     4. Make sure SwiftHook works fine.
-     
-     Latest idea. Set the object a new subclass. The subclass copy superclass's extra-bytes to avoid KVO crash.
-     */
-    case KVOedObject // Unsupport to hook KVO'ed Object
-
     case noRespondSelector // Can't find the method by the selector from the class.
 
     case emptyStruct // The struct of the method's args or return value is empty, This case can't be compatible  with libffi. Please check the parameters or return type of the method.
@@ -72,7 +59,7 @@ struct HookToken: Token {
     
     func cancelHook() {
         swiftHookSerialQueue.sync {
-            _ = internalCancelHook(token: self)
+            _ = try? internalCancelHook(token: self)
         }
     }
 }

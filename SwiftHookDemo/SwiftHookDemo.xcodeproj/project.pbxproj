@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		23781EDBF9A6143DF5D2F64A /* libPods-SwiftHookDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BD4C1900F1699A32BD581F /* libPods-SwiftHookDemo.a */; };
 		2A3408BE245EC121008D8E5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3408BD245EC121008D8E5D /* AppDelegate.swift */; };
-		2A3408C0245EC121008D8E5D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3408BF245EC121008D8E5D /* SceneDelegate.swift */; };
 		2A3408C2245EC121008D8E5D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3408C1245EC121008D8E5D /* ViewController.swift */; };
-		2A3408C5245EC121008D8E5D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3408C3245EC121008D8E5D /* Main.storyboard */; };
 		2A3408C7245EC121008D8E5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A3408C6245EC121008D8E5D /* Assets.xcassets */; };
 		2A3408CA245EC121008D8E5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3408C8245EC121008D8E5D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -21,9 +19,7 @@
 		14BD4C1900F1699A32BD581F /* libPods-SwiftHookDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftHookDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A3408BA245EC121008D8E5D /* SwiftHookDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftHookDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A3408BD245EC121008D8E5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2A3408BF245EC121008D8E5D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2A3408C1245EC121008D8E5D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2A3408C4245EC121008D8E5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2A3408C6245EC121008D8E5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A3408C9245EC121008D8E5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A3408CB245EC121008D8E5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,9 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				2A3408BD245EC121008D8E5D /* AppDelegate.swift */,
-				2A3408BF245EC121008D8E5D /* SceneDelegate.swift */,
 				2A3408C1245EC121008D8E5D /* ViewController.swift */,
-				2A3408C3245EC121008D8E5D /* Main.storyboard */,
 				2A3408C6245EC121008D8E5D /* Assets.xcassets */,
 				2A3408C8245EC121008D8E5D /* LaunchScreen.storyboard */,
 				2A3408CB245EC121008D8E5D /* Info.plist */,
@@ -80,7 +74,6 @@
 				0BA8DF0DD4EB682A13ADD284 /* Pods-SwiftHookDemo.debug.xcconfig */,
 				2CC1B5712E51042ACD206A7A /* Pods-SwiftHookDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -153,7 +146,6 @@
 			files = (
 				2A3408CA245EC121008D8E5D /* LaunchScreen.storyboard in Resources */,
 				2A3408C7245EC121008D8E5D /* Assets.xcassets in Resources */,
-				2A3408C5245EC121008D8E5D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,21 +183,12 @@
 			files = (
 				2A3408C2245EC121008D8E5D /* ViewController.swift in Sources */,
 				2A3408BE245EC121008D8E5D /* AppDelegate.swift in Sources */,
-				2A3408C0245EC121008D8E5D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2A3408C3245EC121008D8E5D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2A3408C4245EC121008D8E5D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2A3408C8245EC121008D8E5D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -267,7 +250,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -321,7 +304,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -337,13 +320,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZQ7TZ3Q272;
+				DEVELOPMENT_TEAM = 9EE2F6BKKS;
 				INFOPLIST_FILE = SwiftHookDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.SwiftHookDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wangya.SwiftHookDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -92,10 +92,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
                 // Maybe observe by KVO after hook by SwiftHook.
                 return false
             }
-            guard let isIMPChanged = isIMPChanged(hookContext: hookContext) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            guard !isIMPChanged else {
+            guard !(try isIMPChanged(hookContext: hookContext)) else {
                 return false
             }
             guard isHookClosuresEmpty(object: hookObject) else {
@@ -105,10 +102,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
             return true
         } else {
             try hookContext.remove(hookClosure: hookClosure, mode: token.mode)
-            guard let isIMPChanged = isIMPChanged(hookContext: hookContext) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            guard !isIMPChanged else {
+            guard !(try isIMPChanged(hookContext: hookContext)) else {
                 return false
             }
             guard hookContext.isHoolClosurePoolEmpty() else {
@@ -126,9 +120,9 @@ func internalCancelHook(token: HookToken) -> Bool? {
 /**
  Is IMP changed. return nil if has some error
  */
-private func isIMPChanged(hookContext: HookContext) -> Bool? {
+private func isIMPChanged(hookContext: HookContext) throws -> Bool {
     guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: hookContext.targetClass, selector: hookContext.selector) else {
-        return nil
+        throw SwiftHookError.internalError(file: #file, line: #line)
     }
     return hookContext.method != currentMethod ||
         method_getImplementation(currentMethod) != hookContext.methodClosureContext.targetIMP

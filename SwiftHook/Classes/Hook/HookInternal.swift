@@ -14,22 +14,6 @@ enum HookMode {
     case instead
 }
 
-private var hookContextPool = Set<HookContext>()
-
-private func getHookContext(targetClass: AnyClass, selector: Selector) throws -> HookContext {
-    if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
-        try overrideSuperMethod(targetClass: targetClass, selector: selector)
-    }
-    var hookContext: HookContext! = hookContextPool.first(where: { (element) -> Bool in
-        element.targetClass == targetClass && element.selector == selector
-    })
-    if hookContext == nil {
-        hookContext = try HookContext.init(targetClass: targetClass, selector: selector)
-        hookContextPool.insert(hookContext)
-    }
-    return hookContext
-}
-
 func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
     let hookContext = try getHookContext(targetClass: targetClass, selector: selector)
     try hookContext.append(hookClosure: hookClosure, mode: mode)
@@ -108,7 +92,7 @@ func internalCancelHook(token: HookToken) -> Bool? {
             guard hookContext.isHoolClosurePoolEmpty() else {
                 return false
             }
-            hookContextPool.remove(hookContext)
+            removeHookContext(hookContext: hookContext)
             return true
         }
     } catch {
@@ -127,26 +111,3 @@ private func isIMPChanged(hookContext: HookContext) throws -> Bool {
     return hookContext.method != currentMethod ||
         method_getImplementation(currentMethod) != hookContext.methodClosureContext.targetIMP
 }
-
-// MARK: This is debug tools.
-#if DEBUG
-func debug_getNormalClassHookContextsCount() -> Int {
-    var count = 0
-    for item in hookContextPool {
-        if !isDynamicClass(targetClass: item.targetClass) {
-            count += 1
-        }
-    }
-    return count
-}
-
-func debug_getinstancewHookContextsCount() -> Int {
-    var count = 0
-    for item in hookContextPool {
-        if isDynamicClass(targetClass: item.targetClass) {
-            count += 1
-        }
-    }
-    return count
-}
-#endif

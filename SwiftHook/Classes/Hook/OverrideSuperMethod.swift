@@ -81,6 +81,7 @@ private class OverrideMethodContext: Hashable {
     }
 }
 
+// Add the method to the targetClass. The IMP is from Libffi. This IMP call super's IMP. This action can't be reverted because it's not safe. Maybe some code has changed the IMP and we don't know that.
 func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
     let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
     overrideMethodContextPool.insert(overrideMethodContext)

@@ -59,6 +59,7 @@ private class DynamicClassContext: Hashable {
 
 /**
  Wrap dynamic class to object for specified instance hook. Return new class
+ The dynamic class can't be destroy because it's unsafe. Some code may refer to this class.
  */
 func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard let baseClass = object_getClass(object) else {

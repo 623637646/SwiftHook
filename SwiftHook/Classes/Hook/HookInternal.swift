@@ -145,4 +145,14 @@ func debug_getNormalClassHookContextsCount() -> Int {
     }
     return count
 }
+
+func debug_getinstancewHookContextsCount() -> Int {
+    var count = 0
+    for item in hookContextPool {
+        if isDynamicClass(targetClass: item.targetClass) {
+            count += 1
+        }
+    }
+    return count
+}
 #endif

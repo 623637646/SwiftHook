@@ -159,4 +159,81 @@ class OverrideSuperMethodTests: XCTestCase {
         XCTAssertTrue(resultAfter.first! == OverrideSuperOCObject.self)
     }
     
+    func test_overrideMethodContext_after_instance_deinit() throws {
+        class MySuperObject {
+            @objc dynamic func myMethod() {
+            }
+        }
+        class MyObject: MySuperObject {
+            
+        }
+        
+        // before
+        let countBefore = debug_overrideMethodContextCount()
+        XCTAssertNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+        
+        var token: HookToken!
+        var dynamicClass: AnyClass!
+        try autoreleasepool {
+            // hook
+            let object = MyObject.init()
+            token = try hookAfter(object: object, selector: #selector(MySuperObject.myMethod), closure: {
+                
+            }) as? HookToken
+            dynamicClass = object_getClass(object)
+            
+            // check
+            XCTAssertNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+            XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: #selector(MySuperObject.myMethod)))
+            XCTAssertEqual(debug_overrideMethodContextCount(), countBefore + 2) // This should be 2 because first is method "myMethod", The second is method "class"
+        }
+        
+        XCTAssertNotNil(token)
+        XCTAssertNotNil(token.hookContext)
+        XCTAssertNil(token.hookClosure)
+        XCTAssertNil(token.hookObject)
+        XCTAssertEqual(token.mode, .after)
+        
+        XCTAssertNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+        XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: #selector(MySuperObject.myMethod)))
+        XCTAssertEqual(debug_overrideMethodContextCount(), countBefore + 2)
+        
+        XCTAssertNil(internalCancelHook(token: token))
+    }
+    
+    func test_overrideMethodContext_after_hook_cancellation() throws {
+        class MySuperObject {
+            @objc dynamic func myMethod() {
+            }
+        }
+        class MyObject: MySuperObject {
+            
+        }
+        
+        // before
+        let countBefore = debug_overrideMethodContextCount()
+        XCTAssertNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+        
+        // hook
+        let token: HookToken! = try hookAfter(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod), closure: {
+            
+        }) as? HookToken
+        
+        // check
+        XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+        XCTAssertEqual(debug_overrideMethodContextCount(), countBefore + 1)
+        XCTAssertNotNil(token)
+        XCTAssertNotNil(token.hookContext)
+        XCTAssertNotNil(token.hookClosure)
+        XCTAssertNil(token.hookObject)
+        XCTAssertEqual(token.mode, .after)
+        
+        // cancel
+        XCTAssertEqual(internalCancelHook(token: token), true)
+        
+        // check
+        XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
+        XCTAssertEqual(debug_overrideMethodContextCount(), countBefore + 1)
+    }
+    
 }

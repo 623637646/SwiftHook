@@ -167,17 +167,76 @@ class HookContextTests: XCTestCase {
             }
         }
         let countBefore = debug_getinstancewHookContextsCount()
-        var token: HookToken!
+        var token1: HookToken!
         try autoreleasepool {
-            token = try hookAfter(object: MyObject.init(), selector: #selector(MyObject.myMethod), closure: {
+            let object = MyObject.init()
+            token1 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
             }) as? HookToken
             XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         }
-        XCTAssertNotNil(token)
-        XCTAssertNotNil(token.hookContext)
-        XCTAssertNil(token.hookClosure)
-        XCTAssertNil(token.hookObject)
-        XCTAssertEqual(token.mode, .after)
+        XCTAssertNotNil(token1)
+        XCTAssertNotNil(token1.hookContext)
+        XCTAssertNil(token1.hookClosure)
+        XCTAssertNil(token1.hookObject)
+        XCTAssertEqual(token1.mode, .after)
+        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        
+        var token2: HookToken!
+        try autoreleasepool {
+            let object = MyObject.init()
+            token2 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
+            }) as? HookToken
+            XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        }
+        XCTAssertNotNil(token2)
+        XCTAssertNotNil(token2.hookContext)
+        XCTAssertNil(token2.hookClosure)
+        XCTAssertNil(token2.hookObject)
+        XCTAssertEqual(token2.mode, .after)
+        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+    }
+    
+    func test_keep_hookContext_after_cancellation_for_specified_instance() throws {
+        class MyObject {
+            @objc dynamic func myMethod() {
+            }
+        }
+        let countBefore = debug_getinstancewHookContextsCount()
+        
+        let object1 = MyObject.init()
+        let token1: HookToken! = try hookAfter(object: object1, selector: #selector(MyObject.myMethod), closure: {
+        }) as? HookToken
+        
+        // check
+        XCTAssertNotNil(token1)
+        XCTAssertNotNil(token1.hookContext)
+        XCTAssertNotNil(token1.hookClosure)
+        XCTAssertNotNil(token1.hookObject)
+        XCTAssertEqual(token1.mode, .after)
+        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        
+        // cancel
+        XCTAssertEqual(internalCancelHook(token: token1), true)
+        
+        // check
+        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        
+        let object2 = MyObject.init()
+        let token2: HookToken! = try hookAfter(object: object2, selector: #selector(MyObject.myMethod), closure: {
+        }) as? HookToken
+        
+        // check
+        XCTAssertNotNil(token2)
+        XCTAssertNotNil(token2.hookContext)
+        XCTAssertNotNil(token2.hookClosure)
+        XCTAssertNotNil(token2.hookObject)
+        XCTAssertEqual(token2.mode, .after)
+        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        
+        // cancel
+        XCTAssertEqual(internalCancelHook(token: token2), true)
+        
+        // check
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
     }
     

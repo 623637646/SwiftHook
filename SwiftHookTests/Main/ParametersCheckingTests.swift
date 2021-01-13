@@ -468,4 +468,24 @@ class ParametersCheckingTests: XCTestCase {
         }
         
     }
+    
+    func test_KVOed() throws {
+        do {
+            class MyObject: NSObject {
+                @objc dynamic var number: Int = 0
+            }
+            let obj = MyObject.init()
+            var runned = false
+            let token = obj.observe(\.number) { (_, _) in
+                runned = true
+            }
+            obj.number = 1
+            XCTAssertTrue(runned)
+            try obj.sh_hookDeallocAfter {
+                
+            }
+            _ = token
+        } catch let error as NSError where error.code == 3 && error.userInfo[NSLocalizedDescriptionKey] as? String == "Unsupport to hook KVO'ed Object" {
+        }
+    }
 }

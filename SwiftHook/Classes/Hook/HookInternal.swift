@@ -32,10 +32,6 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
     token.hookObject = object
     // set hook closure
     try appendHookClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
-    // Hook dealloc
-    _ = hookDeallocAfterByDelegate(object: object, closure: {
-        _ = internalCancelHook(token: token)
-        } as @convention(block) () -> Void as AnyObject)
     return token
 }
 

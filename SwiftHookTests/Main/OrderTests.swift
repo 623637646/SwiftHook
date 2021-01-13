@@ -354,4 +354,42 @@ class OrderTests: XCTestCase {
         XCTAssertEqual(order, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
     }
     
+    func test_casual() throws {
+        class SuperObject {
+            @objc dynamic func myMethod1() {
+            }
+            @objc dynamic func myMethod2() {
+            }
+        }
+        class MyObject: SuperObject {
+            @objc dynamic override func myMethod1() {
+                super.myMethod1()
+            }
+            @objc dynamic override func myMethod2() {
+                super.myMethod2()
+            }
+        }
+        let object = MyObject.init()
+        var order = [Int]()
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod1)) {
+            order.append(2)
+        }
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod1)) {
+            order.append(1)
+        }
+        try hookBefore(object: object, selector: #selector(MyObject.myMethod2)) {
+            order.append(99)
+        }
+        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod1), closure: {
+            order.append(4)
+        })
+        try hookBefore(targetClass: object_getClass(object)!, selector: #selector(MyObject.myMethod1), closure: {
+            order.append(3)
+        })
+        try hookBefore(targetClass: SuperObject.self, selector: #selector(MyObject.myMethod1), closure: {
+            order.append(5)
+        })
+        object.myMethod1()
+        XCTAssertEqual(order, [1, 2, 3, 4, 5])
+    }
 }

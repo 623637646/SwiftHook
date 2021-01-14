@@ -34,29 +34,26 @@ extension SwiftHookError {
         case .pureSwiftObjectDealloc:
             code = 2
             description = "Technologically can't hook dealloc method for pure Swift Object with swizzling. Please use \"hookDeallocAfterByTail\" to hook pure swift object's dealloc method."
-        case .KVOedObject:
-            code = 3
-            description = "Unsupport to hook KVO'ed Object"
         case .noRespondSelector:
-            code = 4
+            code = 3
             description = "Can't find the method by the selector from the class."
         case .emptyStruct:
-            code = 5
+            code = 4
             description = "The struct of the method's args or return value is empty, This case can't be compatible  with libffi. Please check the parameters or return type of the method."
         case .wrongTypeForHookClosure:
-            code = 6
+            code = 5
             description = "Please check the hook clousre. Is it a standard closure? Does it have keyword @convention(block)?"
         case .incompatibleClosureSignature(description: let des):
-            code = 7
+            code = 6
             description = des
         case .duplicateHookClosure:
-            code = 8
+            code = 7
             description = "This closure has been hooked with current mode already."
         case .ffiError:
-            code = 9
+            code = 8
             description = "The error from FFI. Please raise aa issue: https://github.com/623637646/SwiftHook/issues/new"
         case .internalError(file: let file, line: let line):
-            code = 10
+            code = 9
             description = "internalError => file: \(file), line: \(line). Please raise aa issue: https://github.com/623637646/SwiftHook/issues/new"
         }
         return NSError.init(domain: "SwiftHook.SwiftHookError", code: code, userInfo: [NSLocalizedDescriptionKey: description])

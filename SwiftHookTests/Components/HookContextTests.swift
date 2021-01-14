@@ -11,11 +11,11 @@ import XCTest
 
 class HookContextTests: XCTestCase {
     
-    let InternalErrorNoMethod = 196
+    let InternalErrorNoMethod = 198
     
     func testNoMethod() {
         do {
-            _ = try HookContext.init(targetClass: TestObject.self, selector: #selector(SuperObject.superFuncNoArgs))
+            _ = try HookContext.init(targetClass: TestObject.self, selector: #selector(SuperObject.superFuncNoArgs), isSpecifiedInstance: false)
             XCTFail()
         } catch SwiftHookError.internalError(file: let file, line: let line) {
             XCTAssertTrue(file.hasSuffix("HookContext.swift"))
@@ -28,7 +28,7 @@ class HookContextTests: XCTestCase {
     func testHook() {
         do {
             var result = [Int]()
-            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)))
+            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)), isSpecifiedInstance: false)
             XCTAssertTrue(context.isHoolClosurePoolEmpty())
             
             try context.append(hookClosure: {
@@ -78,7 +78,7 @@ class HookContextTests: XCTestCase {
     
     func testAppend() {
         do {
-            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)))
+            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)), isSpecifiedInstance: false)
             XCTAssertTrue(context.isHoolClosurePoolEmpty())
             
             let closure = {
@@ -104,7 +104,7 @@ class HookContextTests: XCTestCase {
     
     func testRemove() {
         do {
-            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)))
+            let context = try HookContext.init(targetClass: TestObject.self, selector: #selector(TestObject.execute(closure:)), isSpecifiedInstance: false)
             XCTAssertTrue(context.isHoolClosurePoolEmpty())
             
             let closure = {
@@ -155,7 +155,7 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(debug_getNormalClassHookContextsCount(), countBefore + 1)
         
         // cancel
-        XCTAssertEqual(internalCancelHook(token: token), true)
+        XCTAssertEqual(try internalCancelHook(token: token), true)
         
         // check
         XCTAssertEqual(debug_getNormalClassHookContextsCount(), countBefore)
@@ -216,7 +216,7 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         
         // cancel
-        XCTAssertEqual(internalCancelHook(token: token1), true)
+        XCTAssertEqual(try internalCancelHook(token: token1), true)
         
         // check
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
@@ -234,7 +234,7 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         
         // cancel
-        XCTAssertEqual(internalCancelHook(token: token2), true)
+        XCTAssertEqual(try internalCancelHook(token: token2), true)
         
         // check
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)

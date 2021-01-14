@@ -142,7 +142,7 @@ NSInteger measureCount = 100000;
     NSMutableString *log = [[NSMutableString alloc] init];
     [log appendString:@"\n----------------------------------------------------------\n\n"];
     [log appendFormat:@"Case: %@\n", title];
-    [log appendFormat:@"%ld times running\n", measureCount];
+    [log appendFormat:@"%@ times running\n", @(measureCount)];
     [log appendFormat:@"Cost %0.6fs for non-hook\n", nonHookTime];
     [log appendFormat:@"Cost %0.6fs for Aspects\n", aspectsTime];
     [log appendFormat:@"Cost %0.6fs for SwiftHook\n", swiftHookTime];

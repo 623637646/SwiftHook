@@ -198,7 +198,7 @@ class OverrideSuperMethodTests: XCTestCase {
         XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: #selector(MySuperObject.myMethod)))
         XCTAssertEqual(debug_overrideMethodContextCount(), countBefore + 2)
         
-        XCTAssertNil(internalCancelHook(token: token))
+        XCTAssertNil(try internalCancelHook(token: token))
     }
     
     func test_overrideMethodContext_after_hook_cancellation() throws {
@@ -229,7 +229,7 @@ class OverrideSuperMethodTests: XCTestCase {
         XCTAssertEqual(token.mode, .after)
         
         // cancel
-        XCTAssertEqual(internalCancelHook(token: token), true)
+        XCTAssertEqual(try internalCancelHook(token: token), true)
         
         // check
         XCTAssertNotNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))

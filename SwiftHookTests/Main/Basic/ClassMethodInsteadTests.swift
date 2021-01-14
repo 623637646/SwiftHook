@@ -37,7 +37,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA + argumentB)
                 
                 // cancel
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -75,7 +75,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * argumentB)
                 
                 // cancel
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -113,7 +113,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTAssertEqual(result, argumentA * 2 + argumentB * 2)
                 
                 // cancel
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel
@@ -156,7 +156,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -204,7 +204,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -257,8 +257,8 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTAssertEqual(result, [3, 1, 5, 2, 4])
                 
                 // cancel
-                XCTAssertFalse(internalCancelHook(token: token1)!)
-                XCTAssertTrue(internalCancelHook(token: token2)!)
+                XCTAssertFalse(try internalCancelHook(token: token1)!)
+                XCTAssertTrue(try internalCancelHook(token: token2)!)
                 result.removeAll()
             }
             
@@ -289,7 +289,7 @@ class ClassMethodInsteadTests: XCTestCase {
                 XCTFail()
                 return
             }
-            XCTAssertTrue(internalCancelHook(token: hookToken)!)
+            XCTAssertTrue(try internalCancelHook(token: hookToken)!)
         } catch {
             XCTAssertNil(error)
         }

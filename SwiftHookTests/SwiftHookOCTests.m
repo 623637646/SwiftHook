@@ -164,21 +164,6 @@
     }
     
     {
-        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-        [object addObserver:self forKeyPath:@"number" options:NSKeyValueObservingOptionNew context:NULL];
-        NSError *error = nil;
-        OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
-            NSLog(@"hooked");
-        }];
-        XCTAssertNotNil(error);
-        XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 3);
-        XCTAssertEqualObjects(error.localizedDescription, @"Unsupport to hook KVO'ed Object");
-        [token cancelHook];
-        [object removeObserver:self forKeyPath:@"number"];
-    }
-    
-    {
         NSObject *object = [[NSObject alloc] init];
         NSError *error = nil;
         OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
@@ -186,7 +171,7 @@
         }];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 4);
+        XCTAssertEqual(error.code, 3);
         XCTAssertEqualObjects(error.localizedDescription, @"Can't find the method by the selector from the class.");
         [token cancelHook];
     }
@@ -199,7 +184,7 @@
         } error:&error];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 5);
+        XCTAssertEqual(error.code, 4);
         XCTAssertEqualObjects(error.localizedDescription, @"The struct of the method's args or return value is empty, This case can't be compatible  with libffi. Please check the parameters or return type of the method.");
         [token cancelHook];
     }
@@ -212,7 +197,7 @@
         } error:&error];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 5);
+        XCTAssertEqual(error.code, 4);
         XCTAssertEqualObjects(error.localizedDescription, @"The struct of the method's args or return value is empty, This case can't be compatible  with libffi. Please check the parameters or return type of the method.");
         [token cancelHook];
     }
@@ -223,7 +208,7 @@
         OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:[[NSObject alloc] init] error:&error];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 6);
+        XCTAssertEqual(error.code, 5);
         XCTAssertEqualObjects(error.localizedDescription, @"Please check the hook clousre. Is it a standard closure? Does it have keyword @convention(block)?");
         [token cancelHook];
     }
@@ -236,7 +221,7 @@
         } error:&error];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 7);
+        XCTAssertEqual(error.code, 6);
         XCTAssertEqualObjects(error.localizedDescription, @"For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `B`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/");
         [token cancelHook];
     }
@@ -253,7 +238,7 @@
         OCToken *token2 = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) closure:hookClosure error:&error];
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
-        XCTAssertEqual(error.code, 8);
+        XCTAssertEqual(error.code, 7);
         XCTAssertEqualObjects(error.localizedDescription, @"This closure has been hooked with current mode already.");
         
         [token cancelHook];

@@ -40,7 +40,7 @@ class ClassMethodAfterTests: XCTestCase {
                 
                 // cancel
                 
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
                 result.removeAll()
             }
             
@@ -84,7 +84,7 @@ class ClassMethodAfterTests: XCTestCase {
                 XCTAssertTrue(executed)
                 
                 // cancel
-                XCTAssertTrue(internalCancelHook(token: token)!)
+                XCTAssertTrue(try internalCancelHook(token: token)!)
             }
             
             // test cancel

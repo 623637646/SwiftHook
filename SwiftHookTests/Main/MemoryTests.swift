@@ -11,9 +11,9 @@ import XCTest
 // This Testcase should be trigger manually.
 class MemoryTests: XCTestCase {
     
-    func testMemory() {
+    func testMemory() throws {
         while true {
-            autoreleasepool {
+            try autoreleasepool {
                 
                 // MARK: Components
                 
@@ -63,12 +63,13 @@ class MemoryTests: XCTestCase {
                 // MARK: Main
                 
                 let compatibilityTests = CompatibilityTests()
-                compatibilityTests.testKVO()
-                compatibilityTests.testBeforeKVO()
-                compatibilityTests.testBeforeKVOReverseCancel()
-                compatibilityTests.testAfterKVO()
-                compatibilityTests.testAfterKVOReverseCancel()
-                
+                compatibilityTests.test_KVO()
+                try compatibilityTests.test_SwiftHook_KVO_cancel_KVO_cancel_SwiftHook()
+                try compatibilityTests.test_SwiftHook_KVO_cancel_SwiftHook_cancel_KVO()
+                try compatibilityTests.test_KVO_SwiftHook_cancel_SwiftHook_cancel_KVO()
+                try compatibilityTests.test_KVO_SwiftHook_cancel_KVO_cancel_SwiftHook()
+                try compatibilityTests.test_Aspects_SwiftHook_cancel_SwiftHook_cancel_Aspects()
+
                 let specialMethodTests = SpecialMethodTests()
                 specialMethodTests.testDeallocForSingleOCObject()
                 specialMethodTests.testDeallocForSingleSwiftObject()

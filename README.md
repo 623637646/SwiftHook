@@ -1,6 +1,6 @@
 # What is this?
 
-A safe, easy, powerful and efficient hook library for iOS (Support Swift and Objective-C).
+A safe, easy, powerful and efficient hook library for iOS (Support Swift and Objective-C, Good compatibility with KVO).
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 
@@ -153,6 +153,11 @@ Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects
 * Hook with Before and After mode for specified instances, SwiftHook is **4 - 5 times** faster than Aspects.
 * Hook with Instead mode for specified instances, SwiftHook is **2 - 4 times** faster than Aspects.
 
+# Compatibility with KVO
+
+SwiftHook is full compatible with KVO from 3.0.0 version.
+For more test cases: [Here](SwiftHookTests/Main/CompatibilityTests.swift)
+
 # We already have great [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
 
 1. Aspects has some bugs. [Click here for test code](SwiftHookTests/AspectsTests/AspectsErrorTests.m).
@@ -161,6 +166,7 @@ Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects
 4. Aspects doesn’t support Swift object which is not based on NSObject.
 5. Aspects is based on *message forward*. This performance is not good.
 6. Aspects are no longer maintained. Author said: “**STRICTLY DO NOT RECOMMEND TO USE Aspects IN PRODUCTION CODE**”
+7. Aspects is not compatible with KVO.
 
 BTW, **Respect to Aspects!**
 

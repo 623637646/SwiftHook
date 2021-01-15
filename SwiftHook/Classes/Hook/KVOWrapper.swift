@@ -33,7 +33,7 @@ func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     if getMethodWithoutSearchingSuperClasses(targetClass: KVOedClass, selector: selector) == nil,
-       let propertyName = try getPropertyName(object: object, setter: selector) {
+       let propertyName = getKVOName(object: object, setter: selector) {
         guard let observer = object.swiftHookObserver else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
@@ -45,40 +45,41 @@ func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {
 private let setMethodPrefix = "set"
 private let setMethodSuffix = ":"
 // return nil if the selector is not a setter.
-func getPropertyName(object: NSObject, setter: Selector) throws -> String? {
+func getKVOName(object: NSObject, setter: Selector) -> String? {
     let setterName = NSStringFromSelector(setter)
     guard setterName.hasPrefix(setMethodPrefix) && setterName.hasSuffix(setMethodSuffix) else {
         return nil
     }
     let propertyNameWithUppercase = String(setterName.dropFirst(setMethodPrefix.count).dropLast(setMethodSuffix.count))
-    guard let firstCharacter = propertyNameWithUppercase.first else {
-        return nil
-    }
-    let firstCharacterLowercase = firstCharacter.lowercased()
-    let propertyName = firstCharacterLowercase + propertyNameWithUppercase.dropFirst()
-    guard let baseClass = object_getClass(object) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    if let property = class_getProperty(baseClass, propertyName) {
-        // If setter is "setNumber:". This will return "number"
-        return String.init(cString: property_getName(property))
-    }
-    if let property = class_getProperty(baseClass, propertyNameWithUppercase) {
-        // If setter is "setNumber:". This will return "Number"
-        return String.init(cString: property_getName(property))
-    }
-    if object.responds(to: NSSelectorFromString(propertyName)) {
-        // If setter is "setNumber:". This will return "number"
-        return propertyName
-    }
-    if object.responds(to: NSSelectorFromString(propertyNameWithUppercase)) {
-        // If setter is "setNumber:". This will return "number"
-        return propertyNameWithUppercase
-    }
-    if object.responds(to: NSSelectorFromString("is" + propertyNameWithUppercase)) {
-        return propertyName
-    }
-    return nil
+    return propertyNameWithUppercase
+//    guard let firstCharacter = propertyNameWithUppercase.first else {
+//        return nil
+//    }
+//    let firstCharacterLowercase = firstCharacter.lowercased()
+//    let propertyName = firstCharacterLowercase + propertyNameWithUppercase.dropFirst()
+//    guard let baseClass = object_getClass(object) else {
+//        throw SwiftHookError.internalError(file: #file, line: #line)
+//    }
+//    if let property = class_getProperty(baseClass, propertyName) {
+//        // If setter is "setNumber:". This will return "number"
+//        return String.init(cString: property_getName(property))
+//    }
+//    if let property = class_getProperty(baseClass, propertyNameWithUppercase) {
+//        // If setter is "setNumber:". This will return "Number"
+//        return String.init(cString: property_getName(property))
+//    }
+//    if object.responds(to: NSSelectorFromString(propertyName)) {
+//        // If setter is "setNumber:". This will return "number"
+//        return propertyName
+//    }
+//    if object.responds(to: NSSelectorFromString(propertyNameWithUppercase)) {
+//        // If setter is "setNumber:". This will return "number"
+//        return propertyNameWithUppercase
+//    }
+//    if object.responds(to: NSSelectorFromString("is" + propertyNameWithUppercase)) {
+//        return propertyName
+//    }
+//    return nil
 }
 
 func unwrapKVOIfNeeded(object: NSObject) {

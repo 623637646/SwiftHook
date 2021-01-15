@@ -29,7 +29,7 @@ class KVOWrapperTests: XCTestCase {
         XCTAssertFalse(isWrappedKVO(object: object))
     }
     
-    func test_getPropertyName() throws {
+    func test_getKVOName() throws {
         class MyObject: NSObject {
             @objc dynamic func myMethod() {
             }
@@ -59,13 +59,13 @@ class KVOWrapperTests: XCTestCase {
             @objc var Property6: Double = 0.8
         }
         let object = MyObject.init()
-        XCTAssertNil(try getPropertyName(object: object, setter: #selector(MyObject.myMethod)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(setter: MyObject.property1)), NSStringFromSelector(#selector(getter: MyObject.property1)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(setter: MyObject.property2)), NSStringFromSelector(#selector(getter: MyObject.property2)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(setter: MyObject.property3)), NSStringFromSelector(#selector(getter: MyObject.property3)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(MyObject.setProperty4)), NSStringFromSelector(#selector(MyObject.property4)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(MyObject.setProperty5)), NSStringFromSelector(#selector(MyObject.property5)))
-        XCTAssertEqual(try getPropertyName(object: object, setter: #selector(setter: MyObject.Property6)), NSStringFromSelector(#selector(getter: MyObject.Property6)))
+        XCTAssertNil(getKVOName(object: object, setter: #selector(MyObject.myMethod)))
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(setter: MyObject.property1)), "Property1")
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(setter: MyObject.property2)), "Property2")
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(setter: MyObject.property3)), "Property3")
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(MyObject.setProperty4)), "Property4")
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(MyObject.setProperty5)), "Property5")
+        XCTAssertEqual(getKVOName(object: object, setter: #selector(setter: MyObject.Property6)), "Property6")
 
     }
     

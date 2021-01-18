@@ -350,5 +350,49 @@ class KVOWrapperTests: XCTestCase {
         XCTAssertEqual(expectation, [])
         XCTAssertEqual(object.___Number, 11)
     }
+    
+    func test_special_property_name() throws {
+        class MyObject: NSObject {
+            @objc dynamic var swiftHookPrivateProperty: Int = 9
+        }
+        let object = MyObject.init()
+        var expectation = [Int]()
+        XCTAssertEqual(try testGetObjectType(object: object), .normal)
+        
+        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.swiftHookPrivateProperty), closure: { original, o, s, number in
+            expectation.append(1)
+            original(o, s, number)
+            expectation.append(3)
+        } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
+        XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
+        
+        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+            expectation.append(2)
+        }
+        XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
+        XCTAssertEqual(expectation, [])
+        
+        object.swiftHookPrivateProperty = 9
+        XCTAssertEqual(expectation, [1, 2, 3])
+        XCTAssertEqual(object.swiftHookPrivateProperty, 9)
+        
+        expectation = []
+        kvo.invalidate()
+        XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
+        object.swiftHookPrivateProperty = 10
+        XCTAssertEqual(expectation, [1, 3])
+        XCTAssertEqual(object.swiftHookPrivateProperty, 10)
+        
+        expectation = []
+        guard let hookToken = token as? HookToken else {
+            XCTFail()
+            return
+        }
+        XCTAssertTrue(try internalCancelHook(token: hookToken)!)
+        XCTAssertTrue(try testGetObjectType(object: object) == .normal)
+        object.swiftHookPrivateProperty = 11
+        XCTAssertEqual(expectation, [])
+        XCTAssertEqual(object.swiftHookPrivateProperty, 11)
+    }
 
 }

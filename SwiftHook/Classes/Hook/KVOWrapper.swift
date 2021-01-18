@@ -23,6 +23,13 @@ private class Observer: NSObject {
     deinit {
         self.target.removeObserver(self, forKeyPath: Observer.keyPath)
     }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == Observer.keyPath {
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
 }
 
 func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {

@@ -8,6 +8,8 @@
 
 import Foundation
 
+private var KVOContext = 0
+
 private class Observer: NSObject {
     
     private static let keyPath = "swiftHookPrivateProperty"
@@ -17,11 +19,11 @@ private class Observer: NSObject {
     init(target: NSObject) {
         self.target = target
         super.init()
-        target.addObserver(self, forKeyPath: Observer.keyPath, options: .new, context: nil)
+        target.addObserver(self, forKeyPath: Observer.keyPath, options: .new, context: &KVOContext)
     }
     
     deinit {
-        self.target.removeObserver(self, forKeyPath: Observer.keyPath)
+        self.target.removeObserver(self, forKeyPath: Observer.keyPath, context: &KVOContext)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -44,8 +46,8 @@ func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {
         guard let observer = object.swiftHookObserver else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        object.addObserver(observer, forKeyPath: propertyName, options: .new, context: nil)
-        object.removeObserver(observer, forKeyPath: propertyName)
+        object.addObserver(observer, forKeyPath: propertyName, options: .new, context: &KVOContext)
+        object.removeObserver(observer, forKeyPath: propertyName, context: &KVOContext)
     }
 }
 

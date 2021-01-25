@@ -1,6 +1,3 @@
-excluded:
-  - Pods
-
 disabled_rules:
   - trailing_whitespace
   - line_length
@@ -10,3 +7,7 @@ disabled_rules:
   - large_tuple
   - inclusive_language
   - block_based_kvo
+  - function_parameter_count
+  - xctfail_message
+  - file_length
+  - type_body_length

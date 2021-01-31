@@ -4,4 +4,7 @@
 #import "ComplexityStruct.h"
 #import "ObjectiveCUtilities.h"
 #import "ObjectiveCTestObject.h"
+#import "NSKVONotifying_MyClass.h"
+#import "SwiftHook_MyClass.h"
+
 

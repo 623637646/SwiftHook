@@ -12,6 +12,7 @@ private let retainSelector = NSSelectorFromString("retain")
 private let releaseSelector = NSSelectorFromString("release")
 private let autoreleaseSelector = NSSelectorFromString("autorelease")
 private let blacklistSelectors = [retainSelector, releaseSelector, autoreleaseSelector]
+private let taggedPointerStringClass: AnyClass = NSClassFromString("NSTaggedPointerString")!
 
 // MARK: private
 
@@ -21,6 +22,9 @@ func parametersCheck(object: AnyObject, selector: Selector, mode: HookMode, clos
     }
     guard let baseClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
+    }
+    guard baseClass != taggedPointerStringClass else {
+        throw SwiftHookError.hookInstanceOfNSTaggedPointerString
     }
     try parametersCheck(targetClass: baseClass, selector: selector, mode: mode, closure: closure)
 }

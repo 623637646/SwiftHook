@@ -11,3 +11,7 @@ disabled_rules:
   - xctfail_message
   - file_length
   - type_body_length
+  - type_name
+  - force_try
+  - comment_spacing
+  - force_cast

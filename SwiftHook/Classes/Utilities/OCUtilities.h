@@ -1,5 +1,5 @@
 //
-//  BlockUtilities.h
+//  OCUtilities.h
 //  SwiftHook
 //
 //  Created by Yanni Wang on 8/5/20.
@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@import libffi_iOS;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,5 +15,10 @@ extern const char * _Nullable sh_blockSignature(id block);
 extern void (*sh_blockInvoke(id block))(void *, ...);
 
 extern void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...));
+
+
+@interface SwiftHookUtilities: NSObject
++ (BOOL)catchException:(void(^)(void))tryBlock error:(__autoreleasing NSError **)error;
+@end
 
 NS_ASSUME_NONNULL_END

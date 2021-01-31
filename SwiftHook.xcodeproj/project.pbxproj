@@ -64,13 +64,17 @@
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */; };
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
-		2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* BlockUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* BlockUtilities.m */; };
+		2AD183CB24650AE500B8EC51 /* OCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* OCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD183CC24650AE500B8EC51 /* OCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* OCUtilities.m */; };
 		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
 		2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */; };
 		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
 		5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */; };
+		5C19C75C25C5643300C12968 /* ParametersCheckingOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C19C75B25C5643300C12968 /* ParametersCheckingOCTests.m */; };
 		5C1C560C25B1966D00452D25 /* KVOWrapperOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C560B25B1966D00452D25 /* KVOWrapperOCTests.m */; };
+		5C4AB44D25BED9E5005BEC0C /* NSKVONotifying_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */; };
+		5CB66E0425BFB4C200086205 /* SwiftHook_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */; };
+		5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */; };
 		5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */; };
 		B0483D72032422F10867E362 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 		E5924C494B4E9DC4E81EE97F /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EAEA2E68600A15D2FB0F3D7 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */; };
@@ -159,8 +163,8 @@
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersCheck.swift; sourceTree = "<group>"; };
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
-		2AD183C924650AE500B8EC51 /* BlockUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockUtilities.h; sourceTree = "<group>"; };
-		2AD183CA24650AE500B8EC51 /* BlockUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlockUtilities.m; sourceTree = "<group>"; };
+		2AD183C924650AE500B8EC51 /* OCUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCUtilities.h; sourceTree = "<group>"; };
+		2AD183CA24650AE500B8EC51 /* OCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCUtilities.m; sourceTree = "<group>"; };
 		2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityTests.swift; sourceTree = "<group>"; };
 		2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTests.swift; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,7 +172,13 @@
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
 		5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapperTests.swift; sourceTree = "<group>"; };
+		5C19C75B25C5643300C12968 /* ParametersCheckingOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParametersCheckingOCTests.m; sourceTree = "<group>"; };
 		5C1C560B25B1966D00452D25 /* KVOWrapperOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVOWrapperOCTests.m; sourceTree = "<group>"; };
+		5C4AB44B25BED9E5005BEC0C /* NSKVONotifying_MyClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSKVONotifying_MyClass.h; sourceTree = "<group>"; };
+		5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSKVONotifying_MyClass.m; sourceTree = "<group>"; };
+		5CB66E0225BFB4C200086205 /* SwiftHook_MyClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook_MyClass.h; sourceTree = "<group>"; };
+		5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwiftHook_MyClass.m; sourceTree = "<group>"; };
+		5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpecialClassTests.m; sourceTree = "<group>"; };
 		5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapper.swift; sourceTree = "<group>"; };
 		88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; sourceTree = "<group>"; };
 		88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -265,6 +275,7 @@
 				2A5C8D5224670B1D00812DAD /* Basic */,
 				2A22A75924E4E7E0008B81E5 /* MethodObjectAndSelectorTest.swift */,
 				2A8BB5082474458700942DDC /* ParametersCheckingTests.swift */,
+				5C19C75B25C5643300C12968 /* ParametersCheckingOCTests.m */,
 				2A5C8D5D24670DC800812DAD /* MemoryTests.swift */,
 				2A728720246E76F7002D63A1 /* ThreadSafetyTests.swift */,
 				2A8FBD49246ED53300037E7E /* SpecialMethodTests.swift */,
@@ -272,6 +283,7 @@
 				2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */,
 				2A562935250A8A1D00426C2F /* StructTests.swift */,
 				2A28021A2522DC02004F3291 /* VariableCaptureTests.swift */,
+				5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -296,6 +308,10 @@
 				2A27449E246D8B7E00AE6A9A /* ObjectiveCUtilities.h */,
 				2A27449F246D8B7E00AE6A9A /* ObjectiveCUtilities.m */,
 				2A2744A1246D8C5F00AE6A9A /* SwiftUtilities.swift */,
+				5C4AB44B25BED9E5005BEC0C /* NSKVONotifying_MyClass.h */,
+				5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */,
+				5CB66E0225BFB4C200086205 /* SwiftHook_MyClass.h */,
+				5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -442,8 +458,8 @@
 			isa = PBXGroup;
 			children = (
 				2A701512246413CE00B81219 /* Utilities.swift */,
-				2AD183C924650AE500B8EC51 /* BlockUtilities.h */,
-				2AD183CA24650AE500B8EC51 /* BlockUtilities.m */,
+				2AD183C924650AE500B8EC51 /* OCUtilities.h */,
+				2AD183CA24650AE500B8EC51 /* OCUtilities.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -456,7 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB67362245834E30011536D /* SwiftHook.h in Headers */,
-				2AD183CB24650AE500B8EC51 /* BlockUtilities.h in Headers */,
+				2AD183CB24650AE500B8EC51 /* OCUtilities.h in Headers */,
 				2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */,
 				2A3A4A6E245C090100FE1EFC /* FFITypeContext.h in Headers */,
 			);
@@ -733,7 +749,7 @@
 				2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
 				2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */,
-				2AD183CC24650AE500B8EC51 /* BlockUtilities.m in Sources */,
+				2AD183CC24650AE500B8EC51 /* OCUtilities.m in Sources */,
 				2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */,
 				2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */,
 				2A4559AC24F570D8003817C1 /* InsteadHookClosureExtension.swift in Sources */,
@@ -760,6 +776,7 @@
 				2A28021B2522DC02004F3291 /* VariableCaptureTests.swift in Sources */,
 				2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */,
 				2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */,
+				5C4AB44D25BED9E5005BEC0C /* NSKVONotifying_MyClass.m in Sources */,
 				2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */,
 				2A7015112463F57200B81219 /* SHMethodSignatureTests.swift in Sources */,
 				2A1811CC2461A23000B5F18F /* OverrideSuperMethodTests.swift in Sources */,
@@ -768,6 +785,7 @@
 				2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */,
 				2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
+				5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */,
 				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,
@@ -775,6 +793,7 @@
 				5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */,
 				2A0306042477BC4700DF86C6 /* SwiftHookOCTests.m in Sources */,
 				2A2744A4246DA37F00AE6A9A /* DynamicClassTests.swift in Sources */,
+				5CB66E0425BFB4C200086205 /* SwiftHook_MyClass.m in Sources */,
 				2A172A5424756B18001FD825 /* HookInternalTests.swift in Sources */,
 				2A8FBD4D246ED5AA00037E7E /* ObjectiveCTestObject.m in Sources */,
 				2A0BE1B3246824B800B30BE3 /* ClassMethodInsteadTests.swift in Sources */,
@@ -782,6 +801,7 @@
 				2A8FBD4A246ED53300037E7E /* SpecialMethodTests.swift in Sources */,
 				2A2744A0246D8B7E00AE6A9A /* ObjectiveCUtilities.m in Sources */,
 				2A5C8D5A24670C9400812DAD /* AllInstancesAfterTests.swift in Sources */,
+				5C19C75C25C5643300C12968 /* ParametersCheckingOCTests.m in Sources */,
 				2A0BE1B12468241C00B30BE3 /* ClassMethodAfterTests.swift in Sources */,
 				2A5C8D5C24670CA500812DAD /* AllInstancesInsteadTests.swift in Sources */,
 				2A728721246E76F7002D63A1 /* ThreadSafetyTests.swift in Sources */,

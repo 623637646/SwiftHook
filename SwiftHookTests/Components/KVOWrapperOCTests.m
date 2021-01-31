@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 @import SwiftHook;
+#import <SwiftHookTests-Swift.h>
 
 @interface MyObject1 : NSObject{
     NSInteger _number;
@@ -173,6 +174,27 @@
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)test_isSupportedKVO {
+    ^{
+        NSOperation *object = [[NSOperation alloc] init];
+        Class baseClass = object_getClass(object);
+        XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
+        [object addObserver:self forKeyPath:@"ready" options:NSKeyValueObservingOptionNew context:NULL];
+        XCTAssertTrue(object_getClass(object) != baseClass);
+        XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
+        [object removeObserver:self forKeyPath:@"ready" context:NULL];
+    }();
+    ^{
+        NSOperationQueue *object = [[NSOperationQueue alloc] init];
+        Class baseClass = object_getClass(object);
+        XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
+        [object addObserver:self forKeyPath:@"suspended" options:NSKeyValueObservingOptionNew context:NULL];
+        XCTAssertTrue(object_getClass(object) == baseClass);
+        XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
+        [object removeObserver:self forKeyPath:@"suspended" context:NULL];
+    }();
 }
 
 @end

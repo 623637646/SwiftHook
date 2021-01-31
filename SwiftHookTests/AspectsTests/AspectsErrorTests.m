@@ -82,7 +82,7 @@
  Crash on EXC_BAD_ACCESS
  This crash happens on SwiftHook too!!!
  This is related to: https://stackoverflow.com/a/62068020/9315497
- Actually "NSTaggedPointerString" is not objects. "__NSCFString" is objects. Sometimes "__NSCFConstantString" is object sometimes not.
+ Actually "NSTaggedPointerString" is not objects.
  */
 - (void)testCrashWithString
 {
@@ -94,7 +94,7 @@
     [[[NSString alloc] initWithFormat:@""] aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
 
-    // crash (string's class is __NSCFConstantString)
+    // normal (string's class is __NSCFConstantString)
     [@"" aspect_hookSelector:NSSelectorFromString(@"length") withOptions:AspectPositionBefore usingBlock:^(){
     } error:NULL];
 
@@ -123,6 +123,18 @@
         NSLog(@"");
     } error:NULL];
     [[ObjectiveCTestObject alloc] init].number = 9;
+}
+
+/**
+ Github issue: https://github.com/steipete/Aspects/issues/177
+ */
+- (void)test_NSURL_crash {
+    NSError *error = nil;
+    NSURL *url = [[NSURL alloc] initWithString:@"https://www.google.com"];
+    [url aspect_hookSelector:@selector(absoluteString) withOptions:AspectPositionBefore usingBlock:^(id<AspectInfo> info){
+        NSLog(@"");
+    } error:&error];
+    [url absoluteString];
 }
 
 #pragma mark - Unexpected

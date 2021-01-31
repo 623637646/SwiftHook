@@ -1,12 +1,12 @@
 //
-//  BlockUtilities.m
+//  OCUtilities.m
 //  SwiftHook
 //
 //  Created by Yanni Wang on 8/5/20.
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
-#import "BlockUtilities.h"
+#import "OCUtilities.h"
 #import <objc/runtime.h>
 
 // Refer to: https://clang.llvm.org/docs/Block-ABI-Apple.html
@@ -73,3 +73,18 @@ void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...))
     struct Block_literal_1 *layout = (__bridge void *)block;
     layout->invoke = blockInvoke;
 }
+
+@implementation SwiftHookUtilities
+
++ (BOOL)catchException:(void(^)(void))tryBlock error:(__autoreleasing NSError **)error {
+    @try {
+        tryBlock();
+        return YES;
+    }
+    @catch (NSException *exception) {
+        *error = [[NSError alloc] initWithDomain:exception.name code:0 userInfo:exception.userInfo];
+        return NO;
+    }
+}
+
+@end

@@ -23,6 +23,9 @@ func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hoo
 func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
     let targetClass: AnyClass
     if let object = object as? NSObject {
+        guard try isSupportedKVO(object: object) else {
+            throw SwiftHookError.hookKVOUnsupportedInstance
+        }
         // use KVO for specified instance hook
         try wrapKVOIfNeeded(object: object, selector: selector)
         guard let KVOedClass = object_getClass(object) else {

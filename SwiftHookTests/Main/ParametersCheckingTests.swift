@@ -466,26 +466,17 @@ class ParametersCheckingTests: XCTestCase {
         } catch {
             XCTFail()
         }
-        
     }
     
-    func test_KVOed() throws {
+    func test_NSTaggedPointerString() throws {
+        let obj = NSString.init(string: "123")
+        XCTAssertEqual(NSStringFromClass(type(of: obj)), "NSTaggedPointerString")
+        XCTAssertEqual(NSStringFromClass(object_getClass(obj)!), "NSTaggedPointerString")
         do {
-            class MyObject: NSObject {
-                @objc dynamic var number: Int = 0
+            try hookAfter(object: obj, selector: #selector(getter: NSString.length)) {
             }
-            let obj = MyObject.init()
-            var runned = false
-            let token = obj.observe(\.number) { (_, _) in
-                runned = true
-            }
-            obj.number = 1
-            XCTAssertTrue(runned)
-            try obj.sh_hookDeallocAfter {
-                
-            }
-            _ = token
-        } catch let error as NSError where error.code == 3 && error.userInfo[NSLocalizedDescriptionKey] as? String == "Unsupport to hook KVO'ed Object" {
+            XCTFail()
+        } catch SwiftHookError.hookInstanceOfNSTaggedPointerString {
         }
     }
 }

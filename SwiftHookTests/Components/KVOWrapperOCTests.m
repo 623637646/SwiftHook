@@ -181,19 +181,19 @@
         NSOperation *object = [[NSOperation alloc] init];
         Class baseClass = object_getClass(object);
         XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
-        [object addObserver:self forKeyPath:@"ready" options:NSKeyValueObservingOptionNew context:NULL];
+        [object addObserver:self forKeyPath:@"aaaaaaa" options:NSKeyValueObservingOptionNew context:NULL];
         XCTAssertTrue(object_getClass(object) != baseClass);
         XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
-        [object removeObserver:self forKeyPath:@"ready" context:NULL];
+        [object removeObserver:self forKeyPath:@"aaaaaaa" context:NULL];
     }();
     ^{
         NSOperationQueue *object = [[NSOperationQueue alloc] init];
         Class baseClass = object_getClass(object);
         XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
-        [object addObserver:self forKeyPath:@"suspended" options:NSKeyValueObservingOptionNew context:NULL];
-        XCTAssertTrue(object_getClass(object) == baseClass);
+        [object addObserver:self forKeyPath:@"aaaaaaa" options:NSKeyValueObservingOptionNew context:NULL];
+        XCTAssertTrue(object_getClass(object) != baseClass);
         XCTAssertTrue([SwiftUtilitiesOCAPI isSupportedKVOWithObject:object]);
-        [object removeObserver:self forKeyPath:@"suspended" context:NULL];
+        [object removeObserver:self forKeyPath:@"aaaaaaa" context:NULL];
     }();
 }
 

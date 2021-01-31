@@ -240,11 +240,10 @@ class KVOWrapperTests: XCTestCase {
             let object = Operation.init()
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertTrue(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.isReady, changeHandler: { (_, _) in
-            })
+            object.addObserver(self, forKeyPath: "aaaaaaa", options: .new, context: nil)
             XCTAssertTrue(object_getClass(object)! != baseClass)
             XCTAssertTrue(try isSupportedKVO(object: object))
-            keyValueObservation.invalidate()
+            object.removeObserver(self, forKeyPath: "aaaaaaa")
         }()
         try {
             let object = OperationQueue.init()

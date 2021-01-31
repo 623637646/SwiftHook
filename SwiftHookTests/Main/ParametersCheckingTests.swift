@@ -469,7 +469,7 @@ class ParametersCheckingTests: XCTestCase {
     }
     
     func test_NSTaggedPointerString() throws {
-        let obj = NSString.init(string: "123")
+        let obj = NSString.init(format: "123")
         XCTAssertEqual(NSStringFromClass(type(of: obj)), "NSTaggedPointerString")
         XCTAssertEqual(NSStringFromClass(object_getClass(obj)!), "NSTaggedPointerString")
         do {

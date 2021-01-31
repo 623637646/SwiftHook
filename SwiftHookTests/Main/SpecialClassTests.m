@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 @import SwiftHook;
 #import "SwiftHookTests-Swift.h"
+#import <objc/runtime.h>
 
 @interface MyURL43212231212 : NSURL
 @end
@@ -253,13 +254,14 @@
 // MARK: NSDictionary
 
 - (void)test_NSDictionary {
-    [self utilities_test_NSDictionary_obj1:@{} obj2:@{} className:@"__NSDictionary0" supportedKVO:YES];
-    [self utilities_test_NSDictionary_obj1:@{@"key": @1} obj2:@{@"key": @2} className:@"__NSSingleEntryDictionaryI" supportedKVO:NO];
-    [self utilities_test_NSDictionary_obj1:@{@"key1": @1, @"key2": @2} obj2:@{@"key1": @1, @"key2": @2, @"key3": @3} className:@"__NSDictionaryI" supportedKVO:NO];
-    [self utilities_test_NSDictionary_obj1:[@{@"key1": @1, @"key2": @2} mutableCopy] obj2:[@{@"key1": @1, @"key2": @2, @"key3": @3} mutableCopy] className:@"__NSDictionaryM" supportedKVO:YES];
+    [self utilities_test_NSDictionary_obj1:@{} obj2:@{} className:@"__NSDictionary0"];
+    [self utilities_test_NSDictionary_obj1:@{@"key": @1} obj2:@{@"key": @2} className:@"__NSSingleEntryDictionaryI"];
+    [self utilities_test_NSDictionary_obj1:@{@"key1": @1, @"key2": @2} obj2:@{@"key1": @1, @"key2": @2, @"key3": @3} className:@"__NSDictionaryI"];
+    [self utilities_test_NSDictionary_obj1:[@{@"key1": @1, @"key2": @2} mutableCopy] obj2:[@{@"key1": @1, @"key2": @2, @"key3": @3} mutableCopy] className:@"__NSDictionaryM"];
 }
 
-- (void)utilities_test_NSDictionary_obj1:(NSDictionary *)obj1 obj2:(NSDictionary *)obj2 className:(NSString *)className supportedKVO:(BOOL)supportedKVO {
+- (void)utilities_test_NSDictionary_obj1:(NSDictionary *)obj1 obj2:(NSDictionary *)obj2 className:(NSString *)className {
+    BOOL supportedKVO = [self isSupportKVO:obj1];
     NSUInteger count1 = [obj1 count];
     NSUInteger count2 = [obj2 count];
     Class originalClass = object_getClass(obj1);
@@ -307,7 +309,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     XCTAssertEqualObjects(NSStringFromClass([obj1 class]), className);
-    if ([[[self unsuport_KVO_cancellation_class_names] allKeys] containsObject:className]) {
+    if ([[self unsuport_KVO_cancellation_class_names] containsObject:className]) {
         XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), [@"NSKVONotifying_" stringByAppendingString:className]);
         XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"KVOed_normal");
     } else {
@@ -578,8 +580,13 @@
     XCTAssertEqualObjects(expectation, @[]);
     
     XCTAssertEqualObjects(NSStringFromClass([obj1 class]), className);
-    XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), [@"NSKVONotifying_" stringByAppendingString:className]);
-    XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"KVOed_normal");
+    if ([[self unsuport_KVO_cancellation_class_names] containsObject:className]) {
+        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), [@"NSKVONotifying_" stringByAppendingString:className]);
+        XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"KVOed_normal");
+    } else {
+        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), className);
+        XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"normal");
+    }
 }
 
 - (void)test_all_instances_NSOperation{
@@ -658,8 +665,13 @@
     XCTAssertEqualObjects(expectation, @[]);
     
     XCTAssertEqualObjects(NSStringFromClass([obj1 class]), className);
-    XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), className);
-    XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"normal");
+    if ([[self unsuport_KVO_cancellation_class_names] containsObject:className]) {
+        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), [@"NSKVONotifying_" stringByAppendingString:className]);
+        XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"KVOed_normal");
+    } else {
+        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj1)), className);
+        XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj1], @"normal");
+    }
 }
 
 - (void)test_all_instances_NSOperationQueue{
@@ -764,20 +776,48 @@
 }
 
 // MARK: others
-- (void)test_unsuport_KVO_cancellation {
-    [[self unsuport_KVO_cancellation_class_names] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj)), key);
-        [obj addObserver:self forKeyPath:@"anyPath" options:NSKeyValueObservingOptionNew context:NULL];
-        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj)), [@"NSKVONotifying_" stringByAppendingString:key]);
-        [obj removeObserver:self forKeyPath:@"anyPath" context:NULL];
-        XCTAssertEqualObjects(NSStringFromClass(object_getClass(obj)), [@"NSKVONotifying_" stringByAppendingString:key]);
-    }];
+
+- (NSArray<NSString *> *)unsuport_KVO_cancellation_class_names {
+    NSArray *objects = @[[@{@"key1": @1, @"key2": @2} mutableCopy],
+                         [[NSOperation alloc] init],
+                         [[NSOperationQueue alloc] init]];
+    NSMutableArray<NSString *> *result = [[NSMutableArray<NSString *> alloc] init];
+    
+    for (NSObject *object in objects) {
+        Class before = object_getClass(object);
+        NSString *name = NSStringFromClass(before);
+        [object addObserver:self forKeyPath:@"hahaha" options:NSKeyValueObservingOptionNew context:NULL];
+        Class after = object_getClass(object);
+        if (before == after) {
+            continue;
+        }
+        XCTAssertEqualObjects(NSStringFromClass(object_getClass(object)), [@"NSKVONotifying_" stringByAppendingString:name]);
+        [object removeObserver:self forKeyPath:@"hahaha"];
+        Class original = object_getClass(object);
+        if (before != original) {
+            [result addObject:name];
+            XCTAssertEqualObjects(NSStringFromClass(object_getClass(object)), [@"NSKVONotifying_" stringByAppendingString:name]);
+        } else {
+            XCTAssertEqualObjects(NSStringFromClass(object_getClass(object)), name);
+        }
+    }
+    
+    return result;
 }
 
-- (NSDictionary<NSString *, id> *)unsuport_KVO_cancellation_class_names {
-    return @{
-        @"__NSDictionaryM" : [@{@"key1": @1, @"key2": @2} mutableCopy],
-        @"NSOperation" : [[NSOperation alloc] init]
-    };
+-(BOOL)isSupportKVO:(NSObject *)object {
+    Class before = object_getClass(object);
+    NSString *className = NSStringFromClass(before);
+    if ([[self unsuport_KVO_cancellation_class_names] containsObject:className]) {
+        return YES;
+    }
+    [object addObserver:self forKeyPath:@"hahaha" options:NSKeyValueObservingOptionNew context:NULL];
+    Class after = object_getClass(object);
+    [object removeObserver:self forKeyPath:@"hahaha"];
+    Class original = object_getClass(object);
+    XCTAssertEqual(before, original);
+    return before != after;
 }
+
+
 @end

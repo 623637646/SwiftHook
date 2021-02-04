@@ -48,7 +48,7 @@ class SpecialMethodTests: XCTestCase {
                 try hookDeallocAfter(object: object, closure: {
                     executed.append(2)
                 })
-                try hookDeallocAfterByTail(object: object, closure: {
+                hookDeallocAfterByTail(object: object, closure: {
                     executed.append(5)
                 })
                 XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -71,7 +71,7 @@ class SpecialMethodTests: XCTestCase {
                 }
                 
                 XCTAssertTrue(try testGetObjectType(object: object) == .normal)
-                try hookDeallocAfterByTail(object: object, closure: {
+                hookDeallocAfterByTail(object: object, closure: {
                     executed.append(2)
                 })
                 XCTAssertTrue(try testGetObjectType(object: object) == .normal)

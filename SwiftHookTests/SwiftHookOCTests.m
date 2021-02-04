@@ -110,7 +110,7 @@
     @autoreleasepool {
         ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
         NSError *error = nil;
-        [object sh_hookDeallocAfterByTailAndReturnError:&error closure:^{
+        [object sh_hookDeallocAfterByTailWithClosure:^{
             NSLog(@"released!");
         }];
         XCTAssertNil(error);

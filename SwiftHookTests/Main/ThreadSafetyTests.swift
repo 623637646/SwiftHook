@@ -85,7 +85,7 @@ class ThreadSafetyTests: XCTestCase {
         for _ in 0 ... 1000 {
             let object = randomTestObject()
             objects.append(object)
-            tokens.append(try hookDeallocAfterByTail(object: object, closure: {
+            tokens.append(hookDeallocAfterByTail(object: object, closure: {
             }))
         }
         DispatchQueue.concurrentPerform(iterations: 1000) { index in

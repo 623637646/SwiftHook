@@ -458,7 +458,7 @@ class CompatibilityTests: XCTestCase {
             try hookDeallocAfter(object: object, closure: {
                 order.append(6)
             })
-            try hookDeallocAfterByTail(object: object, closure: {
+            hookDeallocAfterByTail(object: object, closure: {
                 order.append(5)
             })
             XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -511,7 +511,7 @@ class CompatibilityTests: XCTestCase {
             try hookDeallocAfter(object: object, closure: {
                 order.append(6)
             })
-            try hookDeallocAfterByTail(object: object, closure: {
+            hookDeallocAfterByTail(object: object, closure: {
                 order.append(5)
             })
             XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -559,7 +559,7 @@ class CompatibilityTests: XCTestCase {
             try hookDeallocAfter(object: object, closure: {
                 order.append(6)
             })
-            try hookDeallocAfterByTail(object: object, closure: {
+            hookDeallocAfterByTail(object: object, closure: {
                 order.append(5)
             })
             

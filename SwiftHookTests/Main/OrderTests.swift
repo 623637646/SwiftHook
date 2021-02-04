@@ -94,7 +94,7 @@ class OrderTests: XCTestCase {
                     deallocOrder.append(8)
                 })
                 
-                try hookDeallocAfterByTail(object: object, closure: {
+                hookDeallocAfterByTail(object: object, closure: {
                     deallocOrder.append(4)
                 })
                 

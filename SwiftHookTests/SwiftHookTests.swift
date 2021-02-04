@@ -172,15 +172,11 @@ class SwiftHookTests: XCTestCase {
     
     // Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
     func test_Specified_Instance_Dealloc_With_After_Tail_Mode() {
-        do {
-            try autoreleasepool {
-                let object = MyPureSwiftObject()
-                _ = try hookDeallocAfterByTail(object: object) {
-                    print("released!")
-                }
+        autoreleasepool {
+            let object = MyPureSwiftObject()
+            _ = hookDeallocAfterByTail(object: object) {
+                print("released!")
             }
-        } catch {
-            XCTFail()
         }
     }
     

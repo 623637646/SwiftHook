@@ -258,7 +258,7 @@ public func hookDeallocAfter(object: NSObject, closure: @escaping @convention(bl
  Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
  */
 @discardableResult
-public func hookDeallocAfterByTail(object: AnyObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
+public func hookDeallocAfterByTail(object: AnyObject, closure: @escaping @convention(block) () -> Void) -> Token {
     swiftHookSerialQueue.sync {
         return hookDeallocAfterByDelegate(object: object, closure: closure as AnyObject)
     }

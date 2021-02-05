@@ -11,7 +11,7 @@ import Foundation
 class FFICIFContext {
     private let argTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>
     private let returnType: UnsafeMutablePointer<ffi_type>
-    private var typeContexts = Set<FFITypeContext>()
+    private var typeContexts = Set<SHFFITypeContext>()
     let cif: UnsafeMutablePointer<ffi_cif>
     
     init(signature: Signature) throws {
@@ -21,13 +21,13 @@ class FFICIFContext {
             deallocateHelperArgTypes?.deallocate()
         }
         for (index, argumentType) in signature.argumentTypes.enumerated() {
-            guard let typeContext = FFITypeContext(typeEncoding: argumentType.code) else {
+            guard let typeContext = SHFFITypeContext(typeEncoding: argumentType.code) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             self.typeContexts.insert(typeContext)
             self.argTypes[index] = typeContext.ffiType
         }
-        guard let returnType = FFITypeContext(typeEncoding: signature.returnType.code) else {
+        guard let returnType = SHFFITypeContext(typeEncoding: signature.returnType.code) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
         self.typeContexts.insert(returnType)

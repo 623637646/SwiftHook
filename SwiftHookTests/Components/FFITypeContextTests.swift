@@ -17,7 +17,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -30,7 +30,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -43,7 +43,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -56,7 +56,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -69,7 +69,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -82,7 +82,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -95,7 +95,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -108,7 +108,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -121,7 +121,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -134,7 +134,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -147,7 +147,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -160,7 +160,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -176,7 +176,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -191,7 +191,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -206,7 +206,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -221,7 +221,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -236,7 +236,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -251,7 +251,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -266,7 +266,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -283,7 +283,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -304,7 +304,7 @@ class FFITypeContextTests: XCTestCase {
             XCTFail()
             return
         }
-        guard let typeContext = FFITypeContext.init(typeEncoding: typeEncoding) else {
+        guard let typeContext = SHFFITypeContext.init(typeEncoding: typeEncoding) else {
             XCTFail()
             return
         }
@@ -364,8 +364,8 @@ class FFITypeContextTests: XCTestCase {
                 XCTFail()
                 return
             }
-            XCTAssertTrue(FFITypeContext.init(typeEncoding: typeEncoding) ==
-                FFITypeContext.init(typeEncoding: typeEncoding))
+            XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) ==
+                SHFFITypeContext.init(typeEncoding: typeEncoding))
         }
         blocks.removeAll()
         blocks.append(({CGPoint.zero} as @convention(block) () -> CGPoint))
@@ -376,8 +376,8 @@ class FFITypeContextTests: XCTestCase {
                 XCTFail()
                 return
             }
-            XCTAssertTrue(FFITypeContext.init(typeEncoding: typeEncoding) !=
-                FFITypeContext.init(typeEncoding: typeEncoding))
+            XCTAssertTrue(SHFFITypeContext.init(typeEncoding: typeEncoding) !=
+                SHFFITypeContext.init(typeEncoding: typeEncoding))
         }
     }
     

@@ -17,5 +17,5 @@ FOUNDATION_EXPORT const unsigned char SwiftHookVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <SwiftHook/PublicHeader.h>
 
 #import <SwiftHook/SHMethodSignature.h>
-#import <SwiftHook/FFITypeContext.h>
-#import <SwiftHook/OCUtilities.h>
+#import <SwiftHook/SHFFITypeContext.h>
+#import <SwiftHook/SHObjectiveCUtilities.h>

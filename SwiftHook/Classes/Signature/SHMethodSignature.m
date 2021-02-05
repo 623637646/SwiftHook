@@ -7,7 +7,7 @@
 //
 
 #import "SHMethodSignature.h"
-#import "OCUtilities.h"
+#import "SHObjectiveCUtilities.h"
 
 @interface SHMethodSignature()
 

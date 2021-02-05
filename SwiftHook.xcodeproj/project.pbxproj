@@ -24,8 +24,8 @@
 		2A2F212424758C7D0032A64D /* HookContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2F212324758C7D0032A64D /* HookContextTests.swift */; };
 		2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */; };
-		2A3A4A6E245C090100FE1EFC /* FFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */; };
+		2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */; };
 		2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */; };
 		2A4559AC24F570D8003817C1 /* InsteadHookClosureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4559AB24F570D8003817C1 /* InsteadHookClosureExtension.swift */; };
 		2A49D84B247D0DDB00E61036 /* AspectsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49D849247D0DDB00E61036 /* AspectsTests.m */; };
@@ -64,8 +64,8 @@
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */; };
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
-		2AD183CB24650AE500B8EC51 /* OCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* OCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2AD183CC24650AE500B8EC51 /* OCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* OCUtilities.m */; };
+		2AD183CB24650AE500B8EC51 /* SHObjectiveCUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AD183C924650AE500B8EC51 /* SHObjectiveCUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2AD183CC24650AE500B8EC51 /* SHObjectiveCUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AD183CA24650AE500B8EC51 /* SHObjectiveCUtilities.m */; };
 		2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */; };
 		2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */; };
 		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
@@ -116,8 +116,8 @@
 		2A2F212324758C7D0032A64D /* HookContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookContextTests.swift; sourceTree = "<group>"; };
 		2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHMethodSignature.h; sourceTree = "<group>"; };
 		2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHMethodSignature.m; sourceTree = "<group>"; };
-		2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFITypeContext.h; sourceTree = "<group>"; };
-		2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFITypeContext.m; sourceTree = "<group>"; };
+		2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFFITypeContext.h; sourceTree = "<group>"; };
+		2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFFITypeContext.m; sourceTree = "<group>"; };
 		2A3A4A70245C303C00FE1EFC /* FFITypeContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFITypeContextTests.swift; sourceTree = "<group>"; };
 		2A4559AB24F570D8003817C1 /* InsteadHookClosureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsteadHookClosureExtension.swift; sourceTree = "<group>"; };
 		2A49D849247D0DDB00E61036 /* AspectsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AspectsTests.m; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersCheck.swift; sourceTree = "<group>"; };
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
-		2AD183C924650AE500B8EC51 /* OCUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCUtilities.h; sourceTree = "<group>"; };
-		2AD183CA24650AE500B8EC51 /* OCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCUtilities.m; sourceTree = "<group>"; };
+		2AD183C924650AE500B8EC51 /* SHObjectiveCUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHObjectiveCUtilities.h; sourceTree = "<group>"; };
+		2AD183CA24650AE500B8EC51 /* SHObjectiveCUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHObjectiveCUtilities.m; sourceTree = "<group>"; };
 		2AEE4F142476CB2E00F822D9 /* CompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityTests.swift; sourceTree = "<group>"; };
 		2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderTests.swift; sourceTree = "<group>"; };
 		4066EDD003F5F07065F58D7E /* Pods_abstract_SwiftHook_SwiftHook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_SwiftHook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -415,8 +415,8 @@
 			children = (
 				2A96867C2485FDBE004A2DD7 /* FFIClosureContext.swift */,
 				2A96867A2485FA47004A2DD7 /* FFICIFContext.swift */,
-				2A3A4A6C245C090100FE1EFC /* FFITypeContext.h */,
-				2A3A4A6D245C090100FE1EFC /* FFITypeContext.m */,
+				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
+				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
 			);
 			path = FFI;
 			sourceTree = "<group>";
@@ -458,8 +458,8 @@
 			isa = PBXGroup;
 			children = (
 				2A701512246413CE00B81219 /* Utilities.swift */,
-				2AD183C924650AE500B8EC51 /* OCUtilities.h */,
-				2AD183CA24650AE500B8EC51 /* OCUtilities.m */,
+				2AD183C924650AE500B8EC51 /* SHObjectiveCUtilities.h */,
+				2AD183CA24650AE500B8EC51 /* SHObjectiveCUtilities.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -472,9 +472,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB67362245834E30011536D /* SwiftHook.h in Headers */,
-				2AD183CB24650AE500B8EC51 /* OCUtilities.h in Headers */,
+				2AD183CB24650AE500B8EC51 /* SHObjectiveCUtilities.h in Headers */,
 				2A348FC62459C1A500DD6ED7 /* SHMethodSignature.h in Headers */,
-				2A3A4A6E245C090100FE1EFC /* FFITypeContext.h in Headers */,
+				2A3A4A6E245C090100FE1EFC /* SHFFITypeContext.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,10 +746,10 @@
 				2A348FC72459C1A500DD6ED7 /* SHMethodSignature.m in Sources */,
 				5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */,
 				2A96867D2485FDBE004A2DD7 /* FFIClosureContext.swift in Sources */,
-				2A3A4A6F245C090100FE1EFC /* FFITypeContext.m in Sources */,
+				2A3A4A6F245C090100FE1EFC /* SHFFITypeContext.m in Sources */,
 				2A65FB4B246800F800535203 /* HookInternal.swift in Sources */,
 				2A0306022477BC3600DF86C6 /* NSObjectExtension.swift in Sources */,
-				2AD183CC24650AE500B8EC51 /* OCUtilities.m in Sources */,
+				2AD183CC24650AE500B8EC51 /* SHObjectiveCUtilities.m in Sources */,
 				2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */,
 				2A951D5F246C5F63000DB1E7 /* DynamicClass.swift in Sources */,
 				2A4559AC24F570D8003817C1 /* InsteadHookClosureExtension.swift in Sources */,

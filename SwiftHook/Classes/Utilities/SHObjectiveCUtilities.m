@@ -1,12 +1,12 @@
 //
-//  OCUtilities.m
+//  SHObjectiveCUtilities.m
 //  SwiftHook
 //
 //  Created by Yanni Wang on 8/5/20.
 //  Copyright © 2020 Yanni. All rights reserved.
 //
 
-#import "OCUtilities.h"
+#import "SHObjectiveCUtilities.h"
 #import <objc/runtime.h>
 
 // Refer to: https://clang.llvm.org/docs/Block-ABI-Apple.html
@@ -27,14 +27,14 @@ enum {
 };
 
 // Refer to: https://clang.llvm.org/docs/Block-ABI-Apple.html
-struct Block_literal_1 {
+struct SHBlockLiteral {
     void *isa; // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
     int flags;
     int reserved;
     void (*invoke)(void *, ...);
     struct Block_descriptor_1 {
         unsigned long int reserved;         // NULL
-        unsigned long int size;         // sizeof(struct Block_literal_1)
+        unsigned long int size;         // sizeof(struct SHBlockLiteral)
         // optional helper functions
         void (*copy_helper)(void *dst, void *src);     // IFF (1<<25)
         void (*dispose_helper)(void *src);             // IFF (1<<25)
@@ -46,7 +46,7 @@ struct Block_literal_1 {
 
 const char * _Nullable sh_blockSignature(id block)
 {
-    struct Block_literal_1 *layout = (__bridge void *)block;
+    struct SHBlockLiteral *layout = (__bridge void *)block;
     if (!(layout->flags & BLOCK_HAS_SIGNATURE))
         return nil;
     
@@ -64,13 +64,13 @@ const char * _Nullable sh_blockSignature(id block)
 
 void (*sh_blockInvoke(id block))(void *, ...)
 {
-    struct Block_literal_1 *layout = (__bridge void *)block;
+    struct SHBlockLiteral *layout = (__bridge void *)block;
     return layout->invoke;
 }
 
 void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...))
 {
-    struct Block_literal_1 *layout = (__bridge void *)block;
+    struct SHBlockLiteral *layout = (__bridge void *)block;
     layout->invoke = blockInvoke;
 }
 

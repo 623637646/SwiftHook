@@ -1,5 +1,5 @@
 //
-//  FFITypeContext.h
+//  SHFFITypeContext.h
 //  SwiftHook
 //
 //  Created by Yanni Wang on 1/5/20.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FFITypeContext : NSObject
+@interface SHFFITypeContext : NSObject
 
 @property (nonatomic, assign, readonly) ffi_type *ffiType;
 

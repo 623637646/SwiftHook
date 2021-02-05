@@ -22,6 +22,7 @@ class SwiftHookTests: XCTestCase {
         
         do {
             let object = MyObject()
+            // WARNING: the object will retain the closure. So make sure the closure doesn't retain the object to avoid memory leak by cycle retain. If you want to access the obeject, please refer to 2nd guide below "XXX and get the parameters.".
             let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
                 print("You will say hello, right?")
             }

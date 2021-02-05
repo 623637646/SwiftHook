@@ -14,6 +14,21 @@
 @implementation MyURL88000876545
 @end
 
+@interface MyConstClass : NSObject
+@end
+
+@implementation MyConstClass
+- (NSObject *const*)myMethod1:(NSObject *const*)p
+{
+    return p;
+}
+
+- (const char *)myMethod2:(const char *)p
+{
+    return p;
+}
+@end
+
 @interface ParametersCheckingOCTests : XCTestCase
 
 @end
@@ -57,6 +72,26 @@
     XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
     XCTAssertEqual(error.code, 11);
     XCTAssertEqualObjects(error.localizedDescription, @"Unable to hook a instance which is not support KVO.");
+}
+
+- (void)test_const_special_cases_parameters {
+    NSError *error = nil;
+    [MyConstClass sh_hookInsteadWithSelector:@selector(myMethod1:) closure:
+     ^(NSObject *const*(^original)(NSObject *object, SEL selector, NSObject *const* parameter),
+       NSObject *object, SEL selector, NSObject *const* parameter){
+        return original(object, selector, parameter);
+    } error:&error];
+    XCTAssertNil(error);
+}
+
+- (void)test_const_char_pointer {
+    NSError *error = nil;
+    [MyConstClass sh_hookInsteadWithSelector:@selector(myMethod2:) closure:
+     ^(const char *(^original)(NSObject *object, SEL selector, const char *parameter),
+       NSObject *object, SEL selector, const char *parameter){
+        return original(object, selector, parameter);
+    } error:&error];
+    XCTAssertNil(error);
 }
 
 @end

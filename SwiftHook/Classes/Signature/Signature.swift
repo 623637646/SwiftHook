@@ -14,6 +14,7 @@ struct Signature {
         
         let code: String
         private let internalValue: String?
+        private let isOriginalClosure: Bool
         
         static let closureTypeValue = (try? TypeValue.init(string: "@?"))!
         static let objectTypeValue = (try? TypeValue.init(string: "@"))!
@@ -22,7 +23,8 @@ struct Signature {
         
         private static let is32BitDevice = Int.bitWidth == Int32.bitWidth
         
-        init(string: String) throws {
+        init(string: String, isOriginalClosure: Bool = false) throws {
+            self.isOriginalClosure = isOriginalClosure
             guard let nameRange = string.range(of: "^[^\\<]+", options: .regularExpression) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
@@ -48,9 +50,19 @@ struct Signature {
                 self.internalValue = nil
             }
         }
-                
+        
         static func == (lhs: Self, rhs: Self) -> Bool {
-            return lhs.code == rhs.code
+            var lshCode = lhs.code
+            var rhsCode = rhs.code
+            if lhs.isOriginalClosure,
+               rhsCode.first == "r" {
+                rhsCode.removeFirst()
+            }
+            if rhs.isOriginalClosure,
+               lshCode.first == "r" {
+                lshCode.removeFirst()
+            }
+            return lshCode == rhsCode
         }
         
         func internalClosureSignature() throws -> Signature? {
@@ -64,13 +76,14 @@ struct Signature {
             guard let methodSignature = SHMethodSignature.init(objCTypes: internalValue) else {
                 return nil
             }
-            return try Signature.init(methodSignature: methodSignature, signatureType: .closure)
+            return try Signature.init(methodSignature: methodSignature, signatureType: .originalClosure)
         }
     }
     
     enum SignatureType {
         case method
         case closure
+        case originalClosure
     }
     
     let argumentTypes: [TypeValue]
@@ -86,10 +99,10 @@ struct Signature {
     private init(methodSignature: SHMethodSignature, signatureType: SignatureType) throws {
         var argumentTypeValues = [TypeValue]()
         for argumentType in methodSignature.argumentTypes {
-            let typeValue = try TypeValue.init(string: argumentType)
+            let typeValue = try TypeValue.init(string: argumentType, isOriginalClosure: signatureType == .originalClosure)
             argumentTypeValues.append(typeValue)
         }
-        let returnTypeValue = try TypeValue.init(string: methodSignature.returnType)
+        let returnTypeValue = try TypeValue.init(string: methodSignature.returnType, isOriginalClosure: signatureType == .originalClosure)
         self.init(argumentTypes: argumentTypeValues, returnType: returnTypeValue, signatureType: signatureType)
     }
     

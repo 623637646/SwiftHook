@@ -102,4 +102,150 @@ class ThreadSafetyTests: XCTestCase {
         //        _ = object
     }
     
+    func test_instance_method_calling() throws {
+        class MyObject {
+            static var result = 0
+            static let serialQueue = DispatchQueue(label: "com.test.mySerialQueue")
+            @objc dynamic func plus1() {
+                MyObject.serialQueue.async {
+                    MyObject.result += 1
+                }
+            }
+        }
+        let object = MyObject.init()
+        DispatchQueue.concurrentPerform(iterations: 1000) {_ in
+            object.plus1()
+        }
+        var exp = expectation(description: "")
+        MyObject.serialQueue.sync {
+            exp.fulfill()
+        }
+        self.waitForExpectations(timeout: 10) { (error) in
+            XCTAssertNil(error)
+            XCTAssertEqual(MyObject.result, 1000)
+        }
+        
+        MyObject.result = 0
+        try hookAfter(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) (AnyObject, Selector) -> Void)
+        try hookBefore(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) (AnyObject, Selector) -> Void)
+        try hookInstead(object: object, selector: #selector(MyObject.plus1), closure: { original, obj, selector in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+            original(obj, selector)
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        DispatchQueue.concurrentPerform(iterations: 1000) {_ in
+            object.plus1()
+        }
+        exp = expectation(description: "")
+        MyObject.serialQueue.sync {
+            exp.fulfill()
+        }
+        self.waitForExpectations(timeout: 10) { (error) in
+            XCTAssertNil(error)
+            XCTAssertEqual(MyObject.result, 5000)
+        }
+    }
+
+    func test_instance_method_calling_NSObject() throws {
+        class MyObject: NSObject {
+            static var result = 0
+            static let serialQueue = DispatchQueue(label: "com.test.mySerialQueue")
+            @objc dynamic func plus1() {
+                MyObject.serialQueue.async {
+                    MyObject.result += 1
+                }
+            }
+        }
+        let object = MyObject.init()
+        DispatchQueue.concurrentPerform(iterations: 1000) {_ in
+            object.plus1()
+        }
+        var exp = expectation(description: "")
+        MyObject.serialQueue.sync {
+            exp.fulfill()
+        }
+        self.waitForExpectations(timeout: 10) { (error) in
+            XCTAssertNil(error)
+            XCTAssertEqual(MyObject.result, 1000)
+        }
+        
+        MyObject.result = 0
+        try hookAfter(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) (AnyObject, Selector) -> Void)
+        try hookBefore(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) (AnyObject, Selector) -> Void)
+        try hookInstead(object: object, selector: #selector(MyObject.plus1), closure: { original, obj, selector in
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+            original(obj, selector)
+            MyObject.serialQueue.async {
+                MyObject.result += 1
+            }
+        } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
+        
+        DispatchQueue.concurrentPerform(iterations: 1000) {_ in
+            object.plus1()
+        }
+        exp = expectation(description: "")
+        MyObject.serialQueue.sync {
+            exp.fulfill()
+        }
+        self.waitForExpectations(timeout: 10) { (error) in
+            XCTAssertNil(error)
+            XCTAssertEqual(MyObject.result, 5000)
+        }
+    }
+    
+    func test_recursion() {
+        class MyObject {
+            @objc dynamic func myMethod(_ int: Int) -> Int {
+                let int = int + 1
+                guard int < 100 else {
+                    return int
+                }
+                return self.myMethod(int)
+            }
+        }
+        let object = MyObject.init()
+        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
+            XCTAssertEqual(object.myMethod(0), 100)
+        }
+    }
+    
+    func test_recursion_NSObject() {
+        class MyObject: NSObject {
+            @objc dynamic func myMethod(_ int: Int) -> Int {
+                let int = int + 1
+                guard int < 100 else {
+                    return int
+                }
+                return self.myMethod(int)
+            }
+        }
+        let object = MyObject.init()
+        DispatchQueue.concurrentPerform(iterations: 1000) { _ in
+            XCTAssertEqual(object.myMethod(0), 100)
+        }
+    }
+    
 }

@@ -70,6 +70,7 @@
 		2AFCFC0524F7D7E400F31C39 /* OrderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFCFC0424F7D7E400F31C39 /* OrderTests.swift */; };
 		3254CB538C59C3804F60CD67 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDE82BCEADCD63CF3BC329 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
 		5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */; };
+		5C178C5425DFC9C7001E4151 /* Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C178C5325DFC9C7001E4151 /* Empty.swift */; };
 		5C19C75C25C5643300C12968 /* ParametersCheckingOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C19C75B25C5643300C12968 /* ParametersCheckingOCTests.m */; };
 		5C1C560C25B1966D00452D25 /* KVOWrapperOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C560B25B1966D00452D25 /* KVOWrapperOCTests.m */; };
 		5C4AB44D25BED9E5005BEC0C /* NSKVONotifying_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */; };
@@ -172,6 +173,8 @@
 		4AC0B2BBF96712AAD1850CE7 /* Pods-AspectsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AspectsTests.release.xcconfig"; path = "Target Support Files/Pods-AspectsTests/Pods-AspectsTests.release.xcconfig"; sourceTree = "<group>"; };
 		56A4774BBF986065FB393974 /* Pods-abstract-SwiftHook-SwiftHook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-SwiftHook/Pods-abstract-SwiftHook-SwiftHook.release.xcconfig"; sourceTree = "<group>"; };
 		5C0F5BF625B03FF900AEB73C /* KVOWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapperTests.swift; sourceTree = "<group>"; };
+		5C178C5225DFC9C6001E4151 /* PerformanceTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PerformanceTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		5C178C5325DFC9C7001E4151 /* Empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empty.swift; sourceTree = "<group>"; };
 		5C19C75B25C5643300C12968 /* ParametersCheckingOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParametersCheckingOCTests.m; sourceTree = "<group>"; };
 		5C1C560B25B1966D00452D25 /* KVOWrapperOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVOWrapperOCTests.m; sourceTree = "<group>"; };
 		5C4AB44B25BED9E5005BEC0C /* NSKVONotifying_MyClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSKVONotifying_MyClass.h; sourceTree = "<group>"; };
@@ -320,6 +323,8 @@
 			isa = PBXGroup;
 			children = (
 				2A5A4859247D3CE9002A3544 /* PerformanceTests.m */,
+				5C178C5325DFC9C7001E4151 /* Empty.swift */,
+				5C178C5225DFC9C6001E4151 /* PerformanceTests-Bridging-Header.h */,
 				2A5A484B247D11FE002A3544 /* Info.plist */,
 			);
 			path = PerformanceTests;
@@ -553,7 +558,7 @@
 				TargetAttributes = {
 					2A5A4846247D11FE002A3544 = {
 						CreatedOnToolsVersion = 11.3.1;
-						LastSwiftMigration = 1130;
+						LastSwiftMigration = 1220;
 					};
 					2AB67350245834E30011536D = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -736,6 +741,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A5A485A247D3CE9002A3544 /* PerformanceTests.m in Sources */,
+				5C178C5425DFC9C7001E4151 /* Empty.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +851,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -866,6 +873,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yanni.PerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PerformanceTests/PerformanceTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

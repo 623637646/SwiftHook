@@ -1,3 +1,5 @@
+[中文](Documents/README.zh-Hans.md)
+
 # What is this?
 
 A safe, easy, powerful and efficient hook library for iOS (Support Swift and Objective-C, Good compatibility with KVO).

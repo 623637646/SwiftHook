@@ -4,13 +4,15 @@ A safe, easy, powerful and efficient hook library for iOS (Support Swift and Obj
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 
-# How to install
+# How to integrate it?
 
 You can integrate **SwiftHook** with [cocoapods](https://cocoapods.org/). 
 
 ```
 pod 'EasySwiftHook'
 ```
+
+Feel free to send Pull Request to support carthage or Swift Package.
 
 # How to use
 
@@ -143,11 +145,11 @@ do {
 
 6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
 
-7. [Hook dealloc](SwiftHookTests/SwiftHookTests.swift#L87)
+7. [Hooking the dealloc method](SwiftHookTests/SwiftHookTests.swift#L87)
 
 # [Performance](Documents/PERFORMANCE.md)
 
-Compared with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects).
+Comparing with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects).
 
 * Hook with Before and After mode for all instances, SwiftHook is **13 - 17 times** faster than Aspects.
 * Hook with Instead mode for all instances, SwiftHook is **3 - 5 times** faster than Aspects.

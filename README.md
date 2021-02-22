@@ -145,7 +145,7 @@ do {
 
 6. [Using in Objective-C](SwiftHookTests/SwiftHookOCTests.m)
 
-7. [Hooking the dealloc method](SwiftHookTests/SwiftHookTests.swift#L87)
+7. [Hooking the dealloc method](SwiftHookTests/SwiftHookTests.swift#L146)
 
 # [Performance](Documents/PERFORMANCE.md)
 

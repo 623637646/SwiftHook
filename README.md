@@ -1,27 +1,27 @@
 [中文](Documents/README.zh-Hans.md)
 
-# What is this?
+# What is SwiftHook?
 
-A safe, easy, powerful and efficient hook library for iOS (Support Swift and Objective-C, Good compatibility with KVO).
+A safe, easy, powerful and efficient hook library for iOS. It supports Swift and Objective-C. It has good compatibility with KVO.
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 
-# How to integrate it?
+# How to integrate SwiftHook?
 
-You can integrate **SwiftHook** with [cocoapods](https://cocoapods.org/). 
+**SwiftHook** can be integrated by [cocoapods](https://cocoapods.org/). 
 
 ```
 pod 'EasySwiftHook'
 ```
 
-Feel free to send Pull Request to support carthage or Swift Package.
+Feel free to send Pull Request to support [Carthage](https://github.com/Carthage/Carthage) or (Swift Packages)[https://developer.apple.com/documentation/swift_packages].
 
-# How to use
+# How to use SwiftHook
 
 1. Call the hook closure **before** executing **specified instance**’s method.
 
 ```swift
-class MyObject { // The class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
+class MyObject { // This class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
     @objc dynamic func sayHello() { // The key words of methods `@objc` and `dynamic` are necessary.
         print("Hello!")
     }
@@ -29,7 +29,7 @@ class MyObject { // The class doesn’t have to inherit from NSObject. of course
 
 do {
     let object = MyObject()
-    // WARNING: the object will retain the closure. So make sure the closure doesn't retain the object to avoid memory leak by cycle retain. If you want to access the obeject, please refer to 2nd guide below "XXX and get the parameters.".
+    // WARNING: the object will retain the closure. So make sure the closure doesn't retain the object to avoid memory leak by cycle retain. If you want to access the obeject, please refer to 2nd guide "XXX and get the parameters." below.
     let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
         print("You will say hello, right?")
     }
@@ -40,7 +40,7 @@ do {
 }
 ```
 
-2. Call the hook closure **after** executing **specified instance**'s method. And get the parameters.
+2. Call the hook closure **after** executing **specified instance**'s method and get the parameters.
 
 ```swift
 class MyObject {
@@ -52,9 +52,9 @@ class MyObject {
 do {
     let object = MyObject()
     
-    // 1. The first parameter mush be AnyObject or NSObject or YOUR CLASS (In this case. It has to inherits from NSObject, otherwise will build error with "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'").
+    // 1. The first parameter mush be AnyObject or NSObject or YOUR CLASS (If it's YOUR CLASS. It has to inherits from NSObject, otherwise will build error with "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'").
     // 2. The second parameter mush be Selector.
-    // 3. The rest of the parameters are the same as the method.
+    // 3. The rest parameters are the same as the method's.
     // 4. The return type mush be Void if you hook with `before` and `after` mode.
     // 5. The key word `@convention(block)` is necessary
     let hookClosure = { object, selector, name in
@@ -83,16 +83,15 @@ class MyObject {
 do {
     let object = MyObject()
     
-    // 1. The first parameter mush be an closure. This closure means original method. The parameters of it are the same as "How to use: Case 2". The return type of it must be the same as original method's.
-    // 2. The rest of the parameters are the same as "How to use: Case 2".
-    // 3. The return type mush be the same as original method's.
+    // 1. The first parameter mush be an closure. This closure means original method. The closure's parameters and return type are the same with the original method's. 
+    // 2. The rest parameters are the same with the original method's.
+    // 3. The return type mush be the same with original method's.
     let hookClosure = {original, object, selector, left, right in
         let result = original(object, selector, left, right)
-        // You can call original with the different parameters:
-        // let result = original(object, selector, 12, 27).
-        // You also can change the object and selector if you want. Don't even call the original method if needed.
+        // You may call original with the different parameters: let result = original(object, selector, 12, 27).
+        // You also may change the object and selector if you want. You don't even have to call the original method if needed.
         print("\(left) + \(right) equals \(result)")
-        return left * right
+        return left * right // Changing the result
     } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
     let token = try hookInstead(object: object, selector: #selector(MyObject.sum(left:right:)), closure: hookClosure)
     let left = 3
@@ -105,7 +104,7 @@ do {
 }
 ```
 
-4. Call the hook closure **before** executing the method of **all instances of the class**.
+4. Call the hook closure **before** executing the method for **all instances of the class**.
 
 ```swift
 class MyObject {

@@ -14,7 +14,7 @@ It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 pod 'EasySwiftHook'
 ```
 
-Feel free to send Pull Request to support [Carthage](https://github.com/Carthage/Carthage) or (Swift Packages)[https://developer.apple.com/documentation/swift_packages].
+Feel free to send Pull Request to support [Carthage](https://github.com/Carthage/Carthage) or [Swift Packages](https://developer.apple.com/documentation/swift_packages).
 
 # How to use SwiftHook
 

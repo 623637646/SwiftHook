@@ -144,11 +144,11 @@ do {
 }
 ```
 
-6. [在 Objective-C 中使用](SwiftHookTests/SwiftHookOCTests.m)
+6. [在 Objective-C 中使用](../SwiftHookTests/SwiftHookOCTests.m)
 
-7. [Hook dealloc 方法](SwiftHookTests/SwiftHookTests.swift#L146)
+7. [Hook dealloc 方法](../SwiftHookTests/SwiftHookTests.swift#L146)
 
-# [性能](Documents/PERFORMANCE.md)
+# [性能](../Documents/PERFORMANCE.md)
 
 和 [Aspects](https://github.com/steipete/Aspects) 比较 (向 Aspects 致敬).
 
@@ -160,12 +160,12 @@ do {
 # KVO兼容性
 
 自 3.0.0 版本以来，完美兼容KVO。
-更多测试用例: [Here](SwiftHookTests/Main/CompatibilityTests.swift)
+更多测试用例: [Here](../SwiftHookTests/Main/CompatibilityTests.swift)
 
 # We already have great [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
 
-1. Aspects has some bugs. [Click here for test code](SwiftHookTests/AspectsTests/AspectsErrorTests.m).
-2. Aspects doesn’t support Swift with instead mode in some cases. [Click here for test code](SwiftHookTests/AspectsTests/AspectsSwiftTests.swift).
+1. Aspects has some bugs. [Click here for test code](../SwiftHookTests/AspectsTests/AspectsErrorTests.m).
+2. Aspects doesn’t support Swift with instead mode in some cases. [Click here for test code](../SwiftHookTests/AspectsTests/AspectsSwiftTests.swift).
 3. Aspects’s API is not friendly for Swift.
 4. Aspects doesn’t support Swift object which is not based on NSObject.
 5. Aspects is based on *message forward*. This performance is not good.

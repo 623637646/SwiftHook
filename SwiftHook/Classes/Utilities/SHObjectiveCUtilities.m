@@ -76,7 +76,8 @@ void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...))
 
 @implementation SwiftHookUtilities
 
-+ (BOOL)catchException:(void(^)(void))tryBlock error:(__autoreleasing NSError **)error {
++ (BOOL)catchException:(__attribute__((noescape)) void(^)(void))tryBlock error:(__autoreleasing NSError **)error
+{
     @try {
         tryBlock();
         return YES;

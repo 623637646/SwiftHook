@@ -18,7 +18,7 @@ extern void sh_setBlockInvoke(id block, void (*blockInvoke)(void *, ...));
 
 
 @interface SwiftHookUtilities: NSObject
-+ (BOOL)catchException:(void(^)(void))tryBlock error:(__autoreleasing NSError **)error;
++ (BOOL)catchException:(__attribute__((noescape)) void(^)(void))tryBlock error:(__autoreleasing NSError **)error;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -7,16 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		23781EDBF9A6143DF5D2F64A /* libPods-SwiftHookDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BD4C1900F1699A32BD581F /* libPods-SwiftHookDemo.a */; };
 		2A3408BE245EC121008D8E5D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3408BD245EC121008D8E5D /* AppDelegate.swift */; };
 		2A3408C2245EC121008D8E5D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3408C1245EC121008D8E5D /* ViewController.swift */; };
 		2A3408C7245EC121008D8E5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A3408C6245EC121008D8E5D /* Assets.xcassets */; };
 		2A3408CA245EC121008D8E5D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3408C8245EC121008D8E5D /* LaunchScreen.storyboard */; };
+		50A34018BA9EAC0C3E30E7B6 /* libPods-SwiftHookDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77D531D05E88696D5321068A /* libPods-SwiftHookDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0BA8DF0DD4EB682A13ADD284 /* Pods-SwiftHookDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftHookDemo.debug.xcconfig"; path = "Target Support Files/Pods-SwiftHookDemo/Pods-SwiftHookDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		14BD4C1900F1699A32BD581F /* libPods-SwiftHookDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftHookDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A3408BA245EC121008D8E5D /* SwiftHookDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftHookDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A3408BD245EC121008D8E5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2A3408C1245EC121008D8E5D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +23,7 @@
 		2A3408C9245EC121008D8E5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A3408CB245EC121008D8E5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CC1B5712E51042ACD206A7A /* Pods-SwiftHookDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftHookDemo.release.xcconfig"; path = "Target Support Files/Pods-SwiftHookDemo/Pods-SwiftHookDemo.release.xcconfig"; sourceTree = "<group>"; };
+		77D531D05E88696D5321068A /* libPods-SwiftHookDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftHookDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23781EDBF9A6143DF5D2F64A /* libPods-SwiftHookDemo.a in Frameworks */,
+				50A34018BA9EAC0C3E30E7B6 /* libPods-SwiftHookDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +80,7 @@
 		BDE29083A91C7981BB18EA28 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				14BD4C1900F1699A32BD581F /* libPods-SwiftHookDemo.a */,
+				77D531D05E88696D5321068A /* libPods-SwiftHookDemo.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -4,16 +4,6 @@
 
 它基于 iOS runtime 和 [libffi](https://github.com/libffi/libffi)。
 
-# 怎么集成？
-
-使用 [cocoapods](https://cocoapods.org/). 
-
-```
-pod 'EasySwiftHook'
-```
-
-欢迎提 Pull Request 来支持 carthage 和 Swift Package。
-
 # 如何使用？
 
 1. hook某个实例的某个方法，在目标方法执行之前调用 hook 闭包。
@@ -147,6 +137,16 @@ do {
 6. [在 Objective-C 中使用](../SwiftHookTests/SwiftHookOCTests.m)
 
 7. [Hook dealloc 方法](../SwiftHookTests/SwiftHookTests.swift#L146)
+
+# 怎么集成？
+
+使用 [cocoapods](https://cocoapods.org/). 
+
+```
+pod 'EasySwiftHook'
+```
+
+欢迎提 Pull Request 来支持 carthage 和 Swift Package。
 
 # [性能](../Documents/PERFORMANCE.md)
 

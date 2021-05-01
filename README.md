@@ -6,16 +6,6 @@ A safe, easy, powerful and efficient hook library for iOS. It supports Swift and
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 
-# How to integrate SwiftHook?
-
-**SwiftHook** can be integrated by [cocoapods](https://cocoapods.org/). 
-
-```
-pod 'EasySwiftHook'
-```
-
-Feel free to send Pull Request to support [Carthage](https://github.com/Carthage/Carthage) or [Swift Packages](https://developer.apple.com/documentation/swift_packages).
-
 # How to use SwiftHook
 
 1. Call the hook closure **before** executing **specified instance**’s method.
@@ -148,6 +138,16 @@ do {
 
 7. [Hooking the dealloc method](SwiftHookTests/SwiftHookTests.swift#L146)
 
+# How to integrate SwiftHook?
+
+**SwiftHook** can be integrated by [cocoapods](https://cocoapods.org/). 
+
+```
+pod 'EasySwiftHook'
+```
+
+Feel free to send Pull Request to support [Carthage](https://github.com/Carthage/Carthage) or [Swift Packages](https://developer.apple.com/documentation/swift_packages).
+
 # [Performance](Documents/PERFORMANCE.md)
 
 Comparing with [Aspects](https://github.com/steipete/Aspects) (respect to Aspects).
@@ -174,19 +174,8 @@ For more test cases: [Here](SwiftHookTests/Main/CompatibilityTests.swift)
 
 BTW, **Respect to Aspects!**
 
-# How it works?
-
-1. What is [libffi](https://github.com/libffi/libffi).? 
-    1. Call C function at runtime.
-    2. Create closure (IMP) at runtime.
-2. [SwiftHook’s logic](https://docs.google.com/drawings/d/13JHfInydNK-2CKLfVb63H2lRMJ3mF5rF6d4wkw7EPSs/edit?usp=sharing).
-
 # Requirements
 
 - iOS 10.0+ (Unverified for macOS, tvOS, watchOS)
 - Xcode 11+
 - Swift 5.0+
-
-# Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/623637646/SwiftHook.svg)](https://starchart.cc/623637646/SwiftHook)

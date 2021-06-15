@@ -12,7 +12,7 @@ private let retainSelector = NSSelectorFromString("retain")
 private let releaseSelector = NSSelectorFromString("release")
 private let autoreleaseSelector = NSSelectorFromString("autorelease")
 private let blacklistSelectors = [retainSelector, releaseSelector, autoreleaseSelector]
-private let taggedPointerStringClass: AnyClass = NSClassFromString("NSTaggedPointerString")!
+private let taggedPointerStringClass: AnyClass? = NSClassFromString("NSTaggedPointerString")
 
 // MARK: private
 

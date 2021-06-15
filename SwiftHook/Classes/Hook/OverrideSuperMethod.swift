@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import libffi_iOS
 
 private func overrideMethodCalled(cif: UnsafeMutablePointer<ffi_cif>?,
                                   ret: UnsafeMutableRawPointer?,

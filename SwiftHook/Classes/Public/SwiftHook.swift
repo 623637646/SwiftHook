@@ -8,6 +8,8 @@
 
 // MARK: - Constant
 
+import Foundation
+
 // queue
 private let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
 

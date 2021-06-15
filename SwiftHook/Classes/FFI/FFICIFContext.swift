@@ -7,6 +7,10 @@
 //
 
 import Foundation
+import libffi_iOS
+#if SWIFT_PACKAGE
+import SwiftHookOCSources
+#endif
 
 class FFICIFContext {
     private let argTypes: UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>

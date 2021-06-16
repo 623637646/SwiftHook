@@ -148,8 +148,6 @@ pod 'EasySwiftHook'
 
 或者使用 Swift Package Manager。 **3.2.0** 版本之后，SPM被支持。
 
-欢迎提 Pull Request 来支持 carthage 和 Swift Package。
-
 # [性能](../Documents/PERFORMANCE.md)
 
 和 [Aspects](https://github.com/steipete/Aspects) 比较 (向 Aspects 致敬).

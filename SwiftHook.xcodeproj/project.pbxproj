@@ -355,6 +355,7 @@
 				2ACB400C24EAA90A0098B59D /* Signature */,
 				2ACB400924EAA7840098B59D /* FFI */,
 				2ACB400E24EAA9330098B59D /* Utilities */,
+				5C1B9A042678ED8F001B334D /* OCSources */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -420,8 +421,6 @@
 			children = (
 				2A96867C2485FDBE004A2DD7 /* FFIClosureContext.swift */,
 				2A96867A2485FA47004A2DD7 /* FFICIFContext.swift */,
-				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
-				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
 			);
 			path = FFI;
 			sourceTree = "<group>";
@@ -438,8 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				2AC10C7F245872F200ED6815 /* Signature.swift */,
-				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
-				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
 			);
 			path = Signature;
 			sourceTree = "<group>";
@@ -463,10 +460,21 @@
 			isa = PBXGroup;
 			children = (
 				2A701512246413CE00B81219 /* Utilities.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		5C1B9A042678ED8F001B334D /* OCSources */ = {
+			isa = PBXGroup;
+			children = (
+				2A348FC42459C1A500DD6ED7 /* SHMethodSignature.h */,
+				2A348FC52459C1A500DD6ED7 /* SHMethodSignature.m */,
+				2A3A4A6C245C090100FE1EFC /* SHFFITypeContext.h */,
+				2A3A4A6D245C090100FE1EFC /* SHFFITypeContext.m */,
 				2AD183C924650AE500B8EC51 /* SHObjectiveCUtilities.h */,
 				2AD183CA24650AE500B8EC51 /* SHObjectiveCUtilities.m */,
 			);
-			path = Utilities;
+			path = OCSources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

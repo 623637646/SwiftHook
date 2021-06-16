@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import SwiftHookOCSources
+#endif
 
 private var associatedInsteadContextHandle: UInt8 = 0
 

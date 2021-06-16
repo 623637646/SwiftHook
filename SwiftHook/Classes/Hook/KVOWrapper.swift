@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import SwiftHookOCSources
+#endif
 
 private var SwiftHookKVOContext = 0
 private let SwiftHookKeyPath = "swiftHookPrivateProperty"

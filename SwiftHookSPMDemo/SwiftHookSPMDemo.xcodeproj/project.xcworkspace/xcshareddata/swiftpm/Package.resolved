@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "libffi_iOS",
+        "repositoryURL": "https://github.com/623637646/libffi.git",
+        "state": {
+          "branch": null,
+          "revision": "c006945112296b8dc4c47bf70cd3ad5fc31488cf",
+          "version": "3.3.6-iOS"
+        }
+      },
+      {
+        "package": "SwiftHook",
+        "repositoryURL": "https://github.com/623637646/SwiftHook.git",
+        "state": {
+          "branch": "master",
+          "revision": "75a877186cf9290e710de9570d48cec7fe09bcdb",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

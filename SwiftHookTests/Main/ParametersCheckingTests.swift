@@ -159,7 +159,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (Int, Double) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be nil or `@:` or as the same as method's. The closure parameters type is `qd`. The method parameters type is `@:qq`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -168,7 +168,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `{CGPoint=dd}d`. But the method parameters type is `@:{CGPoint=dd}{CGRect={CGPoint=dd}{CGSize=dd}}`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be nil or `@:` or as the same as method's. The closure parameters type is `{CGPoint=dd}d`. The method parameters type is `@:{CGPoint=dd}{CGRect={CGPoint=dd}{CGSize=dd}}`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -302,12 +302,23 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _, _ in
                 
-            } as @convention(block) (String) -> Void as AnyObject)
+            } as @convention(block) (String, Selector) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` mode. The parameters of the hook closure mush be nil or `@`. But it's `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+        } catch {
+            XCTAssertNil(error)
+        }
+        
+        do {
+            try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+                
+            } as @convention(block) (ObjectiveCTestObject) -> Void as AnyObject)
+            XCTFail()
+        } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `after` mode. The parameters of the hook closure mush be nil. But it's `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }

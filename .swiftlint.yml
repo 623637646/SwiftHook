@@ -12,3 +12,4 @@ disabled_rules:
   - large_tuple
   - inclusive_language
   - block_based_kvo
+  - file_length

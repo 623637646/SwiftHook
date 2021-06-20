@@ -1,152 +1,99 @@
 //
-//  OCTests.m
+//  ParametersCheckingOCTests.m
 //  SwiftHookTests
 //
-//  Created by Yanni Wang on 22/5/20.
-//  Copyright © 2020 Yanni. All rights reserved.
+//  Created by Wang Ya on 1/30/21.
+//  Copyright © 2021 Yanni. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
-#import "ObjectiveCTestObject.h"
 @import SwiftHook;
-#import <SwiftHookTests-Swift.h>
+#import "ObjectiveCTestObject.h"
 
-@interface SwiftHookOCTests : XCTestCase
+@interface MyURL88000876545 : NSURL
+@end
+@implementation MyURL88000876545
+@end
+
+@interface MyConstClass : NSObject
+@end
+
+@implementation MyConstClass
+- (NSObject *const*)myMethod1:(NSObject *const*)p
+{
+    return p;
+}
+
+- (const char *)myMethod2:(const char *)p
+{
+    return p;
+}
+@end
+
+@interface ParametersCheckingOCTests : XCTestCase
 
 @end
 
-@implementation SwiftHookOCTests
+@implementation ParametersCheckingOCTests
 
-// Perform the hook closure before executing specified instance's method.
-- (void)testSingleHookBefore
-{
-    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-    NSError *error = nil;
-    OCToken *token = [object sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
-        NSLog(@"hooked");
-    }];
-    XCTAssertNil(error);
-    [object noArgsNoReturnFunc];
-    [token cancelHook];
+- (void)test_SwiftHookError_hookKVOUnsupportedInstance {
+    [self utilities_test_obj:@"123"];
+    [self utilities_test_obj:[[NSString alloc] initWithFormat:@"1233243242423432432432423432424242423324234"]];
+    [self utilities_test_obj:[[NSMutableString alloc] initWithFormat:@"1233243242423432432432423432424242423324234"]];
+    [self utilities_test_obj:@[]];
+    [self utilities_test_obj:@[@1]];
+    [self utilities_test_obj:@[@1, @2]];
+    [self utilities_test_obj:[@[@1, @2] mutableCopy]];
+    [self utilities_test_obj:@{@"key": @1}];
+    [self utilities_test_obj:@{@"key1": @1, @"key2": @2}];
+    [self utilities_test_obj:[[NSSet alloc] init]];
+    [self utilities_test_obj:[[NSSet alloc] initWithObjects:@1, nil]];
+    [self utilities_test_obj:[[NSSet alloc] initWithObjects:@1, @2, nil]];
+    [self utilities_test_obj:[[NSMutableSet alloc] init]];
+    [self utilities_test_obj:[[NSMutableSet alloc] initWithObjects:@1, nil]];
+    [self utilities_test_obj:[[NSMutableSet alloc] initWithObjects:@1, @2, nil]];
+    [self utilities_test_obj:[[NSOrderedSet alloc] init]];
+    [self utilities_test_obj:[[NSOrderedSet alloc] initWithObject:@1]];
+    [self utilities_test_obj:[[NSOrderedSet alloc] initWithObjects:@1, @2, nil]];
+    [self utilities_test_obj:[[NSMutableOrderedSet alloc] init]];
+    [self utilities_test_obj:[[NSMutableOrderedSet alloc] initWithObject:@1]];
+    [self utilities_test_obj:[[NSMutableOrderedSet alloc] initWithObjects:@1, @2, nil]];
+    [self utilities_test_obj:[[NSURL alloc] initWithString:@"https://www.google.com"]];
+    [self utilities_test_obj:[[MyURL88000876545 alloc] initWithString:@"https://www.google.com"]];
+    [self utilities_test_obj:[[NSTimer alloc] initWithFireDate:[[NSDate alloc] init] interval:10 repeats:YES block:^(NSTimer * _Nonnull timer) {
+    }]];
 }
 
-// Perform the hook closure after executing specified instance's method. And get the parameters.
-- (void)testSingleHookAfterWithArguments
-{
-    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+- (void)utilities_test_obj:(NSObject *)obj {
     NSError *error = nil;
-    OCToken *token = [object sh_hookAfterSelector:@selector(sumFuncWithA:b:) closure:^void (NSObject *object, SEL selector, NSInteger a, NSInteger b){
-        NSLog(@"arg1 is %ld", a); // arg1 is 3
-        NSLog(@"arg2 is %ld", b); // arg2 is 4
+    OCToken *token = [obj sh_hookAfterSelector:@selector(isEqual:) error:&error closure:^{
+    }];
+    XCTAssertNil(token);
+    XCTAssertNotNil(error);
+    XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
+    XCTAssertEqual(error.code, 11);
+    XCTAssertEqualObjects(error.localizedDescription, @"Unable to hook a instance which is not support KVO.");
+}
+
+- (void)test_const_special_cases_parameters {
+    NSError *error = nil;
+    [MyConstClass sh_hookInsteadWithSelector:@selector(myMethod1:) closure:
+     ^(NSObject *const*(^original)(NSObject *object, SEL selector, NSObject *const* parameter),
+       NSObject *object, SEL selector, NSObject *const* parameter){
+        return original(object, selector, parameter);
     } error:&error];
     XCTAssertNil(error);
-    [object sumFuncWithA:3 b:4];
-    [token cancelHook];
 }
 
-// Totally override the mehtod for specified instance. You can call original with the same parameters or different parameters. Don't even call the original method if you want.
-- (void)testSingleHookInstead
-{
-    ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
+- (void)test_const_char_pointer {
     NSError *error = nil;
-    OCToken *token = [object sh_hookInsteadWithSelector:@selector(sumFuncWithA:b:) closure:^NSInteger (NSInteger(^original)(NSObject *object, SEL selector, NSInteger a, NSInteger b), NSObject *object, SEL selector, NSInteger a, NSInteger b){
-        // get the arguments of the function
-        NSLog(@"arg1 is %ld", a); // arg1 is 3
-        NSLog(@"arg2 is %ld", b); // arg2 is 4
-        
-        // run original function
-        NSInteger result = original(object, selector, a, b); // Or change the parameters: let result = original(-1, -2)
-        NSLog(@"original result is %ld", result);
-        return 9;
+    [MyConstClass sh_hookInsteadWithSelector:@selector(myMethod2:) closure:
+     ^(const char *(^original)(NSObject *object, SEL selector, const char *parameter),
+       NSObject *object, SEL selector, const char *parameter){
+        return original(object, selector, parameter);
     } error:&error];
     XCTAssertNil(error);
-    NSInteger result = [object sumFuncWithA:3 b:4];
-    NSLog(@"hooked result is %ld", result); // result = 9
-    [token cancelHook];
 }
-
-// Perform the hook closure before executing the method of all instances of the class.
-- (void)testAllInstances
-{
-    NSError *error = nil;
-    OCToken *token = [ObjectiveCTestObject sh_hookBeforeSelector:@selector(noArgsNoReturnFunc) error:&error closure:^{
-        NSLog(@"hooked");
-    }];
-    XCTAssertNil(error);
-    [[[ObjectiveCTestObject alloc] init] noArgsNoReturnFunc];
-    [token cancelHook];
-}
-
-// Perform the hook closure before executing the class method.
-- (void)testClassMethod
-{
-    NSError *error = nil;
-    OCToken *token = [ObjectiveCTestObject sh_hookClassMethodBeforeSelector:@selector(classNoArgsNoReturnFunc) error:&error closure:^{
-        NSLog(@"hooked");
-    }];
-    XCTAssertNil(error);
-    [ObjectiveCTestObject classNoArgsNoReturnFunc];
-    [token cancelHook];
-}
-
-// MARK: Advanced usage
-
-// Perform the hook closure before executing the instance dealloc method. This API only works for NSObject.
-- (void)testSingleHookBeforeDeallocForNSObject
-{
-    @autoreleasepool {
-        NSError *error = nil;
-        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-        [object sh_hookDeallocBeforeAndReturnError:&error closure:^{
-            NSLog(@"released!");
-        }];
-        XCTAssertNil(error);
-    }
-}
-
-// Perform hook closure after executing the instance dealloc method. This isn't using runtime. Just add a "Tail" to the instance. The instance is the only object retaining "Tail" object. So when the instance releasing. "Tail" know this event. This API can work for NSObject and pure Swift object.
-- (void)testSingleHookAfterDeallocByTail
-{
-    @autoreleasepool {
-        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-        NSError *error = nil;
-        [object sh_hookDeallocAfterByTailWithClosure:^{
-            NSLog(@"released!");
-        }];
-        XCTAssertNil(error);
-    }
-}
-
-// Totally override the dealloc mehtod for specified instance. Have to call original to avoid memory leak. This API only works for NSObject.
-- (void)testSingleHookInsteadDeallocForNSObject
-{
-    @autoreleasepool {
-        ObjectiveCTestObject *object = [[ObjectiveCTestObject alloc] init];
-        NSError *error = nil;
-        [object sh_hookDeallocInsteadAndReturnError:&error closure:^(void (^original)(void)) {
-            NSLog(@"before release!");
-            original(); // have to call original "dealloc" to avoid memory leak!!!
-            NSLog(@"released!");
-        }];
-        XCTAssertNil(error);
-    }
-}
-
-// Perform the hook closure before executing the dealloc method of all instances of the class. This API only works for NSObject.
-- (void)testAllInstancesHookBeforeDeallocForNSObject
-{
-    NSError *error = nil;
-    [UIViewController sh_hookDeallocBeforeAndReturnError:&error closure:^{
-        NSLog(@"released!");
-    }];
-    XCTAssertNil(error);
-    @autoreleasepool {
-        UIViewController *vc = [[UIViewController alloc] init];
-        NSLog(@"Init a vc %@", vc);
-    }
-}
-
-// MARK: Others
 
 - (void)test_Error
 {

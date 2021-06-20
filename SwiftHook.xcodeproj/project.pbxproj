@@ -57,7 +57,6 @@
 		2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A99159B24587BF4007955E7 /* SignatureTests.swift */; };
 		2AA23CB8247E6ED3003776FC /* AspectsSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA23CB7247E6ED3003776FC /* AspectsSwiftTests.swift */; };
 		2AB6735B245834E30011536D /* SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AB67351245834E30011536D /* SwiftHook.framework */; };
-		2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB6735F245834E30011536D /* SwiftHookTests.swift */; };
 		2AB67362245834E30011536D /* SwiftHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AB67354245834E30011536D /* SwiftHook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2ABBD40B24EA96700094FEE0 /* ParametersCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */; };
 		2AC10C80245872F200ED6815 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC10C7F245872F200ED6815 /* Signature.swift */; };
@@ -77,7 +76,6 @@
 		5C4AB44D25BED9E5005BEC0C /* NSKVONotifying_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */; };
 		5C8212B8268A181900D48AB1 /* HookAllInstancesOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C8212B7268A181900D48AB1 /* HookAllInstancesOCTests.m */; };
 		5C8569652684C61300752BF8 /* HookCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8569642684C61300752BF8 /* HookCommon.swift */; };
-		5CB008D62685760200089443 /* SwiftHookOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB008D52685760200089443 /* SwiftHookOCTests.m */; };
 		5CB66E0425BFB4C200086205 /* SwiftHook_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */; };
 		5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */; };
 		5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */; };
@@ -169,7 +167,6 @@
 		2AB67354245834E30011536D /* SwiftHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook.h; sourceTree = "<group>"; };
 		2AB67355245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AB6735A245834E30011536D /* SwiftHookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftHookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2AB6735F245834E30011536D /* SwiftHookTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHookTests.swift; sourceTree = "<group>"; };
 		2AB67361245834E30011536D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersCheck.swift; sourceTree = "<group>"; };
 		2AC10C7F245872F200ED6815 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
@@ -195,7 +192,6 @@
 		5C4AB44C25BED9E5005BEC0C /* NSKVONotifying_MyClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSKVONotifying_MyClass.m; sourceTree = "<group>"; };
 		5C8212B7268A181900D48AB1 /* HookAllInstancesOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookAllInstancesOCTests.m; sourceTree = "<group>"; };
 		5C8569642684C61300752BF8 /* HookCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookCommon.swift; sourceTree = "<group>"; };
-		5CB008D52685760200089443 /* SwiftHookOCTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftHookOCTests.m; sourceTree = "<group>"; };
 		5CB66E0225BFB4C200086205 /* SwiftHook_MyClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftHook_MyClass.h; sourceTree = "<group>"; };
 		5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwiftHook_MyClass.m; sourceTree = "<group>"; };
 		5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpecialClassTests.m; sourceTree = "<group>"; };
@@ -296,7 +292,7 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		2A3B8C0C24742362007E6D65 /* Main */ = {
+		2A3B8C0C24742362007E6D65 /* Advanced */ = {
 			isa = PBXGroup;
 			children = (
 				2A5C8D5224670B1D00812DAD /* Basic */,
@@ -312,7 +308,7 @@
 				2A28021A2522DC02004F3291 /* VariableCaptureTests.swift */,
 				5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */,
 			);
-			path = Main;
+			path = Advanced;
 			sourceTree = "<group>";
 		};
 		2A49D847247D0D3800E61036 /* AspectsTests */ = {
@@ -422,9 +418,7 @@
 			children = (
 				5C22E53A26897E9500C7CEB9 /* SwiftAPITests */,
 				5C22E53B26897EB800C7CEB9 /* OCAPITests */,
-				2AB6735F245834E30011536D /* SwiftHookTests.swift */,
-				5CB008D52685760200089443 /* SwiftHookOCTests.m */,
-				2A3B8C0C24742362007E6D65 /* Main */,
+				2A3B8C0C24742362007E6D65 /* Advanced */,
 				2A0C85DA2476B5A9003AA9D9 /* Components */,
 				2A58BF9A245C94FE005227F5 /* Others */,
 				2A49D847247D0D3800E61036 /* AspectsTests */,
@@ -867,9 +861,7 @@
 				2AEE4F152476CB2E00F822D9 /* CompatibilityTests.swift in Sources */,
 				2A951D45246BF7A4000DB1E7 /* SingleInstancesInsteadTests.swift in Sources */,
 				2A7F43CA245835D600A63935 /* LibffiTests.swift in Sources */,
-				5CB008D62685760200089443 /* SwiftHookOCTests.m in Sources */,
 				5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */,
-				2AB67360245834E30011536D /* SwiftHookTests.swift in Sources */,
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
 				5C348C222686E77200E14854 /* HookSpecificInstanceTests.swift in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,

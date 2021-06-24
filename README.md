@@ -146,7 +146,7 @@ do {
 pod 'EasySwiftHook'
 ```
 
-Or use Swift Package Manager. SPM is supported from **3.2.0**.
+Or use Swift Package Manager. SPM is supported from **3.2.0**. Make sure your Xcode is greater than 12.5, otherwise it compiles error.
 
 # [Performance](Documents/PERFORMANCE.md)
 

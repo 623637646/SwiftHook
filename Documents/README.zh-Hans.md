@@ -146,7 +146,7 @@ do {
 pod 'EasySwiftHook'
 ```
 
-或者使用 Swift Package Manager。 **3.2.0** 版本之后，SPM被支持。
+或者使用 Swift Package Manager。 **3.2.0** 版本之后，SPM被支持。确保Xcode的版本大于等于12.5，否则会有编译错误。
 
 # [性能](../Documents/PERFORMANCE.md)
 

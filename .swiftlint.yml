@@ -1,5 +1,7 @@
 excluded:
   - Pods
+  - SwiftHookDemo
+  - SwiftHookSPMDemo
 
 disabled_rules:
   - trailing_whitespace

@@ -52,7 +52,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookBefore(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -97,7 +97,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookAfter(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -146,7 +146,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookInstead(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -260,7 +260,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookClassMethodBefore(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -304,7 +304,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookClassMethodAfter(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -352,7 +352,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookClassMethodInstead(targetClass: targetClass, selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -397,7 +397,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookBefore(object: TestObject(), selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -440,7 +440,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookAfter(object: TestObject(), selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -487,7 +487,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             try hookInstead(object: TestObject(), selector: selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }

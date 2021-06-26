@@ -68,10 +68,10 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
         switch mode {
         case .before, .after:
             guard closureReturnType == .voidTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `\(closureReturnType.code)`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `\(closureReturnType.code)`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard closureArgumentTypes.isEmpty else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `\(closureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `\(closureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
         case .instead:
             // Original closure (first parameter)
@@ -80,7 +80,7 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
             }
             let originalClosureType = closureArgumentTypes[0]
             guard originalClosureType == .closureTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `\(originalClosureType.code)`. By right it should be \"@?\". For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `\(originalClosureType.code)`. By right it should be \"@?\". For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard let originalClosureSignature = try originalClosureType.internalClosureSignature() else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
@@ -91,22 +91,22 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
             var originalClosureArgumentTypes = originalClosureSignature.argumentTypes
             
             guard originalClosureReturnType == .voidTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The return type of the original closure (the hook closure's first parameter) should be `v`. But the return type of the original closure is `\(originalClosureReturnType.code)`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The return type of the original closure (the hook closure's first parameter) should be `v`. But the return type of the original closure is `\(originalClosureReturnType.code)`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard originalClosureArgumentTypes.count >= 1 else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             originalClosureArgumentTypes.removeFirst()
             guard originalClosureArgumentTypes.isEmpty else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The parameters of the original closure (the hook closure's first parameter) must be empty. The original closure parameters type is `\(originalClosureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The parameters of the original closure (the hook closure's first parameter) must be empty. The original closure parameters type is `\(originalClosureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             
             // Hook closure
             guard closureReturnType == .voidTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The return type of the hook closure should be `v`. But the return type of the hook closure is `\(closureReturnType.code)`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The return type of the hook closure should be `v`. But the return type of the hook closure is `\(closureReturnType.code)`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard closureArgumentTypes.isEmpty else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The parameters of the hook closure without firt one (The first parameter is the `original` closure) must be empty. But now the parameters type of the hook closure without firt one is `\(closureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "Hook \"dealloc\" method for `instead` mode. The parameters of the hook closure without firt one (The first parameter is the `original` closure) must be empty. But now the parameters type of the hook closure without firt one is `\(closureArgumentTypes.toSignatureString())`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
         }
         
@@ -114,11 +114,11 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
         switch mode {
         case .before, .after:
             guard closureReturnType == .voidTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `\(closureReturnType.code)`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `\(closureReturnType.code)`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             if !closureArgumentTypes.isEmpty {
                 guard closureArgumentTypes == methodArgumentTypes else {
-                    throw SwiftHookError.incompatibleClosureSignature(description: "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `\(closureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                    throw SwiftHookError.incompatibleClosureSignature(description: "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `\(closureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
                 }
             }
         case .instead:
@@ -128,7 +128,7 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
             }
             let originalClosureType = closureArgumentTypes[0]
             guard originalClosureType == .closureTypeValue else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `\(originalClosureType.code)`. By right it should be \"@?\". For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `\(originalClosureType.code)`. By right it should be \"@?\". For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard let originalClosureSignature = try originalClosureType.internalClosureSignature() else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
@@ -139,22 +139,22 @@ func parametersCheck(targetClass: AnyClass, selector: Selector, mode: HookMode, 
             var originalClosureArgumentTypes = originalClosureSignature.argumentTypes
             
             guard originalClosureReturnType == methodReturnType else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The return type of the original closure (the hook closure's first parameter) should be the same as method's return type. But the return type of the original closure is `\(originalClosureReturnType.code)`, The return type of the method is `\(methodReturnType.code)`. Thay are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The return type of the original closure (the hook closure's first parameter) should be the same as method's return type. But the return type of the original closure is `\(originalClosureReturnType.code)`, The return type of the method is `\(methodReturnType.code)`. Thay are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard originalClosureArgumentTypes.count >= 1 else {
                 throw SwiftHookError.internalError(file: #file, line: #line)
             }
             originalClosureArgumentTypes.removeFirst()
             guard originalClosureArgumentTypes == methodArgumentTypes else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `\(originalClosureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) must be the same as the method's. The original closure parameters type is `\(originalClosureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             
             // Hook closure
             guard closureReturnType == methodReturnType else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The return type of the hook closure should be the same as method's return type. But the return type of the hook closure is `\(closureReturnType.code)`, The return type of the method is `\(methodReturnType.code)`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The return type of the hook closure should be the same as method's return type. But the return type of the hook closure is `\(closureReturnType.code)`, The return type of the method is `\(methodReturnType.code)`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
             guard closureArgumentTypes == methodArgumentTypes else {
-                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The parameters type of the hook closure without firt one (The first parameter is the `original` closure) must be the same as the method's. But now the parameters type of the hook closure without firt one is `\(closureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+                throw SwiftHookError.incompatibleClosureSignature(description: "For `instead` mode. The parameters type of the hook closure without firt one (The first parameter is the `original` closure) must be the same as the method's. But now the parameters type of the hook closure without firt one is `\(closureArgumentTypes.toSignatureString())`. But the method parameters type is `\(methodArgumentTypes.toSignatureString())`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
             }
         }
     }

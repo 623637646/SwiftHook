@@ -222,7 +222,7 @@
         XCTAssertNotNil(error);
         XCTAssertEqualObjects(error.domain, @"SwiftHook.SwiftHookError");
         XCTAssertEqual(error.code, 6);
-        XCTAssertEqualObjects(error.localizedDescription, @"For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `B`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/");
+        XCTAssertEqualObjects(error.localizedDescription, @"For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `B`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html");
         [token cancelHook];
     }
     

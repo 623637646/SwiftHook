@@ -150,7 +150,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (Int, Int) -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -159,7 +159,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (Int, Double) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -168,7 +168,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `{CGPoint=dd}d`. But the method parameters type is `@:{CGPoint=dd}{CGRect={CGPoint=dd}{CGSize=dd}}`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure must be the same as method's. The closure parameters type is `{CGPoint=dd}d`. But the method parameters type is `@:{CGPoint=dd}{CGRect={CGPoint=dd}{CGSize=dd}}`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -259,7 +259,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Double, AnyObject, Selector, Int, Int) -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The return type of the original closure (the hook closure's first parameter) should be the same as method's return type. But the return type of the original closure is `d`, The return type of the method is `q`. Thay are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The return type of the original closure (the hook closure's first parameter) should be the same as method's return type. But the return type of the original closure is `d`, The return type of the method is `q`. Thay are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -271,7 +271,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Double as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The return type of the hook closure should be the same as method's return type. But the return type of the hook closure is `d`, The return type of the method is `q`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The return type of the hook closure should be the same as method's return type. But the return type of the hook closure is `d`, The return type of the method is `q`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -283,7 +283,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Double) -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The parameters type of the hook closure without firt one (The first parameter is the `original` closure) must be the same as the method's. But now the parameters type of the hook closure without firt one is `@:qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The parameters type of the hook closure without firt one (The first parameter is the `original` closure) must be the same as the method's. But now the parameters type of the hook closure without firt one is `@:qd`. But the method parameters type is `@:qq`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -296,7 +296,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) () -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -307,7 +307,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (String) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `@`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The parameters of the hook closure mush be empty. But it's `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -329,7 +329,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (AnyObject) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `@`. By right it should be \"@?\". For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "For `instead` mode. The type of the hook closure's first parameter should be a closure (It's `original` closure). But the signature is `@`. By right it should be \"@?\". For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -340,7 +340,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (() -> CGPoint) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the original closure (the hook closure's first parameter) should be `v`. But the return type of the original closure is `{CGPoint=dd}`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the original closure (the hook closure's first parameter) should be `v`. But the return type of the original closure is `{CGPoint=dd}`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -351,7 +351,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) ((Int, Double) -> Void) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The parameters of the original closure (the hook closure's first parameter) must be empty. The original closure parameters type is `qd`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The parameters of the original closure (the hook closure's first parameter) must be empty. The original closure parameters type is `qd`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -363,7 +363,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (() -> Void) -> String as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the hook closure should be `v`. But the return type of the hook closure is `@`. For more about Type Encodings: https://nshipster.com/type-encodings/")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `instead` mode. The return type of the hook closure should be `v`. But the return type of the hook closure is `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }

@@ -150,7 +150,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (Int, Int) -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "For `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "For `befor` and `after` mode. The return type of the hook closure has to be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -296,7 +296,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) () -> Int as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure mush be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` and `after` mode. The return type of the hook closure has to be `v`. But it's `q`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -307,7 +307,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (String, Selector) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` mode. The parameters of the hook closure mush be nil or `@`. But it's `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `befor` mode. The parameters of the hook closure have to be nil or `@`. But it's `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }
@@ -318,7 +318,7 @@ class ParametersCheckingTests: XCTestCase {
             } as @convention(block) (ObjectiveCTestObject) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
-            XCTAssertEqual(description, "Hook \"dealloc\" method for `after` mode. The parameters of the hook closure mush be nil. But it's `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
+            XCTAssertEqual(description, "Hook \"dealloc\" method for `after` mode. The parameters of the hook closure have to be nil. But it's `@`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
         } catch {
             XCTAssertNil(error)
         }

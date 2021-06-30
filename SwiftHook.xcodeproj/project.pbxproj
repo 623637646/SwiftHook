@@ -79,6 +79,8 @@
 		5CB66E0425BFB4C200086205 /* SwiftHook_MyClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */; };
 		5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */; };
 		5CBCCE1D25985EBF0016EA11 /* KVOWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */; };
+		5CE650D7268CA84500A7F34D /* HookOnceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE650D6268CA84500A7F34D /* HookOnceTests.swift */; };
+		5CE650DC268CAA7100A7F34D /* HookOnceOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CE650DB268CAA7100A7F34D /* HookOnceOCTests.m */; };
 		5CF1A182268A1B88006A7881 /* HookClassMethodsOCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CF1A181268A1B88006A7881 /* HookClassMethodsOCTests.m */; };
 		5CF6DC532685D0D900079A81 /* HookSpecificInstanceOC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF6DC522685D0D900079A81 /* HookSpecificInstanceOC.swift */; };
 		5CF6DC582685D0ED00079A81 /* HookAllInstancesOC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF6DC572685D0ED00079A81 /* HookAllInstancesOC.swift */; };
@@ -196,6 +198,8 @@
 		5CB66E0325BFB4C200086205 /* SwiftHook_MyClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwiftHook_MyClass.m; sourceTree = "<group>"; };
 		5CB7A7F425BAC82C002E85BC /* SpecialClassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpecialClassTests.m; sourceTree = "<group>"; };
 		5CBCCE1C25985EBF0016EA11 /* KVOWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVOWrapper.swift; sourceTree = "<group>"; };
+		5CE650D6268CA84500A7F34D /* HookOnceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookOnceTests.swift; sourceTree = "<group>"; };
+		5CE650DB268CAA7100A7F34D /* HookOnceOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookOnceOCTests.m; sourceTree = "<group>"; };
 		5CF1A181268A1B88006A7881 /* HookClassMethodsOCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookClassMethodsOCTests.m; sourceTree = "<group>"; };
 		5CF6DC522685D0D900079A81 /* HookSpecificInstanceOC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookSpecificInstanceOC.swift; sourceTree = "<group>"; };
 		5CF6DC572685D0ED00079A81 /* HookAllInstancesOC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookAllInstancesOC.swift; sourceTree = "<group>"; };
@@ -506,6 +510,7 @@
 				5C348C212686E77200E14854 /* HookSpecificInstanceTests.swift */,
 				5C007C6A268732EC00FBA69F /* HookAllInstancesTests.swift */,
 				5C007C722687347C00FBA69F /* HookClassMethodsTests.swift */,
+				5CE650D6268CA84500A7F34D /* HookOnceTests.swift */,
 			);
 			path = SwiftAPITests;
 			sourceTree = "<group>";
@@ -516,6 +521,7 @@
 				5C22E53F26897EF000C7CEB9 /* HookSpecificInstanceOCTests.m */,
 				5C8212B7268A181900D48AB1 /* HookAllInstancesOCTests.m */,
 				5CF1A181268A1B88006A7881 /* HookClassMethodsOCTests.m */,
+				5CE650DB268CAA7100A7F34D /* HookOnceOCTests.m */,
 			);
 			path = OCAPITests;
 			sourceTree = "<group>";
@@ -849,6 +855,7 @@
 				2A99159C24587BF4007955E7 /* SignatureTests.swift in Sources */,
 				2A28021B2522DC02004F3291 /* VariableCaptureTests.swift in Sources */,
 				2A2744A2246D8C5F00AE6A9A /* SwiftUtilities.swift in Sources */,
+				5CE650D7268CA84500A7F34D /* HookOnceTests.swift in Sources */,
 				2A951D41246BF784000DB1E7 /* SingleInstancesBeforeTests.swift in Sources */,
 				5C4AB44D25BED9E5005BEC0C /* NSKVONotifying_MyClass.m in Sources */,
 				2A5C8D5E24670DC800812DAD /* MemoryTests.swift in Sources */,
@@ -864,6 +871,7 @@
 				5CB7A7F525BAC82C002E85BC /* SpecialClassTests.m in Sources */,
 				2A1134EE2471450E008555F9 /* HookDeallocAfterDelegateTests.swift in Sources */,
 				5C348C222686E77200E14854 /* HookSpecificInstanceTests.swift in Sources */,
+				5CE650DC268CAA7100A7F34D /* HookOnceOCTests.m in Sources */,
 				2A7F43CB245835D600A63935 /* LibffiTestsOC.m in Sources */,
 				2A3A4A71245C303C00FE1EFC /* FFITypeContextTests.swift in Sources */,
 				5C0F5BF725B03FF900AEB73C /* KVOWrapperTests.swift in Sources */,

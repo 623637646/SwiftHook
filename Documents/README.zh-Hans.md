@@ -134,9 +134,9 @@ do {
 }
 ```
 
-6. [在 Objective-C 中使用](../SwiftHookTests/OCAPITests)
-
-7. [Hook dealloc 方法](../SwiftHookTests/SwiftAPITests)
+6. [Hook dealloc 方法](../SwiftHookTests/SwiftAPITests/HookAllInstancesTests.swift#L252)
+7. [只 Hooking 一次](../SwiftHookTests/SwiftAPITests/HookOnceTests.swift)
+8. [在 Objective-C 中使用](../SwiftHookTests/OCAPITests)
 
 # 怎么集成？
 

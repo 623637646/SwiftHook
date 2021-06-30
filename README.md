@@ -160,7 +160,7 @@ Comparing with [Aspects](https://github.com/steipete/Aspects) (respect to Aspect
 # Compatibility with KVO
 
 SwiftHook is full compatible with KVO from 3.0.0 version.
-For more test cases: [Here](SwiftHookTests/Main/CompatibilityTests.swift)
+For more test cases: [Here](SwiftHookTests/Advanced/CompatibilityTests.swift)
 
 # We already have great [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
 

@@ -160,7 +160,7 @@ pod 'EasySwiftHook'
 # KVO兼容性
 
 自 3.0.0 版本以来，完美兼容KVO。
-更多测试用例: [Here](../SwiftHookTests/Main/CompatibilityTests.swift)
+更多测试用例: [Here](../SwiftHookTests/Advanced/CompatibilityTests.swift)
 
 # We already have great [Aspects](https://github.com/steipete/Aspects). Why do I created SwiftHook?
 

@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yanni. All rights reserved.
 //
 
+import Foundation
+
 // queue
 let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
 

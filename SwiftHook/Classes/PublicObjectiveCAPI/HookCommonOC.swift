@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yanni. All rights reserved.
 //
 
+import Foundation
+
 // MARK: - Token
 
 @objcMembers public class OCToken: NSObject {

@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yanni. All rights reserved.
 //
 
+import Foundation
+
 // MARK: - empty closure
 
 // before
@@ -162,7 +164,7 @@ public func hookAfter<T: AnyObject>(object: T, selector: Selector, closure: @esc
  */
 @discardableResult
 public func hookBefore(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
-    return try swiftHookSerialQueue.sync {
+    return try swiftHookSerialQueue.sync { () -> Token in
         try parametersCheck(object: object, selector: selector, mode: .before, closure: closure as AnyObject)
         return try internalHook(object: object, selector: selector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -198,7 +200,7 @@ public func hookBefore(object: AnyObject, selector: Selector, closure: Any) thro
  */
 @discardableResult
 public func hookAfter(object: AnyObject, selector: Selector, closure: Any) throws -> Token {
-    return try swiftHookSerialQueue.sync {
+    return try swiftHookSerialQueue.sync { () -> Token in
         try parametersCheck(object: object, selector: selector, mode: .after, closure: closure as AnyObject)
         return try internalHook(object: object, selector: selector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -265,7 +267,7 @@ public func hookInstead(object: AnyObject, selector: Selector, closure: Any) thr
  */
 @discardableResult
 public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
-    return try swiftHookSerialQueue.sync {
+    return try swiftHookSerialQueue.sync { () -> Token in
         try parametersCheck(object: object, selector: deallocSelector, mode: .before, closure: closure as AnyObject)
         return try internalHook(object: object, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -304,7 +306,7 @@ public func hookDeallocBefore<T: NSObject>(object: T, closure: @escaping (_ obje
         guard let obj = obj as? T else { fatalError() }
         closure(obj)
     } as @convention(block) (NSObject) -> Void
-    return try swiftHookSerialQueue.sync {
+    return try swiftHookSerialQueue.sync { () -> Token in
         try parametersCheck(object: object, selector: deallocSelector, mode: .before, closure: closure as AnyObject)
         return try internalHook(object: object, selector: deallocSelector, mode: .before, hookClosure: closure as AnyObject)
     }
@@ -334,7 +336,7 @@ public func hookDeallocBefore<T: NSObject>(object: T, closure: @escaping (_ obje
  */
 @discardableResult
 public func hookDeallocAfter(object: NSObject, closure: @escaping @convention(block) () -> Void) throws -> Token {
-    return try swiftHookSerialQueue.sync {
+    return try swiftHookSerialQueue.sync { () -> Token in
         try parametersCheck(object: object, selector: deallocSelector, mode: .after, closure: closure as AnyObject)
         return try internalHook(object: object, selector: deallocSelector, mode: .after, hookClosure: closure as AnyObject)
     }
@@ -400,7 +402,7 @@ public func hookDeallocAfterByTail(object: AnyObject, closure: @escaping @conven
  */
 @discardableResult
 public func hookDeallocInstead(object: NSObject, closure: @escaping @convention(block) (_ original: () -> Void) -> Void) throws -> Token {
-    try swiftHookSerialQueue.sync {
+    try swiftHookSerialQueue.sync { () -> Token in 
         try parametersCheck(object: object, selector: deallocSelector, mode: .instead, closure: closure as AnyObject)
         return try internalHook(object: object, selector: deallocSelector, mode: .instead, hookClosure: closure as AnyObject)
     }

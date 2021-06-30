@@ -135,8 +135,8 @@ do {
 ```
 
 6. [Using in Objective-C](SwiftHookTests/OCAPITests)
-
-7. [Hooking the dealloc method](SwiftHookTests/SwiftAPITests)
+7. [Hooking the dealloc method](SwiftHookTests/SwiftAPITests/HookAllInstancesTests.swift#L252)
+8. [Hooking only once (Cancel the hook once triggered)](SwiftHookTests/SwiftAPITests/HookOnceTests.swift)
 
 # How to integrate SwiftHook?
 

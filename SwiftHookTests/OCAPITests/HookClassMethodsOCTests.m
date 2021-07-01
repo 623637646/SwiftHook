@@ -157,7 +157,7 @@ OCToken *token_HookClassMethodsOCTests = nil;
     XCTAssertFalse(run);
     NSError *error = nil;
     token_HookClassMethodsOCTests = [MyObject_HookClassMethodsOCTests sh_hookClassMethodBeforeSelector:@selector(myMethodWithNumber:url:) closure:^(NSObject *  _Nonnull __unsafe_unretained class, SEL _Nonnull sel) {
-        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == class);
+        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == (Class)class);
         XCTAssertEqual(sel, @selector(myMethodWithNumber:url:));
         XCTAssertFalse(run_HookClassMethodsOCTests);
         XCTAssertFalse(run);
@@ -182,7 +182,7 @@ OCToken *token_HookClassMethodsOCTests = nil;
     XCTAssertFalse(run);
     NSError *error = nil;
     token_HookClassMethodsOCTests = [MyObject_HookClassMethodsOCTests sh_hookClassMethodAfterSelector:@selector(myMethodWithNumber:url:) closure:^(NSObject *  _Nonnull __unsafe_unretained class, SEL _Nonnull sel, NSInteger number, NSURL *url) {
-        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == class);
+        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == (Class)class);
         XCTAssertEqual(sel, @selector(myMethodWithNumber:url:));
         XCTAssertEqual(number, 77);
         XCTAssertEqualObjects(url, [NSURL URLWithString:@"https://google.com"]);
@@ -209,7 +209,7 @@ OCToken *token_HookClassMethodsOCTests = nil;
     XCTAssertFalse(run);
     NSError *error = nil;
     token_HookClassMethodsOCTests = [MyObject_HookClassMethodsOCTests sh_hookClassMethodInsteadWithSelector:@selector(myMethodWithNumber:url:) closure:^NSInteger (NSInteger(^original)(NSObject *  _Nonnull __unsafe_unretained class, SEL _Nonnull sel, NSInteger number, NSURL *url), NSObject *  _Nonnull __unsafe_unretained class, SEL _Nonnull sel, NSInteger number, NSURL *url) {
-        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == class);
+        XCTAssertTrue(MyObject_HookClassMethodsOCTests.class == (Class)class);
         XCTAssertEqual(sel, @selector(myMethodWithNumber:url:));
         XCTAssertEqual(number, 77);
         XCTAssertEqualObjects(url, [NSURL URLWithString:@"https://google.com"]);

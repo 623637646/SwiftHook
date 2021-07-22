@@ -144,12 +144,6 @@ private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookCon
         }
     }
     
-    let callBeforeOrAfterClosure = {(hookClosure: AnyObject, hookContext: HookContext, hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) in
-        var hookClosure = hookClosure
-        hookArgsBuffer[0] = withUnsafeMutablePointer(to: &hookClosure, {UnsafeMutableRawPointer($0)})
-        ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosure), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer.baseAddress)
-    }
-    
     // call before closures.
     for hookClosure in beforeHookClosures.reversed() {
         callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
@@ -162,6 +156,12 @@ private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookCon
     for hookClosure in afterHookClosures.reversed() {
         callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
     }
+}
+
+private func callBeforeOrAfterClosure(_ hookClosure: AnyObject, _ hookContext: HookContext, _ hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
+    var hookClosure = hookClosure
+    hookArgsBuffer[0] = withUnsafeMutablePointer(to: &hookClosure, {UnsafeMutableRawPointer($0)})
+    ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosure), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer.baseAddress)
 }
 
 class HookContext {

@@ -119,7 +119,6 @@ func isHookClosuresEmpty(object: AnyObject) -> Bool {
 
 // MARK: This is debug tools.
 
-#if DEBUG
 func debug_hookClosureCount(object: AnyObject) -> Int {
     guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
         return 0
@@ -136,4 +135,3 @@ func debug_hookClosureCount(object: AnyObject) -> Int {
     }
     return count
 }
-#endif

@@ -1,8 +1,8 @@
 # 这是什么？
 
-一个安全，简单，强大并高效的 iOS hook 库（支持 Swift 和 Objective-C，兼容KVO）。
+一个安全、简单、高效的 iOS hook库，可以动态修改某个对象的方法或者一个类所有对象的某个方法。 它支持 Swift 和 Objective-C，与 KVO 具有良好的兼容性。
 
-它基于 iOS runtime 和 [libffi](https://github.com/libffi/libffi)。
+它基于 iOS 运行时和 [libffi](https://github.com/libffi/libffi)。
 
 # 如何使用？
 

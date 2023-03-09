@@ -2,7 +2,7 @@
 
 # What is SwiftHook?
 
-A safe, easy, powerful and efficient hook library for iOS. It supports Swift and Objective-C. It has good compatibility with KVO.
+A safe, easy, and efficient hook library for iOS. It can dynamically change the logic of a method of an object or a method of all objects of a class. It supports Swift and Objective-C. It has good compatibility with KVO.
 
 It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
 

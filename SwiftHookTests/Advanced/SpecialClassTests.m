@@ -301,7 +301,7 @@
     
     [expectation removeAllObjects];
     XCTAssertEqual([obj2 count], count2);
-    XCTAssertEqualObjects(expectation, obj1 == obj2 ? @[@1] : @[]);
+    XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
     [token cancelHook];

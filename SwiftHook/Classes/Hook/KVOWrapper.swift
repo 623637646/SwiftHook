@@ -122,9 +122,7 @@ func isSupportedKVO(object: NSObject) throws -> Bool {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     let result: Bool
-    if object is NSArray || object is NSSet || object is NSOrderedSet {
-        result = false
-    } else if try isKVOed(object: object) {
+    if try isKVOed(object: object) {
         result = true
     } else {
         do {

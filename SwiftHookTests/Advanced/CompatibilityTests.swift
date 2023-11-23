@@ -364,7 +364,9 @@ class CompatibilityTests: XCTestCase {
         let kvo = object.observe(\.obj?.obj.int) { (_, _) in
             order.append(2)
         }
-        _ = kvo
+        defer {
+            _ = kvo
+        }
         XCTAssertEqual(try testGetObjectType(object: object), .KVOed(mode: .normal))
         
         _ = try hookInstead(object: object, selector: #selector(setter: MyObject1.obj), closure: { original, object, selector, number in
@@ -406,7 +408,9 @@ class CompatibilityTests: XCTestCase {
         let kvo = object.observe(\.obj?.obj.int) { (_, _) in
             order.append(2)
         }
-        _ = kvo
+        defer {
+            _ = kvo
+        }
         XCTAssertEqual(try testGetObjectType(object: object), .KVOed(mode: .swiftHook))
         
         object.obj = MyObject2.init()
@@ -429,7 +433,9 @@ class CompatibilityTests: XCTestCase {
             let kvo = object.observe(\.number) { (_, _) in
                 order.append(0)
             }
-            _ = kvo
+            defer {
+                _ = kvo
+            }
             
             // before
             try hookBefore(object: object, selector: deallocSelector) {

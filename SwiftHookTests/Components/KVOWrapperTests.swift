@@ -258,11 +258,11 @@ class KVOWrapperTests: XCTestCase {
         try {
             let object = NSDictionary.init()
             let baseClass: AnyClass = object_getClass(object)!
-            XCTAssertTrue(try isSupportedKVO(object: object))
+            XCTAssertFalse(try isSupportedKVO(object: object))
             let keyValueObservation = object.observe(\.count, changeHandler: { (_, _) in
             })
-            XCTAssertTrue(object_getClass(object)! != baseClass)
-            XCTAssertTrue(try isSupportedKVO(object: object))
+            XCTAssertTrue(object_getClass(object)! == baseClass)
+            XCTAssertFalse(try isSupportedKVO(object: object))
             keyValueObservation.invalidate()
         }()
         try {

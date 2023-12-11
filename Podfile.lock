@@ -1,11 +1,11 @@
 PODS:
   - Aspects (1.4.1)
-  - libffi-iOS (3.3.6-iOS)
-  - SwiftLint (0.43.1)
+  - libffi-iOS (3.4.4-iOS)
+  - SwiftLint (0.54.0)
 
 DEPENDENCIES:
   - Aspects
-  - libffi-iOS (~> 3.3.6-iOS)
+  - libffi-iOS (~> 3.4.4-iOS)
   - SwiftLint
 
 SPEC REPOS:
@@ -16,9 +16,9 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
-  libffi-iOS: 2932b5feac77dc5de0eca4a72269e2c9928a26af
-  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
+  libffi-iOS: 092789907d6a6d09aa3df43920205c9aacb58726
+  SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: cd86616a7140ea91bede20f7df03a6cce0c58e78
+PODFILE CHECKSUM: 1e1b2f6d211099df271811e12552fa428722a248
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

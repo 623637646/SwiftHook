@@ -1,11 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 use_frameworks!
 
 abstract_target 'abstract-SwiftHook' do
   
-  pod 'libffi-iOS', '~> 3.3.6-iOS', :inhibit_warnings => true
+  pod 'libffi-iOS', '~> 3.4.4-iOS', :inhibit_warnings => true
   pod 'SwiftLint'
   
   target 'SwiftHook' do
@@ -28,7 +28,7 @@ post_install do |installer|
     installer.generated_projects.each do |project|
         project.targets.each do |target|
             target.build_configurations.each do |config|
-                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
             end
         end
     end

@@ -197,11 +197,12 @@ class CompatibilityTests: XCTestCase {
         XCTAssertEqual(object.number, 10)
     }
     
+    class MyObject: NSObject {
+        @objc dynamic var property1: Int = 9
+        @objc dynamic var property2: UIView?
+    }
+    
     func test_randomly() throws {
-        class MyObject: NSObject {
-            @objc dynamic var property1: Int = 9
-            @objc dynamic var property2: UIView?
-        }
         
         enum HookLog {
             case KVO(token: NSKeyValueObservation, number: Int)
@@ -347,16 +348,18 @@ class CompatibilityTests: XCTestCase {
         XCTAssertEqual(object.property1, number)
     }
     
+    class MyObject1: NSObject {
+        @objc dynamic var obj: MyObject2?
+    }
+    class MyObject2: NSObject {
+        @objc dynamic var obj: MyObject3 = MyObject3.init()
+    }
+    class MyObject3: NSObject {
+        @objc dynamic var int: Int = 9
+    }
+    
     func test_KVO_SwiftHook_complicated_path() throws {
-        class MyObject1: NSObject {
-            @objc dynamic var obj: MyObject2?
-        }
-        class MyObject2: NSObject {
-            @objc dynamic var obj: MyObject3 = MyObject3.init()
-        }
-        class MyObject3: NSObject {
-            @objc dynamic var int: Int = 9
-        }
+        
         let object = MyObject1.init()
         var order = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
@@ -385,15 +388,6 @@ class CompatibilityTests: XCTestCase {
     }
     
     func test_SwiftHook_KVO_complicated_path() throws {
-        class MyObject1: NSObject {
-            @objc dynamic var obj: MyObject2?
-        }
-        class MyObject2: NSObject {
-            @objc dynamic var obj: MyObject3 = MyObject3.init()
-        }
-        class MyObject3: NSObject {
-            @objc dynamic var int: Int = 9
-        }
         let object = MyObject1.init()
         var order = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
@@ -572,7 +566,9 @@ class CompatibilityTests: XCTestCase {
             let kvo = object.observe(\.number) { (_, _) in
                 order.append(0)
             }
-            _ = kvo
+            defer {
+                _ = kvo
+            }
             
             XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
             

@@ -114,24 +114,24 @@ class OrderTests: XCTestCase {
         }
     }
     
+    class Order: NSObject {
+        var value = [Int]()
+    }
+    
+    class MyObject {
+        static let methodNumber = Int.random(in: Int.min ... Int.max)
+        
+        @objc dynamic func myMethod(order: Order) {
+            order.value.append(MyObject.methodNumber)
+        }
+    }
+    
     func test_Dynamic_Checking() {
-        
-        class Order: NSObject {
-            var value = [Int]()
-        }
-        
-        class MyObject {
-            static let methodNumber = Int.random(in: Int.min ... Int.max)
-            
-            @objc dynamic func myMethod(order: Order) {
-                order.value.append(MyObject.methodNumber)
-            }
-        }
         
         let createBeforeOrAfterHookClosure = { number in
             return {_, _, order in
                 order.value.append(number)
-            } as @convention(block) (AnyObject, Selector, Order) -> Void    // Can't remove "as @convention(block) (AnyObject, Selector, Order) -> Void" here, It may be a bug of compiler.
+            }
         } as (Int) -> @convention(block) (AnyObject, Selector, Order) -> Void
         
         let createInsteadHookClosure = { number in

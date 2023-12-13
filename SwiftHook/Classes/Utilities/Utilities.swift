@@ -10,17 +10,15 @@ import Foundation
 
 func getMethodWithoutSearchingSuperClasses(targetClass: AnyClass, selector: Selector) -> Method? {
     var length: UInt32 = 0
-    let firstMethod = withUnsafeMutablePointer(to: &length) { (p) -> UnsafeMutablePointer<Method>? in
-        class_copyMethodList(targetClass, p)
+    let firstMethod = withUnsafeMutablePointer(to: &length) { (pointer) -> UnsafeMutablePointer<Method>? in
+        class_copyMethodList(targetClass, pointer)
     }
     defer {
         free(firstMethod)
     }
     let bufferPointer = UnsafeBufferPointer.init(start: firstMethod, count: Int(length))
-    for method in bufferPointer {
-        if method_getName(method) == selector {
-            return method
-        }
+    for method in bufferPointer where method_getName(method) == selector {
+        return method
     }
     return nil
 }

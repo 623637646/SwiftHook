@@ -81,7 +81,7 @@ class KVOWrapperTests: XCTestCase {
         
         // aspect -> swiftHook
         try {
-            let run = { (_ object: NSObject) in
+            let run = { (object: NSObject) in
                 var expectation = [Int]()
                 XCTAssertFalse(try isKVOed(object: object))
                 let random1 = Int.random(in: Int.min ... Int.max)
@@ -115,7 +115,7 @@ class KVOWrapperTests: XCTestCase {
         
         // setClass -> swiftHook
         try {
-            let run = { (_ object: NSObject) in
+            let run = { (object: NSObject) in
                 var expectation = [Int]()
                 XCTAssertFalse(try isKVOed(object: object))
                 let random1 = Int.random(in: Int.min ... Int.max)
@@ -150,7 +150,7 @@ class KVOWrapperTests: XCTestCase {
         
         // swiftHook -> setClass
         try {
-            let run = { (_ object: NSObject) in
+            let run = { (object: NSObject) in
                 var expectation = [Int]()
                 let originalClass: AnyClass = object_getClass(object)!
                 XCTAssertFalse(try isKVOed(object: object))
@@ -186,7 +186,7 @@ class KVOWrapperTests: XCTestCase {
             let object = NSURL.init(string: "https://www.google.com")!
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.absoluteString, changeHandler: { (_, _) in
+            let keyValueObservation = object.observe(\.absoluteString, changeHandler: { _, _ in
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
             XCTAssertFalse(try isSupportedKVO(object: object))
@@ -196,7 +196,7 @@ class KVOWrapperTests: XCTestCase {
             let object = NSString.init(string: "???")
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.length, changeHandler: { (_, _) in
+            let keyValueObservation = object.observe(\.length, changeHandler: { _, _ in
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
             XCTAssertFalse(try isSupportedKVO(object: object))
@@ -208,7 +208,7 @@ class KVOWrapperTests: XCTestCase {
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
             XCTAssertThrowsError(try SwiftHookUtilities.catchException {
-                _ = object.observe(\.count, changeHandler: { (_, _) in
+                _ = object.observe(\.count, changeHandler: { _, _ in
                 })
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
@@ -219,7 +219,7 @@ class KVOWrapperTests: XCTestCase {
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
             XCTAssertThrowsError(try SwiftHookUtilities.catchException {
-                _ = object.observe(\.count, changeHandler: { (_, _) in
+                _ = object.observe(\.count, changeHandler: { _, _ in
                 })
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
@@ -230,7 +230,7 @@ class KVOWrapperTests: XCTestCase {
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
             XCTAssertThrowsError(try SwiftHookUtilities.catchException {
-                _ = object.observe(\.count, changeHandler: { (_, _) in
+                _ = object.observe(\.count, changeHandler: { _, _ in
                 })
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
@@ -249,7 +249,7 @@ class KVOWrapperTests: XCTestCase {
             let object = OperationQueue.init()
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertTrue(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.isSuspended, changeHandler: { (_, _) in
+            let keyValueObservation = object.observe(\.isSuspended, changeHandler: { _, _ in
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
             XCTAssertTrue(try isSupportedKVO(object: object))
@@ -259,7 +259,7 @@ class KVOWrapperTests: XCTestCase {
             let object = NSDictionary.init()
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertFalse(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.count, changeHandler: { (_, _) in
+            let keyValueObservation = object.observe(\.count, changeHandler: { _, _ in
             })
             XCTAssertTrue(object_getClass(object)! == baseClass)
             XCTAssertFalse(try isSupportedKVO(object: object))
@@ -269,7 +269,7 @@ class KVOWrapperTests: XCTestCase {
             let object = UIView.init()
             let baseClass: AnyClass = object_getClass(object)!
             XCTAssertTrue(try isSupportedKVO(object: object))
-            let keyValueObservation = object.observe(\.center, changeHandler: { (_, _) in
+            let keyValueObservation = object.observe(\.center, changeHandler: { _, _ in
             })
             XCTAssertTrue(object_getClass(object)! != baseClass)
             XCTAssertTrue(try isSupportedKVO(object: object))
@@ -294,7 +294,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -338,7 +338,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.Number) { (_, _) in
+        let kvo = object.observe(\.Number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -390,7 +390,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -442,7 +442,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.Number) { (_, _) in
+        let kvo = object.observe(\.Number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -486,7 +486,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.___number) { (_, _) in
+        let kvo = object.observe(\.___number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -530,7 +530,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.___Number) { (_, _) in
+        let kvo = object.observe(\.___Number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -574,7 +574,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+        let kvo = object.observe(\.swiftHookPrivateProperty) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -618,7 +618,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+        let kvo = object.observe(\.swiftHookPrivateProperty) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -659,7 +659,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+        let kvo = object.observe(\.swiftHookPrivateProperty) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -703,7 +703,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+        let kvo = object.observe(\.swiftHookPrivateProperty) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -744,7 +744,7 @@ class KVOWrapperTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.swiftHookPrivateProperty) { (_, _) in
+        let kvo = object.observe(\.swiftHookPrivateProperty) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))

@@ -77,7 +77,7 @@ public func hookAfter(targetClass: AnyClass, selector: Selector, closure: @escap
          return number1 + number2
      }
  }
- let token = try! hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = MyObject().sum(1, 2)
@@ -108,7 +108,7 @@ public func hookBefore<T: AnyObject>(targetClass: T.Type, selector: Selector, cl
          return number1 + number2
      }
  }
- let token = try! hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = MyObject().sum(1, 2)
@@ -273,7 +273,7 @@ public func hookDeallocBefore(targetClass: NSObject.Type, closure: @escaping @co
  ```
  class MyObject: NSObject {
  }
- let token = try! hookDeallocBefore(targetClass: MyObject.self, closure: { (obj) in
+ let token = try! hookDeallocBefore(targetClass: MyObject.self, closure: { obj in
      print("hooked")
  })
  autoreleasepool {
@@ -340,7 +340,7 @@ public func hookDeallocAfter(targetClass: NSObject.Type, closure: @escaping @con
  ```
  class MyObject: NSObject {
  }
- let token = try! hookDeallocInstead(targetClass: MyObject.self, closure: { (original) in
+ let token = try! hookDeallocInstead(targetClass: MyObject.self, closure: { original in
      print("before release")
      original()
      print("after release")

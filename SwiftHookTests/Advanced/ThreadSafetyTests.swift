@@ -120,7 +120,7 @@ class ThreadSafetyTests: XCTestCase {
         MyObject.serialQueue.sync {
             exp.fulfill()
         }
-        self.waitForExpectations(timeout: 10) { (error) in
+        self.waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(MyObject.result, 1000)
         }
@@ -153,7 +153,7 @@ class ThreadSafetyTests: XCTestCase {
         MyObject.serialQueue.sync {
             exp.fulfill()
         }
-        self.waitForExpectations(timeout: 10) { (error) in
+        self.waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(MyObject.result, 5000)
         }
@@ -177,7 +177,7 @@ class ThreadSafetyTests: XCTestCase {
         MyObject.serialQueue.sync {
             exp.fulfill()
         }
-        self.waitForExpectations(timeout: 10) { (error) in
+        self.waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(MyObject.result, 1000)
         }
@@ -210,7 +210,7 @@ class ThreadSafetyTests: XCTestCase {
         MyObject.serialQueue.sync {
             exp.fulfill()
         }
-        self.waitForExpectations(timeout: 10) { (error) in
+        self.waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(MyObject.result, 5000)
         }

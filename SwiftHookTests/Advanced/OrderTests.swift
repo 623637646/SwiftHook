@@ -80,7 +80,7 @@ class OrderTests: XCTestCase {
                     deallocOrder.append(6)
                 })
                 
-                try hookDeallocInstead(targetClass: Request.self, closure: { (original) in
+                try hookDeallocInstead(targetClass: Request.self, closure: { original in
                     deallocOrder.append(3)
                     original()
                     deallocOrder.append(5)
@@ -98,7 +98,7 @@ class OrderTests: XCTestCase {
                     deallocOrder.append(4)
                 })
                 
-                try hookDeallocInstead(object: object) { (original) in
+                try hookDeallocInstead(object: object) { original in
                     deallocOrder.append(1)
                     original()
                     deallocOrder.append(7)
@@ -364,9 +364,11 @@ class OrderTests: XCTestCase {
         class MyObject: SuperObject {
             @objc dynamic override func myMethod1() {
                 super.myMethod1()
+                _ = 0 // Fix SwiftLint warning.
             }
             @objc dynamic override func myMethod2() {
                 super.myMethod2()
+                _ = 0 // Fix SwiftLint warning.
             }
         }
         let object = MyObject.init()

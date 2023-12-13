@@ -169,7 +169,7 @@ class FFITypeContextTests: XCTestCase {
     
     func testPointerDouble() {
         var doubleValue: Double = 0
-        withUnsafePointer(to: &doubleValue) { (doubleValuePointer) -> Void in
+        withUnsafePointer(to: &doubleValue) { doubleValuePointer in
             let block: @convention(block) () -> UnsafePointer<Double> = {
                 return doubleValuePointer
             }
@@ -362,7 +362,7 @@ class FFITypeContextTests: XCTestCase {
             blocks.append(({Self.self} as @convention(block) () -> AnyClass))
             blocks.append(({#function} as @convention(block) () -> Selector))
             blocks.append(({0} as @convention(block) () -> Any))
-            blocks.forEach { (block) in
+            blocks.forEach { block in
                 guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
                     XCTFail()
                     return
@@ -374,7 +374,7 @@ class FFITypeContextTests: XCTestCase {
             blocks.append(({CGPoint.zero} as @convention(block) () -> CGPoint))
             blocks.append(({CGRect.zero} as @convention(block) () -> CGRect))
             blocks.append(({ComplexityStruct.init()} as @convention(block) () -> ComplexityStruct))
-            blocks.forEach { (block) in
+            blocks.forEach { block in
                 guard let typeEncoding = self.getReturnTypeEncoding(block: block) else {
                     XCTFail()
                     return

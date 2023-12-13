@@ -85,7 +85,7 @@ class HookSpecificInstanceTests: XCTestCase {
         var run = false
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
-        try hookBefore(object: obj, selector: #selector(MyObject.myMethod(number:url:))) {[weak obj] (object, sel) in
+        try hookBefore(object: obj, selector: #selector(MyObject.myMethod(number:url:))) {[weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -116,7 +116,7 @@ class HookSpecificInstanceTests: XCTestCase {
         var run = false
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
-        try hookAfter(object: obj, selector: #selector(MyObject.myMethod)) {[weak obj] (object, sel) in
+        try hookAfter(object: obj, selector: #selector(MyObject.myMethod)) {[weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -303,7 +303,7 @@ class HookSpecificInstanceTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocBefore(object: obj) { (obj) in
+            try hookDeallocBefore(object: obj) { obj in
                 XCTAssertEqual(obj.name, "bbb")
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
@@ -404,7 +404,7 @@ class HookSpecificInstanceTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocInstead(object: obj, closure: { (original) in
+            try hookDeallocInstead(object: obj, closure: { original in
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
                 XCTAssertFalse(MyObject.isReleased)

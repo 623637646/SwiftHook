@@ -11,8 +11,8 @@ import Foundation
 import SwiftHookOCSources
 #endif
 
-private var SwiftHookKVOContext = 0
-private let SwiftHookKeyPath = "swiftHookPrivateProperty"
+private var swiftHookKVOContext = 0
+private let swiftHookKeyPath = "swiftHookPrivateProperty"
 
 private class RealObserver: NSObject {
     
@@ -23,7 +23,7 @@ private class RealObserver: NSObject {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == SwiftHookKeyPath {
+        if keyPath == swiftHookKeyPath {
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -37,11 +37,11 @@ private class Observer: NSObject {
     init(target: NSObject) {
         self.target = target
         super.init()
-        target.addObserver(RealObserver.shared, forKeyPath: SwiftHookKeyPath, options: .new, context: &SwiftHookKVOContext)
+        target.addObserver(RealObserver.shared, forKeyPath: swiftHookKeyPath, options: .new, context: &swiftHookKVOContext)
     }
     
     deinit {
-        self.target.removeObserver(RealObserver.shared, forKeyPath: SwiftHookKeyPath, context: &SwiftHookKVOContext)
+        self.target.removeObserver(RealObserver.shared, forKeyPath: swiftHookKeyPath, context: &swiftHookKVOContext)
     }
 }
 
@@ -57,8 +57,8 @@ func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {
         guard let observer = object.swiftHookObserver else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
-        object.addObserver(observer, forKeyPath: propertyName, options: .new, context: &SwiftHookKVOContext)
-        object.removeObserver(observer, forKeyPath: propertyName, context: &SwiftHookKVOContext)
+        object.addObserver(observer, forKeyPath: propertyName, options: .new, context: &swiftHookKVOContext)
+        object.removeObserver(observer, forKeyPath: propertyName, context: &swiftHookKVOContext)
     }
 }
 
@@ -127,10 +127,10 @@ func isSupportedKVO(object: NSObject) throws -> Bool {
     } else {
         do {
             try SwiftHookUtilities.catchException {
-                object.addObserver(RealObserver.shared, forKeyPath: SwiftHookKeyPath, options: .new, context: &SwiftHookKVOContext)
+                object.addObserver(RealObserver.shared, forKeyPath: swiftHookKeyPath, options: .new, context: &swiftHookKVOContext)
             }
             defer {
-                object.removeObserver(RealObserver.shared, forKeyPath: SwiftHookKeyPath, context: &SwiftHookKVOContext)
+                object.removeObserver(RealObserver.shared, forKeyPath: swiftHookKeyPath, context: &swiftHookKVOContext)
             }
             guard let isaClassNew = object_getClass(object) else {
                 throw SwiftHookError.internalError(file: #file, line: #line)

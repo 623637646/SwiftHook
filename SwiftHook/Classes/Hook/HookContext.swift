@@ -106,7 +106,7 @@ private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, r
             return
         }
         var hookClosure = insteadHookClosures[lastIndex - 1]
-        withUnsafeMutablePointer(to: &hookClosure) { (hookClosurePointer) -> Void in
+        withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
             let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
             let hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
             defer {
@@ -167,7 +167,7 @@ private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookCon
 
 private func callBeforeOrAfterClosure(_ hookClosure: AnyObject, _ hookContext: HookContext, _ hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
     var hookClosure = hookClosure
-    withUnsafeMutablePointer(to: &hookClosure) { (hookClosurePointer) -> Void in
+    withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
         hookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
         ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer.baseAddress)
     }
@@ -239,9 +239,9 @@ class HookContext {
         }(), returnType: methodSignature.returnType, signatureType: .closure))
         
         // Prep closure
-        self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, fun: methodCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
+        self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, userData: Unmanaged.passUnretained(self).toOpaque(), fun: methodCalledFunction)
         
-        self.insteadClosureContext = try FFIClosureContext.init(cif: self.insteadClosureCifContext.cif, fun: insteadClosureCalledFunction, userData: Unmanaged.passUnretained(self).toOpaque())
+        self.insteadClosureContext = try FFIClosureContext.init(cif: self.insteadClosureCifContext.cif, userData: Unmanaged.passUnretained(self).toOpaque(), fun: insteadClosureCalledFunction)
         
         // swizzling
         method_setImplementation(self.method, self.methodClosureContext.targetIMP)

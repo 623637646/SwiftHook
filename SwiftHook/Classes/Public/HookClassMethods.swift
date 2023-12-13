@@ -77,7 +77,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
          return number1 + number2
      }
  }
- let token = try! hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = MyObject.sum(1, 2)
@@ -108,7 +108,7 @@ public func hookClassMethodBefore<T: AnyObject>(targetClass: T.Type, selector: S
          return number1 + number2
      }
  }
- let token = try! hookClassMethodAfter(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookClassMethodAfter(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = MyObject.sum(1, 2)

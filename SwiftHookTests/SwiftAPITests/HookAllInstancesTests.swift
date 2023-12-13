@@ -85,7 +85,7 @@ class HookAllInstancesTests: XCTestCase {
         var run = false
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
-        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:))) {[weak obj] (object, sel) in
+        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:))) {[weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -116,7 +116,7 @@ class HookAllInstancesTests: XCTestCase {
         var run = false
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
-        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {[weak obj] (object, sel) in
+        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {[weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -303,7 +303,7 @@ class HookAllInstancesTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocBefore(targetClass: MyObject.self) { (obj) in
+            try hookDeallocBefore(targetClass: MyObject.self) { obj in
                 XCTAssertEqual(obj.name, "bbb")
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
@@ -372,7 +372,7 @@ class HookAllInstancesTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocInstead(targetClass: MyObject.self, closure: { (original) in
+            try hookDeallocInstead(targetClass: MyObject.self, closure: { original in
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
                 XCTAssertFalse(MyObject.isReleased)

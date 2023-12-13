@@ -80,7 +80,7 @@ public func hookAfter(object: AnyObject, selector: Selector, closure: @escaping 
      }
  }
  let object = MyObject()
- let token = try! hookBefore(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookBefore(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = object.sum(1, 2)
@@ -112,7 +112,7 @@ public func hookBefore<T: AnyObject>(object: T, selector: Selector, closure: @es
      }
  }
  let object = MyObject()
- let token = try! hookAfter(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { (obj, sel) in
+ let token = try! hookAfter(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { obj, sel in
      print("hooked")
  })
  _ = object.sum(1, 2)
@@ -283,7 +283,7 @@ public func hookDeallocBefore(object: NSObject, closure: @escaping @convention(b
  var token: Token?
  autoreleasepool {
      let object = MyObject()
-     token = try! hookDeallocBefore(object: object, closure: { (obj) in
+     token = try! hookDeallocBefore(object: object, closure: { obj in
          print("hooked")
      })
  }
@@ -381,7 +381,7 @@ public func hookDeallocAfterByTail(object: AnyObject, closure: @escaping @conven
  var token: Token?
  autoreleasepool {
      let object = MyObject()
-     token = try! hookDeallocInstead(object: object, closure: { (original) in
+     token = try! hookDeallocInstead(object: object, closure: { original in
          print("before release")
          original()
          print("after release")

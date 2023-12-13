@@ -20,13 +20,13 @@ class AspectsSwiftTests: XCTestCase {
                 let invocation = aspectInfo.originalInvocation()!
                 invocation.invoke()
                 var result: Int!
-                withUnsafeMutablePointer(to: &result) { (p) -> Void in
-                    invocation.getReturnValue(UnsafeMutableRawPointer(p))
+                withUnsafeMutablePointer(to: &result) { pointer in
+                    invocation.getReturnValue(UnsafeMutableRawPointer(pointer))
                 }
                 XCTAssertEqual(result, 999)
                 result = 333
-                withUnsafeMutablePointer(to: &result) { (p) -> Void in
-                    invocation.setReturnValue(UnsafeMutableRawPointer(p))
+                withUnsafeMutablePointer(to: &result) { pointer in
+                    invocation.setReturnValue(UnsafeMutableRawPointer(pointer))
                 }
                 } as @convention(block) (AspectInfo) -> Void)
             
@@ -49,14 +49,14 @@ class AspectsSwiftTests: XCTestCase {
                 invocation.invoke()
                 
                 unowned var result: NSURLRequest?
-                withUnsafeMutablePointer(to: &result) { (p) -> Void in
-                    invocation.getReturnValue(UnsafeMutableRawPointer(p))
+                withUnsafeMutablePointer(to: &result) { pointer in
+                    invocation.getReturnValue(UnsafeMutableRawPointer(pointer))
                 }
                 XCTAssertEqual(result?.url?.absoluteString, "https://www.shopee.com")
                 
                 var new = NSURLRequest(url: URL(string: "https://www.google.com")!)
-                withUnsafeMutablePointer(to: &new) { (p) -> Void in
-                    invocation.setReturnValue(UnsafeMutableRawPointer(p))
+                withUnsafeMutablePointer(to: &new) { pointer in
+                    invocation.setReturnValue(UnsafeMutableRawPointer(pointer))
                     invocation.retainArguments()
                 }
                 } as @convention(block) (AspectInfo) -> Void)

@@ -17,7 +17,7 @@ class CompatibilityTests: XCTestCase {
         var called = false
         let object = ObjectiveCTestObject()
         XCTAssertTrue(try testGetObjectType(object: object) == .normal)
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             called = true
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .normal))
@@ -45,7 +45,7 @@ class CompatibilityTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -86,7 +86,7 @@ class CompatibilityTests: XCTestCase {
         } as @convention(block) ((AnyObject, Selector, Int) -> Void, AnyObject, Selector, Int) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -120,7 +120,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .normal))
@@ -161,7 +161,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let kvo = object.observe(\.number) { (_, _) in
+        let kvo = object.observe(\.number) { _, _ in
             expectation.append(2)
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .normal))
@@ -219,7 +219,7 @@ class CompatibilityTests: XCTestCase {
         var token = try hookAfter(object: object, selector: #selector(setter: MyObject.property2)) {
         }
         property2Log.append(.swiftHook(token: token, start: 0, end: 0))
-        var keyValueObservation = object.observe(\.property2) { (_, _) in
+        var keyValueObservation = object.observe(\.property2) { _, _ in
         }
         property2Log.append(.KVO(token: keyValueObservation, number: 0))
         for _ in 0 ... Int.random(in: 0 ... 100) {
@@ -236,7 +236,7 @@ class CompatibilityTests: XCTestCase {
             } else {
                 // KVO
                 let number = Int.random(in: Int.min ... Int.max)
-                let token = object.observe(\.property1) { (_, _) in
+                let token = object.observe(\.property1) { _, _ in
                     order.append(number)
                 }
                 logs.append(.KVO(token: token, number: number))
@@ -247,7 +247,7 @@ class CompatibilityTests: XCTestCase {
         }
         property2Log.append(.swiftHook(token: token, start: 0, end: 0))
         
-        keyValueObservation = object.observe(\.property2) { (_, _) in
+        keyValueObservation = object.observe(\.property2) { _, _ in
         }
         property2Log.append(.KVO(token: keyValueObservation, number: 0))
         
@@ -303,8 +303,8 @@ class CompatibilityTests: XCTestCase {
         }
         
         var hasSwiftHook = false
-        property2Log.forEach { (log) in
-            if case .swiftHook(token: _, start: _, end: _) = log {
+        property2Log.forEach { log in
+            if case .swiftHook = log {
                 hasSwiftHook = true
             }
         }
@@ -315,7 +315,7 @@ class CompatibilityTests: XCTestCase {
         XCTAssertEqual(order, [])
         XCTAssertEqual(object.property1, number)
         
-        property2Log.forEach { (log) in
+        property2Log.forEach { log in
             if case let .swiftHook(token: token, start: _, end: _) = log {
                 token.cancelHook()
             }
@@ -335,7 +335,7 @@ class CompatibilityTests: XCTestCase {
         XCTAssertEqual(order, [])
         XCTAssertEqual(object.property1, number)
         
-        property2Log.forEach { (log) in
+        property2Log.forEach { log in
             if case let .KVO(token: token, number: _) = log {
                 token.invalidate()
             }
@@ -364,7 +364,7 @@ class CompatibilityTests: XCTestCase {
         var order = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let kvo = object.observe(\.obj?.obj.int) { (_, _) in
+        let kvo = object.observe(\.obj?.obj.int) { _, _ in
             order.append(2)
         }
         defer {
@@ -399,7 +399,7 @@ class CompatibilityTests: XCTestCase {
         } as @convention(block) ((MyObject1, Selector, MyObject2) -> Void, MyObject1, Selector, MyObject2) -> Void)
         XCTAssertEqual(try testGetObjectType(object: object), .KVOed(mode: .swiftHook))
         
-        let kvo = object.observe(\.obj?.obj.int) { (_, _) in
+        let kvo = object.observe(\.obj?.obj.int) { _, _ in
             order.append(2)
         }
         defer {
@@ -424,7 +424,7 @@ class CompatibilityTests: XCTestCase {
             let object = MyObject()
             XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             
-            let kvo = object.observe(\.number) { (_, _) in
+            let kvo = object.observe(\.number) { _, _ in
                 order.append(0)
             }
             defer {
@@ -499,7 +499,7 @@ class CompatibilityTests: XCTestCase {
                 order.append(9)
             } as @convention(block) (() -> Void) -> Void)
             
-            let kvo = object.observe(\.number) { (_, _) in
+            let kvo = object.observe(\.number) { _, _ in
                 order.append(0)
             }
             kvo.invalidate()
@@ -563,7 +563,7 @@ class CompatibilityTests: XCTestCase {
                 order.append(5)
             })
             
-            let kvo = object.observe(\.number) { (_, _) in
+            let kvo = object.observe(\.number) { _, _ in
                 order.append(0)
             }
             defer {

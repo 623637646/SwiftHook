@@ -13,10 +13,10 @@ class FFIClosureContext {
     private let ffiClosure: UnsafeMutablePointer<ffi_closure>
     let targetIMP: IMP
     
-    init(cif: UnsafeMutablePointer<ffi_cif>, fun: (@escaping @convention(c) (UnsafeMutablePointer<ffi_cif>?, UnsafeMutableRawPointer?, UnsafeMutablePointer<UnsafeMutableRawPointer?>?, UnsafeMutableRawPointer?) -> Void), userData: UnsafeMutableRawPointer) throws {
+    init(cif: UnsafeMutablePointer<ffi_cif>, userData: UnsafeMutableRawPointer, fun: @escaping @convention(c) (UnsafeMutablePointer<ffi_cif>?, UnsafeMutableRawPointer?, UnsafeMutablePointer<UnsafeMutableRawPointer?>?, UnsafeMutableRawPointer?) -> Void) throws {
         var targetIMP: UnsafeMutableRawPointer?
-        self.ffiClosure = try withUnsafeMutablePointer(to: &targetIMP) { (p) -> UnsafeMutablePointer<ffi_closure> in
-            guard let closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, p) else {
+        self.ffiClosure = try withUnsafeMutablePointer(to: &targetIMP) { (pointer) -> UnsafeMutablePointer<ffi_closure> in
+            guard let closure = ffi_closure_alloc(MemoryLayout<ffi_closure>.stride, pointer) else {
                 throw SwiftHookError.ffiError
             }
             return closure.assumingMemoryBound(to: ffi_closure.self)

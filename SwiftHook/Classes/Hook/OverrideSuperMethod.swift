@@ -62,7 +62,7 @@ private class OverrideMethodContext: Hashable {
         self.methodCifContext = try FFICIFContext.init(signature: methodSignature)
         
         // FFIClosureContext
-        self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, fun: overrideMethodCalled, userData: Unmanaged.passUnretained(self).toOpaque())
+        self.methodClosureContext = try FFIClosureContext.init(cif: self.methodCifContext.cif, userData: Unmanaged.passUnretained(self).toOpaque(), fun: overrideMethodCalled)
         
         // add Method
         guard class_addMethod(self.targetClass, self.selector, self.methodClosureContext.targetIMP, method_getTypeEncoding(superMethod)) else {

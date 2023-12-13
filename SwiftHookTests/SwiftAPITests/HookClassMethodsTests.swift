@@ -82,7 +82,7 @@ class HookClassMethodsTests: XCTestCase {
         var run = false
         XCTAssertFalse(MyObject.run)
         XCTAssertFalse(run)
-        try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:))) { (object, sel) in
+        try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:))) { object, sel in
             XCTAssertTrue(MyObject.self === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -112,7 +112,7 @@ class HookClassMethodsTests: XCTestCase {
         var run = false
         XCTAssertFalse(MyObject.run)
         XCTAssertFalse(run)
-        try hookClassMethodAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) { (object, sel) in
+        try hookClassMethodAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) { object, sel in
             XCTAssertTrue(MyObject.self === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             

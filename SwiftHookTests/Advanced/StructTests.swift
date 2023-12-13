@@ -49,7 +49,7 @@ class StructTests: XCTestCase {
         }
         
         var pointerForTesting: UInt8 = 0
-        withUnsafeMutablePointer(to: &pointerForTesting) { (pointer) -> Void in
+        withUnsafeMutablePointer(to: &pointerForTesting) { pointer in
             do {
                 let token1 = try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
                     XCTAssertEqual(s.i, 11)

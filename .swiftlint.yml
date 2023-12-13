@@ -1,13 +1,11 @@
 excluded:
   - Pods
-  - SwiftHookDemo
-  - SwiftHookSPMDemo
+  - Examples
 
 disabled_rules:
   - trailing_whitespace
   - line_length
   - function_body_length
-  - identifier_name
   - cyclomatic_complexity
   - large_tuple
   - inclusive_language

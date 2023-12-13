@@ -13,7 +13,7 @@ class LibffiTests: XCTestCase {
     
     func testLibffiCall() {
         var cif: ffi_cif = ffi_cif()
-        withUnsafeMutablePointer(to: &cif) { (cifPointer) -> Void in
+        withUnsafeMutablePointer(to: &cif) { cifPointer in
             let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
             defer { argumentTypes.deallocate() }
             argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
@@ -35,11 +35,11 @@ class LibffiTests: XCTestCase {
             var arg2 = Int.random(in: Int.min / 2 ... Int.max / 2)
             var returnValue: Int = 0
             
-            withUnsafeMutablePointer(to: &obj) { (objPointer) -> Void in
-                withUnsafeMutablePointer(to: &selector) { (selectorPointer) -> Void in
-                    withUnsafeMutablePointer(to: &arg1) { (arg1Pointer) -> Void in
-                        withUnsafeMutablePointer(to: &arg2) { (arg2Pointer) -> Void in
-                            withUnsafeMutableBytes(of: &returnValue, { (pReturnValue) -> Void in
+            withUnsafeMutablePointer(to: &obj) { objPointer in
+                withUnsafeMutablePointer(to: &selector) { selectorPointer in
+                    withUnsafeMutablePointer(to: &arg1) { arg1Pointer in
+                        withUnsafeMutablePointer(to: &arg2) { arg2Pointer in
+                            withUnsafeMutableBytes(of: &returnValue, { pReturnValue in
                                 let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 4)
                                 defer { arguments.deallocate() }
                                 arguments[0] = UnsafeMutableRawPointer(objPointer)
@@ -61,7 +61,7 @@ class LibffiTests: XCTestCase {
     
     func testLibffiClosure() {
         var cif: ffi_cif = ffi_cif()
-        withUnsafeMutablePointer(to: &cif) { (cifPointer) -> Void in
+        withUnsafeMutablePointer(to: &cif) { cifPointer in
             let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 4)
             defer { argumentTypes.deallocate() }
             argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
@@ -137,9 +137,9 @@ class LibffiTests: XCTestCase {
         pointType.type = UInt16(FFI_TYPE_STRUCT)
         pointType.elements = elementsTypes.baseAddress
         
-        withUnsafeMutablePointer(to: &pointType) { (pointTypePointer) -> Void in
+        withUnsafeMutablePointer(to: &pointType) { pointTypePointer in
             var cif = ffi_cif()
-            withUnsafeMutablePointer(to: &cif) { (cifPointer) -> Void in
+            withUnsafeMutablePointer(to: &cif) { cifPointer in
                 let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 3)
                 defer { argumentTypes.deallocate() }
                 argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)
@@ -157,9 +157,9 @@ class LibffiTests: XCTestCase {
                 var selector = #selector(TestObject.testPoint(point:))
                 let imp = class_getMethodImplementation(TestObject.self, selector)
                 var arg1 = CGPoint.init(x: 11, y: 22)
-                withUnsafeMutablePointer(to: &obj) { (objPointer) -> Void in
-                    withUnsafeMutablePointer(to: &selector) { (selectorPointer) -> Void in
-                        withUnsafeMutablePointer(to: &arg1) { (arg1Pointer) -> Void in
+                withUnsafeMutablePointer(to: &obj) { objPointer in
+                    withUnsafeMutablePointer(to: &selector) { selectorPointer in
+                        withUnsafeMutablePointer(to: &arg1) { arg1Pointer in
                             let arguments = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>.allocate(capacity: 3)
                             defer { arguments.deallocate() }
                             arguments[0] = UnsafeMutableRawPointer(objPointer)
@@ -189,9 +189,9 @@ class LibffiTests: XCTestCase {
         pointType.type = UInt16(FFI_TYPE_STRUCT)
         pointType.elements = elementsTypes.baseAddress
         
-        withUnsafeMutablePointer(to: &pointType) { (pointTypePointer) -> Void in
+        withUnsafeMutablePointer(to: &pointType) { pointTypePointer in
             var cif = ffi_cif()
-            withUnsafeMutablePointer(to: &cif) { (cifPointer) -> Void in
+            withUnsafeMutablePointer(to: &cif) { cifPointer in
                 let argumentTypes = UnsafeMutableBufferPointer<UnsafeMutablePointer<ffi_type>?>.allocate(capacity: 3)
                 defer { argumentTypes.deallocate() }
                 argumentTypes[0] = UnsafeMutablePointer(&ffi_type_pointer)

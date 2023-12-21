@@ -375,7 +375,7 @@
 			children = (
 				2ACB400824EAA76B0098B59D /* Public */,
 				5CF6DC4E2685D0A100079A81 /* PublicObjectiveCAPI */,
-				2ACB400B24EAA8AF0098B59D /* Pamameter */,
+				2ACB400B24EAA8AF0098B59D /* Parameters */,
 				2ACB400D24EAA9170098B59D /* Hook */,
 				2ACB400C24EAA90A0098B59D /* Signature */,
 				2ACB400924EAA7840098B59D /* FFI */,
@@ -452,12 +452,12 @@
 			path = FFI;
 			sourceTree = "<group>";
 		};
-		2ACB400B24EAA8AF0098B59D /* Pamameter */ = {
+		2ACB400B24EAA8AF0098B59D /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
 				2ABBD40A24EA96700094FEE0 /* ParametersCheck.swift */,
 			);
-			path = Pamameter;
+			path = Parameters;
 			sourceTree = "<group>";
 		};
 		2ACB400C24EAA90A0098B59D /* Signature */ = {

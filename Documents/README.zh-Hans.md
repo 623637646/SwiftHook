@@ -176,6 +176,6 @@ BTW, **Respect to Aspects!**
 
 # Requirements
 
-- iOS 10.0+ (Unverified for macOS, tvOS, watchOS)
-- Xcode 11+
+- iOS 12.0+ (Unverified for macOS, tvOS, watchOS)
+- Xcode 15.1+
 - Swift 5.0+

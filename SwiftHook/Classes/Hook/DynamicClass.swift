@@ -68,10 +68,13 @@ func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard !isDynamicClass(targetClass: baseClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    var context: DynamicClassContext! = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
+    let existingContext = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
         dynamicClassContext.baseClass == baseClass
     }
-    if context == nil {
+    let context: DynamicClassContext
+    if let existingContext {
+        context = existingContext
+    } else {
         context = try DynamicClassContext.init(baseClass: baseClass)
         dynamicClassContextPool.insert(context)
     }

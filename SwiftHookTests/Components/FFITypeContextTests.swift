@@ -333,8 +333,8 @@ class FFITypeContextTests: XCTestCase {
                     [
                         UnsafeMutablePointer(&ffi_type_float)
                     ]
-                ]
-            ]
+                ] as [Any]
+            ] as [Any]
         ], ffiType: typeContext.ffiType.pointee)
     }
     

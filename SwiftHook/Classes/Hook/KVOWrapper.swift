@@ -57,6 +57,7 @@ func wrapKVOIfNeeded(object: NSObject, selector: Selector) throws {
         guard let observer = object.swiftHookObserver else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
+        // With this code. `getMethodWithoutSearchingSuperClasses(targetClass: KVOedClass, selector: selector)` will be non-nil.
         object.addObserver(observer, forKeyPath: propertyName, options: .new, context: &swiftHookKVOContext)
         object.removeObserver(observer, forKeyPath: propertyName, context: &swiftHookKVOContext)
     }

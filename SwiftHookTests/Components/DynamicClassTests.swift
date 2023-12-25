@@ -80,6 +80,7 @@ class DynamicClassTests: XCTestCase {
         }
     }
     
+    // This test case and the next test case are to ensure that classes with the same name in different namespaces can be hooked normally.
     func test_Duplicated_Dynamic_Class_Name1() {
         class MyObject {
             @objc dynamic func sayHello() {

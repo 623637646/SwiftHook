@@ -122,7 +122,7 @@ class KVOWrapperTests: XCTestCase {
                 let random2 = Int.random(in: Int.min ... Int.max)
 
                 let baseClass: AnyClass = object_getClass(object)!
-                let newClassName = "Test" + "\(ObjectIdentifier(baseClass).hashValue)"
+                let newClassName = "Test" + NSStringFromClass(baseClass)
                 let newClass: AnyClass = objc_allocateClassPair(baseClass, newClassName, 0)!
                 objc_registerClassPair(newClass)
                 try hookInstead(targetClass: newClass, selector: NSSelectorFromString("class"), closure: { original, obj, select in
@@ -166,7 +166,7 @@ class KVOWrapperTests: XCTestCase {
                 XCTAssertEqual(expectation, [random1])
                 
                 let baseClass: AnyClass = object_getClass(object)!
-                let newClassName = "Test" + "\(ObjectIdentifier(baseClass).hashValue)"
+                let newClassName = "Test" + NSStringFromClass(baseClass)
                 let newClass: AnyClass = objc_allocateClassPair(baseClass, newClassName, 0x68)!
                 objc_registerClassPair(newClass)
                 memcpy(object_getIndexedIvars(newClass)!, object_getIndexedIvars(baseClass)!, 0x68)

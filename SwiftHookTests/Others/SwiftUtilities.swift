@@ -150,7 +150,7 @@ private func testIsDynamic(object: AnyObject) throws -> Bool {
     let isDynamic = isDynamicClass(targetClass: isaClass)
     let hasDynamicClassPrefix = className.hasPrefix(dynamicClassPrefix)
     let isSuperClassMatch = class_getSuperclass(isaClass) == typeClass
-    let isNameMatch = className.replacingOccurrences(of: dynamicClassPrefix, with: "") == "\(ObjectIdentifier(typeClass).hashValue)"
+    let isNameMatch = className == dynamicClassPrefix + NSStringFromClass(typeClass)
     if isDynamic && hasDynamicClassPrefix && isSuperClassMatch && isNameMatch {
         return true
     } else if !isDynamic && !isNameMatch {

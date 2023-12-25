@@ -772,7 +772,7 @@ class CompatibilityTests: XCTestCase {
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
         
         let baseClass: AnyClass = object_getClass(object)!
-        let newClassName = "Test" + "\(ObjectIdentifier(baseClass).hashValue)"
+        let newClassName = "Test" + NSStringFromClass(baseClass)
         let newClass: AnyClass = objc_allocateClassPair(baseClass, newClassName, 0x68)!
         objc_registerClassPair(newClass)
         memcpy(object_getIndexedIvars(newClass)!, object_getIndexedIvars(baseClass)!, 0x68)

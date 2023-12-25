@@ -20,7 +20,7 @@ private class DynamicClassContext: Hashable {
     fileprivate init(baseClass: AnyClass) throws {
         self.baseClass = baseClass
         // Can't use `let dynamicClassName = prefix + "\(baseClass)"` here because the "\(baseClass)" doesn't contain namespace. There maybe some different class with the same className.
-        let dynamicClassName = prefix + "\(ObjectIdentifier(baseClass).hashValue)"
+        let dynamicClassName = prefix + NSStringFromClass(baseClass)
         guard let dynamicClass = objc_allocateClassPair(baseClass, dynamicClassName, 0) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }

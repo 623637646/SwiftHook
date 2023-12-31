@@ -11,6 +11,7 @@ import XCTest
 // This Testcase should be trigger manually.
 class MemoryTests: XCTestCase {
     
+    // This test kept the memory at 84.4MB for Xcode 15.1, iPhone 15 Pro Max Simulator, Chip Apple M2 Max
     func testMemory() throws {
         while true {
             try autoreleasepool {

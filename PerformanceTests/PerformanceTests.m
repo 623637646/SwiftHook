@@ -153,3 +153,76 @@ NSInteger measureCount = 100000;
 }
 
 @end
+
+
+/**
+ Xcode 15.1, iPhone 15 Pro Max Simulator, Chip Apple M2 Max
+ 
+ Test Suite 'All tests' started at 2023-12-31 16:11:30.451.
+ Test Suite 'PerformanceTests.xctest' started at 2023-12-31 16:11:30.452.
+ Test Suite 'PerformanceTests' started at 2023-12-31 16:11:30.452.
+ Test Case '-[PerformanceTests testHookAfterForSingleInstance]' started.
+
+ ----------------------------------------------------------
+
+ Case: Hook with After mode for single instances
+ 100000 times running
+ Cost 0.000246s for non-hook
+ Cost 0.254924s for Aspects
+ Cost 0.052079s for SwiftHook
+ SwiftHook is 4.89 times faster than Aspects (Hook with After mode for single instances)
+ SwiftHook takes 211.66 times longer than Non-Hook
+
+ ----------------------------------------------------------
+ Test Case '-[PerformanceTests testHookAfterForSingleInstance]' passed (0.338 seconds).
+ Test Case '-[PerformanceTests testHookBeforeForAllInstance]' started.
+
+ ----------------------------------------------------------
+
+ Case: Hook with Befre mode for all instances
+ 100000 times running
+ Cost 0.000335s for non-hook
+ Cost 0.240454s for Aspects
+ Cost 0.013159s for SwiftHook
+ SwiftHook is 18.27 times faster than Aspects (Hook with Befre mode for all instances)
+ SwiftHook takes 39.28 times longer than Non-Hook
+
+ ----------------------------------------------------------
+ Test Case '-[PerformanceTests testHookBeforeForAllInstance]' passed (0.268 seconds).
+ Test Case '-[PerformanceTests testHookInsteadForAllInstance]' started.
+
+ ----------------------------------------------------------
+
+ Case: Hook with Instead mode for all instances
+ 100000 times running
+ Cost 0.000234s for non-hook
+ Cost 0.248692s for Aspects
+ Cost 0.045132s for SwiftHook
+ SwiftHook is 5.51 times faster than Aspects (Hook with Instead mode for all instances)
+ SwiftHook takes 192.87 times longer than Non-Hook
+
+ ----------------------------------------------------------
+ Test Case '-[PerformanceTests testHookInsteadForAllInstance]' passed (0.308 seconds).
+ Test Case '-[PerformanceTests testHookInsteadForSingleInstance]' started.
+
+ ----------------------------------------------------------
+
+ Case: Hook with Instead mode for single instances
+ 100000 times running
+ Cost 0.000234s for non-hook
+ Cost 0.244987s for Aspects
+ Cost 0.104481s for SwiftHook
+ SwiftHook is 2.34 times faster than Aspects (Hook with Instead mode for single instances)
+ SwiftHook takes 446.48 times longer than Non-Hook
+
+ ----------------------------------------------------------
+ Test Case '-[PerformanceTests testHookInsteadForSingleInstance]' passed (0.362 seconds).
+ Test Suite 'PerformanceTests' passed at 2023-12-31 16:11:31.729.
+      Executed 4 tests, with 0 failures (0 unexpected) in 1.276 (1.277) seconds
+ Test Suite 'PerformanceTests.xctest' passed at 2023-12-31 16:11:31.730.
+      Executed 4 tests, with 0 failures (0 unexpected) in 1.276 (1.278) seconds
+ Test Suite 'All tests' passed at 2023-12-31 16:11:31.730.
+      Executed 4 tests, with 0 failures (0 unexpected) in 1.276 (1.279) seconds
+ Program ended with exit code: 0
+ 
+ */

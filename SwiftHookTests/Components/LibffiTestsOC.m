@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <objc/runtime.h>
 #import "ObjectiveCTestObject.h"
-@import libffi_iOS;
+@import libffi_apple;
 
 @interface LibffiTestsOC : XCTestCase
 

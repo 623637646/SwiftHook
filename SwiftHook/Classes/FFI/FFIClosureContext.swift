@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import libffi_iOS
+import libffi_apple
 
 class FFIClosureContext {
     private let ffiClosure: UnsafeMutablePointer<ffi_closure>

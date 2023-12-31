@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@import libffi_iOS;
+@import libffi_apple;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -1,0 +1,28 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+def shared_pods
+  pod 'EasySwiftHook', :path=>'../'
+end
+
+target 'iOSCocoapodsDynamicExample' do
+  use_frameworks!
+  platform :ios, '12.0'
+  shared_pods
+end
+
+target 'iOSCocoapodsStaticExample' do
+  platform :ios, '12.0'
+  shared_pods
+end
+
+target 'MacCocoapodsDynamicExample' do
+  use_frameworks!
+  platform :osx, '10.13'
+  shared_pods
+end
+
+target 'MacCocoapodsStaticExample' do
+  platform :osx, '10.13'
+  shared_pods
+end
+

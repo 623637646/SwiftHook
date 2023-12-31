@@ -2,9 +2,9 @@
 
 # What is SwiftHook?
 
-A secure, simple, and efficient iOS hook library that dynamically modifies the methods of a specific object or all objects of a class. It supports both Swift and Objective-C and has excellent compatibility with Key-Value Observing (KVO).
+A secure, simple, and efficient Swift/Objective-C hook library that dynamically modifies the methods of a specific object or all objects of a class. It supports both Swift and Objective-C and has excellent compatibility with Key-Value Observing (KVO).
 
-It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
+It’s based on Objective-C runtime and [libffi](https://github.com/libffi/libffi).
 
 # How to use SwiftHook
 
@@ -176,6 +176,6 @@ BTW, **Respect to Aspects!**
 
 # Requirements
 
-- iOS 12.0+ (Unverified for macOS, tvOS, watchOS)
+- iOS 12.0+, MacOS 10.13+ (Unverified for tvOS, watchOS)
 - Xcode 15.1+
 - Swift 5.0+

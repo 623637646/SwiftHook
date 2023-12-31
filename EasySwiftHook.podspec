@@ -1,10 +1,10 @@
 Pod::Spec.new do |spec|
   spec.name         = "EasySwiftHook"
   spec.version      = "3.5.0"
-  spec.summary      = "Hook in Swift and Objective C by iOS runtime and libffi."
+  spec.summary      = "A library to hook methods in Swift and Objective-C."
   spec.description  = <<-DESC
-  A secure, simple, and efficient iOS hook library that dynamically modifies the methods of a specific object or all objects of a class. It supports both Swift and Objective-C and has excellent compatibility with Key-Value Observing (KVO).
-  It’s based on iOS runtime and [libffi](https://github.com/libffi/libffi).
+  A secure, simple, and efficient Swift/Objective-C hook library that dynamically modifies the methods of a specific object or all objects of a class. It supports both Swift and Objective-C and has excellent compatibility with Key-Value Observing (KVO).
+  It’s based on Objective-C runtime and [libffi](https://github.com/libffi/libffi).
                    DESC
 
   spec.homepage     = "https://github.com/623637646/SwiftHook"

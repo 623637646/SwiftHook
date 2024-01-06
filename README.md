@@ -11,127 +11,119 @@ It’s based on Objective-C runtime and [libffi](https://github.com/libffi/libff
 1. Call the hook closure **before** executing **specified instance**’s method.
 
 ```swift
-class MyObject { // This class doesn’t have to inherit from NSObject. of course inheriting from NSObject works fine.
-    @objc dynamic func sayHello() { // The key words of methods `@objc` and `dynamic` are necessary.
-        print("Hello!")
+class TestObject { // No need to inherit from NSObject.
+    // Use `@objc` to make this method accessible from Objective-C
+    // Using `dynamic` tells Swift to always refer to Objective-C dynamic dispatch
+    @objc dynamic func testMethod() {
+        print("Executing `testMethod`")
     }
 }
 
-do {
-    let object = MyObject()
-    // WARNING: the object will retain the closure. So make sure the closure doesn't retain the object to avoid memory leak by cycle retain. If you want to access the obeject, please refer to 2nd guide "XXX and get the parameters." below.
-    let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    object.sayHello()
-    token.cancelHook() // cancel the hook
-} catch {
-    XCTFail()
+let obj = TestObject()
+
+let token = try hookBefore(object: obj, selector: #selector(TestObject.testMethod)) {
+    print("Before executing `testMethod`")
 }
+
+obj.testMethod()
+token.cancelHook() // cancel the hook
 ```
 
 2. Call the hook closure **after** executing **specified instance**'s method and get the parameters.
 
 ```swift
-class MyObject {
-    @objc dynamic func sayHi(name: String) {
-        print("Hi! \(name)")
+class TestObject {
+    @objc dynamic func testMethod(_ parameter: String) {
+        print("Executing `testMethod` with parameter: \(parameter)")
     }
 }
 
-do {
-    let object = MyObject()
-    
-    // 1. The first parameter mush be AnyObject or NSObject or YOUR CLASS (If it's YOUR CLASS. It has to inherits from NSObject, otherwise will build error with "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'").
-    // 2. The second parameter mush be Selector.
-    // 3. The rest parameters are the same as the method's.
-    // 4. The return type mush be Void if you hook with `before` and `after` mode.
-    // 5. The key word `@convention(block)` is necessary
-    let hookClosure = { object, selector, name in
-        print("Nice to see you \(name)")
-        print("The object is: \(object)")
-        print("The selector is: \(selector)")
-    } as @convention(block) (AnyObject, Selector, String) -> Void
-    let token = try hookAfter(object: object, selector: #selector(MyObject.sayHi), closure: hookClosure)
-    
-    object.sayHi(name: "Yanni")
-    token.cancelHook()
-} catch {
-    XCTFail()
-}
+let obj = TestObject()
+
+let token = try hookAfter(object: obj, selector: #selector(TestObject.testMethod(_:)), closure: { obj, sel, parameter in
+    print("After executing `testMethod` with parameter: \(parameter)")
+} as @convention(block) ( // Using `@convention(block)` to declares a Swift closure as an Objective-C block
+    AnyObject, // `obj` Instance
+    Selector, // `testMethod` Selector
+    String // first parameter
+) -> Void // return value
+)
+
+obj.testMethod("ABC")
+token.cancelHook() // cancel the hook
 ```
 
 3. Totally override the mehtod for **specified instance**.
 
 ```swift
-class MyObject {
-    @objc dynamic func sum(left: Int, right: Int) -> Int {
-        return left + right
+class Math {
+    @objc dynamic func double(_ number: Int) -> Int {
+        let result = number * 2
+        print("Executing `double` with \(number), result is \(result)")
+        return result
     }
 }
 
-do {
-    let object = MyObject()
-    
-    // 1. The first parameter mush be an closure. This closure means original method. The closure's parameters and return type are the same with the original method's. 
-    // 2. The rest parameters are the same with the original method's.
-    // 3. The return type mush be the same with original method's.
-    let hookClosure = {original, object, selector, left, right in
-        let result = original(object, selector, left, right)
-        // You may call original with the different parameters: let result = original(object, selector, 12, 27).
-        // You also may change the object and selector if you want. You don't even have to call the original method if needed.
-        print("\(left) + \(right) equals \(result)")
-        return left * right // Changing the result
-    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
-    let token = try hookInstead(object: object, selector: #selector(MyObject.sum(left:right:)), closure: hookClosure)
-    let left = 3
-    let right = 4
-    let result = object.sum(left: left, right: right)
-    print("\(left) * \(right) equals \(result)")
-    token.cancelHook()
-} catch {
-    XCTFail()
-}
+let math = Math()
+
+try hookInstead(object: math, selector: #selector(Math.double(_:)), closure: { original, obj, sel, number in
+    print("Before executing `double`")
+    let originalResult = original(obj, sel, number)
+    print("After executing `double`, got result \(originalResult)")
+    print("Triple the number!")
+    return number * 3
+} as @convention(block) (
+    (AnyObject, Selector, Int) -> Int,  // original method block
+    AnyObject, // `math` Instance
+    Selector, // `sum` Selector
+    Int // number
+) -> Int // return value
+)
+
+let number = 3
+let result = math.double(number)
+print("Double \(number), got \(result)")
 ```
 
 4. Call the hook closure **before** executing the method for **all instances of the class**.
 
 ```swift
-class MyObject {
-    @objc dynamic func sayHello() {
-        print("Hello!")
+class TestObject {
+    @objc dynamic func testMethod() {
+        print("Executing `testMethod`")
     }
 }
 
-do {
-    let token = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    MyObject().sayHello()
-    token.cancelHook()
-} catch {
-    XCTFail()
+let token = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.testMethod)) {
+    print("Before executing `testMethod`")
 }
+
+let obj = TestObject()
+obj.testMethod()
+token.cancelHook() // cancel the hook
 ```
 
 5. Call the hook closure **before** executing the **class method**.
 
 ```swift
-class MyObject {
-    @objc dynamic class func sayHello() {
-        print("Hello!")
+class TestObject {
+    @objc dynamic class func testClassMethod() {
+        print("Executing `testClassMethod`")
+    }
+    @objc dynamic static func testStaticMethod() {
+        print("Executing `testStaticMethod`")
     }
 }
 
-do {
-    let token = try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    MyObject.sayHello()
-    token.cancelHook()
-} catch {
-    XCTFail()
+try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.testClassMethod)) {
+    print("Before executing `testClassMethod`")
 }
+TestObject.testClassMethod()
+
+try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.testStaticMethod)) {
+    print("Before executing `testStaticMethod`")
+}
+TestObject.testStaticMethod()
 ```
 
 6. [Hooking the dealloc method](SwiftHookTests/SwiftAPITests/HookAllInstancesTests.swift#L252)

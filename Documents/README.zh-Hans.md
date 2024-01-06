@@ -9,129 +9,121 @@
 1. hook某个实例的某个方法，在目标方法执行之前调用 hook 闭包。
 
 ```swift
-class MyObject { // 这个 Class 不用继承自 NSObject。当然，继承自 NSObject 也没问题。
-    @objc dynamic func sayHello() { // 关键字 `@objc` 和 `dynamic` 不可以省略。
-        print("Hello!")
+class TestObject { // No need to inherit from NSObject.
+    // Use `@objc` to make this method accessible from Objective-C
+    // Using `dynamic` tells Swift to always refer to Objective-C dynamic dispatch
+    @objc dynamic func testMethod() {
+        print("Executing `testMethod`")
     }
 }
 
-do {
-    let object = MyObject()
-    // 警告: 这个 object 会强引用 hook 的闭包. 所以为了避免循环引用导致内存泄漏，请确保 hook closure 不会强引用 object。 如果你想要在 hook closure 里访问object，请参考教程的第二步。
-    let token = try hookBefore(object: object, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    object.sayHello()
-    token.cancelHook() // 取消 hook。
-} catch {
-    XCTFail()
+let obj = TestObject()
+
+let token = try hookBefore(object: obj, selector: #selector(TestObject.testMethod)) {
+    print("Before executing `testMethod`")
 }
+
+obj.testMethod()
+token.cancelHook() // cancel the hook
 ```
 
 2. hook某个实例的某个方法，在目标方法执行之后调用 hook 闭包，并且获取方法的参数。
 
 
 ```swift
-class MyObject {
-    @objc dynamic func sayHi(name: String) {
-        print("Hi! \(name)")
+class TestObject {
+    @objc dynamic func testMethod(_ parameter: String) {
+        print("Executing `testMethod` with parameter: \(parameter)")
     }
 }
 
-do {
-    let object = MyObject()
-    
-    // 1. 第一个参数必须是 AnyObject 或者 NSObject 或者“你的Class”（如果第一个参数是“你的Class”，那么“你的Class”必须继承自 NSObject。否则会有编译错误 "XXX is not representable in Objective-C, so it cannot be used with '@convention(block)'"）
-    // 2. 第二个参数必须是 Selector
-    // 3. 剩下的参数和方法的参数保持一致。
-    // 4. 如果 hook模式是 `before`和`after`，那么返回值必须是Void。
-    // 5. 关键字 `@convention(block)` 不能省略。
-    let hookClosure = { object, selector, name in
-        print("Nice to see you \(name)")
-        print("The object is: \(object)")
-        print("The selector is: \(selector)")
-    } as @convention(block) (AnyObject, Selector, String) -> Void
-    let token = try hookAfter(object: object, selector: #selector(MyObject.sayHi), closure: hookClosure)
-    
-    object.sayHi(name: "Yanni")
-    token.cancelHook()
-} catch {
-    XCTFail()
-}
+let obj = TestObject()
+
+let token = try hookAfter(object: obj, selector: #selector(TestObject.testMethod(_:)), closure: { obj, sel, parameter in
+    print("After executing `testMethod` with parameter: \(parameter)")
+} as @convention(block) ( // Using `@convention(block)` to declares a Swift closure as an Objective-C block
+    AnyObject, // `obj` Instance
+    Selector, // `testMethod` Selector
+    String // first parameter
+) -> Void // return value
+)
+
+obj.testMethod("ABC")
+token.cancelHook() // cancel the hook
 ```
 
 3. hook某个实例的某个方法，用 hook 闭包完全取代目标方法。
 
 ```swift
-class MyObject {
-    @objc dynamic func sum(left: Int, right: Int) -> Int {
-        return left + right
+class Math {
+    @objc dynamic func double(_ number: Int) -> Int {
+        let result = number * 2
+        print("Executing `double` with \(number), result is \(result)")
+        return result
     }
 }
 
-do {
-    let object = MyObject()
-    
-    // 1. 第一个参数必须是一个闭包。这个闭包代表原来方法的实现。此闭包的参数和返回值必须和目标方法一致。
-    // 2. 剩下的参数必须和目标方法的参数类型一致。
-    // 3. 返回值必须和目标方法的返回值类型一致。
-    let hookClosure = {original, object, selector, left, right in
-        let result = original(object, selector, left, right)
-        // 你可以用自定义的参数调用原实现。 let result = original(object, selector, 12, 27).
-        // 如果你愿意，也可以修改 object 和 selector。如果需要，甚至可以不调用原实现。
-        print("\(left) + \(right) equals \(result)")
-        return left * right // 可以修改返回值
-    } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
-    let token = try hookInstead(object: object, selector: #selector(MyObject.sum(left:right:)), closure: hookClosure)
-    let left = 3
-    let right = 4
-    let result = object.sum(left: left, right: right)
-    print("\(left) * \(right) equals \(result)")
-    token.cancelHook()
-} catch {
-    XCTFail()
-}
+let math = Math()
+
+try hookInstead(object: math, selector: #selector(Math.double(_:)), closure: { original, obj, sel, number in
+    print("Before executing `double`")
+    let originalResult = original(obj, sel, number)
+    print("After executing `double`, got result \(originalResult)")
+    print("Triple the number!")
+    return number * 3
+} as @convention(block) (
+    (AnyObject, Selector, Int) -> Int,  // original method block
+    AnyObject, // `math` Instance
+    Selector, // `sum` Selector
+    Int // number
+) -> Int // return value
+)
+
+let number = 3
+let result = math.double(number)
+print("Double \(number), got \(result)")
 ```
 
 4. hook某个类的所有实例的某个方法，在目标方法执行之前调用 hook 闭包。
 
 
 ```swift
-class MyObject {
-    @objc dynamic func sayHello() {
-        print("Hello!")
+class TestObject {
+    @objc dynamic func testMethod() {
+        print("Executing `testMethod`")
     }
 }
 
-do {
-    let token = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    MyObject().sayHello()
-    token.cancelHook()
-} catch {
-    XCTFail()
+let token = try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.testMethod)) {
+    print("Before executing `testMethod`")
 }
+
+let obj = TestObject()
+obj.testMethod()
+token.cancelHook() // cancel the hook
 ```
 
-5. hook某个类的某个类方法，在目标方法执行之前调用 hook 闭包。
+5. hook某个类的某个类方法或静态方法，在目标方法执行之前调用 hook 闭包。
 
 ```swift
-class MyObject {
-    @objc dynamic class func sayHello() {
-        print("Hello!")
+class TestObject {
+    @objc dynamic class func testClassMethod() {
+        print("Executing `testClassMethod`")
+    }
+    @objc dynamic static func testStaticMethod() {
+        print("Executing `testStaticMethod`")
     }
 }
 
-do {
-    let token = try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.sayHello)) {
-        print("You will say hello, right?")
-    }
-    MyObject.sayHello()
-    token.cancelHook()
-} catch {
-    XCTFail()
+try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.testClassMethod)) {
+    print("Before executing `testClassMethod`")
 }
+TestObject.testClassMethod()
+
+try hookClassMethodBefore(targetClass: TestObject.self, selector: #selector(TestObject.testStaticMethod)) {
+    print("Before executing `testStaticMethod`")
+}
+TestObject.testStaticMethod()
 ```
 
 6. [Hook dealloc 方法](../SwiftHookTests/SwiftAPITests/HookAllInstancesTests.swift#L252)

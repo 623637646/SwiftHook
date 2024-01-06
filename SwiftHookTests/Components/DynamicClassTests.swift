@@ -83,11 +83,11 @@ class DynamicClassTests: XCTestCase {
     // This test case and the next test case are to ensure that classes with the same name in different namespaces can be hooked normally.
     func test_Duplicated_Dynamic_Class_Name1() {
         class MyObject {
-            @objc dynamic func sayHello() {
+            @objc dynamic func test() {
             }
         }
         do {
-            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.sayHello)) {
+            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.test)) {
             }
         } catch {
             XCTFail()
@@ -96,11 +96,11 @@ class DynamicClassTests: XCTestCase {
     
     func test_Duplicated_Dynamic_Class_Name2() {
         class MyObject {
-            @objc dynamic func sayHello() {
+            @objc dynamic func test() {
             }
         }
         do {
-            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.sayHello)) {
+            try hookBefore(object: MyObject.init(), selector: #selector(MyObject.test)) {
             }
         } catch {
             XCTFail()

@@ -1,6 +1,5 @@
-excluded:
-  - Pods
-  - Examples
+included:
+  - SwiftHook
 
 disabled_rules:
   - trailing_whitespace

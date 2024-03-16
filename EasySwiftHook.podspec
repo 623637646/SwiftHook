@@ -14,5 +14,5 @@ Pod::Spec.new do |spec|
   spec.swift_version = '5.0'
   spec.source       = { :git => "https://github.com/623637646/SwiftHook.git", :tag => spec.version.to_s }
   spec.source_files  = "SwiftHook/Classes/**/*.{h,m,swift}"
-  spec.dependency 'libffi_apple', '~> 3.4.4'
+  spec.dependency 'libffi_apple', '~> 3.4.5'
 end

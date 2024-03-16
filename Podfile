@@ -5,7 +5,7 @@ use_frameworks!
 
 abstract_target 'abstract-SwiftHook' do
   
-  pod 'libffi_apple', '~> 3.4.4', :inhibit_warnings => true
+  pod 'libffi_apple', '~> 3.4.5', :inhibit_warnings => true
   pod 'SwiftLint'
   
   target 'SwiftHook' do

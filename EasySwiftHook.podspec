@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "EasySwiftHook"
-  spec.version      = "3.5.2"
+  spec.version      = "3.5.3"
   spec.summary      = "A library to hook methods in Swift and Objective-C."
   spec.description  = <<-DESC
   A secure, simple, and efficient Swift/Objective-C hook library that dynamically modifies the methods of a specific object or all objects of a class. It supports both Swift and Objective-C and has excellent compatibility with Key-Value Observing (KVO).

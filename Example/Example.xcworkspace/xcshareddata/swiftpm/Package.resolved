@@ -1,14 +1,15 @@
 {
+  "originHash" : "42f726c30fa1c6427fba01605e044f3a7b80e59adefee24792a8292d1763033b",
   "pins" : [
     {
       "identity" : "libffi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/623637646/libffi.git",
       "state" : {
-        "revision" : "bc1dac0c1b522539f21fc28fe1f7e07bb7c2fbd5",
-        "version" : "3.4.5"
+        "revision" : "ba435e5a3b38cf2eede5974d3e2bd3c737f066e1",
+        "version" : "3.4.7"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

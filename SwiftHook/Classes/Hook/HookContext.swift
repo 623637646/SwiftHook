@@ -12,168 +12,8 @@ import libffi_apple
 import SwiftHookOCSources
 #endif
 
-private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
-    
-    // Parameters
-    guard let userdata = userdata, let cif = cif else {
-        assert(false)
-        return
-    }
-    let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
-    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: Int(cif.pointee.nargs))
-    
-    // Get instead hook closures.
-    var insteadHookClosures = hookContext.insteadHookClosures
-    if hookContext.isSpecifiedInstance {
-        let objectPointer = argsBuffer[0]!
-        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
-        insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
-    }
-    
-    // instead
-    if var hookClosure = insteadHookClosures.last {
-        // preparation for instead
-        var insteadClosure = createInsteadClosure(targetIMP: hookContext.insteadClosureContext.targetIMP, objectPointer: argsBuffer[0]!, selectorPointer: argsBuffer[1]!, currentHookClosure: hookClosure)
-        
-        withUnsafeMutablePointer(to: &hookClosure, { hookClosurePointer in
-            withUnsafeMutablePointer(to: &insteadClosure, { insteadClosurePointer in
-                let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
-                let insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
-                defer {
-                    insteadHookArgsBuffer.deallocate()
-                }
-                insteadHookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
-                insteadHookArgsBuffer[1] = UnsafeMutableRawPointer(insteadClosurePointer)
-                if nargs >= 3 {
-                    for index in 2 ... nargs - 1 {
-                        insteadHookArgsBuffer[index] = argsBuffer[index - 2]
-                    }
-                }
-                ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), ret, insteadHookArgsBuffer.baseAddress)
-            })
-        })
-    } else {
-        callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: hookContext, ret: ret, argsBuffer: argsBuffer)
-    }
-}
-
-private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
-    
-    // Parameters
-    guard let userdata = userdata, let cif = cif else {
-        assert(false)
-        return
-    }
-    let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
-    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: Int(cif.pointee.nargs))
-    let insteadClosurePointer = argsBuffer[0]!
-    unowned(unsafe) let insteadClosure = insteadClosurePointer.assumingMemoryBound(to: AnyObject.self).pointee
-    guard let insteadContext = getInsteadContext(insteadClosure: insteadClosure) else {
-        assert(false)
-        return
-    }
-    
-    // Get instead hook closures.
-    var insteadHookClosures = hookContext.insteadHookClosures
-    if hookContext.isSpecifiedInstance {
-        let objectPointer = hookContext.isHookingDealloc ? insteadContext.objectPointer : argsBuffer[1]!
-        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
-        insteadHookClosures += getHookClosures(object: object, selector: hookContext.selector).instead
-    }
-    
-    // "insteadHookClosures.first == nil" is for object changing. If user change the object (First parameter). The "insteadHookClosures.first" may be nil.
-    if insteadHookClosures.first == nil ||
-        insteadContext.currentHookClosure === insteadHookClosures.first {
-        // call original method
-        let nargs = Int(hookContext.methodCifContext.cif.pointee.nargs)
-        let methodArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
-        defer {
-            methodArgsBuffer.deallocate()
-        }
-        if hookContext.isHookingDealloc {
-            methodArgsBuffer[0] = insteadContext.objectPointer
-            methodArgsBuffer[1] = insteadContext.selectorPointer
-        } else {
-            for index in 0 ... nargs - 1 {
-                methodArgsBuffer[index] = argsBuffer[index + 1]
-            }
-        }
-        callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: hookContext, ret: ret, argsBuffer: methodArgsBuffer)
-    } else {
-        // call next instead hook closure
-        guard let lastIndex = insteadHookClosures.lastIndex(where: {$0 === insteadContext.currentHookClosure}) else {
-            assert(false)
-            return
-        }
-        var hookClosure = insteadHookClosures[lastIndex - 1]
-        withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
-            let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
-            let hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
-            defer {
-                hookArgsBuffer.deallocate()
-            }
-            hookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
-            hookArgsBuffer[1] = insteadClosurePointer
-            for index in 2 ... nargs - 1 {
-                hookArgsBuffer[index] = argsBuffer[index - 1]
-            }
-            insteadContext.currentHookClosure = hookClosurePointer.pointee
-            ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), ret, hookArgsBuffer.baseAddress)
-        }
-    }
-}
-
-private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: HookContext, ret: UnsafeMutableRawPointer?, argsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
-    
-    // Get before and after hook closures.
-    var beforeHookClosures = hookContext.beforeHookClosures
-    var afterHookClosures = hookContext.afterHookClosures
-    if hookContext.isSpecifiedInstance {
-        let objectPointer = argsBuffer[0]!
-        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
-        let (before, after, _) = getHookClosures(object: object, selector: hookContext.selector)
-        beforeHookClosures += before
-        afterHookClosures += after
-    }
-    
-    // preparation argsBuffer
-    var hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>?
-    defer {
-        hookArgsBuffer?.deallocate()
-    }
-    if !beforeHookClosures.isEmpty || !afterHookClosures.isEmpty {
-        let nargs = Int(hookContext.beforeAfterCifContext.cif.pointee.nargs)
-        hookArgsBuffer = UnsafeMutableBufferPointer.allocate(capacity: nargs)
-        if nargs >= 2 {
-            for index in 1 ... nargs - 1 {
-                hookArgsBuffer![index] = argsBuffer[index - 1]
-            }
-        }
-    }
-    
-    // call before closures.
-    for hookClosure in beforeHookClosures.reversed() {
-        callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
-    }
-    
-    // call original
-    ffi_call(hookContext.methodCifContext.cif, unsafeBitCast(hookContext.methodOriginalIMP, to: (@convention(c) () -> Void).self), ret, argsBuffer.baseAddress)
-    
-    // call after closures.
-    for hookClosure in afterHookClosures.reversed() {
-        callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
-    }
-}
-
-private func callBeforeOrAfterClosure(_ hookClosure: AnyObject, _ hookContext: HookContext, _ hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
-    var hookClosure = hookClosure
-    withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
-        hookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
-        ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer.baseAddress)
-    }
-}
-
 class HookContext {
+    static var pool = Set<HookContext>()
     
     // basic
     let targetClass: AnyClass
@@ -252,65 +92,75 @@ class HookContext {
     }
     
     func append(hookClosure: AnyObject, mode: HookMode) throws {
+        func append(to keyPath: ReferenceWritableKeyPath<HookContext, [AnyObject]>) throws {
+            guard !self[keyPath: keyPath].contains(where: { hookClosure === $0 }) else {
+                throw SwiftHookError.duplicateHookClosure
+            }
+            self[keyPath: keyPath].append(hookClosure)
+        }
         switch mode {
         case .before:
-            guard !beforeHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.duplicateHookClosure
-            }
-            beforeHookClosures.append(hookClosure)
+            try append(to: \.beforeHookClosures)
         case .after:
-            guard !afterHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.duplicateHookClosure
-            }
-            afterHookClosures.append(hookClosure)
+            try append(to: \.afterHookClosures)
         case .instead:
-            guard !insteadHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.duplicateHookClosure
-            }
-            insteadHookClosures.append(hookClosure)
+            try append(to: \.insteadHookClosures)
         }
     }
     
     func remove(hookClosure: AnyObject, mode: HookMode) throws {
+        func modify(_ keyPath: ReferenceWritableKeyPath<HookContext, [AnyObject]>) throws {
+            guard self[keyPath: keyPath].contains(where: { hookClosure === $0 }) else {
+                throw SwiftHookError.internalError(file: #file, line: #line)
+            }
+            self[keyPath: keyPath].removeAll { hookClosure === $0 }
+        }
         switch mode {
         case .before:
-            guard beforeHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            beforeHookClosures.removeAll {
-                hookClosure  === $0
-            }
+            try modify(\.beforeHookClosures)
         case .after:
-            guard afterHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            afterHookClosures.removeAll {
-                hookClosure  === $0
-            }
+            try modify(\.afterHookClosures)
         case .instead:
-            guard insteadHookClosures.contains(where: {
-                hookClosure  === $0
-            }) else {
-                throw SwiftHookError.internalError(file: #file, line: #line)
-            }
-            insteadHookClosures.removeAll {
-                hookClosure  === $0
-            }
+            try modify(\.insteadHookClosures)
         }
     }
     
     func isHoolClosurePoolEmpty() -> Bool {
         beforeHookClosures.isEmpty && insteadHookClosures.isEmpty && afterHookClosures.isEmpty
+    }
+    
+    func isIMPChanged() throws -> Bool {
+        guard let currentMethod = getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) else {
+            throw SwiftHookError.internalError(file: #file, line: #line)
+        }
+        return method != currentMethod ||
+            method_getImplementation(currentMethod) != methodClosureContext.targetIMP
+    }
+    
+    func remove() {
+        Self.pool.remove(self)
+    }
+    
+    static func get(for targetClass: AnyClass, selector: Selector, isSpecifiedInstance: Bool) throws -> HookContext {
+        if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
+            try overrideSuperMethod(targetClass: targetClass, selector: selector)
+        }
+        var hookContext: HookContext! = HookContext.pool.first(where: { (element) -> Bool in
+            element.targetClass == targetClass && element.selector == selector
+        })
+        if hookContext == nil {
+            hookContext = try HookContext(targetClass: targetClass, selector: selector, isSpecifiedInstance: isSpecifiedInstance)
+            HookContext.pool.insert(hookContext)
+        }
+        return hookContext
+    }
+    
+    static func classHookContextsCount() -> Int {
+        HookContext.pool.filter { !$0.isSpecifiedInstance }.count
+    }
+    
+    static func instanceHookContextsCount() -> Int {
+        HookContext.pool.filter { $0.isSpecifiedInstance }.count
     }
 }
 
@@ -325,39 +175,163 @@ extension HookContext: Hashable {
     }
 }
 
-private var hookContextPool = Set<HookContext>()
-
-func getHookContext(targetClass: AnyClass, selector: Selector, isSpecifiedInstance: Bool) throws -> HookContext {
-    if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
-        try overrideSuperMethod(targetClass: targetClass, selector: selector)
+private func methodCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
+    
+    // Parameters
+    guard let userdata = userdata, let cif = cif else {
+        assert(false)
+        return
     }
-    var hookContext: HookContext! = hookContextPool.first(where: { (element) -> Bool in
-        element.targetClass == targetClass && element.selector == selector
-    })
-    if hookContext == nil {
-        hookContext = try HookContext.init(targetClass: targetClass, selector: selector, isSpecifiedInstance: isSpecifiedInstance)
-        hookContextPool.insert(hookContext)
+    let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
+    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: Int(cif.pointee.nargs))
+    
+    // Get instead hook closures.
+    var insteadHookClosures = hookContext.insteadHookClosures
+    if hookContext.isSpecifiedInstance {
+        let objectPointer = argsBuffer[0]!
+        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
+        insteadHookClosures += hookClosures(for: object, selector: hookContext.selector).instead
     }
-    return hookContext
+    
+    // instead
+    if var hookClosure = insteadHookClosures.last {
+        // preparation for instead
+        var insteadClosure = createInsteadClosure(targetIMP: hookContext.insteadClosureContext.targetIMP, objectPointer: argsBuffer[0]!, selectorPointer: argsBuffer[1]!, currentHookClosure: hookClosure)
+        
+        withUnsafeMutablePointer(to: &hookClosure, { hookClosurePointer in
+            withUnsafeMutablePointer(to: &insteadClosure, { insteadClosurePointer in
+                let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
+                let insteadHookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
+                defer {
+                    insteadHookArgsBuffer.deallocate()
+                }
+                insteadHookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
+                insteadHookArgsBuffer[1] = UnsafeMutableRawPointer(insteadClosurePointer)
+                if nargs >= 3 {
+                    for index in 2 ... nargs - 1 {
+                        insteadHookArgsBuffer[index] = argsBuffer[index - 2]
+                    }
+                }
+                ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), ret, insteadHookArgsBuffer.baseAddress)
+            })
+        })
+    } else {
+        callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: hookContext, ret: ret, argsBuffer: argsBuffer)
+    }
 }
 
-func removeHookContext(hookContext: HookContext) {
-    hookContextPool.remove(hookContext)
+private func insteadClosureCalledFunction(cif: UnsafeMutablePointer<ffi_cif>?, ret: UnsafeMutableRawPointer?, args: UnsafeMutablePointer<UnsafeMutableRawPointer?>?, userdata: UnsafeMutableRawPointer?) {
+    
+    // Parameters
+    guard let userdata = userdata, let cif = cif else {
+        assert(false)
+        return
+    }
+    let hookContext = Unmanaged<HookContext>.fromOpaque(userdata).takeUnretainedValue()
+    let argsBuffer = UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>(start: args, count: Int(cif.pointee.nargs))
+    let insteadClosurePointer = argsBuffer[0]!
+    unowned(unsafe) let insteadClosure = insteadClosurePointer.assumingMemoryBound(to: AnyObject.self).pointee
+    guard let insteadContext = getInsteadContext(insteadClosure: insteadClosure) else {
+        assert(false)
+        return
+    }
+    
+    // Get instead hook closures.
+    var insteadHookClosures = hookContext.insteadHookClosures
+    if hookContext.isSpecifiedInstance {
+        let objectPointer = hookContext.isHookingDealloc ? insteadContext.objectPointer : argsBuffer[1]!
+        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
+        insteadHookClosures += hookClosures(for: object, selector: hookContext.selector).instead
+    }
+    
+    // "insteadHookClosures.first == nil" is for object changing. If user change the object (First parameter). The "insteadHookClosures.first" may be nil.
+    if insteadHookClosures.first == nil ||
+        insteadContext.currentHookClosure === insteadHookClosures.first {
+        // call original method
+        let nargs = Int(hookContext.methodCifContext.cif.pointee.nargs)
+        let methodArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
+        defer {
+            methodArgsBuffer.deallocate()
+        }
+        if hookContext.isHookingDealloc {
+            methodArgsBuffer[0] = insteadContext.objectPointer
+            methodArgsBuffer[1] = insteadContext.selectorPointer
+        } else {
+            for index in 0 ... nargs - 1 {
+                methodArgsBuffer[index] = argsBuffer[index + 1]
+            }
+        }
+        callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: hookContext, ret: ret, argsBuffer: methodArgsBuffer)
+    } else {
+        // call next instead hook closure
+        guard let lastIndex = insteadHookClosures.lastIndex(where: {$0 === insteadContext.currentHookClosure}) else {
+            assert(false)
+            return
+        }
+        var hookClosure = insteadHookClosures[lastIndex - 1]
+        withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
+            let nargs = Int(hookContext.insteadCifContext.cif.pointee.nargs)
+            let hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?> = UnsafeMutableBufferPointer.allocate(capacity: nargs)
+            defer {
+                hookArgsBuffer.deallocate()
+            }
+            hookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
+            hookArgsBuffer[1] = insteadClosurePointer
+            for index in 2 ... nargs - 1 {
+                hookArgsBuffer[index] = argsBuffer[index - 1]
+            }
+            insteadContext.currentHookClosure = hookClosurePointer.pointee
+            ffi_call(hookContext.insteadCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), ret, hookArgsBuffer.baseAddress)
+        }
+    }
 }
 
-// MARK: This is debug tools.
-func debug_getNormalClassHookContextsCount() -> Int {
-    var count = 0
-    for item in hookContextPool where !item.isSpecifiedInstance {
-        count += 1
+private func callBeforeHookClosuresAndOriginalMethodAndAfterHookClosures(hookContext: HookContext, ret: UnsafeMutableRawPointer?, argsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
+    
+    // Get before and after hook closures.
+    var beforeHookClosures = hookContext.beforeHookClosures
+    var afterHookClosures = hookContext.afterHookClosures
+    if hookContext.isSpecifiedInstance {
+        let objectPointer = argsBuffer[0]!
+        unowned(unsafe) let object = objectPointer.assumingMemoryBound(to: AnyObject.self).pointee
+        let (before, after, _) = hookClosures(for: object, selector: hookContext.selector)
+        beforeHookClosures += before
+        afterHookClosures += after
     }
-    return count
+    
+    // preparation argsBuffer
+    var hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>?
+    defer {
+        hookArgsBuffer?.deallocate()
+    }
+    if !beforeHookClosures.isEmpty || !afterHookClosures.isEmpty {
+        let nargs = Int(hookContext.beforeAfterCifContext.cif.pointee.nargs)
+        hookArgsBuffer = UnsafeMutableBufferPointer.allocate(capacity: nargs)
+        if nargs >= 2 {
+            for index in 1 ... nargs - 1 {
+                hookArgsBuffer![index] = argsBuffer[index - 1]
+            }
+        }
+    }
+    
+    // call before closures.
+    for hookClosure in beforeHookClosures.reversed() {
+        callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
+    }
+    
+    // call original
+    ffi_call(hookContext.methodCifContext.cif, unsafeBitCast(hookContext.methodOriginalIMP, to: (@convention(c) () -> Void).self), ret, argsBuffer.baseAddress)
+    
+    // call after closures.
+    for hookClosure in afterHookClosures.reversed() {
+        callBeforeOrAfterClosure(hookClosure, hookContext, hookArgsBuffer!)
+    }
 }
 
-func debug_getinstancewHookContextsCount() -> Int {
-    var count = 0
-    for item in hookContextPool where item.isSpecifiedInstance {
-        count += 1
+private func callBeforeOrAfterClosure(_ hookClosure: AnyObject, _ hookContext: HookContext, _ hookArgsBuffer: UnsafeMutableBufferPointer<UnsafeMutableRawPointer?>) {
+    var hookClosure = hookClosure
+    withUnsafeMutablePointer(to: &hookClosure) { hookClosurePointer in
+        hookArgsBuffer[0] = UnsafeMutableRawPointer(hookClosurePointer)
+        ffi_call(hookContext.beforeAfterCifContext.cif, unsafeBitCast(sh_blockInvoke(hookClosurePointer.pointee), to: (@convention(c) () -> Void).self), nil, hookArgsBuffer.baseAddress)
     }
-    return count
 }

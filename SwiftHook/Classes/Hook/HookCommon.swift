@@ -8,14 +8,11 @@
 
 import Foundation
 
-// queue
 let swiftHookSerialQueue = DispatchQueue(label: "com.yanni.SwiftHook")
 
-// default selectors
 let deallocSelector = NSSelectorFromString("dealloc")
 
-// MARK: - Error
-public enum SwiftHookError: Error {
+enum SwiftHookError: Error {
     
     case hookClassWithObjectAPI // Can't hook class with object hooking API. Please use "hookClassMethod" instead.
     
@@ -29,7 +26,7 @@ public enum SwiftHookError: Error {
     
     case wrongTypeForHookClosure // Please check the hook clousre. Is it a standard closure? Does it have keyword @convention(block)?
     
-    case incompatibleClosureSignature(description: String) // Please check the hook closure if it match to the method.
+    case incompatibleClosureSignature(_ description: String) // Please check the hook closure if it match to the method.
     
     case duplicateHookClosure // This closure has been hooked with current mode already.
     
@@ -40,30 +37,4 @@ public enum SwiftHookError: Error {
     case hookInstanceOfNSTaggedPointerString // Unsupport to hook instance of NSTaggedPointerString.
     
     case hookKVOUnsupportedInstance // Unable to hook a instance which is not support KVO.
-}
-
-// MARK: - Token
-public protocol Token {
-    func cancelHook()
-}
-
-struct HookToken: Token {
-    
-    weak var hookContext: HookContext?
-    weak var hookClosure: AnyObject?
-    let mode: HookMode
-    
-    weak var hookObject: AnyObject? // This is only for specified instance hook
-    
-    init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
-        self.hookContext = hookContext
-        self.hookClosure = hookClosure
-        self.mode = mode
-    }
-    
-    func cancelHook() {
-        swiftHookSerialQueue.sync {
-            _ = try? internalCancelHook(token: self)
-        }
-    }
 }

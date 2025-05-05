@@ -28,7 +28,7 @@ class ClassMethodBeforeTests: XCTestCase {
                     result.append(1)
                     } as @convention(block) () -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+                XCTAssertEqual(HookContext.classHookContextsCount(), 1)
                 
                 // test hook
                 XCTAssertEqual(result, [])
@@ -50,7 +50,7 @@ class ClassMethodBeforeTests: XCTestCase {
                 result.append(2)
             }
             XCTAssertEqual(result, [2])
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)
+            XCTAssertEqual(HookContext.classHookContextsCount(), 0)
         } catch {
             XCTAssertNil(error)
         }
@@ -76,7 +76,7 @@ class ClassMethodBeforeTests: XCTestCase {
                     executed = true
                     } as @convention(block) (AnyObject, Selector, Int, Int) -> Void
                 let token = try internalHook(targetClass: targetClass, selector: selector, mode: mode, hookClosure: closure as AnyObject)
-                XCTAssertEqual(debug_getNormalClassHookContextsCount(), 1)
+                XCTAssertEqual(HookContext.classHookContextsCount(), 1)
                 
                 // test hook
                 let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
@@ -92,7 +92,7 @@ class ClassMethodBeforeTests: XCTestCase {
             let result = TestObject.classMethodSumFunc(a: argumentA, b: argumentB)
             XCTAssertEqual(result, argumentA + argumentB)
             XCTAssertFalse(executed)
-            XCTAssertEqual(debug_getNormalClassHookContextsCount(), 0)
+            XCTAssertEqual(HookContext.classHookContextsCount(), 0)
         } catch {
             XCTAssertNil(error)
         }

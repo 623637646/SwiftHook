@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "libffi_iOS",
-        "repositoryURL": "https://github.com/623637646/libffi.git",
-        "state": {
-          "branch": null,
-          "revision": "c006945112296b8dc4c47bf70cd3ad5fc31488cf",
-          "version": "3.3.6-iOS"
-        }
+  "pins" : [
+    {
+      "identity" : "libffi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/623637646/libffi.git",
+      "state" : {
+        "revision" : "ba435e5a3b38cf2eede5974d3e2bd3c737f066e1",
+        "version" : "3.4.7"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }

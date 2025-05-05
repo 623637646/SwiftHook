@@ -8,130 +8,71 @@
 
 import Foundation
 
-private var associatedContextHandle: UInt8 = 0
-
 private class ClosuresContext {
     var before: [Selector: [AnyObject]] = [:]
     var after: [Selector: [AnyObject]] = [:]
     var instead: [Selector: [AnyObject]] = [:]
+    
+    var isEmpty: Bool {
+        [before, instead, after].allSatisfy { $0.values.allSatisfy(\.isEmpty) }
+    }
+    
+    var count: Int {
+        [before, instead, after].flatMap { $0.values }.reduce(0) { $0 + $1.count }
+    }
 }
 
-func getHookClosures(object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+func hookClosures(for object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
+    guard let context = closuresContext(for: object) else {
         return ([], [], [])
     }
     return (context.before[selector] ?? [], context.after[selector] ?? [], context.instead[selector] ?? [])
 }
 
-func appendHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    var context: ClosuresContext! = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext
-    if context == nil {
-        context = ClosuresContext.init()
-        objc_setAssociatedObject(object, &associatedContextHandle, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+func appendHookClosure(_ hookClosure: AnyObject, selector: Selector, mode: HookMode, to object: AnyObject) throws {
+    let context = getAssociatedValue("associatedContextHandle", object: object, initialValue: ClosuresContext())
+    
+    func append(to dictKeyPath: ReferenceWritableKeyPath<ClosuresContext, [Selector: [AnyObject]]>) throws {
+        var closures = context[keyPath: dictKeyPath][selector] ?? []
+        guard !closures.contains(where: { hookClosure === $0 }) else {
+            throw SwiftHookError.duplicateHookClosure
+        }
+        closures.append(hookClosure)
+        context[keyPath: dictKeyPath][selector] = closures
     }
+
     switch mode {
     case .before:
-        var closures = context.before[selector] ?? []
-        guard !closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.duplicateHookClosure
-        }
-        closures.append(hookClosure)
-        context.before[selector] = closures
+        try append(to: \.before)
     case .after:
-        var closures = context.after[selector] ?? []
-        guard !closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.duplicateHookClosure
-        }
-        closures.append(hookClosure)
-        context.after[selector] = closures
+        try append(to: \.after)
     case .instead:
-        var closures = context.instead[selector] ?? []
-        guard !closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.duplicateHookClosure
-        }
-        closures.append(hookClosure)
-        context.instead[selector] = closures
+        try append(to: \.instead)
     }
 }
 
-func removeHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+func removeHookClosure(_ hookClosure: AnyObject, selector: Selector, mode: HookMode, for object: AnyObject) throws {
+    guard let context = closuresContext(for: object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     switch mode {
     case .before:
-        var closures = context.before[selector] ?? []
-        guard closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        closures.removeAll {
-            hookClosure  === $0
-        }
-        context.before[selector] = closures
+        context.before[selector]?.removeAll(where: { hookClosure === $0 })
     case .after:
-        var closures = context.after[selector] ?? []
-        guard closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        closures.removeAll {
-            hookClosure  === $0
-        }
-        context.after[selector] = closures
+        context.after[selector]?.removeAll(where: { hookClosure === $0 })
     case .instead:
-        var closures = context.instead[selector] ?? []
-        guard closures.contains(where: {
-            hookClosure  === $0
-        }) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        closures.removeAll {
-            hookClosure  === $0
-        }
-        context.instead[selector] = closures
+        context.instead[selector]?.removeAll(where: { hookClosure === $0 })
     }
 }
 
-func isHookClosuresEmpty(object: AnyObject) -> Bool {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
-        return true
-    }
-    for (_, value) in context.before where !value.isEmpty {
-        return false
-    }
-    for (_, value) in context.instead where !value.isEmpty {
-        return false
-    }
-    for (_, value) in context.after where !value.isEmpty {
-        return false
-    }
-    return true
+func isHookClosuresEmpty(for object: AnyObject) -> Bool {
+    closuresContext(for: object)?.isEmpty ?? true
 }
 
-// MARK: This is debug tools.
+func hookClosureCount(for object: AnyObject) -> Int {
+    closuresContext(for: object)?.count ?? 0
+}
 
-func debug_hookClosureCount(object: AnyObject) -> Int {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
-        return 0
-    }
-    var count = 0
-    for (_, value) in context.before where !value.isEmpty {
-        count += value.count
-    }
-    for (_, value) in context.instead where !value.isEmpty {
-        count += value.count
-    }
-    for (_, value) in context.after where !value.isEmpty {
-        count += value.count
-    }
-    return count
+fileprivate func closuresContext(for object: AnyObject) -> ClosuresContext? {
+    getAssociatedValue("associatedContextHandle", object: object)
 }

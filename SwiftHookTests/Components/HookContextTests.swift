@@ -139,7 +139,7 @@ class HookContextTests: XCTestCase {
         }
         
         // before
-        let countBefore = debug_getNormalClassHookContextsCount()
+        let countBefore = HookContext.classHookContextsCount()
         
         // hook
         let token: HookToken! = try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {
@@ -152,13 +152,13 @@ class HookContextTests: XCTestCase {
         XCTAssertNotNil(token.hookClosure)
         XCTAssertNil(token.hookObject)
         XCTAssertEqual(token.mode, .after)
-        XCTAssertEqual(debug_getNormalClassHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.classHookContextsCount(), countBefore + 1)
         
         // cancel
         XCTAssertEqual(try internalCancelHook(token: token), true)
         
         // check
-        XCTAssertEqual(debug_getNormalClassHookContextsCount(), countBefore)
+        XCTAssertEqual(HookContext.classHookContextsCount(), countBefore)
     }
     
     func test_keep_hookContext_after_instance_deinit() throws {
@@ -166,34 +166,34 @@ class HookContextTests: XCTestCase {
             @objc dynamic func myMethod() {
             }
         }
-        let countBefore = debug_getinstancewHookContextsCount()
+        let countBefore = HookContext.instanceHookContextsCount()
         var token1: HookToken!
         try autoreleasepool {
             let object = MyObject.init()
             token1 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
             }) as? HookToken
-            XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+            XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         }
         XCTAssertNotNil(token1)
         XCTAssertNotNil(token1.hookContext)
         XCTAssertNil(token1.hookClosure)
         XCTAssertNil(token1.hookObject)
         XCTAssertEqual(token1.mode, .after)
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         
         var token2: HookToken!
         try autoreleasepool {
             let object = MyObject.init()
             token2 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
             }) as? HookToken
-            XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+            XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         }
         XCTAssertNotNil(token2)
         XCTAssertNotNil(token2.hookContext)
         XCTAssertNil(token2.hookClosure)
         XCTAssertNil(token2.hookObject)
         XCTAssertEqual(token2.mode, .after)
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
     }
     
     func test_keep_hookContext_after_cancellation_for_specified_instance() throws {
@@ -201,7 +201,7 @@ class HookContextTests: XCTestCase {
             @objc dynamic func myMethod() {
             }
         }
-        let countBefore = debug_getinstancewHookContextsCount()
+        let countBefore = HookContext.instanceHookContextsCount()
         
         let object1 = MyObject.init()
         let token1: HookToken! = try hookAfter(object: object1, selector: #selector(MyObject.myMethod), closure: {
@@ -213,13 +213,13 @@ class HookContextTests: XCTestCase {
         XCTAssertNotNil(token1.hookClosure)
         XCTAssertNotNil(token1.hookObject)
         XCTAssertEqual(token1.mode, .after)
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         
         // cancel
         XCTAssertEqual(try internalCancelHook(token: token1), true)
         
         // check
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         
         let object2 = MyObject.init()
         let token2: HookToken! = try hookAfter(object: object2, selector: #selector(MyObject.myMethod), closure: {
@@ -231,13 +231,13 @@ class HookContextTests: XCTestCase {
         XCTAssertNotNil(token2.hookClosure)
         XCTAssertNotNil(token2.hookObject)
         XCTAssertEqual(token2.mode, .after)
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
         
         // cancel
         XCTAssertEqual(try internalCancelHook(token: token2), true)
         
         // check
-        XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
+        XCTAssertEqual(HookContext.instanceHookContextsCount(), countBefore + 1)
     }
     
 }

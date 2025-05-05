@@ -29,9 +29,8 @@ private func overrideMethodCalled(cif: UnsafeMutablePointer<ffi_cif>?,
     ffi_call(overrideMethodContext.methodCifContext.cif, unsafeBitCast(methodIMP, to: (@convention(c) () -> Void).self), ret, args)
 }
 
-private var overrideMethodContextPool = Set<OverrideMethodContext>()
-
 private class OverrideMethodContext: Hashable {
+    static var pool = Set<OverrideMethodContext>()
     
     fileprivate let targetClass: AnyClass
     fileprivate let selector: Selector
@@ -85,11 +84,11 @@ private class OverrideMethodContext: Hashable {
 // Add the method to the targetClass. The IMP is from Libffi. This IMP call super's IMP. This action can't be reverted because it's not safe. Maybe some code has changed the IMP and we don't know that.
 func overrideSuperMethod(targetClass: AnyClass, selector: Selector) throws {
     let overrideMethodContext = try OverrideMethodContext.init(targetClass: targetClass, selector: selector)
-    overrideMethodContextPool.insert(overrideMethodContext)
+    OverrideMethodContext.pool.insert(overrideMethodContext)
 }
 
 // MARK: This is debug tools.
 
 func debug_overrideMethodContextCount() -> Int {
-    return overrideMethodContextPool.count
+    OverrideMethodContext.pool.count
 }

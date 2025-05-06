@@ -20,25 +20,26 @@ private class ClosuresContext {
     var count: Int {
         [before, instead, after].flatMap { $0.values }.reduce(0) { $0 + $1.count }
     }
+    
+    func closures(for selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
+        (before[selector] ?? [], after[selector] ?? [], instead[selector] ?? [])
+    }
 }
 
 func hookClosures(for object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
-    guard let context = closuresContext(for: object) else {
-        return ([], [], [])
-    }
-    return (context.before[selector] ?? [], context.after[selector] ?? [], context.instead[selector] ?? [])
+    closuresContext(for: object)?.closures(for: selector) ?? ([], [], [])
 }
 
 func appendHookClosure(_ hookClosure: AnyObject, selector: Selector, mode: HookMode, to object: AnyObject) throws {
-    let context = getAssociatedValue("associatedContextHandle", object: object, initialValue: ClosuresContext())
+    var context = getAssociatedValue("closuresContext", object: object, initialValue: ClosuresContext())
     
-    func append(to dictKeyPath: ReferenceWritableKeyPath<ClosuresContext, [Selector: [AnyObject]]>) throws {
-        var closures = context[keyPath: dictKeyPath][selector] ?? []
+    func append(to keyPath: WritableKeyPath<ClosuresContext, [Selector: [AnyObject]]>) throws {
+        var closures = context[keyPath: keyPath][selector] ?? []
         guard !closures.contains(where: { hookClosure === $0 }) else {
             throw SwiftHookError.duplicateHookClosure
         }
         closures.append(hookClosure)
-        context[keyPath: dictKeyPath][selector] = closures
+        context[keyPath: keyPath][selector] = closures
     }
 
     switch mode {
@@ -52,16 +53,26 @@ func appendHookClosure(_ hookClosure: AnyObject, selector: Selector, mode: HookM
 }
 
 func removeHookClosure(_ hookClosure: AnyObject, selector: Selector, mode: HookMode, for object: AnyObject) throws {
-    guard let context = closuresContext(for: object) else {
+    guard var context = closuresContext(for: object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+    
+    func remove(_ keyPath: WritableKeyPath<ClosuresContext, [Selector: [AnyObject]]>) throws {
+        var closures = context[keyPath: keyPath][selector] ?? []
+        guard closures.contains(where: { hookClosure === $0 }) else {
+            throw SwiftHookError.duplicateHookClosure
+        }
+        closures.removeAll(where: { hookClosure === $0 })
+        context[keyPath: keyPath][selector] = closures
+    }
+    
     switch mode {
     case .before:
-        context.before[selector]?.removeAll(where: { hookClosure === $0 })
+        try remove(\.before)
     case .after:
-        context.after[selector]?.removeAll(where: { hookClosure === $0 })
+        try remove(\.after)
     case .instead:
-        context.instead[selector]?.removeAll(where: { hookClosure === $0 })
+        try remove(\.instead)
     }
 }
 
@@ -74,5 +85,5 @@ func hookClosureCount(for object: AnyObject) -> Int {
 }
 
 fileprivate func closuresContext(for object: AnyObject) -> ClosuresContext? {
-    getAssociatedValue("associatedContextHandle", object: object)
+    getAssociatedValue("closuresContext", object: object)
 }

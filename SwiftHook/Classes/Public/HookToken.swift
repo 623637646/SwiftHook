@@ -32,20 +32,8 @@ public class HookToken {
     
     /// A Boolean value indicating whether the hook is active.
     public var isActive: Bool {
-        get {
-            if let deallocAfterHook = deallocAfterHook {
-                return deallocAfterHook.isActive
-            }
-            return hookContext != nil
-        }
-        set {
-            guard newValue != isActive else { return }
-            if newValue {
-                try? apply()
-            } else {
-                revert()
-            }
-        }
+        get { deallocAfterHook?.isActive ?? (hookContext != nil) }
+        set { newValue ? try? apply() : revert() }
     }
     
     /// Applies the hook.
@@ -114,7 +102,6 @@ public class HookToken {
                 return nil
             }
             try removeHookClosure(hookClosure, selector: hookContext.selector, mode: mode, for: hookObject)
-          //  try removeHookClosure(hookClosure, selector: hookContext.selector, mode: mode, of: hookObject)
             
             guard object_getClass(hookObject) == hookContext.targetClass else {
                 // The class is changed after hooking by SwiftHook.
@@ -180,7 +167,7 @@ public class HookToken {
 
 extension HookToken {
     class DeallocAfterHook {
-        private  weak var delegate: HookDeallocAfterDelegate?
+        private weak var delegate: HookDeallocAfterDelegate?
         private weak var object: AnyObject?
         private let closure: AnyObject
                 

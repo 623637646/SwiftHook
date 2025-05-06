@@ -127,7 +127,7 @@ public struct ClassHook<T: AnyObject> {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    public func hookAfter<T: AnyObject>(_ selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> HookToken {
+    public func hookAfter(_ selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> HookToken {
         let closure = { obj, sel in
             guard let obj = obj as? T.Type else { fatalError() }
             closure(obj, sel)
@@ -222,7 +222,7 @@ public struct ClassHook<T: AnyObject> {
      return number1 + number2
      }
      }
-     let token = try! hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
+     let token = try! hook(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
      // You may call the original method with some different parameters. You can even not call the original method.
      return original(obj, sel, number1, numebr2)
      } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int )
@@ -241,7 +241,7 @@ public struct ClassHook<T: AnyObject> {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    public func hookInstead(_ selector: Selector, closure: Any) throws -> HookToken {
+    public func hook(_ selector: Selector, closure: Any) throws -> HookToken {
         guard let targetClass = object_getClass(targetClass) else {
             throw SwiftHookError.internalError(file: #file, line: #line)
         }
@@ -283,7 +283,7 @@ extension ClassHook where T: NSObject {
     }
 
     @discardableResult
-    public func hookInstead(_ selector: String, closure: Any) throws -> HookToken {
-        try hookInstead(NSSelectorFromString(selector), closure: closure)
+    public func hook(_ selector: String, closure: Any) throws -> HookToken {
+        try hook(NSSelectorFromString(selector), closure: closure)
     }
 }

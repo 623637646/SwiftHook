@@ -16,36 +16,33 @@ public extension NSObject {
     /**
      Execute the closure before the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
+     
+     try MyObject().hookBefore(#selector(MyObject.sum(with:number2:))) {
+        print("hooked before")
+     }
      ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
-         NSLog(@"hooked");
-     }];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
-     ```
+
      - parameter selector: The method you want to hook on.
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
-    func hookBefore(_ selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookBefore(_ selector: Selector, closure: @escaping () -> Void) throws -> HookToken {
         try hookBefore(selector, closure: closure as Any)
     }
     
     @discardableResult
-    func hookBefore(_ selector: String, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookBefore(_ selector: String, closure: @escaping () -> Void) throws -> HookToken {
         try hookBefore(NSSelectorFromString(selector), closure: closure)
     }
 
@@ -53,36 +50,33 @@ public extension NSObject {
     /**
      Execute the closure after the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
+     
+     try MyObject().hookAfter(#selector(MyObject.sum(with:number2:))) {
+        print("hooked after")
+     }
      ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
-         NSLog(@"hooked");
-     }];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
-     ```
+
      - parameter selector: The method you want to hook on.
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
-    func hookAfter(_ selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookAfter(_ selector: Selector, closure: @escaping () -> Void) throws -> HookToken {
         try hookAfter(selector, closure: closure as Any)
     }
     
     @discardableResult
-    func hookAfter(_ selector: String, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookAfter(_ selector: String, closure: @escaping () -> Void) throws -> HookToken {
         try hookAfter(NSSelectorFromString(selector), closure: closure as Any)
     }
 
@@ -92,32 +86,24 @@ public extension NSObject {
     /**
      Execute the closure with all parameters before the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
-     ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookBeforeSelector:@selector(sumWithNumber1:number2:) closure:^(MyObject * _Nonnull obj, SEL _Nonnull sel, NSInteger number1, NSInteger number2) {
-         NSLog(@"hooked");
-     } error:NULL];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     
+     try MyObject().hookBefore(#selector(MyObject.sum(with:number2:))) { object, selector, num1, num2 in
+         print("hooked before sum with \(n1), \(n2)")
+     }
      ```
      - parameter selector: The method you want to hook on.
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain. The following is a description of the closure
-         1. The first parameter has to be YOUR CLASS or NSObject.
-         2. The second parameter has to be SEL.
-         3. The rest parameters are the same as the method's.
-         4. The return type has to be Void.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure. Parameters: `(Self, Selector, ...)`. Return type: `Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
     func hookBefore(_ selector: Selector, closure: Any) throws -> HookToken {
@@ -133,32 +119,24 @@ public extension NSObject {
     /**
      Execute the closure with all parameters after the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
-     ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookAfterSelector:@selector(sumWithNumber1:number2:) closure:^(MyObject * _Nonnull obj, SEL _Nonnull sel, NSInteger number1, NSInteger number2) {
-         NSLog(@"hooked");
-     } error:NULL];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     
+     try MyObject().hookAfter(#selector(MyObject.sum(with:number2:))) { object, selector, num1, num2 in
+     print("hooked after sum with \(n1), \(n2)")
+     }
      ```
      - parameter selector: The method you want to hook on.
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain. The following is a description of the closure
-         1. The first parameter has to be YOUR CLASS or NSObject.
-         2. The second parameter has to be SEL.
-         3. The rest parameters are the same as the method's.
-         4. The return type has to be Void.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure. Parameters: `(Self, Selector, ...)`. Return type: `Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
     func hookAfter(_ selector: Selector, closure: Any) throws -> HookToken {
@@ -174,44 +152,36 @@ public extension NSObject {
     /**
      Replace the implementation of object's method by the closure.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         @objc func sum(of number1: Int, and number2: Int) -> Int { return number1 + number2 }
      }
-     @end
+     
+     try MyObject().hook(#selector(MyObject.sum(of:and:))) { original, obj, sel, n1, n2 in
+         print("instead of sum")
+         return original(obj, sel, n1, n2) * 2
+     } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int
+     
+     // returns 6
+     MyObject().sum(of: 1, and: 2)
      ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookInsteadWithSelector:@selector(sumWithNumber1:number2:) closure:^NSInteger(NSInteger(^original)(MyObject * _Nonnull obj, SEL _Nonnull sel, NSInteger number1, NSInteger number2), MyObject * _Nonnull obj, SEL _Nonnull sel, NSInteger number1, NSInteger number2) {
-         NSLog(@"hooked");
-         // You may call the original method with some different parameters. You can even not call the original method.
-         return original(obj, sel, number1, number2);
-     } error:NULL];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
-     ```
+     
      - parameter selector: The method you want to hook on.
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain. The following is a description of the closure
-         1. The first parameter has to be a closure (block). This closure means original method. The closure's parameters and return type are the same as the original method's (The parameters contain Object and Selector at the beginning)..
-         2. The second parameter has to be YOUR CLASS or NSObject.
-         3. The third parameter has to be SEL.
-         4. The rest parameters are the same as the method's.
-         5. The return type has to be the same as the original method's.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure. Parameters: `((Self, Selector, ...) -> ReturnType, Self, Selector, ...) -> ReturnType`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
-    func hookInstead(_ selector: Selector, closure: Any) throws -> HookToken {
-        try ObjectHook(self).hookInstead(selector, closure: closure)
+    func hook(_ selector: Selector, closure: Any) throws -> HookToken {
+        try ObjectHook(self).hook(selector, closure: closure)
     }
     
     @discardableResult
-    func hookInstead(_ selector: String, closure: Any) throws -> HookToken {
-        try ObjectHook(self).hookInstead(selector, closure: closure)
+    func hook(_ selector: String, closure: Any) throws -> HookToken {
+        try ObjectHook(self).hook(selector, closure: closure)
     }
 }
 
@@ -219,99 +189,96 @@ public extension NSObjectProtocol where Self: NSObject {
     /**
      Execute the closure with the object and the selector before the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
-     ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(NSObject * _Nonnull obj, SEL _Nonnull sel) {
-         NSLog(@"hooked");
-     }];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     
+     try MyObject().hookBefore(#selector(MyObject.sum(with:number2:))) { obj, sel in
+         print("before sum of \(obj)")
+     }
      ```
      - parameter selector: The method you want to hook on.
-     - parameter closureObjSel: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closureObjSel: The hook closure. Parameters: `(Self, Selector) -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
     func hookBefore(_ selector: Selector, closure: @escaping (Self, Selector) -> Void) throws -> HookToken {
-        let typedClosure: @convention(block) (NSObject, Selector) -> Void = { obj, sel in
-            guard let typedObj = obj as? Self else {
-                assertionFailure("Failed to cast \(obj) to expected type \(Self.self)")
-                return
-            }
+        try ObjectHook(self).hookBefore(selector) { obj, sel in
+            guard let typedObj = obj as? Self else { fatalError() }
             closure(typedObj, sel)
         }
-        return try hookBefore(selector, closureObjSel: typedClosure)
     }
     
     @discardableResult
     func hookBefore(_ selector: String, closure: @escaping (Self, Selector) -> Void) throws -> HookToken {
-       try hookBefore(NSSelectorFromString(selector), closure: closure)
+        try hookBefore(NSSelectorFromString(selector), closure: closure)
     }
     
     /**
      Execute the closure with the object and the selector after the execution of object's method.
      
-     # For example this is your class
-     ```
-     @interface MyObject : NSObject
-     @end
-     @implementation MyObject
-     -(NSInteger)sumWithNumber1:(NSInteger)number1 number2:(NSInteger)number2 {
-         return number1 + number2;
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject {
+         func sum(with number1: Int, number2: Int) -> Int {
+             return number1 + number2
+         }
      }
-     @end
-     ```
-     # Example to use the API
-     ```
-     MyObject *obj = [[MyObject alloc] init];
-     OCHookToken *token = [obj hookAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(NSObject * _Nonnull obj, SEL _Nonnull sel) {
-         NSLog(@"hooked");
-     }];
-     [obj sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     
+     try MyObject().hookAfter(#selector(MyObject.sum(with:number2:))) { obj, sel in
+         print("after sum of \(obj)")
+     }
      ```
      - parameter selector: The method you want to hook on.
-     - parameter closureObjSel: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closureObjSel: The hook closure. Parameters: `(Self, Selector) -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
     func hookAfter(_ selector: Selector, closure: @escaping (Self, Selector) -> Void) throws -> HookToken {
-        let typedClosure: @convention(block) (NSObject, Selector) -> Void = { obj, sel in
-            guard let typedObj = obj as? Self else {
-                assertionFailure("Failed to cast \(obj) to expected type \(Self.self)")
-                return
-            }
+        try ObjectHook(self).hookAfter(selector) { obj, sel in
+            guard let typedObj = obj as? Self else { fatalError() }
             closure(typedObj, sel)
         }
-        return try hookAfter(selector, closureObjSel: typedClosure)
     }
     
     @discardableResult
     func hookAfter(_ selector: String, closure: @escaping (Self, Selector) -> Void) throws -> HookToken {
-       try hookAfter(NSSelectorFromString(selector), closure: closure)
+        try hookAfter(NSSelectorFromString(selector), closure: closure)
     }
-}
-
-fileprivate extension NSObject {
+    
+    /**
+     Execute the closure with the object before the object dealloc.
+     
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject { deinit { print("dealloc") } }
+     
+     try MyObject().hookDeallocBefore { obj in
+        print("before dealloc of \(obj)")
+     }
+     ```
+     - parameter closureObj: The hook closure. Parameter: `(Self) -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles. Do not capture strong references to the object.
+     */
     @discardableResult
-    func hookBefore(_ selector: Selector, closureObjSel: @escaping @convention(block) (_ object: NSObject, _ selector: Selector) -> Void) throws -> HookToken {
-        try hookBefore(selector, closure: closureObjSel as Any)
-    }
-
-    @discardableResult
-    func hookAfter(_ selector: Selector, closureObjSel: @escaping @convention(block) (_ object: NSObject, _ selector: Selector) -> Void) throws -> HookToken {
-        try hookAfter(selector, closure: closureObjSel as Any)
+    public func hookDeallocBefore(_ closure: @escaping (Self) -> Void) throws -> HookToken {
+        try ObjectHook(self).hookDeallocBefore { object in
+            guard let typedObject = object as? Self else { fatalError() }
+            closure(typedObject)
+        }
     }
 }
 
@@ -321,52 +288,23 @@ public extension NSObject {
     /**
      Execute the closure before the object dealloc.
      
-     # Example
-     ```
-     OCHookToken *token = nil;
-     @autoreleasepool {
-         NSObject *obj = [[NSObject alloc] init];
-         token = [obj hookDeallocBeforeAndReturnError:NULL closure:^{
-             NSLog(@"hooked");
-         }];
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject { deinit { print("dealloc") } }
+     
+     try MyObject().hookDeallocBefore {
+        print("before dealloc")
      }
-     [token cancelHook];
      ```
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure. Parameter: `() -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
-    func hookDeallocBefore(closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookDeallocBefore(closure: @escaping () -> Void) throws -> HookToken {
         try ObjectHook(self).hookDeallocBefore(closure: closure)
-    }
-
-    /**
-     Execute the closure with the object before the object dealloc.
-     
-     # Example
-     ```
-     OCHookToken *token = nil;
-     @autoreleasepool {
-         NSObject *obj = [[NSObject alloc] init];
-         token = [obj hookDeallocBeforeAndReturnError:NULL closureObj:^(NSObject * _Nonnull obj) {
-             NSLog(@"hooked");
-         }];
-     }
-     [token cancelHook];
-     ```
-     - parameter closureObj: The hook closure.
-     
-       **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     
-       **WARNING**: In the closure, do not assign the object to anywhere outside the closure. Do not keep the reference of the object. Because the object is going to be released. Otherwise it crashs on:
-         1. `malloc: *** error for object: pointer being freed was not allocated`
-         2. `Cannot form weak reference to instance of class xxx. It is possible that this object was over-released, or is in the process of deallocation.`
-         3. `EXC_BAD_ACCESS`.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
-     */
-    @discardableResult
-    func hookDeallocBefore(closureObj: @escaping @convention(block) (_ object: NSObject) -> Void) throws -> HookToken {
-        try ObjectHook(self).hookDeallocBefore(closure: closureObj)
     }
 
     // MARK: after deinit
@@ -374,22 +312,22 @@ public extension NSObject {
     /**
      Execute the closure after the object dealloc.
      
-     # Example
-     ```
-     OCHookToken *token = nil;
-     @autoreleasepool {
-         NSObject *obj = [[NSObject alloc] init];
-         token = [obj hookDeallocAfterAndReturnError:NULL closure:^{
-             NSLog(@"hooked");
-         }];
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject { deinit { print("dealloc") } }
+     
+     try MyObject().hookDeallocAfter {
+        print("after dealloc")
      }
-     [token cancelHook];
      ```
-     - parameter closure: The hook closure. **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - parameter closure: The hook closure. Parameter: `() -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
+     
+     - Note: The object will retain the closure. Avoid retain cycles.
      */
     @discardableResult
-    func hookDeallocAfter(closure: @escaping @convention(block) () -> Void) throws -> HookToken {
+    func hookDeallocAfter(closure: @escaping () -> Void) throws -> HookToken {
         try ObjectHook(self).hookDeallocAfter(closure: closure)
     }
 
@@ -398,36 +336,23 @@ public extension NSObject {
     /**
      Replace the implementation of object's dealloc method by the closure.
      
-     # Example
-     ```
-     OCHookToken *token = nil;
-     @autoreleasepool {
-         NSObject *obj = [[NSObject alloc] init];
-         token = [obj hookDeallocInsteadAndReturnError:NULL closure:^(void (^ _Nonnull original)(void)) {
-             NSLog(@"before release");
-             original();
-             NSLog(@"after release");
-         }];
+     Example usage:
+     
+     ```swift
+     class MyObject: NSObject { deinit { print("dealloc") } }
+     
+     try MyObject().hookDeallocInstead { original in
+         print("instead of dealloc")
+         original()
      }
-     [token cancelHook];
      ```
-     - parameter closure: The hook closure.
+     - parameter closure: The hook closure. Parameter: `(() -> Void) -> Void`.
+     - returns: The token of this hook. You may cancel or reapply the hook through the token.
      
-         **WARNING**: The object will retain the closure. So make sure that the closure doesn't retain the object in turn to avoid memory leak because of cycle retain.
- 
-         **WARNING**: Have to call original to avoid memory leak.
-     
-     - returns: The token of this hook behavior. You may cancel this hook through this token.
+     - Note: The object will retain the closure. Avoid retain cycles. Call `original()` to prevent memory leaks.
      */
     @discardableResult
-    func hookDeallocInstead(closure: @escaping @convention(block) (_ original: () -> Void) -> Void) throws -> HookToken {
+    func hookDeallocInstead(closure: @escaping (_ original: () -> Void) -> Void) throws -> HookToken {
         try ObjectHook(self).hookDeallocInstead(closure: closure)
     }
 }
-
-/*
- @discardableResult
- func hookBefore<Block>(_ selector: Selector, signature: Block.Type, closure: Block) throws -> HookToken {
-     try SwiftHook.hookBefore(selector, object: self, closure: closure)
- }
- */

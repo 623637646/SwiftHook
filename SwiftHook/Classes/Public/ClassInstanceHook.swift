@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Hooks all instance methods/properties of a class.
+/// Hooks all instances of a class.
 public struct ClassInstanceHook<T: AnyObject> {
     let targetClass: T.Type
     
@@ -216,7 +216,7 @@ public struct ClassInstanceHook<T: AnyObject> {
      return number1 + number2
      }
      }
-     let token = try! hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
+     let token = try! hook(targetClass: MyObject.self, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
      // You may call the original method with some different parameters. You can even not call the original method.
      return original(obj, sel, number1, numebr2)
      } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int )
@@ -235,7 +235,7 @@ public struct ClassInstanceHook<T: AnyObject> {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    public func hookInstead(_ selector: Selector, closure: Any) throws -> HookToken {
+    public func hook(_ selector: Selector, closure: Any) throws -> HookToken {
         try swiftHookSerialQueue.sync {
             try HookToken(for: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)._apply()
         }
@@ -402,7 +402,7 @@ extension ClassInstanceHook where T: NSObject {
     }
 
     @discardableResult
-    public func hookInstead(_ selector: String, closure: Any) throws -> HookToken {
-        try hookInstead(NSSelectorFromString(selector), closure: closure)
+    public func hook(_ selector: String, closure: Any) throws -> HookToken {
+        try hook(NSSelectorFromString(selector), closure: closure)
     }
 }

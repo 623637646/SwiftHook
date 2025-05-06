@@ -224,7 +224,7 @@ public struct ObjectHook<T: AnyObject> {
      }
      }
      let object = MyObject()
-     let token = try! hookInstead(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
+     let token = try! hook(object: object, selector: #selector(MyObject.sum(_:_:)), closure: { original, obj, sel, number1, numebr2 in
      // You may call the original method with some different parameters. You can even not call the original method.
      return original(obj, sel, number1, numebr2)
      } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int )
@@ -243,7 +243,7 @@ public struct ObjectHook<T: AnyObject> {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    public func hookInstead(_ selector: Selector, closure: Any) throws -> HookToken {
+    public func hook(_ selector: Selector, closure: Any) throws -> HookToken {
         return try swiftHookSerialQueue.sync {
             return try HookToken(for: object, selector: selector, mode: .instead, hookClosure: closure as AnyObject)._apply()
         }
@@ -353,8 +353,8 @@ extension ObjectHook where T: NSObject {
     }
 
     @discardableResult
-    public func hookInstead(_ selector: String, closure: Any) throws -> HookToken {
-        try hookInstead(NSSelectorFromString(selector), closure: closure)
+    public func hook(_ selector: String, closure: Any) throws -> HookToken {
+        try hook(NSSelectorFromString(selector), closure: closure)
     }
 }
 

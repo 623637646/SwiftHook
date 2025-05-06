@@ -9,9 +9,8 @@
 import Foundation
 
 private class DynamicClassContext {
-        
-    static var contextsByDynamicClass: [ObjectIdentifier: DynamicClassContext] = [:]
-    static var contextsByClass: [ObjectIdentifier: DynamicClassContext] = [:]
+    private static var byDynamicClass: [ObjectIdentifier: DynamicClassContext] = [:]
+    private static var byClass: [ObjectIdentifier: DynamicClassContext] = [:]
     
     fileprivate let baseClass: AnyClass
     fileprivate let dynamicClass: AnyClass
@@ -36,16 +35,26 @@ private class DynamicClassContext {
         if getMethodWithoutSearchingSuperClasses(targetClass: dynamicClass, selector: selector) == nil {
             try overrideSuperMethod(targetClass: dynamicClass, selector: selector)
         }
-        getClassHookContext = try HookContext.init(targetClass: dynamicClass, selector: selector, isSpecifiedInstance: true)
+        getClassHookContext = try HookContext(targetClass: dynamicClass, selector: selector, isSpecifiedInstance: true)
         try getClassHookContext.append(hookClosure: {_, _, _ in
             return baseClass
         } as @convention(block) ((AnyObject, Selector) -> AnyClass, AnyObject, Selector) -> AnyClass as AnyObject, mode: .instead)
         self.dynamicClass = dynamicClass
         deallocateHelper = nil
+        Self.byDynamicClass[ObjectIdentifier(dynamicClass)] = self
+        Self.byClass[ObjectIdentifier(baseClass)] = self
     }
     
     deinit {
         objc_disposeClassPair(dynamicClass)
+    }
+    
+    static subscript(base baseClass: AnyClass) -> DynamicClassContext? {
+        byClass[ObjectIdentifier(baseClass)]
+    }
+    
+    static subscript(dynamic dynamicClass: AnyClass) -> DynamicClassContext? {
+        byDynamicClass[ObjectIdentifier(dynamicClass)]
     }
 }
 
@@ -57,18 +66,18 @@ func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard let baseClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
+
+    DynamicClassContext[dynamic: baseClass] == nil
     guard !isDynamicClass(targetClass: baseClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     
-    let existingContext = DynamicClassContext.contextsByClass[ObjectIdentifier(baseClass)]
+    let existingContext = DynamicClassContext[base: baseClass]
     let context: DynamicClassContext
     if let existingContext {
         context = existingContext
     } else {
         context = try DynamicClassContext(baseClass: baseClass)
-        DynamicClassContext.contextsByClass[ObjectIdentifier(baseClass)] = context
-        DynamicClassContext.contextsByDynamicClass[ObjectIdentifier(context.dynamicClass)] = context
     }
     object_setClass(object, context.dynamicClass)
     return context.dynamicClass
@@ -78,12 +87,12 @@ func unwrapDynamicClass(object: AnyObject) throws {
     guard let dynamicClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard let context = DynamicClassContext.contextsByDynamicClass[ObjectIdentifier(dynamicClass)] else {
+    guard let context = DynamicClassContext[dynamic: dynamicClass] else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     object_setClass(object, context.baseClass)
 }
 
 func isDynamicClass(targetClass: AnyClass) -> Bool {
-    DynamicClassContext.contextsByDynamicClass[ObjectIdentifier(targetClass)] != nil
+    DynamicClassContext[dynamic: targetClass] != nil
 }

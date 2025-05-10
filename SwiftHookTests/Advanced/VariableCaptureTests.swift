@@ -26,7 +26,7 @@ class VariableCaptureTests: XCTestCase {
             return result + addNumber
         } as @convention(block) ((AnyObject, Selector, Int) -> Int, AnyObject, Selector, Int) -> Int)
         XCTAssertEqual(object.double(number: 11), 25)
-        token.cancelHook()
+        token.revert()
     }
 
 }

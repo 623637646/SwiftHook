@@ -51,7 +51,7 @@
     
     NSMutableArray<NSNumber *> *expectation = [[NSMutableArray<NSNumber *> alloc] init];
     NSError *error = nil;
-    OCToken *token = [obj sh_hookAfterSelector:@selector(length) error:&error closure:^{
+    HookToken *token = [obj sh_hookAfterSelector:@selector(length) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -71,7 +71,7 @@
     XCTAssertEqual(length2, 4);
     XCTAssertEqualObjects(expectation, @[]);
     
-    [token cancelHook];
+    [token revert];
     NSUInteger length3 = [obj length];
     XCTAssertEqual(length3, 3);
     XCTAssertEqualObjects(expectation, @[]);
@@ -100,7 +100,7 @@
     XCTAssertEqual(obj1.length, length1);
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(length) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(length) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -122,7 +122,7 @@
     XCTAssertEqualObjects(expectation, obj1 == obj2 ? @[@1] : @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqual([obj1 length], length1);
     XCTAssertEqualObjects(expectation, @[]);
 
@@ -145,7 +145,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(length));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(length) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(length) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -156,7 +156,7 @@
     XCTAssertEqual([obj length], length);
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqual([obj length], length);
@@ -188,7 +188,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -210,7 +210,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqual([obj1 count], count1);
     XCTAssertEqualObjects(expectation, @[]);
 
@@ -233,7 +233,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(count));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -244,7 +244,7 @@
     XCTAssertEqual([obj count], count);
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqual([obj count], count);
@@ -277,7 +277,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertEqualObjects(NSStringFromClass([obj1 class]), className);
@@ -304,7 +304,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqual([obj1 count], count1);
     XCTAssertEqualObjects(expectation, @[]);
 
@@ -332,7 +332,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(count));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -343,7 +343,7 @@
     XCTAssertEqual([obj count], count);
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqual([obj count], count);
@@ -377,7 +377,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -399,7 +399,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqual([obj1 count], count1);
     XCTAssertEqualObjects(expectation, @[]);
     
@@ -424,7 +424,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(count));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -435,7 +435,7 @@
     XCTAssertEqual([obj count], count);
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqual([obj count], count);
@@ -469,7 +469,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(count) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -491,7 +491,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqual([obj1 count], count1);
     XCTAssertEqualObjects(expectation, @[]);
     
@@ -516,7 +516,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(count));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(count) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -527,7 +527,7 @@
     XCTAssertEqual([obj count], count);
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqual([obj count], count);
@@ -553,7 +553,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNil(error);
@@ -574,7 +574,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     obj1.name = @"name3";
     XCTAssertEqualObjects(obj1.name, @"name3");
     XCTAssertEqualObjects(expectation, @[]);
@@ -597,7 +597,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(setName:));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -609,7 +609,7 @@
     XCTAssertEqualObjects(obj.name, @"name1");
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     obj.name = @"name2";
@@ -637,7 +637,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj2], @"normal");
 
     NSError *error = nil;
-    OCToken *token = [obj1 sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
+    HookToken *token = [obj1 sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNil(error);
@@ -659,7 +659,7 @@
     XCTAssertEqualObjects(expectation, @[]);
 
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     obj1.name = @"name3";
     XCTAssertEqualObjects(obj1.name, @"name3");
     XCTAssertEqualObjects(expectation, @[]);
@@ -682,7 +682,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(setName:));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(setName:) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -694,7 +694,7 @@
     XCTAssertEqualObjects(obj.name, @"name1");
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     obj.name = @"name2";
@@ -720,7 +720,7 @@
     XCTAssertEqualObjects([SwiftUtilitiesOCAPI getObjectTypeWithObject:obj], @"normal");
     
     NSError *error = nil;
-    OCToken *token = [obj sh_hookAfterSelector:@selector(host) error:&error closure:^{
+    HookToken *token = [obj sh_hookAfterSelector:@selector(host) error:&error closure:^{
         [expectation addObject:@1];
     }];
     XCTAssertNotNil(error);
@@ -738,7 +738,7 @@
     XCTAssertEqualObjects(expectation, @[]);
     
     [expectation removeAllObjects];
-    [token cancelHook];
+    [token revert];
     XCTAssertEqualObjects([obj host], @"www.google.com");
     XCTAssertEqualObjects(expectation, @[]);
     
@@ -756,7 +756,7 @@
     IMP originalIMP = class_getMethodImplementation(class, @selector(host));
     XCTAssertFalse(originalIMP == NULL);
     NSError *error = nil;
-    OCToken *token = [class sh_hookAfterSelector:@selector(host) error:&error closure:^{
+    HookToken *token = [class sh_hookAfterSelector:@selector(host) error:&error closure:^{
         expectation ++;
     }];
     XCTAssertNil(error);
@@ -768,7 +768,7 @@
     XCTAssertEqualObjects(obj.host, @"www.google.com");
     XCTAssertEqual(expectation, 1);
 
-    [token cancelHook];
+    [token revert];
     expectation = 0;
     XCTAssertEqual(object_getClass(obj), class);
     XCTAssertEqualObjects(obj.host, @"www.google.com");

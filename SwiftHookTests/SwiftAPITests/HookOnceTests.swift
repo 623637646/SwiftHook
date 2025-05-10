@@ -24,7 +24,7 @@ class HookOnceTests: XCTestCase {
         var token: Token?
         token = try hookBefore(object: obj, selector: #selector(MyObject.myMethod)) {
             run = true
-            token?.cancelHook()
+            token?.revert()
         }
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
@@ -53,7 +53,7 @@ class HookOnceTests: XCTestCase {
         var token: Token?
         token = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
             run = true
-            token?.cancelHook()
+            token?.revert()
         }
         let obj1 = MyObject()
         XCTAssertFalse(obj1.run)

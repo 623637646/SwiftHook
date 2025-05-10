@@ -10,7 +10,7 @@
 @import SwiftHook;
 
 BOOL isReleased_HookAllInstancesOCTests = NO;
-OCToken *token_HookAllInstancesOCTests = nil;
+HookToken *token_HookAllInstancesOCTests = nil;
 
 @interface MyObject_HookAllInstancesOCTests : NSObject
 @property (nonatomic, assign) BOOL run;
@@ -54,7 +54,7 @@ OCToken *token_HookAllInstancesOCTests = nil;
 {
     [super tearDown];
     isReleased_HookAllInstancesOCTests = NO;
-    [token_HookAllInstancesOCTests cancelHook];
+    [token_HookAllInstancesOCTests revert];
     token_HookAllInstancesOCTests = nil;
 }
 

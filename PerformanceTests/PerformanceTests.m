@@ -40,12 +40,12 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [TestObject sh_hookBeforeSelector:@selector(emptyMethod) error:&error closure:^{
+    HookToken *swiftHookToken = [TestObject sh_hookBeforeSelector:@selector(emptyMethod) error:&error closure:^{
     }];
     XCTAssertNil(error);
 
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
-    [swiftHookToken cancelHook];
+    [swiftHookToken revert];
     
     [self log:@"Hook with Befre mode for all instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
     XCTAssert(aspectsTime / swiftHookTime > 10 && aspectsTime / swiftHookTime < 30);
@@ -64,13 +64,13 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [TestObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
+    HookToken *swiftHookToken = [TestObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
         original(object, selector);
     } error:&error];
     XCTAssertNil(error);
 
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
-    [swiftHookToken cancelHook];
+    [swiftHookToken revert];
     
     [self log:@"Hook with Instead mode for all instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
     XCTAssert(aspectsTime / swiftHookTime > 3 && aspectsTime / swiftHookTime < 9);
@@ -88,12 +88,12 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [testObject sh_hookAfterSelector:@selector(emptyMethod) error:&error closure:^{
+    HookToken *swiftHookToken = [testObject sh_hookAfterSelector:@selector(emptyMethod) error:&error closure:^{
     }];
     XCTAssertNil(error);
 
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
-    [swiftHookToken cancelHook];
+    [swiftHookToken revert];
     
     [self log:@"Hook with After mode for single instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
     XCTAssert(aspectsTime / swiftHookTime > 3 && aspectsTime / swiftHookTime < 9);
@@ -112,13 +112,13 @@ NSInteger measureCount = 100000;
     NSTimeInterval aspectsTime = [self executionTimeWithObject:testObject];
     XCTAssertTrue([aspectsToken remove]);
     
-    OCToken *swiftHookToken = [testObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
+    HookToken *swiftHookToken = [testObject sh_hookInsteadWithSelector:@selector(emptyMethod) closure:^(void(^original)(NSObject *, SEL), NSObject *object, SEL selector){
         original(object, selector);
     } error:&error];
     XCTAssertNil(error);
     
     NSTimeInterval swiftHookTime = [self executionTimeWithObject:testObject];
-    [swiftHookToken cancelHook];
+    [swiftHookToken revert];
     
     [self log:@"Hook with Instead mode for single instances" nonHookTime: nonHookTime aspectsTime: aspectsTime swiftHookTime: swiftHookTime];
     XCTAssert(aspectsTime / swiftHookTime > 1.5 && aspectsTime / swiftHookTime < 3.5);

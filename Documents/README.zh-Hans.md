@@ -24,7 +24,7 @@ let token = try hookBefore(object: obj, selector: #selector(TestObject.testMetho
 }
 
 obj.testMethod()
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 2. hook某个实例的某个方法，在目标方法执行之后调用 hook 闭包，并且获取方法的参数。
@@ -49,7 +49,7 @@ let token = try hookAfter(object: obj, selector: #selector(TestObject.testMethod
 )
 
 obj.testMethod("ABC")
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 3. hook某个实例的某个方法，用 hook 闭包完全取代目标方法。
@@ -100,7 +100,7 @@ let token = try hookBefore(targetClass: TestObject.self, selector: #selector(Tes
 
 let obj = TestObject()
 obj.testMethod()
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 5. hook某个类的某个类方法或静态方法，在目标方法执行之前调用 hook 闭包。

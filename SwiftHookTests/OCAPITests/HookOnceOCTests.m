@@ -33,9 +33,9 @@
     MyObject_HookOnceOCTests *obj = [[MyObject_HookOnceOCTests alloc] init];
     __block BOOL run = NO;
     NSError *error = nil;
-    __block OCToken *token = [obj sh_hookBeforeSelector:@selector(myMethod) error:&error closure:^{
+    __block HookToken *token = [obj sh_hookBeforeSelector:@selector(myMethod) error:&error closure:^{
         run = YES;
-        [token cancelHook];
+        [token revert];
     }];
     XCTAssertNil(error);
     
@@ -58,9 +58,9 @@
 {
     __block BOOL run = NO;
     NSError *error = nil;
-    __block OCToken *token = [MyObject_HookOnceOCTests sh_hookBeforeSelector:@selector(myMethod) error:&error closure:^{
+    __block HookToken *token = [MyObject_HookOnceOCTests sh_hookBeforeSelector:@selector(myMethod) error:&error closure:^{
         run = YES;
-        [token cancelHook];
+        [token revert];
     }];
     XCTAssertNil(error);
     

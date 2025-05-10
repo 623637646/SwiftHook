@@ -59,7 +59,7 @@ class ThreadSafetyTests: XCTestCase {
             } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
         }
         DispatchQueue.concurrentPerform(iterations: 1000) { index in
-            tokens[index].cancelHook()
+            tokens[index].revert()
             //                _ = try internalCancelHook(token: tokens[index]) // This will crash because of non-thread-safe
         }
     }
@@ -74,7 +74,7 @@ class ThreadSafetyTests: XCTestCase {
             } as @convention(block) (AnyObject, Selector, () -> Void) -> Void as AnyObject))
         }
         DispatchQueue.concurrentPerform(iterations: 1000) { index in
-            tokens[index].cancelHook()
+            tokens[index].revert()
             //                _ = try internalCancelHook(token: tokens[index]) // This will not crash because of non-thread-safe
         }
     }
@@ -89,7 +89,7 @@ class ThreadSafetyTests: XCTestCase {
             }))
         }
         DispatchQueue.concurrentPerform(iterations: 1000) { index in
-            tokens[index].cancelHook()
+            tokens[index].revert()
         }
     }
     

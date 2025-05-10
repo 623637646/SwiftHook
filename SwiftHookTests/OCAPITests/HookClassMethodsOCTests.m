@@ -10,7 +10,7 @@
 @import SwiftHook;
 
 BOOL run_HookClassMethodsOCTests = NO;
-OCToken *token_HookClassMethodsOCTests = nil;
+HookToken *token_HookClassMethodsOCTests = nil;
 
 @interface MyObject_HookClassMethodsOCTests : NSObject
 @end
@@ -47,7 +47,7 @@ OCToken *token_HookClassMethodsOCTests = nil;
 {
     [super tearDown];
     run_HookClassMethodsOCTests = NO;
-    [token_HookClassMethodsOCTests cancelHook];
+    [token_HookClassMethodsOCTests revert];
     token_HookClassMethodsOCTests = nil;
 }
 

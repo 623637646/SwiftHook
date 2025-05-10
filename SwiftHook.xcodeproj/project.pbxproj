@@ -89,6 +89,7 @@
 		5CFD44352684BC270093B8AE /* HookAllInstances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFD44342684BC270093B8AE /* HookAllInstances.swift */; };
 		5CFD443A2684BE6F0093B8AE /* HookClassMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFD44392684BE6F0093B8AE /* HookClassMethods.swift */; };
 		7AD8C40F3055E327661F4899 /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEAD8798D180A50367B01ECD /* Pods_abstract_SwiftHook_abstract_Tests_SwiftHookTests.framework */; };
+		9C168FD12DCF6626004E057C /* AssociatedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C168FD02DCF6626004E057C /* AssociatedValue.swift */; };
 		9D9BA436787C8D1A1DD0FC11 /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF1E0C29467EB34BE523DCD /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */; };
 		B3308AE5EE0DFBB46D3B36E1 /* Pods_abstract_SwiftHook_SwiftHook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB31730A08C58A7462F1907 /* Pods_abstract_SwiftHook_SwiftHook.framework */; };
 /* End PBXBuildFile section */
@@ -209,6 +210,7 @@
 		5CFD44392684BE6F0093B8AE /* HookClassMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookClassMethods.swift; sourceTree = "<group>"; };
 		7DF1E0C29467EB34BE523DCD /* Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_abstract_SwiftHook_abstract_Tests_PerformanceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88C8289860529051CF5421EE /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.release.xcconfig"; sourceTree = "<group>"; };
+		9C168FD02DCF6626004E057C /* AssociatedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedValue.swift; sourceTree = "<group>"; };
 		9F5BDFB4D8F29B447F9C8114 /* Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BAD7DBE2536D5303CFF8B866 /* Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig"; path = "Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests.release.xcconfig"; sourceTree = "<group>"; };
 		C2329BB3948E080990AE138F /* Pods_AspectsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AspectsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -486,6 +488,7 @@
 		2ACB400E24EAA9330098B59D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				9C168FD02DCF6626004E057C /* AssociatedValue.swift */,
 				2A701512246413CE00B81219 /* Utilities.swift */,
 			);
 			path = Utilities;
@@ -733,9 +736,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests/Pods-abstract-SwiftHook-abstract-Tests-SwiftHookTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -772,9 +779,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests/Pods-abstract-SwiftHook-abstract-Tests-PerformanceTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -839,6 +850,7 @@
 				2A5363942460762F008B8A94 /* OverrideSuperMethod.swift in Sources */,
 				5CF6DC652685D10800079A81 /* HookCommonOC.swift in Sources */,
 				2A7F43C02458359E00A63935 /* HookContext.swift in Sources */,
+				9C168FD12DCF6626004E057C /* AssociatedValue.swift in Sources */,
 				2A65762F2472BA9A00FE57CE /* TargetObjectExtension.swift in Sources */,
 				2A701513246413CE00B81219 /* Utilities.swift in Sources */,
 				2A96867B2485FA47004A2DD7 /* FFICIFContext.swift in Sources */,

@@ -10,7 +10,7 @@ import Foundation
 
 private let prefix = "SwiftHook_"
 
-private class DynamicClassContext: Hashable {
+private class DynamicClassContext {
     
     private static var byDynamicClass: [ObjectIdentifier: DynamicClassContext] = [:]
     private static var byClass: [ObjectIdentifier: DynamicClassContext] = [:]

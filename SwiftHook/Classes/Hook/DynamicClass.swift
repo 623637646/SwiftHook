@@ -9,9 +9,11 @@
 import Foundation
 
 private let prefix = "SwiftHook_"
-private var dynamicClassContextPool = Set<DynamicClassContext>()
 
 private class DynamicClassContext: Hashable {
+    
+    private static var byDynamicClass: [ObjectIdentifier: DynamicClassContext] = [:]
+    private static var byClass: [ObjectIdentifier: DynamicClassContext] = [:]
     
     fileprivate let baseClass: AnyClass
     fileprivate let dynamicClass: AnyClass
@@ -42,6 +44,8 @@ private class DynamicClassContext: Hashable {
         } as @convention(block) ((AnyObject, Selector) -> AnyClass, AnyObject, Selector) -> AnyClass as AnyObject, mode: .instead)
         self.dynamicClass = dynamicClass
         deallocateHelper = nil
+        DynamicClassContext.byDynamicClass[ObjectIdentifier(dynamicClass)] = self
+        DynamicClassContext.byClass[ObjectIdentifier(baseClass)] = self
     }
     
     deinit {
@@ -54,6 +58,14 @@ private class DynamicClassContext: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(dynamicClass))
+    }
+    
+    static func context(forBaseClass baseClass: AnyClass) -> DynamicClassContext? {
+        byClass[ObjectIdentifier(baseClass)]
+    }
+    
+    static func context(forDynamicClass dynamicClass: AnyClass) -> DynamicClassContext? {
+        byDynamicClass[ObjectIdentifier(dynamicClass)]
     }
 }
 
@@ -68,15 +80,13 @@ func wrapDynamicClass(object: AnyObject) throws -> AnyClass {
     guard !isDynamicClass(targetClass: baseClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    let existingContext = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
-        dynamicClassContext.baseClass == baseClass
-    }
+    
+    let existingContext = DynamicClassContext.context(forBaseClass: baseClass)
     let context: DynamicClassContext
     if let existingContext {
         context = existingContext
     } else {
         context = try DynamicClassContext.init(baseClass: baseClass)
-        dynamicClassContextPool.insert(context)
     }
     object_setClass(object, context.dynamicClass)
     return context.dynamicClass
@@ -86,27 +96,12 @@ func unwrapDynamicClass(object: AnyObject) throws {
     guard let dynamicClass = object_getClass(object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    guard isDynamicClass(targetClass: dynamicClass) else {
-        throw SwiftHookError.internalError(file: #file, line: #line)
-    }
-    let firstContext = dynamicClassContextPool.first { (dynamicClassContext) -> Bool in
-        dynamicClassContext.dynamicClass == dynamicClass
-    }
-    guard let context = firstContext else {
+    guard let context = DynamicClassContext.context(forDynamicClass: dynamicClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     object_setClass(object, context.baseClass)
 }
 
 func isDynamicClass(targetClass: AnyClass) -> Bool {
-    // This code performance is very bad.
-    //    NSStringFromClass(targetClass).hasPrefix(prefix)
-    
-    // This is best performance solution. But Swift has some bugs so can't use it. Refer to: https://stackoverflow.com/q/62027812/9315497
-    //    return (objc_getAssociatedObject(targetClass, &associatedDynamicTagHandle) as? Bool) ?? false
-    
-    // This code performance is bad.
-    dynamicClassContextPool.contains { (dynamicClassContext) -> Bool in
-        dynamicClassContext.dynamicClass == targetClass
-    }
+    DynamicClassContext.context(forDynamicClass: targetClass) != nil
 }

@@ -10,6 +10,6 @@ import Foundation
 
 func hookDeallocAfterByDelegate(object: AnyObject, closure: AnyObject) -> HookToken {
     let token = HookToken(deallocAfter: object, hookClosure: closure)
-    token.apply()
+    _ = token.apply()
     return token
 }

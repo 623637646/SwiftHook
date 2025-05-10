@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftHookOCSources
 
+/// Represents a hook to a method.
 @objcMembers
 public class HookToken: NSObject {
     
@@ -27,17 +27,23 @@ public class HookToken: NSObject {
     /// A Boolean value indicating whether the hook is active.
     @objc public var isActive: Bool {
         get { hookContext != nil || deallocAfterDelegate != nil }
-        set { newValue ? apply() : revert() }
+        set { _ = newValue ? apply() : revert() }
     }
     
-    /// Applies the hook.
-    @objc public func apply() {
+    /**
+     Applies the hook.
+     
+     - Returns: `true` if the hook is successfully applied, otherwise `false`.
+     */
+    @discardableResult
+    @objc public func apply() -> Bool {
         guard !isActive else {
-            return
+            return true
         }
-        swiftHookSerialQueue.sync {
+        return swiftHookSerialQueue.sync {
             if !hooksDealloc {
                 try? internalApplyHook(token: self)
+                return isActive
             } else if let object = hookObject {
                 var delegate: HookDeallocAfterDelegate! = objc_getAssociatedObject(object, &associatedDelegateHandle) as? HookDeallocAfterDelegate
                 if delegate == nil {
@@ -46,21 +52,30 @@ public class HookToken: NSObject {
                 }
                 deallocAfterDelegate = delegate
                 deallocAfterDelegate?.hookClosures.append(hookClosure)
+                return true
             }
+            return false
         }
     }
     
-    /// Reverts the hook.
-    @objc public func revert() {
+    /**
+     Reverts the hook.
+     
+     - Returns: `true` if the hook is successfully reverted, otherwise `false`.
+     */
+    @discardableResult
+    @objc public func revert() -> Bool {
         guard isActive else {
-            return
+            return true
         }
-        swiftHookSerialQueue.sync {
+        return swiftHookSerialQueue.sync {
             if hooksDealloc {
                 deallocAfterDelegate?.hookClosures.removeAll(where: { $0 === self.hookClosure })
                 deallocAfterDelegate = nil
+                return true
             } else {
                 _ = try? internalCancelHook(token: self)
+                return !isActive
             }
         }
     }

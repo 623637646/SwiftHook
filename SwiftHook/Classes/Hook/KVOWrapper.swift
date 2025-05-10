@@ -114,9 +114,8 @@ func isWrappedKVO(object: NSObject) -> Bool {
     return object.swiftHookObserver != nil
 }
 
-private var isSupportedKVOAssociatedKey = 0
 func isSupportedKVO(object: NSObject) throws -> Bool {
-    if let isSupportedKVO = objc_getAssociatedObject(object, &isSupportedKVOAssociatedKey) as? Bool {
+    if let isSupportedKVO: Bool = getAssociatedValue("isSupportedKVO", object: object) {
         return isSupportedKVO
     }
     guard let isaClass = object_getClass(object) else {
@@ -141,7 +140,7 @@ func isSupportedKVO(object: NSObject) throws -> Bool {
             result = false
         }
     }
-    objc_setAssociatedObject(object, &isSupportedKVOAssociatedKey, result, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+    setAssociatedValue(result, key: "isSupportedKVO", object: object)
     return result
 }
 
@@ -171,13 +170,12 @@ func isKVOed(object: NSObject) throws -> Bool {
 // MARK: extension
 
 private extension NSObject {
-    static var swiftHookObserverAssociatedKey = 0
     var swiftHookObserver: Observer? {
         get {
-            return objc_getAssociatedObject(self, &NSObject.swiftHookObserverAssociatedKey) as? Observer
+            getAssociatedValue("swiftHookObserver", object: self)
         }
         set {
-            objc_setAssociatedObject(self, &NSObject.swiftHookObserverAssociatedKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedValue(newValue, key: "swiftHookObserver", object: self)
         }
     }
 }

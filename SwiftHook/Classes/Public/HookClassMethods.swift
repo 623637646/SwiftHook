@@ -162,10 +162,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .before, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
 }
 
 // after
@@ -200,10 +197,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .after, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
 }
 
 // instead
@@ -240,8 +234,5 @@ public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, cl
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .instead, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
 }

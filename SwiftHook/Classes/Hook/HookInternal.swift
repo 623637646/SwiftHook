@@ -15,13 +15,13 @@ import Foundation
 }
 
 func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
-    let token = HookToken(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
+    let token = try HookToken(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
     try internalApplyHook(token: token)
     return token
 }
 
 func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
-    let token = HookToken(object: object, selector: selector, mode: mode, hookClosure: hookClosure)
+    let token = try HookToken(object: object, selector: selector, mode: mode, hookClosure: hookClosure)
     try internalApplyHook(token: token)
     return token
 }

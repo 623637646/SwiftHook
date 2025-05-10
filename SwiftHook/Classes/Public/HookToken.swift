@@ -80,7 +80,10 @@ public class HookToken: NSObject {
         }
     }
     
-    init(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) {
+    init(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
+        try swiftHookSerialQueue.sync {
+            try parametersCheck(object: object, selector: deallocSelector, mode: .instead, closure: hookClosure)
+        }
         self.hookObject = object
         self.targetClass = nil
         self.mode = mode
@@ -88,7 +91,10 @@ public class HookToken: NSObject {
         self.hookClosure = hookClosure
     }
     
-    init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) {
+    init(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws {
+        try swiftHookSerialQueue.sync {
+            try parametersCheck(targetClass: targetClass, selector: deallocSelector, mode: .instead, closure: hookClosure)
+        }
         self.targetClass = targetClass
         self.mode = mode
         self.selector = selector
@@ -96,12 +102,12 @@ public class HookToken: NSObject {
     }
     
     init(deallocAfter object: AnyObject, hookClosure: AnyObject) {
+        self.targetClass = nil
+        self.hookObject = object
         self.mode = .after
         self.selector = deallocSelector
         self.hookClosure = hookClosure
-        self.targetClass = nil
         self.hooksDealloc = true
-        self.hookObject = object
     }
 
     class HookDeallocAfterDelegate {

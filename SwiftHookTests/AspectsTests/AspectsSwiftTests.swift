@@ -120,7 +120,7 @@ class AspectsSwiftTests: XCTestCase {
             XCTAssertEqual(object.number, 9)
             
             expectation = []
-            token.cancelHook()
+            token.revert()
             XCTAssertTrue(try testGetObjectType(object: object) == .dynamic)
             object.number = 11
             XCTAssertEqual(expectation, [3, 4])

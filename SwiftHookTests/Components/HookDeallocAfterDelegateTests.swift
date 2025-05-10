@@ -46,7 +46,7 @@ class HookDeallocAfterDelegateTests: XCTestCase {
             let token = hookDeallocAfterByDelegate(object: object, closure: {
                 result.append(2)
             } as @convention(block) () -> Void as AnyObject)
-            token.cancelHook()
+            token.revert()
         }
         XCTAssertEqual(result, [1])
     }

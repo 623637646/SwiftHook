@@ -28,18 +28,18 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
+     HookToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
          NSLog(@"hooked");
      }];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closure: The hook closure.
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
+    @objc class func sh_hookClassMethodBefore(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
         return try self.sh_hookClassMethodBefore(selector: selector, closure: closure as Any)
     }
     
@@ -59,18 +59,18 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
+     HookToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closure:^{
          NSLog(@"hooked");
      }];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closure: The hook closure.
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodAfter(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> OCToken {
+    @objc class func sh_hookClassMethodAfter(selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
         return try self.sh_hookClassMethodAfter(selector: selector, closure: closure as Any)
     }
     
@@ -92,18 +92,18 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(Class  _Nonnull __unsafe_unretained obj, SEL _Nonnull sel) {
+     HookToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(Class  _Nonnull __unsafe_unretained obj, SEL _Nonnull sel) {
          NSLog(@"hooked");
      }];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closureObjSel: The hook closure.
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodBefore(selector: Selector, closureObjSel: @escaping (_ class: AnyClass, _ selector: Selector) -> Void) throws -> OCToken {
+    @objc class func sh_hookClassMethodBefore(selector: Selector, closureObjSel: @escaping (_ class: AnyClass, _ selector: Selector) -> Void) throws -> HookToken {
         let closureObjSel = { obj, sel in
             guard let obj = obj as? AnyClass else { fatalError() }
             closureObjSel(obj, sel)
@@ -127,18 +127,18 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(Class  _Nonnull __unsafe_unretained obj, SEL _Nonnull sel) {
+     HookToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) error:NULL closureObjSel:^(Class  _Nonnull __unsafe_unretained obj, SEL _Nonnull sel) {
          NSLog(@"hooked");
      }];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closureObjSel: The hook closure.
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodAfter(selector: Selector, closureObjSel: @escaping (_ class: AnyClass, _ selector: Selector) -> Void) throws -> OCToken {
+    @objc class func sh_hookClassMethodAfter(selector: Selector, closureObjSel: @escaping (_ class: AnyClass, _ selector: Selector) -> Void) throws -> HookToken {
         let closureObjSel = { obj, sel in
             guard let obj = obj as? AnyClass else { fatalError() }
             closureObjSel(obj, sel)
@@ -164,11 +164,11 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) closure:^(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
+     HookToken *token = [MyObject sh_hookClassMethodBeforeSelector:@selector(sumWithNumber1:number2:) closure:^(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
          NSLog(@"hooked");
      } error:NULL];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closure: The hook closure. The following is a description of the closure
@@ -179,9 +179,9 @@ public extension NSObject {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodBefore(selector: Selector, closure: Any) throws -> OCToken {
+    @objc class func sh_hookClassMethodBefore(selector: Selector, closure: Any) throws -> HookToken {
         do {
-            return OCToken(token: try hookClassMethodBefore(targetClass: self, selector: selector, closure: closure))
+            return try hookClassMethodBefore(targetClass: self, selector: selector, closure: closure)
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -206,11 +206,11 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) closure:^(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
+     HookToken *token = [MyObject sh_hookClassMethodAfterSelector:@selector(sumWithNumber1:number2:) closure:^(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
          NSLog(@"hooked");
      } error:NULL];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closure: The hook closure. The following is a description of the closure
@@ -221,9 +221,9 @@ public extension NSObject {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodAfter(selector: Selector, closure: Any) throws -> OCToken {
+    @objc class func sh_hookClassMethodAfter(selector: Selector, closure: Any) throws -> HookToken {
         do {
-            return OCToken(token: try hookClassMethodAfter(targetClass: self, selector: selector, closure: closure))
+            return try hookClassMethodAfter(targetClass: self, selector: selector, closure: closure)
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -248,12 +248,12 @@ public extension NSObject {
      ```
      # Example to use the API
      ```
-     OCToken *token = [MyObject sh_hookClassMethodInsteadWithSelector:@selector(sumWithNumber1:number2:) closure:^NSInteger(NSInteger(^original)(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2), NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
+     HookToken *token = [MyObject sh_hookClassMethodInsteadWithSelector:@selector(sumWithNumber1:number2:) closure:^NSInteger(NSInteger(^original)(NSObject *obj, SEL sel, NSInteger number1, NSInteger number2), NSObject *obj, SEL sel, NSInteger number1, NSInteger number2) {
          NSLog(@"hooked");
          return original(obj, sel, number1, number2);
      } error:NULL];
      [MyObject sumWithNumber1:1 number2:2];
-     [token cancelHook];
+     [token revert];
      ```
      - parameter selector: The method you want to hook on.
      - parameter closure: The hook closure. The following is a description of the closure
@@ -265,9 +265,9 @@ public extension NSObject {
      - returns: The token of this hook behavior. You may cancel this hook through this token.
      */
     @discardableResult
-    @objc class func sh_hookClassMethodInstead(selector: Selector, closure: Any) throws -> OCToken {
+    @objc class func sh_hookClassMethodInstead(selector: Selector, closure: Any) throws -> HookToken {
         do {
-            return OCToken(token: try hookClassMethodInstead(targetClass: self, selector: selector, closure: closure))
+            return try hookClassMethodInstead(targetClass: self, selector: selector, closure: closure)
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error

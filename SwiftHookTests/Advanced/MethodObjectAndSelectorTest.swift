@@ -34,7 +34,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -79,7 +79,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -128,7 +128,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertEqual(result, [-1, 0, 1])
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -210,11 +210,11 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertEqual(result, "2+noArgsNoReturnFunc")
             
             // cancel
-            tokenBefore.cancelHook()
-            tokenAfter.cancelHook()
-            tokenInstead1.cancelHook()
-            tokenInstead2.cancelHook()
-            tokenInstead3.cancelHook()
+            tokenBefore.revert()
+            tokenAfter.revert()
+            tokenInstead1.revert()
+            tokenInstead2.revert()
+            tokenInstead3.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -242,7 +242,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -286,7 +286,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -334,7 +334,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertEqual(result, [-1, 0, 1])
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -380,7 +380,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -423,7 +423,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertTrue(run)
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -470,7 +470,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertEqual(result, [-1, 0, 1])
             
             // cancel
-            token.cancelHook()
+            token.revert()
         } catch {
             XCTAssertNil(error)
         }
@@ -548,11 +548,11 @@ class MethodObjectAndSelectorTest: XCTestCase {
             XCTAssertEqual(result, "3+classNoArgsNoReturnFunc")
             
             // cancel
-            tokenBefore.cancelHook()
-            tokenAfter.cancelHook()
-            token1.cancelHook()
-            token2.cancelHook()
-            token3.cancelHook()
+            tokenBefore.revert()
+            tokenAfter.revert()
+            token1.revert()
+            token2.revert()
+            token3.revert()
         } catch {
             XCTAssertNil(error)
         }

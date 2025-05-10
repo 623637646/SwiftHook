@@ -32,8 +32,8 @@ class StructTests: XCTestCase {
                 return result
                 } as @convention(block)((AnyObject, Selector, CGPoint, UIEvent?) -> Bool, AnyObject, Selector, CGPoint, UIEvent?) -> Bool)
             _ = MyObject.init().point(inside: CGPoint.init(x: 11, y: 22), with: nil)
-            token1.cancelHook()
-            token2.cancelHook()
+            token1.revert()
+            token2.revert()
         } catch {
             XCTFail()
         }
@@ -86,8 +86,8 @@ class StructTests: XCTestCase {
                 XCTAssertEqual(result.frame, CGRect.init(x: 44, y: 55, width: 66, height: 77))
                 XCTAssertEqual(result.s.d, 99)
                 XCTAssertEqual(result.s.s.p, UnsafeMutableRawPointer(pointer))
-                token1.cancelHook()
-                token2.cancelHook()
+                token1.revert()
+                token2.revert()
             } catch {
                 XCTFail()
             }
@@ -136,8 +136,8 @@ class StructTests: XCTestCase {
             
             let result = MyObject.init().doublePoint(theStruct: s)
             XCTAssertEqual(result.frame1, CGRect.init(x: 4, y: 8, width: 12, height: 16))
-            token1.cancelHook()
-            token2.cancelHook()
+            token1.revert()
+            token2.revert()
         } catch {
             XCTFail()
         }

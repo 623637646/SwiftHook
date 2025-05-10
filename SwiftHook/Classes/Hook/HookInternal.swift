@@ -8,44 +8,51 @@
 
 import Foundation
 
-enum HookMode {
+@objc public enum HookMode: Int {
     case before
     case after
     case instead
 }
 
 func internalHook(targetClass: AnyClass, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
-    let hookContext = try getHookContext(targetClass: targetClass, selector: selector, isSpecifiedInstance: false)
-    try hookContext.append(hookClosure: hookClosure, mode: mode)
-    return HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
+    let token = try HookToken(targetClass: targetClass, selector: selector, mode: mode, hookClosure: hookClosure)
+    try internalApplyHook(token: token)
+    return token
 }
 
 func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClosure: AnyObject) throws -> HookToken {
-    let targetClass: AnyClass
-    if let object = object as? NSObject {
-        guard try isSupportedKVO(object: object) else {
-            throw SwiftHookError.hookKVOUnsupportedInstance
-        }
-        // use KVO for specified instance hook
-        try wrapKVOIfNeeded(object: object, selector: selector)
-        guard let KVOedClass = object_getClass(object) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        targetClass = KVOedClass
-    } else {
-        // create dynamic class for specified instance hook
-        guard let baseClass = object_getClass(object) else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        targetClass = isDynamicClass(targetClass: baseClass) ? baseClass : try wrapDynamicClass(object: object)
-    }
-    // hook
-    let hookContext = try getHookContext(targetClass: targetClass, selector: selector, isSpecifiedInstance: true)
-    var token = HookToken(hookContext: hookContext, hookClosure: hookClosure, mode: mode)
-    token.hookObject = object
-    // set hook closure
-    try appendHookClosure(object: object, selector: selector, hookClosure: hookClosure, mode: mode)
+    let token = try HookToken(object: object, selector: selector, mode: mode, hookClosure: hookClosure)
+    try internalApplyHook(token: token)
     return token
+}
+
+func internalApplyHook(token: HookToken) throws {
+    if let targetClass = token.targetClass {
+        let hookContext = try getHookContext(targetClass: targetClass, selector: token.selector, isSpecifiedInstance: false)
+        try hookContext.append(hookClosure: token.hookClosure, mode: token.mode)
+        token.hookContext = hookContext
+    } else if let object = token.hookObject {
+        let targetClass: AnyClass
+        if let object = object as? NSObject {
+            guard try isSupportedKVO(object: object) else {
+                throw SwiftHookError.hookKVOUnsupportedInstance
+            }
+            // use KVO for specified instance hook
+            try wrapKVOIfNeeded(object: object, selector: token.selector)
+            guard let KVOedClass = object_getClass(object) else {
+                throw SwiftHookError.internalError(file: #file, line: #line)
+            }
+            targetClass = KVOedClass
+        } else {
+            // create dynamic class for specified instance hook
+            targetClass = try wrapDynamicClass(object: object)
+        }
+        // hook
+        let hookContext = try getHookContext(targetClass: targetClass, selector: token.selector, isSpecifiedInstance: true)
+        // set hook closure
+        try appendHookClosure(object: object, selector: token.selector, hookClosure: token.hookClosure, mode: token.mode)
+        token.hookContext = hookContext
+    }
 }
 
 /**
@@ -58,7 +65,7 @@ func internalHook(object: AnyObject, selector: Selector, mode: HookMode, hookClo
  
  # Case 2: Hook all instance or hook class method.
  Try to change the Method's IMP from hooked to original and released context.
- But it's dangerous when the current IMP is not previous hooked IMP. In this case. cancelHook() still works fine but the context will not be released.
+ But it's dangerous when the current IMP is not previous hooked IMP. In this case. revert() still works fine but the context will not be released.
  1. Return true if the context will be released.
  2. Return false if the context will not be released.
  3. Returen nil means some issues like token already canceled.
@@ -79,11 +86,8 @@ func internalCancelHook(token: HookToken) throws -> Bool? {
             // The object has been deinit.
             return nil
         }
-        guard let hookClosure = token.hookClosure else {
-            // Token has been canceled.
-            return nil
-        }
-        try removeHookClosure(object: hookObject, selector: hookContext.selector, hookClosure: hookClosure, mode: token.mode)
+        try removeHookClosure(object: hookObject, selector: hookContext.selector, hookClosure: token.hookClosure, mode: token.mode)
+        token.hookContext = nil
         
         guard object_getClass(hookObject) == hookContext.targetClass else {
             // The class is changed after hooking by SwiftHook.
@@ -106,10 +110,8 @@ func internalCancelHook(token: HookToken) throws -> Bool? {
         return true
     } else {
         // This hook is for all instance or class method
-        guard let hookClosure = token.hookClosure else {
-            throw SwiftHookError.internalError(file: #file, line: #line)
-        }
-        try hookContext.remove(hookClosure: hookClosure, mode: token.mode)
+        try hookContext.remove(hookClosure: token.hookClosure, mode: token.mode)
+        token.hookContext = nil
         guard !(try isIMPChanged(hookContext: hookContext)) else {
             // The IMP is changed after hooking by SwiftHook.
             return false

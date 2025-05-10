@@ -26,7 +26,7 @@ let token = try hookBefore(object: obj, selector: #selector(TestObject.testMetho
 }
 
 obj.testMethod()
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 2. Call the hook closure **after** executing **specified instance**'s method and get the parameters.
@@ -50,7 +50,7 @@ let token = try hookAfter(object: obj, selector: #selector(TestObject.testMethod
 )
 
 obj.testMethod("ABC")
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 3. Totally override the mehtod for **specified instance**.
@@ -100,7 +100,7 @@ let token = try hookBefore(targetClass: TestObject.self, selector: #selector(Tes
 
 let obj = TestObject()
 obj.testMethod()
-token.cancelHook() // cancel the hook
+token.revert() // cancel the hook
 ```
 
 5. Call the hook closure **before** executing the **class method**.

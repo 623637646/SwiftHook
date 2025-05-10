@@ -175,8 +175,8 @@ class SpecialMethodTests: XCTestCase {
                     i += 1
                 }
             }
-            token1!.cancelHook()
-            token2!.cancelHook()
+            token1!.revert()
+            token2!.revert()
             XCTAssertEqual(i, 2)
         } catch {
             XCTFail()

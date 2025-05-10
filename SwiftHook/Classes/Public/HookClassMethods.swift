@@ -25,7 +25,7 @@ import Foundation
      print("hooked")
  })
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -33,7 +33,7 @@ import Foundation
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
+public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
     return try hookClassMethodBefore(targetClass: targetClass, selector: selector, closure: closure as Any)
 }
 
@@ -52,7 +52,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
      print("hooked")
  })
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -60,7 +60,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> Token {
+public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: @escaping @convention(block) () -> Void) throws -> HookToken {
     return try hookClassMethodAfter(targetClass: targetClass, selector: selector, closure: closure as Any)
 }
 
@@ -81,7 +81,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
      print("hooked")
  })
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -89,7 +89,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodBefore<T: AnyObject>(targetClass: T.Type, selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> Token {
+public func hookClassMethodBefore<T: AnyObject>(targetClass: T.Type, selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> HookToken {
     let closure = { obj, sel in
         guard let obj = obj as? T.Type else { fatalError() }
         closure(obj, sel)
@@ -112,7 +112,7 @@ public func hookClassMethodBefore<T: AnyObject>(targetClass: T.Type, selector: S
      print("hooked")
  })
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -120,7 +120,7 @@ public func hookClassMethodBefore<T: AnyObject>(targetClass: T.Type, selector: S
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodAfter<T: AnyObject>(targetClass: T.Type, selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> Token {
+public func hookClassMethodAfter<T: AnyObject>(targetClass: T.Type, selector: Selector, closure: @escaping (_ class: T.Type, _ selector: Selector) -> Void) throws -> HookToken {
     let closure = { obj, sel in
         guard let obj = obj as? T.Type else { fatalError() }
         closure(obj, sel)
@@ -145,7 +145,7 @@ public func hookClassMethodAfter<T: AnyObject>(targetClass: T.Type, selector: Se
      print("hooked")
  } as @convention(block) (AnyObject, Selector, Int, Int) -> Void)
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -158,14 +158,11 @@ public func hookClassMethodAfter<T: AnyObject>(targetClass: T.Type, selector: Se
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
+public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .before, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .before, hookClosure: closure as AnyObject)
 }
 
 // after
@@ -183,7 +180,7 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
      print("hooked")
  } as @convention(block) (AnyObject, Selector, Int, Int) -> Void)
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -196,14 +193,11 @@ public func hookClassMethodBefore(targetClass: AnyClass, selector: Selector, clo
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
+public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .after, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .after, hookClosure: closure as AnyObject)
 }
 
 // instead
@@ -222,7 +216,7 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
      return original(obj, sel, number1, numebr2)
  } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Int )
  _ = MyObject.sum(1, 2)
- token.cancelHook() // cancel hook
+ token.revert() // cancel hook
  ```
  - parameter targetClass: The class you want to hook on. It doesn’t have to be inherited from NSObject.
  - parameter selector: The method you want to hook on.  It has to be declared with the keywords  `@objc` and `dynamic`.
@@ -236,12 +230,9 @@ public func hookClassMethodAfter(targetClass: AnyClass, selector: Selector, clos
  - returns: The token of this hook behavior. You may cancel this hook through this token.
  */
 @discardableResult
-public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> Token {
+public func hookClassMethodInstead(targetClass: AnyClass, selector: Selector, closure: Any) throws -> HookToken {
     guard let targetClass = object_getClass(targetClass) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
-    return try swiftHookSerialQueue.sync {
-        try parametersCheck(targetClass: targetClass, selector: selector, mode: .instead, closure: closure as AnyObject)
-        return try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
-    }
+    return try internalHook(targetClass: targetClass, selector: selector, mode: .instead, hookClosure: closure as AnyObject)
 }

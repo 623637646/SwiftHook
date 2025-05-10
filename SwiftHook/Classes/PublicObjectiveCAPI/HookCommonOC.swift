@@ -8,18 +8,6 @@
 
 import Foundation
 
-// MARK: - Token
-
-@objcMembers public class OCToken: NSObject {
-    private let token: Token
-    init(token: Token) {
-        self.token = token
-    }
-    public func cancelHook() {
-        token.cancelHook()
-    }
-}
-
 extension SwiftHookError {
     var getNSError: NSError {
         let code: Int

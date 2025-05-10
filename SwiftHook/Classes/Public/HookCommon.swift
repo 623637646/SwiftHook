@@ -41,29 +41,3 @@ public enum SwiftHookError: Error {
     
     case hookKVOUnsupportedInstance // Unable to hook a instance which is not support KVO.
 }
-
-// MARK: - Token
-public protocol Token {
-    func cancelHook()
-}
-
-struct HookToken: Token {
-    
-    weak var hookContext: HookContext?
-    weak var hookClosure: AnyObject?
-    let mode: HookMode
-    
-    weak var hookObject: AnyObject? // This is only for specified instance hook
-    
-    init(hookContext: HookContext, hookClosure: AnyObject, mode: HookMode) {
-        self.hookContext = hookContext
-        self.hookClosure = hookClosure
-        self.mode = mode
-    }
-    
-    func cancelHook() {
-        swiftHookSerialQueue.sync {
-            _ = try? internalCancelHook(token: self)
-        }
-    }
-}

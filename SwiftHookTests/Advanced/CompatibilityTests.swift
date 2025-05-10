@@ -286,7 +286,7 @@ class CompatibilityTests: XCTestCase {
             let aLog = logs[randomIndex]
             switch aLog {
             case let .swiftHook(token: token, start: _, end: _):
-                token.cancelHook()
+                token.revert()
             case .KVO(token: let token, number: _):
                 token.invalidate()
             }
@@ -317,7 +317,7 @@ class CompatibilityTests: XCTestCase {
         
         property2Log.forEach { log in
             if case let .swiftHook(token: token, start: _, end: _) = log {
-                token.cancelHook()
+                token.revert()
             }
         }
         

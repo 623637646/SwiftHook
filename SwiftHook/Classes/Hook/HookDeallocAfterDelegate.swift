@@ -8,8 +8,6 @@
 
 import Foundation
 
-private var associatedDelegateHandle: UInt8 = 0
-
 private class HookDeallocAfterDelegate {
     
     var hookClosures = [AnyObject]()
@@ -39,11 +37,7 @@ private struct HookDeallocAfterToken: Token {
 }
 
 func hookDeallocAfterByDelegate(object: AnyObject, closure: AnyObject) -> Token {
-    var delegate: HookDeallocAfterDelegate! = objc_getAssociatedObject(object, &associatedDelegateHandle) as? HookDeallocAfterDelegate
-    if delegate == nil {
-        delegate = HookDeallocAfterDelegate()
-        objc_setAssociatedObject(object, &associatedDelegateHandle, delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
+    let delegate = getAssociatedValue("associatedDelegateHandle", object: object, initialValue: HookDeallocAfterDelegate())
     delegate.hookClosures.append(closure)
     return HookDeallocAfterToken.init(delegate: delegate, closure: closure)
 }

@@ -8,8 +8,6 @@
 
 import Foundation
 
-private var associatedContextHandle: UInt8 = 0
-
 private class ClosuresContext {
     var before: [Selector: [AnyObject]] = [:]
     var after: [Selector: [AnyObject]] = [:]
@@ -17,18 +15,14 @@ private class ClosuresContext {
 }
 
 func getHookClosures(object: AnyObject, selector: Selector) -> (before: [AnyObject], after: [AnyObject], instead: [AnyObject]) {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+    guard let context = closuresContext(for: object) else {
         return ([], [], [])
     }
     return (context.before[selector] ?? [], context.after[selector] ?? [], context.instead[selector] ?? [])
 }
 
 func appendHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    var context: ClosuresContext! = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext
-    if context == nil {
-        context = ClosuresContext.init()
-        objc_setAssociatedObject(object, &associatedContextHandle, context, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
+    let context = getAssociatedValue("closuresContext", object: object, initialValue: ClosuresContext())
     switch mode {
     case .before:
         var closures = context.before[selector] ?? []
@@ -61,7 +55,7 @@ func appendHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyOb
 }
 
 func removeHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyObject, mode: HookMode) throws {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+    guard let context = closuresContext(for: object) else {
         throw SwiftHookError.internalError(file: #file, line: #line)
     }
     switch mode {
@@ -102,7 +96,7 @@ func removeHookClosure(object: AnyObject, selector: Selector, hookClosure: AnyOb
 }
 
 func isHookClosuresEmpty(object: AnyObject) -> Bool {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+    guard let context = closuresContext(for: object) else {
         return true
     }
     for (_, value) in context.before where !value.isEmpty {
@@ -120,7 +114,7 @@ func isHookClosuresEmpty(object: AnyObject) -> Bool {
 // MARK: This is debug tools.
 
 func debug_hookClosureCount(object: AnyObject) -> Int {
-    guard let context = objc_getAssociatedObject(object, &associatedContextHandle) as? ClosuresContext else {
+    guard let context = closuresContext(for: object) else {
         return 0
     }
     var count = 0
@@ -134,4 +128,8 @@ func debug_hookClosureCount(object: AnyObject) -> Int {
         count += value.count
     }
     return count
+}
+
+private func closuresContext(for object: AnyObject) -> ClosuresContext? {
+    getAssociatedValue("closuresContext", object: object)
 }

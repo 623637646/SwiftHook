@@ -331,8 +331,8 @@ struct HookContextKey: Hashable {
     let classID: ObjectIdentifier
     let selector: Selector
     
-    init(_ class_: AnyClass, _ selector: Selector) {
-        self.classID = ObjectIdentifier(class_)
+    init(_ class: AnyClass, _ selector: Selector) {
+        self.classID = ObjectIdentifier(`class`)
         self.selector = selector
     }
 }

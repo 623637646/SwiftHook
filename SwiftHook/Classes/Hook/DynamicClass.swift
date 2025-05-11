@@ -52,14 +52,6 @@ private class DynamicClassContext {
         objc_disposeClassPair(dynamicClass)
     }
     
-    static func == (lhs: DynamicClassContext, rhs: DynamicClassContext) -> Bool {
-        lhs.dynamicClass == rhs.dynamicClass
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(dynamicClass))
-    }
-    
     static func context(forBaseClass baseClass: AnyClass) -> DynamicClassContext? {
         byClass[ObjectIdentifier(baseClass)]
     }

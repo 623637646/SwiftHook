@@ -314,41 +314,38 @@ class HookContext {
     }
 }
 
-extension HookContext: Hashable {
-    static func == (lhs: HookContext, rhs: HookContext) -> Bool {
-        lhs.targetClass == rhs.targetClass && lhs.selector == rhs.selector
-    }
+private var hookContextPool: [HookContextKey: HookContext] = [:]
+
+struct HookContextKey: Hashable {
+    let classID: ObjectIdentifier
+    let selector: Selector
     
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(targetClass))
-        hasher.combine(selector)
+    init(_ class: AnyClass, _ selector: Selector) {
+        self.classID = ObjectIdentifier(`class`)
+        self.selector = selector
     }
 }
-
-private var hookContextPool = Set<HookContext>()
 
 func getHookContext(targetClass: AnyClass, selector: Selector, isSpecifiedInstance: Bool) throws -> HookContext {
     if getMethodWithoutSearchingSuperClasses(targetClass: targetClass, selector: selector) == nil {
         try overrideSuperMethod(targetClass: targetClass, selector: selector)
     }
-    var hookContext: HookContext! = hookContextPool.first(where: { (element) -> Bool in
-        element.targetClass == targetClass && element.selector == selector
-    })
+    var hookContext: HookContext! = hookContextPool[.init(targetClass, selector)]
     if hookContext == nil {
         hookContext = try HookContext.init(targetClass: targetClass, selector: selector, isSpecifiedInstance: isSpecifiedInstance)
-        hookContextPool.insert(hookContext)
+        hookContextPool[.init(targetClass, selector)] = hookContext
     }
     return hookContext
 }
 
 func removeHookContext(hookContext: HookContext) {
-    hookContextPool.remove(hookContext)
+    hookContextPool[.init(hookContext.targetClass, hookContext.selector)] = nil
 }
 
 // MARK: This is debug tools.
 func debug_getNormalClassHookContextsCount() -> Int {
     var count = 0
-    for item in hookContextPool where !item.isSpecifiedInstance {
+    for item in hookContextPool.values where !item.isSpecifiedInstance {
         count += 1
     }
     return count
@@ -356,7 +353,7 @@ func debug_getNormalClassHookContextsCount() -> Int {
 
 func debug_getinstancewHookContextsCount() -> Int {
     var count = 0
-    for item in hookContextPool where item.isSpecifiedInstance {
+    for item in hookContextPool.values where item.isSpecifiedInstance {
         count += 1
     }
     return count

@@ -314,17 +314,6 @@ class HookContext {
     }
 }
 
-extension HookContext: Hashable {
-    static func == (lhs: HookContext, rhs: HookContext) -> Bool {
-        lhs.targetClass == rhs.targetClass && lhs.selector == rhs.selector
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(targetClass))
-        hasher.combine(selector)
-    }
-}
-
 private var hookContextPool: [HookContextKey: HookContext] = [:]
 
 struct HookContextKey: Hashable {

@@ -347,6 +347,22 @@ public struct ClassHook<T: AnyObject> {
 }
 
 public extension ClassHook {
+    /**
+     Hooks before getting the specified property of the class.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked before the property is get. It receives:
+         - `object`: The object.
+         - `value`: The value of the property to be get.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hookBefore(\.classProperty) { class_, value in
+        // hooks before.
+     }
+     ```
+     */
     @discardableResult
     func hookBefore<Value>(_ keyPath: KeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ value: Value)->()) throws -> Token {
         try hookBefore(try keyPath.getterName(), closure: { obj, sel, val in
@@ -355,6 +371,22 @@ public extension ClassHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks before setting the specified property of the class.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked before the property is set. It receives:
+         - `object`: The object.
+         - `value`: The new value of the property to be set.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hookBefore(set \.classProperty) { class_, value in
+        // hooks before.
+     }
+     ```
+     */
     @discardableResult
     func hookBefore<Value>(set keyPath: WritableKeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ value: Value)->()) throws -> Token {
         try hookBefore(try keyPath.setterName(), closure: { obj, sel, val in
@@ -363,6 +395,22 @@ public extension ClassHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks after getting the specified property of the class.
+     
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked after the property is read. It receives:
+         - `object`: The object.
+         - `value`: The current value of the property.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hookAfter(\.classProperty) { class_, value in
+        // hooks after.
+     }
+     ```
+     */
     @discardableResult
     func hookAfter<Value>(_ keyPath: KeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ value: Value)->()) throws -> Token {
         try hookAfter(try keyPath.getterName(), closure: { obj, sel, val in
@@ -371,6 +419,22 @@ public extension ClassHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks after setting the specified property of the class.
+     
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked after the property is set. It receives:
+         - `object`: The object.
+         - `value`: The new value of the property.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hookAfter(set \.classProperty) { class_, value in
+        // hooks after.
+     }
+     ```
+     */
     @discardableResult
     func hookAfter<Value>(set keyPath: WritableKeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ value: Value)->()) throws -> Token {
         try hookAfter(try keyPath.setterName(), closure: { obj, sel, val in
@@ -379,6 +443,23 @@ public extension ClassHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks getting the specified property of the class.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: A closure that is invoked whenever the property is read. It receives:
+         - `object`: The instance on which the property is being accessed.
+         - `original`: The value returned by the original getter.
+         - Returns: The value to return from the getter. This can be the original value or a modified one.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hook(\.classProperty) { class_, originalValue in
+        return original.uppercased()
+     }
+     ```
+     */
     @discardableResult
     func hook<Value>(_ keyPath: KeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ original: Value)->(Value)) throws -> Token {
         try hook(try keyPath.getterName(), closure: { original, obj, sel in
@@ -390,6 +471,26 @@ public extension ClassHook {
                                  AnyObject, Selector) -> Any)
     }
     
+    /**
+     Hooks setting the specified property of the class.
+     
+     - Parameters:
+        - keyPath: The key path to the writable property to hook.
+       - closure: The handler that is invoked whenever the property is set. It receives:
+         - `object`: The instance on which the property is being set.
+         - `value`: The new value that is about to be written to the property.
+         - `original`: A block that invokes the original setter behavior. If the block isn't called, the property will not be updated.
+
+     Example usage:
+     ```swift
+     try ClassHook(MyObject.self).hook(set \.classProperty) { class_, value, original in
+        if stringValue != "" {
+            // Sets the stringValue.
+            original(stringValue)
+        }
+     }
+     ```
+     */
     @discardableResult
     func hook<Value>(set keyPath: WritableKeyPath<T.Type, Value>, closure: @escaping (_ class_: T.Type, _ value: Value, _ original: (Value)->())->()) throws -> Token {
         try hook(try keyPath.setterName(), closure: { original, obj, sel, val in

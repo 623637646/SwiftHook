@@ -507,6 +507,22 @@ extension ObjectHook where T: NSObject {
 }
 
 public extension ObjectHook {
+    /**
+     Hooks before getting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked before the property is get. It receives:
+         - `object`: The object.
+         - `value`: The value to be returned by the property.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hookBefore(\.stringValue) { textfield, stringValue in
+        // hooks before.
+     }
+     ```
+     */
     @discardableResult
     func hookBefore<Value>(_ keyPath: KeyPath<T, Value>, closure: @escaping (_ object: T,_ value: Value)->()) throws -> Token {
         try hookBefore(try keyPath.getterName(), closure: { obj, sel, val in
@@ -515,6 +531,22 @@ public extension ObjectHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks before setting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked before the property is set. It receives:
+         - `object`: The object.
+         - `value`: The new value to be set to the property.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hookBefore(set \.stringValue) { textfield, stringValue in
+        // hooks before.
+     }
+     ```
+     */
     @discardableResult
     func hookBefore<Value>(set keyPath: WritableKeyPath<T, Value>, closure: @escaping (_ object: T,_ value: Value)->()) throws -> Token {
         try hookBefore(try keyPath.setterName(), closure: { obj, sel, val in
@@ -523,6 +555,22 @@ public extension ObjectHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks after getting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked after the property is read. It receives:
+         - `object`: The object.
+         - `value`: The current value of the property.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hookAfter(\.stringValue) { textfield, stringValue in
+        // hooks after.
+     }
+     ```
+     */
     @discardableResult
     func hookAfter<Value>(_ keyPath: KeyPath<T, Value>, closure: @escaping (_ object: T,_ value: Value)->()) throws -> Token {
         try hookAfter(try keyPath.getterName(), closure: { obj, sel, val in
@@ -531,6 +579,22 @@ public extension ObjectHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks after setting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: The handler that is invoked after the property is set. It receives:
+         - `object`: The object.
+         - `value`: The new value of the property.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hookAfter(set \.stringValue) { textfield, stringValue in
+        // hooks after.
+     }
+     ```
+     */
     @discardableResult
     func hookAfter<Value>(set keyPath: WritableKeyPath<T, Value>, closure: @escaping (_ object: T,_ value: Value)->()) throws -> Token {
         try hookAfter(try keyPath.setterName(), closure: { obj, sel, val in
@@ -539,6 +603,23 @@ public extension ObjectHook {
         } as @convention(block) (AnyObject, Selector, Any) -> Void )
     }
     
+    /**
+     Hooks getting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the property to hook.
+       - closure: A closure that is invoked whenever the property is read. It receives:
+         - `object`: The instance on which the property is being accessed.
+         - `original`: The value returned by the original getter.
+         - Returns: The value to return from the getter. This can be the original value or a modified one.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hook(\.stringValue) { object, originalValue in
+        return originalValue.uppercased()
+     }
+     ```
+     */
     @discardableResult
     func hook<Value>(_ keyPath: KeyPath<T, Value>, closure: @escaping (_ object: T, _ original: Value)->(Value)) throws -> Token {
         try hook(try keyPath.getterName(), closure: { original, obj, sel in
@@ -550,6 +631,26 @@ public extension ObjectHook {
                                  AnyObject, Selector) -> Any)
     }
     
+    /**
+     Hooks setting the specified property.
+
+     - Parameters:
+        - keyPath: The key path to the writable property to hook.
+        - closure: The handler that is invoked whenever the property is set. It receives:
+            - `object`: The instance on which the property is being set.
+            - `value`: The new value that is about to be written to the property.
+            - `original`: A block that invokes the original setter. If the block isn't called, the property will not be updated.
+
+     Example usage:
+     ```swift
+     try ObjectHook(textfield).hook(set \.stringValue) { textfield, stringValue, original in
+        if stringValue != "" {
+            // Sets the stringValue.
+            original(stringValue)
+        }
+     }
+     ```
+     */
     @discardableResult
     func hook<Value>(set keyPath: WritableKeyPath<T, Value>, closure: @escaping (_ object: T, _ value: Value, _ original: (Value)->())->()) throws -> Token {
         try hook(try keyPath.setterName(), closure: { original, obj, sel, val in

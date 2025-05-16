@@ -27,7 +27,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === object)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookBefore(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassInstanceHook(targetClass).hookBefore(selector, closure: closure)
             
             // test hook
             object.noArgsNoReturnFunc()
@@ -49,7 +49,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookBefore(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassInstanceHook(targetClass).hookBefore(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -72,7 +72,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === object)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookAfter(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassInstanceHook(targetClass).hookAfter(selector, closure: closure)
             
             // test hook
             object.noArgsNoReturnFunc()
@@ -94,7 +94,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookAfter(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassInstanceHook(targetClass).hookAfter(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -119,7 +119,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 original(obj, sel, closure)
                 result.append(1)
                 } as @convention(block) (@escaping (AnyObject, Selector, () -> Void) -> Void, AnyObject, Selector, () -> Void) -> Void
-            let token = try hookInstead(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassInstanceHook(targetClass).hook(selector, closure: closure)
             
             // test hook
             object.execute {
@@ -143,7 +143,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
-            try hookInstead(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassInstanceHook(targetClass).hook(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) have to be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -170,13 +170,13 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertEqual(obj.number, 2)
                 XCTAssertEqual(sel, #selector(ObjectiveCTestObject.noArgsNoReturnFunc))
                 } as @convention(block) (ObjectiveCTestObject, Selector) -> Void
-            let tokenBefore = try hookBefore(targetClass: targetClass, selector: selector, closure: closureBefore)
+            let tokenBefore = try ClassInstanceHook(targetClass).hookBefore(selector, closure: closureBefore)
             
             let closureAfter = {obj, sel in
                 XCTAssertEqual(obj.number, 2)
                 XCTAssertEqual(sel, #selector(ObjectiveCTestObject.noArgsNoReturnFunc))
                 } as @convention(block) (ObjectiveCTestObject, Selector) -> Void
-            let tokenAfter = try hookAfter(targetClass: targetClass, selector: selector, closure: closureAfter)
+            let tokenAfter = try ClassInstanceHook(targetClass).hookAfter(selector, closure: closureAfter)
             
             let closureInstead1 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 3)
@@ -185,7 +185,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 object.number = 2
                 return original(object, #selector(ObjectiveCTestObject.noArgsNoReturnFunc))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let tokenInstead1 = try hookInstead(targetClass: targetClass, selector: selector, closure: closureInstead1)
+            let tokenInstead1 = try ClassInstanceHook(targetClass).hook(selector, closure: closureInstead1)
             
             let closureInstead2 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 4)
@@ -194,7 +194,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 object.number = 3
                 return original(object, #selector(ObjectiveCTestObject.classNoArgsNoReturnFunc))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let tokenInstead2 = try hookInstead(targetClass: targetClass, selector: selector, closure: closureInstead2)
+            let tokenInstead2 = try ClassInstanceHook(targetClass).hook(selector, closure: closureInstead2)
             
             let closureInstead3 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 1)
@@ -203,7 +203,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 object.number = 4
                 return original(object, #selector(ObjectiveCTestObject.sumFunc(withA:b:)))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let tokenInstead3 = try hookInstead(targetClass: targetClass, selector: selector, closure: closureInstead3)
+            let tokenInstead3 = try ClassInstanceHook(targetClass).hook(selector, closure: closureInstead3)
             
             // test hook
             result = object.getSelfNumberPlusCMD()
@@ -235,7 +235,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === targetClass)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookClassMethodBefore(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassHook(targetClass).hookBefore(selector, closure: closure)
             
             // test hook
             TestObject.classMethodNoArgsNoReturnFunc()
@@ -257,7 +257,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookClassMethodBefore(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassHook(targetClass).hookBefore(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -279,7 +279,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === targetClass)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookClassMethodAfter(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassHook(targetClass).hookAfter(selector, closure: closure)
             
             // test hook
             TestObject.classMethodNoArgsNoReturnFunc()
@@ -301,7 +301,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookClassMethodAfter(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassHook(targetClass).hookAfter(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -325,7 +325,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 original(obj, sel, closure)
                 result.append(1)
                 } as @convention(block) (@escaping (AnyObject, Selector, () -> Void) -> Void, AnyObject, Selector, () -> Void) -> Void
-            let token = try hookClassMethodInstead(targetClass: targetClass, selector: selector, closure: closure)
+            let token = try ClassHook(targetClass).hook(selector, closure: closure)
             
             // test hook
             TestObject.classMethodExecute {
@@ -349,7 +349,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.classMethodNoArgsNoReturnFunc)
             let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
-            try hookClassMethodInstead(targetClass: targetClass, selector: selector, closure: closure)
+            try ClassHook(targetClass).hook(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) have to be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -373,7 +373,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === object)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookBefore(object: object, selector: selector, closure: closure)
+            let token = try ObjectHook(object).hookBefore(selector, closure: closure)
             
             // test hook
             object.noArgsNoReturnFunc()
@@ -394,7 +394,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookBefore(object: TestObject(), selector: selector, closure: closure)
+            try ObjectHook(TestObject()).hookBefore(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -416,7 +416,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertTrue(obj === object)
                 XCTAssertTrue(sel == selector)
                 } as @convention(block) (NSObject, Selector) -> Void
-            let token = try hookAfter(object: object, selector: selector, closure: closure)
+            let token = try ObjectHook(object).hookAfter(selector, closure: closure)
             
             // test hook
             object.noArgsNoReturnFunc()
@@ -437,7 +437,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = {_, _ in
                 } as @convention(block) (Selector, NSObject) -> Void
-            try hookAfter(object: TestObject(), selector: selector, closure: closure)
+            try ObjectHook(TestObject()).hookAfter(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `befor` and `after` mode. The parameters type of the hook closure have to be nil or `@:` or as the same as method's. The closure parameters type is `:@`. The method parameters type is `@:`. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -461,7 +461,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 original(obj, sel, closure)
                 result.append(1)
                 } as @convention(block) (@escaping (AnyObject, Selector, () -> Void) -> Void, AnyObject, Selector, () -> Void) -> Void
-            let token = try hookInstead(object: object, selector: selector, closure: closure)
+            let token = try ObjectHook(object).hook(selector, closure: closure)
             
             // test hook
             object.execute {
@@ -484,7 +484,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
             let selector = #selector(TestObject.noArgsNoReturnFunc)
             let closure = { _, _, _ in
                 } as @convention(block) ((Selector, NSObject) -> Void, Selector, NSObject) -> Void
-            try hookInstead(object: TestObject(), selector: selector, closure: closure)
+            try ObjectHook(TestObject()).hook(selector, closure: closure)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
             XCTAssertEqual(description, "For `instead` mode. The parameters type of the original closure (the hook closure's first parameter) have to be the same as the method's. The original closure parameters type is `:@`. But the method parameters type is `@:`. They are not the same. For more about Type Encodings: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html")
@@ -510,13 +510,13 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 XCTAssertEqual(obj.number, 1)
                 XCTAssertEqual(sel, #selector(ObjectiveCTestObject.getSelfNumberPlusCMD))
                 } as @convention(block) (ObjectiveCTestObject, Selector) -> Void
-            let tokenBefore = try hookBefore(object: object, selector: selector, closure: closureBefore)
+            let tokenBefore = try ObjectHook(object).hookBefore(selector, closure: closureBefore)
             
             let closureAfter = {obj, sel in
                 XCTAssertEqual(obj.number, 3)
                 XCTAssertEqual(sel, #selector(ObjectiveCTestObject.classNoArgsNoReturnFunc))
                 } as @convention(block) (ObjectiveCTestObject, Selector) -> Void
-            let tokenAfter = try hookAfter(object: object, selector: selector, closure: closureAfter)
+            let tokenAfter = try ObjectHook(object).hookAfter(selector, closure: closureAfter)
             
             let closure1 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 3)
@@ -525,7 +525,7 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 object.number = 2
                 return original(object, #selector(ObjectiveCTestObject.noArgsNoReturnFunc))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let token1 = try hookInstead(object: object, selector: selector, closure: closure1)
+            let token1 = try ObjectHook(object).hook(selector, closure: closure1)
             
             let closure2 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 1)
@@ -534,14 +534,14 @@ class MethodObjectAndSelectorTest: XCTestCase {
                 object.number = 3
                 return original(object, #selector(ObjectiveCTestObject.classNoArgsNoReturnFunc))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let token2 = try hookInstead(object: object, selector: selector, closure: closure2)
+            let token2 = try ObjectHook(object).hook(selector, closure: closure2)
             
             let closure3 = {original, obj, sel in
                 XCTAssertEqual(obj.number, 1)
                 XCTAssertEqual(sel, #selector(ObjectiveCTestObject.getSelfNumberPlusCMD))
                 return original(obj, #selector(ObjectiveCTestObject.sumFunc(withA:b:)))
                 } as @convention(block) ((ObjectiveCTestObject, Selector) -> String, ObjectiveCTestObject, Selector) -> String
-            let token3 = try hookInstead(object: object, selector: selector, closure: closure3)
+            let token3 = try ObjectHook(object).hook(selector, closure: closure3)
             
             // test hook
             result = object.getSelfNumberPlusCMD()
@@ -567,15 +567,15 @@ class MethodObjectAndSelectorTest: XCTestCase {
         
         let obj = MyObject.init()
         var array = [Int]()
-        try hookBefore(object: obj, selector: #selector(MyObject.myMethod)) {
+        try ObjectHook(obj).hookBefore(#selector(MyObject.myMethod)) {
             array.append(2)
         }
-        try hookInstead(object: obj, selector: #selector(MyObject.myMethod), closure: {original, _, sel in
+        try ObjectHook(obj).hook(#selector(MyObject.myMethod), closure: {original, _, sel in
             array.append(1)
             original(NSURLRequest.init(), sel)
             array.append(4)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
-        try hookAfter(object: obj, selector: #selector(MyObject.myMethod), closure: {
+        try ObjectHook(obj).hookAfter(#selector(MyObject.myMethod), closure: {
             array.append(3)
         })
         obj.myMethod()

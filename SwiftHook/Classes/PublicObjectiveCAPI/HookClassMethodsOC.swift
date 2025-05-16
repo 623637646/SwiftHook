@@ -181,7 +181,7 @@ public extension NSObject {
     @discardableResult
     @objc class func sh_hookClassMethodBefore(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookClassMethodBefore(targetClass: self, selector: selector, closure: closure))
+            return OCToken(token: try ClassHook(self).hookBefore(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -223,7 +223,7 @@ public extension NSObject {
     @discardableResult
     @objc class func sh_hookClassMethodAfter(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookClassMethodAfter(targetClass: self, selector: selector, closure: closure))
+            return OCToken(token: try ClassHook(self).hookAfter(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -267,7 +267,7 @@ public extension NSObject {
     @discardableResult
     @objc class func sh_hookClassMethodInstead(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookClassMethodInstead(targetClass: self, selector: selector, closure: closure))
+            return OCToken(token: try ClassHook(self).hook(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error

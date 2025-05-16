@@ -178,7 +178,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookBefore(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookBefore(object: self, selector: selector, closure: closure))
+            return OCToken(token: try ObjectHook(self).hookBefore(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -221,7 +221,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookAfter(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookAfter(object: self, selector: selector, closure: closure))
+            return OCToken(token: try ObjectHook(self).hookAfter(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -267,7 +267,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookInstead(selector: Selector, closure: Any) throws -> OCToken {
         do {
-            return OCToken(token: try hookInstead(object: self, selector: selector, closure: closure))
+            return OCToken(token: try ObjectHook(self).hook(selector, closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -298,7 +298,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookDeallocBefore(closure: @escaping @convention(block) () -> Void) throws -> OCToken {
         do {
-            return OCToken(token: try hookDeallocBefore(object: self, closure: closure))
+            return OCToken(token: try ObjectHook(self).hookDeallocBefore(closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -334,7 +334,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookDeallocBefore(closureObj: @escaping @convention(block) (_ object: NSObject) -> Void) throws -> OCToken {
         do {
-            return OCToken(token: try hookDeallocBefore(object: self, closure: closureObj))
+            return OCToken(token: try ObjectHook(self).hookDeallocBefore(closure: closureObj))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -365,7 +365,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookDeallocAfter(closure: @escaping @convention(block) () -> Void) throws -> OCToken {
         do {
-            return OCToken(token: try hookDeallocAfter(object: self, closure: closure))
+            return OCToken(token: try ObjectHook(self).hookDeallocAfter(closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error
@@ -393,7 +393,7 @@ public extension NSObject {
      */
     @discardableResult
     @objc func sh_hookDeallocAfterByTail(closure: @escaping @convention(block) () -> Void) -> OCToken {
-        return OCToken(token: hookDeallocAfterByTail(object: self, closure: closure))
+        return OCToken(token: ObjectHook(self).hookDeallocAfterByTail(closure: closure))
     }
 
     // MARK: replace deinit
@@ -425,7 +425,7 @@ public extension NSObject {
     @discardableResult
     @objc func sh_hookDeallocInstead(closure: @escaping @convention(block) (_ original: () -> Void) -> Void) throws -> OCToken {
         do {
-            return OCToken(token: try hookDeallocInstead(object: self, closure: closure))
+            return OCToken(token: try ObjectHook(self).hookDealloc(closure: closure))
         } catch {
             guard let swiftHookError = error as? SwiftHookError else {
                 throw error

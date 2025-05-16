@@ -26,7 +26,7 @@ class ThreadSafetyTests: XCTestCase {
             do {
                 let targetClass: AnyClass = objc_allocateClassPair(TestObject.self, "ThreadSafetyTests_\(index)", 0)!
                 objc_registerClassPair(targetClass)
-                let token = try hookAfter(targetClass: targetClass, selector: #selector(TestObject.noArgsNoReturnFunc)) {}
+                let token = try ClassInstanceHook(targetClass).hookAfter(#selector(TestObject.noArgsNoReturnFunc)) {}
                 guard let hookToken = token as? HookToken else {
                     XCTFail()
                     return
@@ -43,7 +43,7 @@ class ThreadSafetyTests: XCTestCase {
         DispatchQueue.concurrentPerform(iterations: 1000) { _ in
             do {
                 _ = try autoreleasepool {
-                    try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: { _, _, _ in
+                    try ObjectHook(TestObject()).hook(#selector(TestObject.noArgsNoReturnFunc), closure: { _, _, _ in
                     } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
                 }
             } catch {
@@ -85,7 +85,7 @@ class ThreadSafetyTests: XCTestCase {
         for _ in 0 ... 1000 {
             let object = randomTestObject()
             objects.append(object)
-            tokens.append(hookDeallocAfterByTail(object: object, closure: {
+            tokens.append(ObjectHook(object).hookDeallocAfterByTail(closure: {
             }))
         }
         DispatchQueue.concurrentPerform(iterations: 1000) { index in
@@ -126,17 +126,17 @@ class ThreadSafetyTests: XCTestCase {
         }
         
         MyObject.result = 0
-        try hookAfter(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+        try ObjectHook(object).hookAfter(#selector(MyObject.plus1), closure: { _, _ in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }
         } as @convention(block) (AnyObject, Selector) -> Void)
-        try hookBefore(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+        try ObjectHook(object).hookBefore(#selector(MyObject.plus1), closure: { _, _ in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }
         } as @convention(block) (AnyObject, Selector) -> Void)
-        try hookInstead(object: object, selector: #selector(MyObject.plus1), closure: { original, obj, selector in
+        try ObjectHook(object).hook(#selector(MyObject.plus1), closure: { original, obj, selector in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }
@@ -183,17 +183,17 @@ class ThreadSafetyTests: XCTestCase {
         }
         
         MyObject.result = 0
-        try hookAfter(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+        try ObjectHook(object).hookAfter(#selector(MyObject.plus1), closure: { _, _ in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }
         } as @convention(block) (AnyObject, Selector) -> Void)
-        try hookBefore(object: object, selector: #selector(MyObject.plus1), closure: { _, _ in
+        try ObjectHook(object).hookBefore(#selector(MyObject.plus1), closure: { _, _ in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }
         } as @convention(block) (AnyObject, Selector) -> Void)
-        try hookInstead(object: object, selector: #selector(MyObject.plus1), closure: { original, obj, selector in
+        try ObjectHook(object).hook(#selector(MyObject.plus1), closure: { original, obj, selector in
             MyObject.serialQueue.async {
                 MyObject.result += 1
             }

@@ -38,7 +38,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -79,7 +79,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -125,7 +125,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .normal))
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -166,7 +166,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .normal))
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -227,7 +227,7 @@ class CompatibilityTests: XCTestCase {
                 // SwiftHook
                 let start = Int.random(in: Int.min ... Int.max)
                 let end = Int.random(in: Int.min ... Int.max)
-                let token = try hookInstead(object: object, selector: #selector(setter: MyObject.property1), closure: { original, object, selector, number in
+                let token = try ObjectHook(object).hook(#selector(setter: MyObject.property1), closure: { original, object, selector, number in
                     order.append(start)
                     original(object, selector, number)
                     order.append(end)
@@ -372,7 +372,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertEqual(try testGetObjectType(object: object), .KVOed(mode: .normal))
         
-        _ = try hookInstead(object: object, selector: #selector(setter: MyObject1.obj), closure: { original, object, selector, number in
+        _ = try ObjectHook(object).hook(#selector(setter: MyObject1.obj), closure: { original, object, selector, number in
             order.append(1)
             original(object, selector, number)
             order.append(3)
@@ -392,7 +392,7 @@ class CompatibilityTests: XCTestCase {
         var order = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        _ = try hookInstead(object: object, selector: #selector(setter: MyObject1.obj), closure: { original, object, selector, number in
+        _ = try ObjectHook(object).hook(#selector(setter: MyObject1.obj), closure: { original, object, selector, number in
             order.append(1)
             original(object, selector, number)
             order.append(3)
@@ -432,33 +432,33 @@ class CompatibilityTests: XCTestCase {
             }
             
             // before
-            try hookBefore(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookBefore(deallocSelector) {
                 order.append(4)
             }
-            try hookDeallocBefore(object: object, closure: {
+            try ObjectHook(object).hookDeallocBefore(closure: {
                 order.append(3)
             })
             
             // instead
-            try hookInstead(object: object, selector: deallocSelector, closure: { original in
+            try ObjectHook(object).hook(deallocSelector, closure: { original in
                 order.append(2)
                 original()
                 order.append(8)
             } as @convention(block) (() -> Void) -> Void)
-            try hookDeallocInstead(object: object, closure: { original in
+            try ObjectHook(object).hookDealloc(closure: { original in
                 order.append(1)
                 original()
                 order.append(9)
             } as @convention(block) (() -> Void) -> Void)
             
             // after
-            try hookAfter(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookAfter(deallocSelector) {
                 order.append(7)
             }
-            try hookDeallocAfter(object: object, closure: {
+            try ObjectHook(object).hookDeallocAfter(closure: {
                 order.append(6)
             })
-            hookDeallocAfterByTail(object: object, closure: {
+            ObjectHook(object).hookDeallocAfterByTail(closure: {
                 order.append(5)
             })
             XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -480,20 +480,20 @@ class CompatibilityTests: XCTestCase {
             XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             
             // before
-            try hookBefore(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookBefore(deallocSelector) {
                 order.append(4)
             }
-            try hookDeallocBefore(object: object, closure: {
+            try ObjectHook(object).hookDeallocBefore(closure: {
                 order.append(3)
             })
             
             // instead
-            try hookInstead(object: object, selector: deallocSelector, closure: { original in
+            try ObjectHook(object).hook(deallocSelector, closure: { original in
                 order.append(2)
                 original()
                 order.append(8)
             } as @convention(block) (() -> Void) -> Void)
-            try hookDeallocInstead(object: object, closure: { original in
+            try ObjectHook(object).hookDealloc(closure: { original in
                 order.append(1)
                 original()
                 order.append(9)
@@ -505,13 +505,13 @@ class CompatibilityTests: XCTestCase {
             kvo.invalidate()
             
             // after
-            try hookAfter(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookAfter(deallocSelector) {
                 order.append(7)
             }
-            try hookDeallocAfter(object: object, closure: {
+            try ObjectHook(object).hookDeallocAfter(closure: {
                 order.append(6)
             })
-            hookDeallocAfterByTail(object: object, closure: {
+            ObjectHook(object).hookDeallocAfterByTail(closure: {
                 order.append(5)
             })
             XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -533,33 +533,33 @@ class CompatibilityTests: XCTestCase {
             XCTAssertTrue(try testGetObjectType(object: object) == .normal)
             
             // before
-            try hookBefore(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookBefore(deallocSelector) {
                 order.append(4)
             }
-            try hookDeallocBefore(object: object, closure: {
+            try ObjectHook(object).hookDeallocBefore(closure: {
                 order.append(3)
             })
             
             // instead
-            try hookInstead(object: object, selector: deallocSelector, closure: { original in
+            try ObjectHook(object).hook(deallocSelector, closure: { original in
                 order.append(2)
                 original()
                 order.append(8)
             } as @convention(block) (() -> Void) -> Void)
-            try hookDeallocInstead(object: object, closure: { original in
+            try ObjectHook(object).hookDealloc(closure: { original in
                 order.append(1)
                 original()
                 order.append(9)
             } as @convention(block) (() -> Void) -> Void)
             
             // after
-            try hookAfter(object: object, selector: deallocSelector) {
+            try ObjectHook(object).hookAfter(deallocSelector) {
                 order.append(7)
             }
-            try hookDeallocAfter(object: object, closure: {
+            try ObjectHook(object).hookDeallocAfter(closure: {
                 order.append(6)
             })
-            hookDeallocAfterByTail(object: object, closure: {
+            ObjectHook(object).hookDeallocAfterByTail(closure: {
                 order.append(5)
             })
             
@@ -588,7 +588,7 @@ class CompatibilityTests: XCTestCase {
     //        var expectation = [Int]()
     //        XCTAssertEqual(try testGetObjectType(object: object), .normal)
     //
-    //        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+    //        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
     //            expectation.append(1)
     //            original(o, s, number)
     //            expectation.append(2)
@@ -638,7 +638,7 @@ class CompatibilityTests: XCTestCase {
         } as @convention(block) (AspectInfo) -> Void)
         XCTAssertTrue(try testGetObjectType(object: object) == .others)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(4)
@@ -682,7 +682,7 @@ class CompatibilityTests: XCTestCase {
     //        } as @convention(block) (AspectInfo) -> Void)
     //        XCTAssertTrue(try testGetObjectType(object: object) == .others)
     //
-    //        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+    //        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
     //            expectation.append(1)
     //            original(o, s, number)
     //            expectation.append(4)
@@ -720,7 +720,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -764,7 +764,7 @@ class CompatibilityTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -807,7 +807,7 @@ class CompatibilityTests: XCTestCase {
             }
         }
         
-        let token1 = try hookInstead(targetClass: MyOCObject.self, selector: #selector(MyOCObject.myMethod), closure: { original, o, s in
+        let token1 = try ClassInstanceHook(MyOCObject.self).hook(#selector(MyOCObject.myMethod), closure: { original, o, s in
             original(o, s)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         guard let hookToken1 = token1 as? HookToken else {
@@ -816,7 +816,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertTrue(try internalCancelHook(token: hookToken1)!)
         
-        let token2 = try hookInstead(targetClass: MySwiftObject.self, selector: #selector(MySwiftObject.myMethod), closure: { original, o, s in
+        let token2 = try ClassInstanceHook(MySwiftObject.self).hook(#selector(MySwiftObject.myMethod), closure: { original, o, s in
             original(o, s)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         guard let hookToken2 = token2 as? HookToken else {
@@ -825,7 +825,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertTrue(try internalCancelHook(token: hookToken2)!)
         
-        let token3 = try hookInstead(targetClass: MyOCObject.self, selector: #selector(MyOCObject.myMethod), closure: { original, o, s in
+        let token3 = try ClassInstanceHook(MyOCObject.self).hook(#selector(MyOCObject.myMethod), closure: { original, o, s in
             original(o, s)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         let method3 = class_getInstanceMethod(MyOCObject.self, #selector(MyOCObject.myMethod))!
@@ -837,7 +837,7 @@ class CompatibilityTests: XCTestCase {
         }
         XCTAssertFalse(try internalCancelHook(token: hookToken3)!)
         
-        let token4 = try hookInstead(targetClass: MySwiftObject.self, selector: #selector(MySwiftObject.myMethod), closure: { original, o, s in
+        let token4 = try ClassInstanceHook(MySwiftObject.self).hook(#selector(MySwiftObject.myMethod), closure: { original, o, s in
             original(o, s)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         let method4 = class_getInstanceMethod(MySwiftObject.self, #selector(MySwiftObject.myMethod))!

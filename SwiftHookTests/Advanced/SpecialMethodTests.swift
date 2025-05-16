@@ -22,33 +22,33 @@ class SpecialMethodTests: XCTestCase {
                 XCTAssertTrue(try testGetObjectType(object: object) == .normal)
                 
                 // before
-                try hookBefore(object: object, selector: deallocSelector) {
+                try ObjectHook(object).hookBefore(deallocSelector) {
                     executed.append(-1)
                 }
-                try hookDeallocBefore(object: object, closure: {
+                try ObjectHook(object).hookDeallocBefore(closure: {
                     executed.append(-2)
                 })
                 
                 // instead
-                try hookInstead(object: object, selector: deallocSelector, closure: { original in
+                try ObjectHook(object).hook(deallocSelector, closure: { original in
                     executed.append(-3)
                     original()
                     executed.append(3)
                     } as @convention(block) (() -> Void) -> Void)
-                try hookDeallocInstead(object: object, closure: { original in
+                try ObjectHook(object).hookDealloc(closure: { original in
                     executed.append(-4)
                     original()
                     executed.append(4)
                     } as @convention(block) (() -> Void) -> Void)
                 
                 // after
-                try hookAfter(object: object, selector: deallocSelector) {
+                try ObjectHook(object).hookAfter(deallocSelector) {
                     executed.append(1)
                 }
-                try hookDeallocAfter(object: object, closure: {
+                try ObjectHook(object).hookDeallocAfter(closure: {
                     executed.append(2)
                 })
-                hookDeallocAfterByTail(object: object, closure: {
+                ObjectHook(object).hookDeallocAfterByTail(closure: {
                     executed.append(5)
                 })
                 XCTAssertTrue(try testGetObjectType(object: object) == .KVOed(mode: .swiftHook))
@@ -71,7 +71,7 @@ class SpecialMethodTests: XCTestCase {
                 }
                 
                 XCTAssertTrue(try testGetObjectType(object: object) == .normal)
-                hookDeallocAfterByTail(object: object, closure: {
+                ObjectHook(object).hookDeallocAfterByTail(closure: {
                     executed.append(2)
                 })
                 XCTAssertTrue(try testGetObjectType(object: object) == .normal)
@@ -96,23 +96,23 @@ class SpecialMethodTests: XCTestCase {
                 _ = ObjectiveCTestObject() // This will not trigger hook because it will release immediately. Maybe compiler optimization.
                 
                 // before
-                let token1 = try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                let token1 = try ClassInstanceHook(ObjectiveCTestObject.self).hookBefore(deallocSelector) {
                     executed.append(-1)
                 }
                 tokens.append(token1)
-                let token2 = try hookDeallocBefore(targetClass: ObjectiveCTestObject.self, closure: {
+                let token2 = try ClassInstanceHook(ObjectiveCTestObject.self).hookDeallocBefore(closure: {
                     executed.append(-2)
                 })
                 tokens.append(token2)
                 
                 // instead
-                let token3 = try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+                let token3 = try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original in
                     executed.append(-3)
                     original()
                     executed.append(3)
                     } as @convention(block) (() -> Void) -> Void)
                 tokens.append(token3)
-                let token4 = try hookDeallocInstead(targetClass: ObjectiveCTestObject.self, closure: { original in
+                let token4 = try ClassInstanceHook(ObjectiveCTestObject.self).hookDealloc(closure: { original in
                     executed.append(-4)
                     original()
                     executed.append(4)
@@ -120,11 +120,11 @@ class SpecialMethodTests: XCTestCase {
                 tokens.append(token4)
                 
                 // after
-                let token5 = try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector) {
+                let token5 = try ClassInstanceHook(ObjectiveCTestObject.self).hookAfter(deallocSelector) {
                     executed.append(1)
                 }
                 tokens.append(token5)
-                let token6 = try hookDeallocAfter(targetClass: ObjectiveCTestObject.self, closure: {
+                let token6 = try ClassInstanceHook(ObjectiveCTestObject.self).hookDeallocAfter(closure: {
                     executed.append(2)
                 })
                 tokens.append(token6)

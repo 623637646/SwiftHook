@@ -177,7 +177,7 @@ class OverrideSuperMethodTests: XCTestCase {
         try autoreleasepool {
             // hook
             let object = MyObject.init()
-            token = try hookAfter(object: object, selector: #selector(MySuperObject.myMethod), closure: {
+            token = try ObjectHook(object).hookAfter(#selector(MySuperObject.myMethod), closure: {
                 
             }) as? HookToken
             dynamicClass = object_getClass(object)
@@ -215,7 +215,7 @@ class OverrideSuperMethodTests: XCTestCase {
         XCTAssertNil(getMethodWithoutSearchingSuperClasses(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod)))
         
         // hook
-        let token: HookToken! = try hookAfter(targetClass: MyObject.self, selector: #selector(MySuperObject.myMethod), closure: {
+        let token: HookToken! = try ClassInstanceHook(MyObject.self).hookAfter(#selector(MySuperObject.myMethod), closure: {
             
         }) as? HookToken
         

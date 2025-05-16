@@ -311,7 +311,7 @@ class SingleInstancesInsteadTests: XCTestCase {
     func testChangeReturn() {
         do {
             let object = TestObject()
-            let token = try hookInstead(object: object, selector: #selector(TestObject.generateNumber(number:)), closure: { original, o, s, number in
+            let token = try ObjectHook(object).hook(#selector(TestObject.generateNumber(number:)), closure: { original, o, s, number in
                 XCTAssertEqual(number, 4)
                 let number = original(o, s, 5)
                 XCTAssertEqual(number.intValue, 5)

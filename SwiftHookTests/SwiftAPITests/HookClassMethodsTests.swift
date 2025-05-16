@@ -146,7 +146,7 @@ class HookClassMethodsTests: XCTestCase {
         XCTAssertFalse(MyObject.run)
         XCTAssertFalse(run)
         
-        try hookClassMethodBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { object, sel in
+        try ClassHook(MyObject.self).hookBefore(#selector(MyObject.myMethod(number:url:)), closure: { object, sel in
             XCTAssertTrue(MyObject.self === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -180,7 +180,7 @@ class HookClassMethodsTests: XCTestCase {
         XCTAssertFalse(MyObject.run)
         XCTAssertFalse(run)
         
-        try hookClassMethodAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { object, sel, number, url in
+        try ClassHook(MyObject.self).hookAfter(#selector(MyObject.myMethod(number:url:)), closure: { object, sel, number, url in
             XCTAssertTrue(MyObject.self === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)
@@ -216,7 +216,7 @@ class HookClassMethodsTests: XCTestCase {
         XCTAssertFalse(MyObject.run)
         XCTAssertFalse(run)
         
-        try hookClassMethodInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { original, object, sel, number, url in
+        try ClassHook(MyObject.self).hook(#selector(MyObject.myMethod(number:url:)), closure: { original, object, sel, number, url in
             XCTAssertTrue(MyObject.self === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)

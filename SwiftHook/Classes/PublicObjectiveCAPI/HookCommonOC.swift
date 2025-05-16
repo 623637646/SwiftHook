@@ -61,6 +61,10 @@ extension SwiftHookError {
         case .hookKVOUnsupportedInstance:
             code = 11
             description = "Unable to hook a instance which is not support KVO."
+        case .nonObjcProperty:
+            // Won't be thrown as any key path to a property of a NSObject is an Objective-C property.
+            code = 12
+            description = "The property isn't an Objective-C property."
         }
         return NSError.init(domain: "SwiftHook.SwiftHookError", code: code, userInfo: [NSLocalizedDescriptionKey: description])
         

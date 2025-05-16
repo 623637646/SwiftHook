@@ -40,6 +40,8 @@ public enum SwiftHookError: Error {
     case hookInstanceOfNSTaggedPointerString // Unsupport to hook instance of NSTaggedPointerString.
     
     case hookKVOUnsupportedInstance // Unable to hook a instance which is not support KVO.
+    
+    case nonObjcProperty
 }
 
 // MARK: - Token

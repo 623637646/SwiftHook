@@ -21,7 +21,7 @@ class TestObject { // No need to inherit from NSObject.
 
 let obj = TestObject()
 
-let token = try hookBefore(object: obj, selector: #selector(TestObject.testMethod)) {
+let token = try ObjectHook(obj).hookBefore(#selector(TestObject.testMethod)) {
     print("Before executing `testMethod`")
 }
 
@@ -40,7 +40,7 @@ class TestObject {
 
 let obj = TestObject()
 
-let token = try hookAfter(object: obj, selector: #selector(TestObject.testMethod(_:)), closure: { obj, sel, parameter in
+let token = try ObjectHook(obj).hookAfter(#selector(TestObject.testMethod(_:)), closure: { obj, sel, parameter in
     print("After executing `testMethod` with parameter: \(parameter)")
 } as @convention(block) ( // Using `@convention(block)` to declares a Swift closure as an Objective-C block
     AnyObject, // `obj` Instance
@@ -66,7 +66,7 @@ class Math {
 
 let math = Math()
 
-try hookInstead(object: math, selector: #selector(Math.double(_:)), closure: { original, obj, sel, number in
+try ObjectHook(math).hook(#selector(Math.double(_:)), closure: { original, obj, sel, number in
     print("Before executing `double`")
     let originalResult = original(obj, sel, number)
     print("After executing `double`, got result \(originalResult)")

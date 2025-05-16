@@ -18,7 +18,7 @@ class ParametersCheckingTests: XCTestCase {
     
     func testCanNotHookClassWithObjectAPI() {
         do {
-            try hookBefore(object: randomTestClass(), selector: randomSelector(), closure: {
+            try ObjectHook(randomTestClass()).hookBefore(randomSelector(), closure: {
             })
             XCTFail()
         } catch SwiftHookError.hookClassWithObjectAPI {
@@ -26,7 +26,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookAfter(object: randomTestClass(), selector: randomSelector(), closure: {
+            try ObjectHook(randomTestClass()).hookAfter(randomSelector(), closure: {
             })
             XCTFail()
         } catch SwiftHookError.hookClassWithObjectAPI {
@@ -34,7 +34,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(object: randomTestClass(), selector: randomSelector(), closure: {
+            try ObjectHook(randomTestClass()).hook(randomSelector(), closure: {
             })
             XCTFail()
         } catch SwiftHookError.hookClassWithObjectAPI {
@@ -45,7 +45,7 @@ class ParametersCheckingTests: XCTestCase {
     
     func testUnsupportHookPureSwiftObjectDealloc() {
         do {
-            try hookBefore(object: TestObject(), selector: deallocSelector, closure: {
+            try ObjectHook(TestObject()).hookBefore(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -54,7 +54,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookAfter(object: TestObject(), selector: deallocSelector, closure: {
+            try ObjectHook(TestObject()).hookAfter(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -62,7 +62,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(object: TestObject(), selector: deallocSelector, closure: {
+            try ObjectHook(TestObject()).hook(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -70,7 +70,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookBefore(targetClass: TestObject.self, selector: deallocSelector, closure: {
+            try ClassInstanceHook(TestObject.self).hookBefore(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -78,7 +78,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookAfter(targetClass: TestObject.self, selector: deallocSelector, closure: {
+            try ClassInstanceHook(TestObject.self).hookAfter(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -86,7 +86,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(targetClass: TestObject.self, selector: deallocSelector, closure: {
+            try ClassInstanceHook(TestObject.self).hook(deallocSelector, closure: {
             })
             XCTFail()
         } catch SwiftHookError.pureSwiftObjectDealloc {
@@ -97,21 +97,21 @@ class ParametersCheckingTests: XCTestCase {
     
     func testNoRespondSelector() {
         do {
-            try hookBefore(targetClass: randomTestClass(), selector: #selector(NSArray.object(at:)), closure: {})
+            try ClassInstanceHook(randomTestClass()).hookBefore(#selector(NSArray.object(at:)), closure: {})
             XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
             XCTAssertNil(error)
         }
         do {
-            try hookClassMethodAfter(targetClass: TestObject.self, selector: #selector(TestObject.noArgsNoReturnFunc), closure: {})
+            try ClassHook(TestObject.self).hookAfter(#selector(TestObject.noArgsNoReturnFunc), closure: {})
             XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(object: TestObject(), selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
+            try ObjectHook(TestObject()).hook(#selector(TestObject.classMethodNoArgsNoReturnFunc), closure: {})
             XCTFail()
         } catch SwiftHookError.noRespondSelector {
         } catch {
@@ -121,21 +121,21 @@ class ParametersCheckingTests: XCTestCase {
     
     func testMissingSignature() {
         do {
-            try hookBefore(targetClass: randomTestClass(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
+            try ClassHook(randomTestClass()).hookBefore(#selector(TestObject.noArgsNoReturnFunc), closure: NSObject())
             XCTFail()
         } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
             XCTAssertNil(error)
         }
         do {
-            try hookClassMethodAfter(targetClass: TestObject.self, selector: #selector(TestObject.classMethodNoArgsNoReturnFunc), closure: 1)
+            try ClassHook(TestObject.self).hookAfter(#selector(TestObject.classMethodNoArgsNoReturnFunc), closure: 1)
             XCTFail()
         } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(object: TestObject(), selector: #selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
+            try ObjectHook(TestObject()).hook(#selector(TestObject.noArgsNoReturnFunc), closure: {} as AnyObject)
             XCTFail()
         } catch SwiftHookError.wrongTypeForHookClosure {
         } catch {
@@ -145,7 +145,7 @@ class ParametersCheckingTests: XCTestCase {
     
     func testIncompatibleClosureSignature() {
         do {
-            try hookBefore(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
+            try ClassInstanceHook(TestObject.self).hookBefore(#selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
                 return 1
             } as @convention(block) (Int, Int) -> Int as AnyObject)
             XCTFail()
@@ -155,7 +155,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookAfter(object: TestObject(), selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
+            try ObjectHook(TestObject()).hookAfter(#selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
             } as @convention(block) (Int, Double) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
@@ -164,7 +164,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookAfter(object: TestObject(), selector: #selector(TestObject.testStructSignature(point:rect:)), closure: ({_, _ in
+            try ObjectHook(TestObject()).hookAfter(#selector(TestObject.testStructSignature(point:rect:)), closure: ({_, _ in
             } as @convention(block) (CGPoint, Double) -> Void) as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
@@ -173,7 +173,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { _, _ in
             } as @convention(block) (Int, Int) -> Void as AnyObject)
             XCTFail()
         } catch SwiftHookError.incompatibleClosureSignature(description: let description) {
@@ -187,7 +187,7 @@ class ParametersCheckingTests: XCTestCase {
         for selector in blacklistSelectors {
             do {
                 let object = ObjectiveCTestObject()
-                try hookBefore(object: object, selector: selector) {
+                try ObjectHook(object).hookBefore(selector) {
                 }
                 XCTFail()
             } catch SwiftHookError.blacklist {
@@ -196,7 +196,7 @@ class ParametersCheckingTests: XCTestCase {
             }
             
             do {
-                try hookBefore(targetClass: ObjectiveCTestObject.self, selector: selector) {
+                try ClassInstanceHook(ObjectiveCTestObject.self).hookBefore(selector) {
                 }
                 XCTFail()
             } catch SwiftHookError.blacklist {
@@ -208,7 +208,7 @@ class ParametersCheckingTests: XCTestCase {
     
     func test_Hook_Instead_Original_Closure() {
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
                 let result = original(a, b)
                 return Int(result)
             } as @convention(block) ((Int, Int) -> Double, Int, Int) -> Int as AnyObject)
@@ -219,7 +219,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, _, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, _, b in
                 let result = original(NSObject.init(), b)
                 return Int(result)
             } as @convention(block) ((NSObject, Int) -> Int, Int, Int) -> Int as AnyObject)
@@ -230,7 +230,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, a, b in
                 let result = original(a, b, 100)
                 return Int(result)
             } as @convention(block) ((Int, Int, Int) -> Int, Int, Int) -> Int as AnyObject)
@@ -241,7 +241,7 @@ class ParametersCheckingTests: XCTestCase {
             XCTAssertNil(error)
         }
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, a, _ in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, a, _ in
                 let result = original(a)
                 return Int(result)
             } as @convention(block) ((Int) -> Int, Int, Int) -> Int as AnyObject)
@@ -253,7 +253,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
                 let result = original(o, s, a, b)
                 return Int(result)
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Double, AnyObject, Selector, Int, Int) -> Int as AnyObject)
@@ -265,7 +265,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
                 let result = original(o, s, a, b)
                 return Double(result)
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Int) -> Double as AnyObject)
@@ -277,7 +277,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
+            try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.sumFunc(a:b:)), closure: { original, o, s, a, b in
                 let result = original(o, s, a, Int(b))
                 return Int(result)
             } as @convention(block) ((AnyObject, Selector, Int, Int) -> Int, AnyObject, Selector, Int, Double) -> Int as AnyObject)
@@ -291,7 +291,7 @@ class ParametersCheckingTests: XCTestCase {
     
     func test_Hook_Dealloc() {
         do {
-            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: {
+            try ClassInstanceHook(ObjectiveCTestObject.self).hookBefore(deallocSelector, closure: {
                 return 1
             } as @convention(block) () -> Int as AnyObject)
             XCTFail()
@@ -302,7 +302,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookBefore(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _, _ in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hookBefore(deallocSelector, closure: { _, _ in
                 
             } as @convention(block) (String, Selector) -> Void as AnyObject)
             XCTFail()
@@ -313,7 +313,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookAfter(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hookAfter(deallocSelector, closure: { _ in
                 
             } as @convention(block) (ObjectiveCTestObject) -> Void as AnyObject)
             XCTFail()
@@ -324,7 +324,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, o, s in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original, o, s in
                 original(o, s)
             } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void as AnyObject)
             XCTFail()
@@ -335,7 +335,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { _ in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { _ in
                 
             } as @convention(block) (AnyObject) -> Void as AnyObject)
             XCTFail()
@@ -346,7 +346,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original in
                 _ = original()
             } as @convention(block) (() -> CGPoint) -> Void as AnyObject)
             XCTFail()
@@ -357,7 +357,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original in
                 original(1, 1.1)
             } as @convention(block) ((Int, Double) -> Void) -> Void as AnyObject)
             XCTFail()
@@ -368,7 +368,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original in
                 original()
                 return "lol"
             } as @convention(block) (() -> Void) -> String as AnyObject)
@@ -380,7 +380,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: ObjectiveCTestObject.self, selector: deallocSelector, closure: { original, _ in
+            try ClassInstanceHook(ObjectiveCTestObject.self).hook(deallocSelector, closure: { original, _ in
                 original()
             } as @convention(block) (() -> Void, URL) -> Void as AnyObject)
             XCTFail()
@@ -419,7 +419,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod1), closure: { _, _, _ in
+            try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod1), closure: { _, _, _ in
                 return EmptyStruct.init()
             } as @convention(block) ((NSObject, Selector) -> EmptyStruct, NSObject, Selector) -> EmptyStruct)
             XCTFail()
@@ -429,7 +429,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod2), closure: {
+            try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod2), closure: {
                 
             })
             XCTFail()
@@ -439,7 +439,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookAfter(object: MyObject(), selector: #selector(MyObject.myMethod3), closure: {
+            try ObjectHook(MyObject()).hookAfter(#selector(MyObject.myMethod3), closure: {
                 
             })
             XCTFail()
@@ -449,7 +449,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod4), closure: { _, _, _ in
+            try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod4), closure: { _, _, _ in
                 return InternalEmptyStruct.init()
             } as @convention(block) ((NSObject, Selector) -> InternalEmptyStruct, NSObject, Selector) -> InternalEmptyStruct)
             XCTFail()
@@ -459,7 +459,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod5), closure: {
+            try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod5), closure: {
                 
             })
             XCTFail()
@@ -469,7 +469,7 @@ class ParametersCheckingTests: XCTestCase {
         }
         
         do {
-            try hookAfter(object: MyObject(), selector: #selector(MyObject.myMethod6), closure: {
+            try ObjectHook(MyObject()).hookAfter(#selector(MyObject.myMethod6), closure: {
                 
             })
             XCTFail()

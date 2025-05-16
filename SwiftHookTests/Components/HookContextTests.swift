@@ -142,7 +142,7 @@ class HookContextTests: XCTestCase {
         let countBefore = debug_getNormalClassHookContextsCount()
         
         // hook
-        let token: HookToken! = try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {
+        let token: HookToken! = try ClassInstanceHook(MyObject.self).hookAfter(#selector(MyObject.myMethod), closure: {
             
         }) as? HookToken
         
@@ -170,7 +170,7 @@ class HookContextTests: XCTestCase {
         var token1: HookToken!
         try autoreleasepool {
             let object = MyObject.init()
-            token1 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
+            token1 = try ObjectHook(object).hookAfter(#selector(MyObject.myMethod), closure: {
             }) as? HookToken
             XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         }
@@ -184,7 +184,7 @@ class HookContextTests: XCTestCase {
         var token2: HookToken!
         try autoreleasepool {
             let object = MyObject.init()
-            token2 = try hookAfter(object: object, selector: #selector(MyObject.myMethod), closure: {
+            token2 = try ObjectHook(object).hookAfter(#selector(MyObject.myMethod), closure: {
             }) as? HookToken
             XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         }
@@ -204,7 +204,7 @@ class HookContextTests: XCTestCase {
         let countBefore = debug_getinstancewHookContextsCount()
         
         let object1 = MyObject.init()
-        let token1: HookToken! = try hookAfter(object: object1, selector: #selector(MyObject.myMethod), closure: {
+        let token1: HookToken! = try ObjectHook(object1).hookAfter(#selector(MyObject.myMethod), closure: {
         }) as? HookToken
         
         // check
@@ -222,7 +222,7 @@ class HookContextTests: XCTestCase {
         XCTAssertEqual(debug_getinstancewHookContextsCount(), countBefore + 1)
         
         let object2 = MyObject.init()
-        let token2: HookToken! = try hookAfter(object: object2, selector: #selector(MyObject.myMethod), closure: {
+        let token2: HookToken! = try ObjectHook(object2).hookAfter(#selector(MyObject.myMethod), closure: {
         }) as? HookToken
         
         // check

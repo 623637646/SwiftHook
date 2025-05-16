@@ -30,7 +30,7 @@ struct ContentView: View {
         let obj = MyObject()
         // hook
         do {
-            try hookBefore(object: obj, selector: #selector(MyObject.test), closure: { viewController, _ in
+            try ObjectHook(obj).hookBefore(#selector(MyObject.test), closure: { viewController, _ in
                 print("hooked")
             })
         } catch {

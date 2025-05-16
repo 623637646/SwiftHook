@@ -264,7 +264,7 @@ class AllInstancesInsteadTests: XCTestCase {
     
     func testChangeReturn() {
         do {
-            let token = try hookInstead(targetClass: TestObject.self, selector: #selector(TestObject.generateNumber(number:)), closure: { original, object, selector, number in
+            let token = try ClassInstanceHook(TestObject.self).hook(#selector(TestObject.generateNumber(number:)), closure: { original, object, selector, number in
                 XCTAssertEqual(number, 4)
                 let number = original(object, selector, 5)
                 XCTAssertEqual(number.intValue, 5)

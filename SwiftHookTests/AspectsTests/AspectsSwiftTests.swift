@@ -101,7 +101,7 @@ class AspectsSwiftTests: XCTestCase {
             let object = ObjectiveCTestObject()
             var expectation = [Int]()
             
-            let token = try hookInstead(object: object, selector: #selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
+            let token = try ObjectHook(object).hook(#selector(setter: ObjectiveCTestObject.number), closure: { original, o, s, number in
                 expectation.append(1)
                 original(o, s, number)
                 expectation.append(2)

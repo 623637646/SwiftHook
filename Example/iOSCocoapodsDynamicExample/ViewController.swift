@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     func hook() {
         // hook
         do {
-            try hookBefore(object: self, selector: #selector(UIViewController.viewDidAppear(_:)), closure: { viewController, _ in
+            try ObjectHook(self).hookBefore(#selector(UIViewController.viewDidAppear(_:)), closure: { viewController, _ in
                 print("ViewController did appear")
                 print("Title: \(viewController.title ?? "")")
             })

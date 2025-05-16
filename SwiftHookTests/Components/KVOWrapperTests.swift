@@ -98,7 +98,7 @@ class KVOWrapperTests: XCTestCase {
                 XCTAssertEqual(expectation, [random1])
                 expectation.removeAll()
                 
-                try hookBefore(object: object, selector: #selector(setter: SwiftObject.number), closure: {
+                try ObjectHook(object).hookBefore(#selector(setter: SwiftObject.number), closure: {
                     expectation.append(random3)
                 })
                 XCTAssertTrue(try isKVOed(object: object))
@@ -125,7 +125,7 @@ class KVOWrapperTests: XCTestCase {
                 let newClassName = "Test" + NSStringFromClass(baseClass)
                 let newClass: AnyClass = objc_allocateClassPair(baseClass, newClassName, 0)!
                 objc_registerClassPair(newClass)
-                try hookInstead(targetClass: newClass, selector: NSSelectorFromString("class"), closure: { original, obj, select in
+                try ClassInstanceHook(newClass).hook(NSSelectorFromString("class"), closure: { original, obj, select in
                     XCTAssertTrue(original(obj, select) == newClass)
                     return baseClass
                 } as @convention(block) ((NSObject, Selector) -> AnyClass, NSObject, Selector) -> AnyClass)
@@ -133,7 +133,7 @@ class KVOWrapperTests: XCTestCase {
                 XCTAssertFalse(try isKVOed(object: object))
                 XCTAssertTrue(sht_getClass(object) == baseClass)
                 
-                try hookBefore(object: object, selector: #selector(setter: SwiftObject.number), closure: {
+                try ObjectHook(object).hookBefore(#selector(setter: SwiftObject.number), closure: {
                     expectation.append(random1)
                 })
                 XCTAssertTrue(try isKVOed(object: object))
@@ -157,7 +157,7 @@ class KVOWrapperTests: XCTestCase {
                 let random1 = Int.random(in: Int.min ... Int.max)
                 let random2 = Int.random(in: Int.min ... Int.max)
                 
-                try hookBefore(object: object, selector: #selector(setter: SwiftObject.number), closure: {
+                try ObjectHook(object).hookBefore(#selector(setter: SwiftObject.number), closure: {
                     expectation.append(random1)
                 })
                 XCTAssertTrue(try isKVOed(object: object))
@@ -287,7 +287,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -331,7 +331,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.Number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.Number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -383,7 +383,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -435,7 +435,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.Number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.Number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -479,7 +479,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.___number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.___number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -523,7 +523,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.___Number), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.___Number), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -567,7 +567,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: MyObject.swiftHookPrivateProperty), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: MyObject.swiftHookPrivateProperty), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -611,7 +611,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: NSKVONotifying_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: NSKVONotifying_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -652,7 +652,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: NSKVONotifying_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: NSKVONotifying_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -696,7 +696,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: SwiftHook_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: SwiftHook_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)
@@ -737,7 +737,7 @@ class KVOWrapperTests: XCTestCase {
         var expectation = [Int]()
         XCTAssertEqual(try testGetObjectType(object: object), .normal)
         
-        let token = try hookInstead(object: object, selector: #selector(setter: SwiftHook_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(setter: SwiftHook_MyClass.swiftHookPrivateProperty), closure: { original, o, s, number in
             expectation.append(1)
             original(o, s, number)
             expectation.append(3)

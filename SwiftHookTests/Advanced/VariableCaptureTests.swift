@@ -20,7 +20,7 @@ class VariableCaptureTests: XCTestCase {
         
         let object = MyObject()
         let addNumber = 3
-        let token = try hookInstead(object: object, selector: #selector(MyObject.double(number:)), closure: {original, o, s, number in
+        let token = try ObjectHook(object).hook(#selector(MyObject.double(number:)), closure: {original, o, s, number in
             let result = original(o, s, number)
             XCTAssertEqual(result, 22)
             return result + addNumber

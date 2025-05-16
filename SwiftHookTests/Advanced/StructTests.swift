@@ -19,12 +19,12 @@ class StructTests: XCTestCase {
         }
         
         do {
-            let token1 = try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.point(inside:with:)), closure: {_, _, point, event in
+            let token1 = try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.point(inside:with:)), closure: {_, _, point, event in
                 XCTAssertEqual(point, CGPoint.init(x: 11, y: 22))
                 XCTAssertNil(event)
                 } as @convention(block)(AnyObject, Selector, CGPoint, UIEvent?) -> Void)
             
-            let token2 = try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.point(inside:with:)), closure: {original, object, selector, point, event in
+            let token2 = try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.point(inside:with:)), closure: {original, object, selector, point, event in
                 XCTAssertEqual(point, CGPoint.init(x: 11, y: 22))
                 XCTAssertNil(event)
                 let result = original(object, selector, point, event)
@@ -51,7 +51,7 @@ class StructTests: XCTestCase {
         var pointerForTesting: UInt8 = 0
         withUnsafeMutablePointer(to: &pointerForTesting) { pointer in
             do {
-                let token1 = try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
+                let token1 = try ClassInstanceHook(MyObject.self).hookAfter(#selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
                     XCTAssertEqual(s.i, 11)
                     XCTAssertEqual(s.p, CGPoint.init(x: 22, y: 33))
                     XCTAssertEqual(s.frame, CGRect.init(x: 44, y: 55, width: 66, height: 77))
@@ -60,7 +60,7 @@ class StructTests: XCTestCase {
                     
                     } as @convention(block)(AnyObject, Selector, ComplexityStruct) -> Void)
                 
-                let token2 = try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {original, object, selector, s in
+                let token2 = try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.doublePoint(theStruct:)), closure: {original, object, selector, s in
                     XCTAssertEqual(s.i, 11)
                     XCTAssertEqual(s.p, CGPoint.init(x: 22, y: 33))
                     XCTAssertEqual(s.frame, CGRect.init(x: 44, y: 55, width: 66, height: 77))
@@ -107,11 +107,11 @@ class StructTests: XCTestCase {
         }
         
         do {
-            let token1 = try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
+            let token1 = try ClassInstanceHook(MyObject.self).hookAfter(#selector(MyObject.doublePoint(theStruct:)), closure: {_, _, s in
                 XCTAssertEqual(s.frame1, CGRect.init(x: 1, y: 2, width: 3, height: 4))
                 } as @convention(block)(AnyObject, Selector, BigStruct) -> Void)
             
-            let token2 = try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.doublePoint(theStruct:)), closure: {original, object, selector, s in
+            let token2 = try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.doublePoint(theStruct:)), closure: {original, object, selector, s in
                 XCTAssertEqual(s.frame1, CGRect.init(x: 1, y: 2, width: 3, height: 4))
                 var result = original(object, selector, s)
                 XCTAssertEqual(result.frame1, CGRect.init(x: 2, y: 4, width: 6, height: 8))

@@ -151,7 +151,7 @@ class HookAllInstancesTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel in
+        try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -186,7 +186,7 @@ class HookAllInstancesTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel, number, url in
+        try ClassInstanceHook(MyObject.self).hookAfter(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel, number, url in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)
@@ -223,7 +223,7 @@ class HookAllInstancesTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] original, object, sel, number, url in
+        try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] original, object, sel, number, url in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)
@@ -372,7 +372,7 @@ class HookAllInstancesTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocInstead(targetClass: MyObject.self, closure: { original in
+            try ClassInstanceHook(MyObject.self).hookDealloc(closure: { original in
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
                 XCTAssertFalse(MyObject.isReleased)

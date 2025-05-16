@@ -151,7 +151,7 @@ class HookSpecificInstanceTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookBefore(object: obj, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel in
+        try ObjectHook(obj).hookBefore(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             
@@ -186,7 +186,7 @@ class HookSpecificInstanceTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookAfter(object: obj, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel, number, url in
+        try ObjectHook(obj).hookAfter(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] object, sel, number, url in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)
@@ -223,7 +223,7 @@ class HookSpecificInstanceTests: XCTestCase {
         XCTAssertFalse(obj.run)
         XCTAssertFalse(run)
         
-        try hookInstead(object: obj, selector: #selector(MyObject.myMethod(number:url:)), closure: { [weak obj] original, object, sel, number, url in
+        try ObjectHook(obj).hook(#selector(MyObject.myMethod(number:url:)), closure: { [weak obj] original, object, sel, number, url in
             XCTAssertTrue(obj! === object)
             XCTAssertEqual(sel, #selector(MyObject.myMethod))
             XCTAssertEqual(number, 77)
@@ -404,7 +404,7 @@ class HookSpecificInstanceTests: XCTestCase {
             XCTAssertNotNil(reference)
             XCTAssertEqual(run, false)
             XCTAssertFalse(MyObject.isReleased)
-            try hookDeallocInstead(object: obj, closure: { original in
+            try ObjectHook(obj).hookDealloc(closure: { original in
                 XCTAssertNil(reference)
                 XCTAssertEqual(run, false)
                 XCTAssertFalse(MyObject.isReleased)

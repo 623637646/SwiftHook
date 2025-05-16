@@ -32,17 +32,17 @@ class OrderTests: XCTestCase {
                 let urlAmazon = "https://www.amazon.com"
                 let urlShopee = "https://www.shopee.com"
                 
-                try hookBefore(targetClass: targetClass, selector: selector, closure: {_, _, url in
+                try ClassInstanceHook(targetClass).hookBefore(selector, closure: {_, _, url in
                     order.append(2)
                     XCTAssertEqual(url.absoluteString, urlApple)
                     } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookAfter(targetClass: targetClass, selector: selector, closure: {_, _, url in
+                try ClassInstanceHook(targetClass).hookAfter(selector, closure: {_, _, url in
                     order.append(5)
                     XCTAssertEqual(url.absoluteString, urlApple)
                     } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookInstead(targetClass: targetClass, selector: selector, closure: {original, o, s, url in
+                try ClassInstanceHook(targetClass).hook(selector, closure: {original, o, s, url in
                     order.append(3)
                     XCTAssertEqual(url.absoluteString, urlFacebook)
                     let request = original(o, s, URL.init(string: urlApple)!)
@@ -52,17 +52,17 @@ class OrderTests: XCTestCase {
                     return newRequest
                     } as @convention(block) ((AnyObject, Selector, URL) -> NSURLRequest, AnyObject, Selector, URL) -> NSURLRequest)
                 
-                try hookBefore(object: object, selector: selector, closure: {_, _, url in
+                try ObjectHook(object).hookBefore(selector, closure: {_, _, url in
                     order.append(0)
                     XCTAssertEqual(url.absoluteString, urlFacebook)
                     } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookAfter(object: object, selector: selector, closure: {_, _, url in
+                try ObjectHook(object).hookAfter(selector, closure: {_, _, url in
                     order.append(7)
                     XCTAssertEqual(url.absoluteString, urlFacebook)
                     } as @convention(block) (AnyObject, Selector, URL) -> Void)
                 
-                try hookInstead(object: object, selector: selector, closure: {original, o, s, url in
+                try ObjectHook(object).hook(selector, closure: {original, o, s, url in
                     order.append(1)
                     XCTAssertEqual(url.absoluteString, urlGoogle)
                     let request = original(o, s, URL.init(string: urlFacebook)!)
@@ -72,29 +72,29 @@ class OrderTests: XCTestCase {
                     return newRequest
                     } as @convention(block) ((AnyObject, Selector, URL) -> NSURLRequest, AnyObject, Selector, URL) -> NSURLRequest)
                 
-                try hookDeallocBefore(targetClass: Request.self, closure: {
+                try ClassInstanceHook(Request.self).hookDeallocBefore(closure: {
                     deallocOrder.append(2)
                 })
                 
-                try hookDeallocAfter(targetClass: Request.self, closure: {
+                try ClassInstanceHook(Request.self).hookDeallocAfter(closure: {
                     deallocOrder.append(6)
                 })
                 
-                try hookDeallocInstead(targetClass: Request.self, closure: { original in
+                try ClassInstanceHook(Request.self).hookDealloc(closure: { original in
                     deallocOrder.append(3)
                     original()
                     deallocOrder.append(5)
                 })
                 
-                try hookDeallocBefore(object: object, closure: {
+                try ObjectHook(object).hookDeallocBefore(closure: {
                     deallocOrder.append(0)
                 })
                 
-                try hookDeallocAfter(object: object, closure: {
+                try ObjectHook(object).hookDeallocAfter(closure: {
                     deallocOrder.append(8)
                 })
                 
-                hookDeallocAfterByTail(object: object, closure: {
+                ObjectHook(object).hookDeallocAfterByTail(closure: {
                     deallocOrder.append(4)
                 })
                 
@@ -162,13 +162,13 @@ class OrderTests: XCTestCase {
                     switch hookMode {
                     case 0:
                         classBefore.append(randomNumber)
-                        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
+                        try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
                     case 1:
                         classInstead.append(randomNumber)
-                        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(order:)), closure: createInsteadHookClosure(randomNumber))
+                        try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod(order:)), closure: createInsteadHookClosure(randomNumber))
                     case 2:
                         classAfter.append(randomNumber)
-                        try hookAfter(targetClass: MyObject.self, selector: #selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
+                        try ClassInstanceHook(MyObject.self).hookAfter(#selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
                     default:
                         XCTFail()
                     }
@@ -177,13 +177,13 @@ class OrderTests: XCTestCase {
                     switch hookMode {
                     case 0:
                         objectBefore.append(randomNumber)
-                        try hookBefore(object: object, selector: #selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
+                        try ObjectHook(object).hookBefore(#selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
                     case 1:
                         objectInstead.append(randomNumber)
-                        try hookInstead(object: object, selector: #selector(MyObject.myMethod(order:)), closure: createInsteadHookClosure(randomNumber))
+                        try ObjectHook(object).hook(#selector(MyObject.myMethod(order:)), closure: createInsteadHookClosure(randomNumber))
                     case 2:
                         objectAfter.append(randomNumber)
-                        try hookAfter(object: object, selector: #selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
+                        try ObjectHook(object).hookAfter(#selector(MyObject.myMethod(order:)), closure: createBeforeOrAfterHookClosure(randomNumber))
                     default:
                         XCTFail()
                     }
@@ -217,21 +217,21 @@ class OrderTests: XCTestCase {
         
         var order = [Int]()
         
-        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+        try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod)) {
             order.append(8)
         }
         
-        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod)) {
+        try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod)) {
             order.append(7)
         }
         
-        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(6)
             original(obj, sel)
             order.append(11)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         
-        try hookInstead(targetClass: MyObject.self, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ClassInstanceHook(MyObject.self).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(5)
             original(obj, sel)
             order.append(12)
@@ -251,17 +251,17 @@ class OrderTests: XCTestCase {
             order.append(4)
         }
         
-        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+        try ObjectHook(object).hookBefore(#selector(MyObject.myMethod)) {
             order.append(3)
         }
         
-        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ObjectHook(object).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(2)
             original(obj, sel)
             order.append(15)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
         
-        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ObjectHook(object).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(1)
             original(obj, sel)
             order.append(16)
@@ -295,17 +295,17 @@ class OrderTests: XCTestCase {
             order.append(6)
         }
 
-        try hookBefore(object: object, selector: #selector(MyObject.myMethod)) {
+        try ObjectHook(object).hookBefore(#selector(MyObject.myMethod)) {
             order.append(5)
         }
 
-        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ObjectHook(object).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(2)
             original(obj, sel)
             order.append(15)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
 
-        try hookInstead(object: object, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ObjectHook(object).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(1)
             original(obj, sel)
             order.append(16)
@@ -315,27 +315,27 @@ class OrderTests: XCTestCase {
             order.append(10)
         }
 
-        try hookAfter(object: object, selector: #selector(MyObject.myMethod)) {
+        try ObjectHook(object).hookAfter(#selector(MyObject.myMethod)) {
             order.append(9)
         }
         
         let theClass: AnyClass = object_getClass(object)!
         
-        try hookBefore(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+        try ClassInstanceHook(theClass).hookBefore(#selector(MyObject.myMethod)) {
             order.append(8)
         }
 
-        try hookBefore(targetClass: theClass, selector: #selector(MyObject.myMethod)) {
+        try ClassInstanceHook(theClass).hookBefore(#selector(MyObject.myMethod)) {
             order.append(7)
         }
 
-        try hookInstead(targetClass: theClass, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ClassInstanceHook(theClass).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(4)
             original(obj, sel)
             order.append(13)
         } as @convention(block) ((AnyObject, Selector) -> Void, AnyObject, Selector) -> Void)
 
-        try hookInstead(targetClass: theClass, selector: #selector(MyObject.myMethod), closure: {original, obj, sel in
+        try ClassInstanceHook(theClass).hook(#selector(MyObject.myMethod), closure: {original, obj, sel in
             order.append(3)
             original(obj, sel)
             order.append(14)
@@ -379,16 +379,16 @@ class OrderTests: XCTestCase {
         try hookBefore(object: object, selector: #selector(MyObject.myMethod1)) {
             order.append(1)
         }
-        try hookBefore(object: object, selector: #selector(MyObject.myMethod2)) {
+        try ObjectHook(object).hookBefore(#selector(MyObject.myMethod2)) {
             order.append(99)
         }
-        try hookBefore(targetClass: MyObject.self, selector: #selector(MyObject.myMethod1), closure: {
+        try ClassInstanceHook(MyObject.self).hookBefore(#selector(MyObject.myMethod1), closure: {
             order.append(4)
         })
-        try hookBefore(targetClass: object_getClass(object)!, selector: #selector(MyObject.myMethod1), closure: {
+        try ClassInstanceHook(object_getClass(object)!).hookBefore(#selector(MyObject.myMethod1), closure: {
             order.append(3)
         })
-        try hookBefore(targetClass: SuperObject.self, selector: #selector(MyObject.myMethod1), closure: {
+        try ClassInstanceHook(SuperObject.self).hookBefore(#selector(MyObject.myMethod1), closure: {
             order.append(5)
         })
         object.myMethod1()
